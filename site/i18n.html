@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>多语言 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html" aria-current="page">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>多语言</h1>
+        <p class="site-lead">双字典、取词原语与降级路径</p>
+      </header>
+<p>Cinder 的组件文案全部经过一张字典取词，字典随 <code>core</code> 域一起分发，零依赖、无构建期编译、<code>file://</code> 直接可用。</p>
+<ul>
+<li>原语位置：<code>packages/base/src/primitives/i18n.js</code></li>
+<li>挂载点：<code>window.Cinder.Primitives.i18n</code></li>
+<li>内置语言：<code>zh-CN</code>（默认）、<code>en</code></li>
+<li>一致性闸门：<code>npm run check:i18n</code>（8 条断言，见文末）</li>
+<li>验收脚本：<code>node scripts/acceptance-i18n.mjs</code>（31 条断言）</li>
+<li>演示页：<code>demos/i18n.html</code></li>
+</ul>
+<h2 id="s-一-定位与边界">一、定位与边界</h2>
+<table>
+<thead>
+<tr>
+<th>做</th>
+<th>不做</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>组件产生的用户可见文案（<code>aria-label</code>、空态、按钮文字、相对时间）</td>
+<td>业务内容文案（由使用方自己维护）</td>
+</tr>
+<tr>
+<td>运行期切换语言，静态标记自动刷新</td>
+<td>复数规则（<code>one/other</code>）、性别、语序重排</td>
+</tr>
+<tr>
+<td>缺字典时回落到调用处的中文兜底</td>
+<td>内置 RTL 布局翻转</td>
+</tr>
+<tr>
+<td>允许注册第三方语言并局部覆盖</td>
+<td>编译期抽取字典、按 key 摇树</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-二-字典结构与-key-规范">二、字典结构与 key 规范</h2>
+<p>key 一律 <code>组件.语义</code>，小驼峰语义段；同一语义在两种语言下 key 相同。</p>
+<pre><code class="language-js">DICTS = {
+  &quot;zh-CN&quot;: { &quot;datepicker.today&quot;: &quot;今天&quot;, &quot;otp.digit&quot;: &quot;第 {n} 位验证码&quot; },
+  &quot;en&quot;:    { &quot;datepicker.today&quot;: &quot;Today&quot;, &quot;otp.digit&quot;: &quot;Digit {n}&quot; },
+}
+</code></pre>
+<ul>
+<li>插值统一 <code>{name}</code> 语法，占位符名跨语言必须一致（闸门第 3 条）。</li>
+<li>禁止在 key 里嵌语言或版本号。</li>
+</ul>
+<h2 id="s-三-api">三、API</h2>
+<table>
+<thead>
+<tr>
+<th>成员</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t</code></td>
+<td><code>t(key, fallback?, vars?)</code></td>
+<td>按当前语言取词，缺失时用 <code>fallback</code>，再缺失返回 <code>key</code> 本身</td>
+</tr>
+<tr>
+<td><code>tIn</code></td>
+<td><code>tIn(locale, key, fallback?, vars?)</code></td>
+<td>按显式语言取词（组件透传了 <code>locale</code> 参数时用）</td>
+</tr>
+<tr>
+<td><code>setLocale</code></td>
+<td><code>setLocale(tag, opt?)</code></td>
+<td>归一化并切换语言，写回 <code>&lt;html lang&gt;</code>，派发 <code>cin:localechange</code></td>
+</tr>
+<tr>
+<td><code>getLocale</code></td>
+<td><code>getLocale()</code></td>
+<td>当前生效语言</td>
+</tr>
+<tr>
+<td><code>register</code></td>
+<td><code>register(tag, dict)</code></td>
+<td>注册/合并字典，后注册的覆盖先注册的同名 key</td>
+</tr>
+<tr>
+<td><code>apply</code></td>
+<td><code>apply(scope?)</code></td>
+<td>按 <code>data-i18n</code> / <code>data-i18n-aria</code> 刷新指定范围</td>
+</tr>
+<tr>
+<td><code>locales</code></td>
+<td><code>locales()</code></td>
+<td>已注册语言列表</td>
+</tr>
+<tr>
+<td><code>onLocaleChange</code></td>
+<td><code>onLocaleChange(fn)</code></td>
+<td>订阅切换事件，返回取消函数</td>
+</tr>
+<tr>
+<td><code>DICTS</code></td>
+<td><code>DICTS</code></td>
+<td>字典本体（只读约定，勿原地改）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-js">const i18n = Cinder.Primitives.i18n;
+i18n.t(&quot;otp.digit&quot;, null, { n: 3 });        // 第 3 位验证码
+i18n.tIn(&quot;en&quot;, &quot;copy.done&quot;);                // Copied（不改当前语言）
+i18n.setLocale(&quot;en&quot;);                       // → &quot;en&quot;，&lt;html lang=&quot;en&quot;&gt;
+i18n.register(&quot;ja&quot;, { &quot;copy.done&quot;: &quot;コピー済み&quot; });
+i18n.apply(document.querySelector(&quot;#panel&quot;)); // 只刷新局部
+</code></pre>
+<p>语言归一化：<code>zh</code> / <code>zh-CN</code> / <code>zh-Hans-CN</code> 归一为 <code>zh-CN</code>，<code>en-US</code> / <code>en-GB</code> 归一为 <code>en</code>；未注册语言回落 <code>zh-CN</code>（<code>setLocale(&quot;fr&quot;)</code> 返回 <code>&quot;zh-CN&quot;</code>）。</p>
+<h2 id="s-四-静态标记">四、静态标记</h2>
+<p>无需写 JS 就能吃到多语言：</p>
+<pre><code class="language-html">&lt;p data-i18n=&quot;tree.noMatch&quot;&gt;没有匹配的节点&lt;/p&gt;
+&lt;button data-i18n-aria=&quot;copy.done&quot; aria-label=&quot;已复制&quot;&gt;复制&lt;/button&gt;
+</code></pre>
+<ul>
+<li><code>data-i18n</code> 覆盖 <code>textContent</code>，<code>data-i18n-aria</code> 覆盖 <code>aria-label</code>。</li>
+<li>初始加载与每次 <code>setLocale</code> 后自动刷新；<code>apply(scope)</code> 可手动刷新动态插入的节点。</li>
+<li>元素内的中文原文即兜底，字典缺失时保留原文。</li>
+</ul>
+<h2 id="s-五-组件侧约定">五、组件侧约定</h2>
+<ul>
+<li>每个 behavior 顶部声明取词助手，二参为中文兜底：</li>
+</ul>
+<pre><code class="language-js">const tr = (k, f, v) =&gt;
+  C.Primitives &amp;&amp; C.Primitives.i18n
+    ? C.Primitives.i18n.t(k, f, v)
+    : v
+      ? f.replace(/\{(\w+)\}/g, (m, key) =&gt; (v[key] != null ? v[key] : m))
+      : f;
+</code></pre>
+<ul>
+<li>兜底文案必须与 <code>zh-CN</code> 字典<strong>逐字一致</strong>（闸门第 4 条），否则会出现&quot;字典改了、兜底没改&quot;的分叉。</li>
+<li>取值只能走 <code>tr()</code> / <code>tIn()</code>，不得直接读 <code>DICTS</code>。</li>
+<li>禁止用文案当作选择器：<code>timepicker</code> 原先把 <code>aria-label=&quot;分钟&quot;</code> 当查询条件，已改为 <code>data-col=&quot;minute&quot;</code>。凡新增代码都按&quot;文案可翻译、结构用 data 属性&quot;的原则写。</li>
+<li>组件若自身接受 <code>locale</code> 参数（如 <code>format.js</code>），用 <code>tIn</code> 取词，不读全局语言。</li>
+</ul>
+<h2 id="s-六-降级策略">六、降级策略</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只加载分域包（无 <code>core</code>）</td>
+<td><code>tr()</code> 回落中文兜底，且<strong>仍按 <code>{name}</code> 插值</strong>，不会漏出占位符</td>
+</tr>
+<tr>
+<td>字典缺 key</td>
+<td>用调用处 <code>fallback</code>；再缺用 <code>key</code> 本身（不抛错、不空白）</td>
+</tr>
+<tr>
+<td>未注册语言</td>
+<td>回落 <code>zh-CN</code></td>
+</tr>
+<tr>
+<td>新语言只翻了一半</td>
+<td>缺的 key 回落 <code>zh-CN</code>，其余照常</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-七-一句话记牢的两条纪律">七、一句话记牢的两条纪律</h2>
+<ol>
+<li><strong>新增任何用户可见文案，必须同时补 <code>tr()</code> 兜底与两套字典</strong>，否则 <code>npm run check:i18n</code> 直接失败。</li>
+<li><strong>运行时切换语言不回溯已渲染组件</strong>：<code>setLocale</code> 只刷新静态标记与后续取词；已生成的面板（如已打开的 timepicker 列名）需要重新 <code>init</code> 或刷新页面才会换语言。这是刻意取舍——避免每个组件都维护&quot;重渲染&quot;路径。</li>
+</ol>
+<h2 id="s-八-闸门-npm-run-check-i18n">八、闸门 <code>npm run check:i18n</code></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>断言</th>
+<th>拦的是什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>原语可加载并暴露 <code>DICTS</code></td>
+<td>语法错、挂载点丢失</td>
+</tr>
+<tr>
+<td>2</td>
+<td>内置 <code>zh-CN</code> 与 <code>en</code> 两套字典</td>
+<td>漏建语言</td>
+</tr>
+<tr>
+<td>3</td>
+<td>源码存在 i18n 调用点</td>
+<td>改造被回滚成硬编码后仍&quot;通过&quot;</td>
+</tr>
+<tr>
+<td>4</td>
+<td>调用点 key 均被 <code>zh-CN</code> 覆盖</td>
+<td>漏译（新增 <code>tr()</code> 忘加字典）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>两语言 key 集合完全一致</td>
+<td>半成品翻译、孤儿 key</td>
+</tr>
+<tr>
+<td>6</td>
+<td>两语言插值占位符一致</td>
+<td><code>{n}</code> / <code>{total}</code> 错位</td>
+</tr>
+<tr>
+<td>7</td>
+<td>调用点中文兜底与 <code>zh-CN</code> 逐字一致</td>
+<td>字典与兜底分叉</td>
+</tr>
+<tr>
+<td>8</td>
+<td>组件源码无裸中文用户文案</td>
+<td>新写文案绕过 <code>tr()</code>，逐文件逐行报位置</td>
+</tr>
+</tbody>
+</table>
+<p>白名单：<code>console.warn/error/log/info</code> 与 <code>new Error(...)</code> 内的开发期提示不算用户文案。
+<em>（内容由AI生成，仅供参考）</em></p>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-一-定位与边界" data-level="2">一、定位与边界</a>
+      <a href="#s-二-字典结构与-key-规范" data-level="2">二、字典结构与 key 规范</a>
+      <a href="#s-三-api" data-level="2">三、API</a>
+      <a href="#s-四-静态标记" data-level="2">四、静态标记</a>
+      <a href="#s-五-组件侧约定" data-level="2">五、组件侧约定</a>
+      <a href="#s-六-降级策略" data-level="2">六、降级策略</a>
+      <a href="#s-七-一句话记牢的两条纪律" data-level="2">七、一句话记牢的两条纪律</a>
+      <a href="#s-八-闸门-npm-run-check-i18n" data-level="2">八、闸门 npm run check:i18n</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

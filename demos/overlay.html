@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base · 弹窗与交互浮层</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.2</span>
+      <span class="cin-caption">7 类弹窗 + 漫游引导，只引 cinder-base.css</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">浮层</div>
+        <a class="cin-navitem" href="#toast">轻提示</a>
+        <a class="cin-navitem" href="#tooltip">气泡提示</a>
+        <a class="cin-navitem" href="#hovercard">悬停卡片</a>
+        <a class="cin-navitem" href="#popconfirm">气泡确认</a>
+        <a class="cin-navitem" href="#drawer">抽屉面板</a>
+        <a class="cin-navitem" href="#modal">模态窗口</a>
+        <a class="cin-navitem" href="#alert">警告框</a>
+        <a class="cin-navitem" href="#tour">漫游引导</a>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">弹窗与交互浮层</h1>
+                  <p class="cin-caption">按打扰成本从低到高排列：轻提示 → 气泡 → 卡片 → 确认 → 抽屉 → 模态 → 警告 → 引导</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="secondary" data-open-dialog="#dlgGuide">查看规则</button>
+                <button class="cin-btn" data-variant="primary" id="tourStart">开始引导</button>
+              </div>
+            </div>
+
+            <section class="cin-region cin-grid" data-auto id="toast">
+              <div class="cin-panel">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">轻提示 Toast</h2><span class="cin-caption">2.4s 自动消失</span></div>
+                <div class="cin-cluster">
+                  <button class="cin-btn" data-variant="secondary" data-toast="success">保存成功</button>
+                  <button class="cin-btn" data-variant="secondary" data-toast="danger">保存失败</button>
+                  <button class="cin-btn" data-variant="secondary" data-toast="info">已同步</button>
+                  <button class="cin-btn" data-variant="secondary" data-toast="action">带操作</button>
+                </div>
+                <p class="cin-caption" style="margin-block-start:var(--cin-space-150)">不遮挡操作区、不抢焦点；悬停即暂停倒计时。语气色只有 success / danger / info 三档。</p>
+              </div>
+
+              <div class="cin-panel" id="tooltip">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">气泡提示 Tooltip</h2><span class="cin-caption">四向 · 280px 上限</span></div>
+                <div class="cin-cluster">
+                  <span class="cin-tip-wrap">
+                    <button class="cin-btn" data-variant="secondary" aria-describedby="tipTop">上</button>
+                    <span class="cin-tooltip" id="tipTop" role="tooltip" data-side="top">按最近一次同步时间排序</span>
+                  </span>
+                  <span class="cin-tip-wrap">
+                    <button class="cin-btn" data-variant="secondary" aria-describedby="tipRight">右</button>
+                    <span class="cin-tooltip" id="tipRight" role="tooltip" data-side="right">导出当前筛选结果</span>
+                  </span>
+                  <span class="cin-tip-wrap">
+                    <button class="cin-btn" data-variant="secondary" aria-describedby="tipBottom">下</button>
+                    <span class="cin-tooltip" id="tipBottom" role="tooltip" data-side="bottom">含税价，单位：元</span>
+                  </span>
+                  <span class="cin-tip-wrap">
+                    <button class="cin-btn" data-variant="secondary" aria-describedby="tipLeft">左</button>
+                    <span class="cin-tooltip" id="tipLeft" role="tooltip" data-side="left">需要「库存管理」权限</span>
+                  </span>
+                </div>
+                <p class="cin-caption" style="margin-block-start:var(--cin-space-150)">只解释图标或字段含义，不放操作；键盘 focus 同样触发，Esc 关闭。</p>
+              </div>
+            </section>
+
+            <section class="cin-region cin-grid" data-auto>
+              <div class="cin-panel" id="hovercard">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">悬停卡片 Hover Card</h2><span class="cin-caption">移出留 320ms</span></div>
+                <div class="cin-cluster">
+                  <span class="cin-hovercard-wrap">
+                    <a class="cin-btn" data-variant="link" href="#hovercard" aria-details="hc1">@林岚</a>
+                    <span class="cin-hovercard" id="hc1">
+                      <span class="cin-hovercard-head">
+                        <span class="cin-hovercard-avatar">林</span>
+                        <span class="cin-hovercard-identity">
+                          <span class="cin-hovercard-name">林岚</span>
+                          <span class="cin-hovercard-meta">采购部 · 华东仓</span>
+                        </span>
+                      </span>
+                      <span class="cin-hovercard-meta">本月审批 26 单，平均 1.4 小时完成。</span>
+                      <span class="cin-hovercard-actions">
+                        <button class="cin-btn" data-size="sm" data-variant="primary">发消息</button>
+                        <button class="cin-btn" data-size="sm" data-variant="secondary">看单据</button>
+                      </span>
+                    </span>
+                  </span>
+                  <span class="cin-caption">把鼠标移进卡片仍可点击按钮，不会立刻消失。</span>
+                </div>
+              </div>
+
+              <div class="cin-panel" id="popconfirm">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">气泡确认 Popconfirm</h2><span class="cin-caption">行内二次确认</span></div>
+                <div class="cin-cluster">
+                  <span class="cin-popconfirm-wrap">
+                    <button class="cin-btn" data-variant="danger-ghost" data-popconfirm="#pc1" aria-haspopup="dialog" aria-expanded="false" aria-controls="pc1">删除该行</button>
+                    <span class="cin-popconfirm" id="pc1" data-side="top" role="dialog" aria-modal="false" aria-labelledby="pc1Title">
+                      <span class="cin-popconfirm-title" id="pc1Title">删除这行明细？</span>
+                      <span class="cin-popconfirm-body">删除后需重新录入，单据合计会自动重算。</span>
+                      <span class="cin-popconfirm-actions">
+                        <button class="cin-btn" data-size="sm" data-variant="secondary" data-popconfirm-cancel data-safe-action>取消</button>
+                        <button class="cin-btn" data-size="sm" data-variant="danger" data-popconfirm-ok="delete">删除</button>
+                      </span>
+                    </span>
+                  </span>
+                  <span class="cin-popconfirm-wrap">
+                    <button class="cin-btn" data-variant="secondary" data-popconfirm="#pc2" aria-haspopup="dialog" aria-expanded="false" aria-controls="pc2">下向确认</button>
+                    <span class="cin-popconfirm" id="pc2" data-side="bottom" role="dialog" aria-modal="false" aria-labelledby="pc2Title">
+                      <span class="cin-popconfirm-title" id="pc2Title">标记为已对账？</span>
+                      <span class="cin-popconfirm-body">标记后将锁定本期金额。</span>
+                      <span class="cin-popconfirm-actions">
+                        <button class="cin-btn" data-size="sm" data-variant="secondary" data-popconfirm-cancel data-safe-action>再想想</button>
+                        <button class="cin-btn" data-size="sm" data-variant="primary" data-popconfirm-ok="lock">确认</button>
+                      </span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-region cin-grid" data-auto>
+              <div class="cin-panel" id="drawer">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">抽屉面板 Drawer</h2><span class="cin-caption">保留原页面</span></div>
+                <div class="cin-cluster">
+                  <button class="cin-btn" data-variant="secondary" data-open-dialog="#drwProfile">右侧 · 编辑资料</button>
+                  <button class="cin-btn" data-variant="secondary" data-open-dialog="#drwFilter">底部 · 筛选</button>
+                  <button class="cin-btn" data-variant="secondary" data-open-dialog="#drwWide">左宽 · 明细</button>
+                </div>
+                <p class="cin-caption" style="margin-block-start:var(--cin-space-150)">320 / 420 / 560 三档，移动端自动全宽；抽屉内可滚动，页脚固定。</p>
+              </div>
+
+              <div class="cin-panel" id="modal">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">模态窗口 Modal</h2><span class="cin-caption">聚焦单一任务</span></div>
+                <div class="cin-cluster">
+                  <button class="cin-btn" data-variant="primary" data-open-dialog="#dlgLogin">登录</button>
+                  <button class="cin-btn" data-variant="secondary" data-open-dialog="#dlgNew">新建客户</button>
+                  <button class="cin-btn" data-variant="secondary" data-open-dialog="#dlgNote">说明（小）</button>
+                </div>
+                <p class="cin-caption" style="margin-block-start:var(--cin-space-150)">Esc / 点遮罩可关；焦点锁在面板内，关闭后回到触发按钮。</p>
+              </div>
+
+              <div class="cin-panel" id="alert">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">警告框 Alert Dialog</h2><span class="cin-caption">不可逆操作</span></div>
+                <div class="cin-cluster">
+                  <button class="cin-btn" data-variant="danger" data-open-dialog="#dlgDelete">删除账套</button>
+                  <button class="cin-btn" data-variant="secondary" data-open-dialog="#dlgDiscard">放弃未保存修改</button>
+                </div>
+                <p class="cin-caption" style="margin-block-start:var(--cin-space-150)">必须明确选择才可关闭，默认聚焦「取消」，语气色随风险等级。</p>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="tour">
+              <div class="cin-panel-head"><h2 class="cin-panel-title">漫游式引导 Tour</h2><span class="cin-caption">3 步 · 聚光挖孔</span></div>
+              <div class="cin-cluster">
+                <button class="cin-btn" data-variant="primary" id="tourStart2">从头走一遍</button>
+                <span class="cin-caption">高亮关键功能并配说明，适合首次进入的新用户；←/→ 切换，Esc 退出。</span>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <nav class="cin-tabbar">
+      <a class="cin-navitem" aria-current="page" href="#">首页</a>
+      <a class="cin-navitem" href="#">单据</a>
+      <a class="cin-navitem" href="#">我的</a>
+    </nav>
+  </div>
+
+  <!-- ================= 抽屉 ================= -->
+  <dialog class="cin-drawer" id="drwProfile" data-side="end" data-size="md" data-backdrop-close aria-labelledby="drwProfileTitle">
+    <div class="cin-drawer-panel">
+      <div class="cin-drawer-head">
+        <h2 class="cin-drawer-title" id="drwProfileTitle">编辑资料</h2>
+        <button class="cin-dialog-close" data-close-dialog="cancel" aria-label="关闭">✕</button>
+      </div>
+      <div class="cin-drawer-body">
+        <div class="cin-field">
+          <label class="cin-field-label" for="drwName">客户名称</label>
+          <input class="cin-input" id="drwName" value="杭州岚图贸易有限公司" data-autofocus>
+        </div>
+        <div class="cin-field">
+          <label class="cin-field-label" for="drwLevel">客户等级</label>
+          <select class="cin-select" id="drwLevel"><option>战略客户</option><option>重点客户</option><option>普通客户</option></select>
+        </div>
+        <div class="cin-field">
+          <label class="cin-field-label" for="drwNote">备注</label>
+          <textarea class="cin-textarea" id="drwNote" rows="4">账期 30 天，月结。</textarea>
+        </div>
+      </div>
+      <div class="cin-drawer-foot">
+        <button class="cin-btn" data-variant="secondary" data-close-dialog="cancel">取消</button>
+        <button class="cin-btn" data-variant="primary" data-close-dialog="save">保存</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="cin-drawer" id="drwFilter" data-side="bottom" data-backdrop-close aria-labelledby="drwFilterTitle">
+    <div class="cin-drawer-panel">
+      <div class="cin-drawer-head">
+        <h2 class="cin-drawer-title" id="drwFilterTitle">筛选单据</h2>
+        <button class="cin-dialog-close" data-close-dialog="cancel" aria-label="关闭">✕</button>
+      </div>
+      <div class="cin-drawer-body">
+        <div class="cin-field">
+          <label class="cin-field-label" for="drwRange">日期范围</label>
+          <select class="cin-select" id="drwRange" data-autofocus><option>最近 7 天</option><option>最近 30 天</option><option>本季度</option></select>
+        </div>
+        <div class="cin-cluster">
+          <span class="cin-chip">待审核</span><span class="cin-chip">已出库</span><span class="cin-chip">已作废</span>
+        </div>
+      </div>
+      <div class="cin-drawer-foot">
+        <button class="cin-btn" data-variant="ghost" data-close-dialog="reset">重置</button>
+        <button class="cin-btn" data-variant="primary" data-close-dialog="apply">应用</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="cin-drawer" id="drwWide" data-side="start" data-size="lg" data-backdrop-close aria-labelledby="drwWideTitle">
+    <div class="cin-drawer-panel">
+      <div class="cin-drawer-head">
+        <h2 class="cin-drawer-title" id="drwWideTitle">单据明细</h2>
+        <button class="cin-dialog-close" data-close-dialog="cancel" aria-label="关闭">✕</button>
+      </div>
+      <div class="cin-drawer-body">
+        <dl class="cin-kv">
+          <dt>单号</dt><dd class="cin-mono">CG-20261031-0042</dd>
+          <dt>供应商</dt><dd>苏州恒信五金</dd>
+          <dt>金额</dt><dd class="cin-money">¥ 18,420.00</dd>
+          <dt>状态</dt><dd><span class="cin-pill" data-tone="pending">待审核</span></dd>
+        </dl>
+        <div class="cin-inline-alert" data-tone="warning">该供应商账期即将到期。</div>
+      </div>
+      <div class="cin-drawer-foot">
+        <button class="cin-btn" data-variant="secondary" data-close-dialog="cancel">关闭</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ================= 模态 / 警告框 ================= -->
+  <dialog class="cin-dialog" id="dlgLogin" data-size="sm" data-backdrop-close aria-labelledby="dlgLoginTitle">
+    <div class="cin-dialog-panel">
+      <div class="cin-dialog-head">
+        <div class="cin-dialog-head-main">
+          <h2 class="cin-dialog-title" id="dlgLoginTitle">登录 Cinder</h2>
+          <p class="cin-dialog-desc">使用企业账号继续。</p>
+        </div>
+        <button class="cin-dialog-close" data-close-dialog="cancel" aria-label="关闭">✕</button>
+      </div>
+      <div class="cin-dialog-body">
+        <div class="cin-field">
+          <label class="cin-field-label" for="lgUser">账号</label>
+          <input class="cin-input" id="lgUser" autocomplete="username" data-autofocus>
+        </div>
+        <div class="cin-field">
+          <label class="cin-field-label" for="lgPass">密码</label>
+          <input class="cin-input" id="lgPass" type="password" autocomplete="current-password">
+        </div>
+      </div>
+      <div class="cin-dialog-foot">
+        <button class="cin-btn" data-variant="secondary" data-close-dialog="cancel">取消</button>
+        <button class="cin-btn" data-variant="primary" data-close-dialog="login">登录</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="cin-dialog" id="dlgNew" data-size="md" data-backdrop-close aria-labelledby="dlgNewTitle">
+    <div class="cin-dialog-panel">
+      <div class="cin-dialog-head">
+        <div class="cin-dialog-head-main">
+          <h2 class="cin-dialog-title" id="dlgNewTitle">新建客户</h2>
+          <p class="cin-dialog-desc">建好后可直接开单。</p>
+        </div>
+        <button class="cin-dialog-close" data-close-dialog="cancel" aria-label="关闭">✕</button>
+      </div>
+      <div class="cin-dialog-body">
+        <div class="cin-grid" data-cols="2">
+          <div class="cin-field">
+            <label class="cin-field-label" data-required for="ncName">客户名称</label>
+            <input class="cin-input" id="ncName" data-autofocus>
+          </div>
+          <div class="cin-field">
+            <label class="cin-field-label" for="ncPhone">联系电话</label>
+            <input class="cin-input" id="ncPhone" inputmode="tel">
+          </div>
+          <div class="cin-field">
+            <label class="cin-field-label" for="ncLevel">等级</label>
+            <select class="cin-select" id="ncLevel"><option>普通客户</option><option>重点客户</option><option>战略客户</option></select>
+          </div>
+          <div class="cin-field">
+            <label class="cin-field-label" for="ncTerm">账期</label>
+            <input class="cin-input" id="ncTerm" inputmode="numeric" value="30">
+          </div>
+        </div>
+        <p class="cin-field-help">名称与账期会进入合同模板，请核对。</p>
+      </div>
+      <div class="cin-dialog-foot">
+        <span class="cin-dialog-foot-note">必填 2 项</span>
+        <button class="cin-btn" data-variant="secondary" data-close-dialog="cancel">取消</button>
+        <button class="cin-btn" data-variant="primary" data-close-dialog="create">创建</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="cin-dialog" id="dlgNote" data-size="sm" data-backdrop-close aria-labelledby="dlgNoteTitle">
+    <div class="cin-dialog-panel">
+      <div class="cin-dialog-head">
+        <div class="cin-dialog-head-main">
+          <h2 class="cin-dialog-title" id="dlgNoteTitle">为什么需要二次确认</h2>
+          <p class="cin-dialog-desc">不可逆操作前，先让人停一秒。</p>
+        </div>
+        <button class="cin-dialog-close" data-close-dialog="cancel" aria-label="关闭">✕</button>
+      </div>
+      <div class="cin-dialog-body">
+        <p class="cin-body">删除、覆盖、作废这类动作没有撤销入口，用警告框而不是轻提示；文案写清后果，而不是「确定吗？」。</p>
+      </div>
+      <div class="cin-dialog-foot">
+        <button class="cin-btn" data-variant="primary" data-close-dialog="ok">知道了</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="cin-dialog" id="dlgDelete" data-size="sm" data-static role="alertdialog" aria-labelledby="dlgDeleteTitle" aria-describedby="dlgDeleteText">
+    <div class="cin-dialog-panel">
+      <div class="cin-alert">
+        <span class="cin-alert-icon" aria-hidden="true">!</span>
+        <div class="cin-alert-main">
+          <h2 class="cin-alert-title" id="dlgDeleteTitle">删除账套「杭州仓」？</h2>
+          <p class="cin-alert-text" id="dlgDeleteText">删除后 1,284 条单据与全部期初余额一并清除。</p>
+          <p class="cin-alert-consequence">不可恢复，也无法通过回收站找回。</p>
+        </div>
+      </div>
+      <div class="cin-dialog-foot">
+        <button class="cin-btn" data-variant="secondary" data-safe-action data-close-dialog="cancel">取消</button>
+        <button class="cin-btn" data-variant="danger" id="confirmDelete">确认删除</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="cin-dialog" id="dlgDiscard" data-size="sm" data-static role="alertdialog" aria-labelledby="dlgDiscardTitle" aria-describedby="dlgDiscardText">
+    <div class="cin-dialog-panel">
+      <div class="cin-alert" data-tone="warning">
+        <span class="cin-alert-icon" aria-hidden="true">!</span>
+        <div class="cin-alert-main">
+          <h2 class="cin-alert-title" id="dlgDiscardTitle">放弃未保存的修改？</h2>
+          <p class="cin-alert-text" id="dlgDiscardText">当前单据有 6 处改动尚未提交，离开后不保留草稿。</p>
+        </div>
+      </div>
+      <div class="cin-dialog-foot">
+        <button class="cin-btn" data-variant="secondary" data-safe-action data-close-dialog="cancel">继续编辑</button>
+        <button class="cin-btn" data-variant="danger" data-close-dialog="discard">放弃修改</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="cin-dialog" id="dlgGuide" data-size="lg" data-backdrop-close aria-labelledby="dlgGuideTitle">
+    <div class="cin-dialog-panel">
+      <div class="cin-dialog-head">
+        <div class="cin-dialog-head-main">
+          <h2 class="cin-dialog-title" id="dlgGuideTitle">如何选弹窗</h2>
+          <p class="cin-dialog-desc">按打扰成本递增，能轻不重。</p>
+        </div>
+        <button class="cin-dialog-close" data-close-dialog="cancel" aria-label="关闭">✕</button>
+      </div>
+      <div class="cin-dialog-body">
+        <table class="cin-table">
+          <thead><tr><th>组件</th><th>打断程度</th><th>典型场景</th></tr></thead>
+          <tbody>
+            <tr><td>Toast</td><td>无</td><td>保存成功、已同步</td></tr>
+            <tr><td>Tooltip</td><td>无</td><td>图标释义、字段含义</td></tr>
+            <tr><td>Hover Card</td><td>无</td><td>人名预览、卡片详情</td></tr>
+            <tr><td>Popconfirm</td><td>轻</td><td>删一行、锁定对账</td></tr>
+            <tr><td>Drawer</td><td>中</td><td>编辑资料、筛选、明细</td></tr>
+            <tr><td>Modal</td><td>中</td><td>登录、新建表单</td></tr>
+            <tr><td>Alert Dialog</td><td>重</td><td>删除账套、放弃修改</td></tr>
+            <tr><td>Tour</td><td>重（一次性）</td><td>新用户上手引导</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cin-dialog-foot">
+        <button class="cin-btn" data-variant="primary" data-close-dialog="ok">知道了</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="../dist/cinder.js" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      var toastMap = {
+        success: { message: "采购单已保存", tone: "success" },
+        danger: { message: "保存失败，请检查网络", tone: "danger" },
+        info: { message: "已同步至云端", tone: "info" },
+        action: { message: "草稿已删除", tone: "default", action: { label: "撤销" } }
+      };
+      document.querySelectorAll("[data-toast]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          Cinder.toast(toastMap[btn.getAttribute("data-toast")]);
+        });
+      });
+
+      document.addEventListener("cin:confirm", function (e) {
+        Cinder.toast({ message: "已删除 1 行明细", tone: "success" });
+      });
+
+      document.querySelectorAll("dialog").forEach(function (dlg) {
+        dlg.addEventListener("cin:close", function (e) {
+          if (e.detail.reason === "save") Cinder.toast({ message: "资料已保存", tone: "success" });
+          if (e.detail.reason === "apply") Cinder.toast({ message: "筛选已应用", tone: "success" });
+          if (e.detail.reason === "create") Cinder.toast({ message: "客户已创建", tone: "success" });
+          if (e.detail.reason === "login") Cinder.toast({ message: "登录成功", tone: "success" });
+        });
+      });
+
+      document.getElementById("confirmDelete").addEventListener("click", function () {
+        Cinder.closeDialog(document.getElementById("dlgDelete"), "deleted");
+        Cinder.toast({ message: "账套已删除", tone: "danger" });
+      });
+
+      var steps = [
+        { target: "#toast", title: "先看轻提示", body: "保存成功这类反馈不要用模态，Toast 两秒自动消失，不打断当前操作。" },
+        { target: "#popconfirm", title: "危险动作就地确认", body: "删一行、锁对账，用气泡确认贴着按钮问，别升级成整页弹窗。" },
+        { target: "#modal", title: "需要专注才用模态", body: "登录、新建表单这类必须完成才能继续的任务，才值得挡住整页。" },
+        { target: "#alert", title: "不可逆操作走警告框", body: "删除账套、放弃修改，用警告框写清后果，并默认聚焦取消。" }
+      ];
+      function startTour() {
+        Cinder.tour({ steps: steps, title: "弹窗选型引导", onDone: function () {
+          Cinder.toast({ message: "引导完成，可以开始用了", tone: "success" });
+        }});
+      }
+      document.getElementById("tourStart").addEventListener("click", startTour);
+      document.getElementById("tourStart2").addEventListener("click", startTour);
+    });
+  </script>
+</body>
+</html>

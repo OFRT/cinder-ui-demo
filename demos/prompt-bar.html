@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 输入器</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="../dist/cinder-icons.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">prompt-bar</span>
+      <span class="cin-caption">一句话 + @ 来源 + / 命令 + 模型 + 听写；无 JS 退化为普通 textarea</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础：来源 / 命令 / 模型 / 听写 / 发送</h2>
+          <p class="cin-caption">输入 <code>/</code> 或 <code>@</code> 打开菜单；↑↓ 移动，Enter 选中，Esc 收起，Shift+Enter 换行。</p>
+          <form class="cin-prompt" id="prompt-basic">
+            <div class="cin-prompt-refs"></div>
+            <textarea class="cin-prompt-field" name="prompt" rows="1"
+                      placeholder="给 Agent 一句话，/ 唤起命令，@ 引用来源"></textarea>
+            <p class="cin-prompt-error" hidden></p>
+
+            <ul class="cin-prompt-menu" data-menu="command" role="listbox" aria-label="命令" hidden>
+              <li class="cin-prompt-menu-title" role="presentation">插入命令</li>
+              <li class="cin-prompt-option" role="option" data-value="/summarize">总结这段话<span class="cin-prompt-option-hint">/summarize</span></li>
+              <li class="cin-prompt-option" role="option" data-value="/translate">翻译成英文<span class="cin-prompt-option-hint">/translate</span></li>
+              <li class="cin-prompt-option" role="option" data-value="/extract">抽取表格<span class="cin-prompt-option-hint">/extract</span></li>
+              <li class="cin-prompt-option" role="option" data-value="/rewrite" aria-disabled="true">改写（需管理员）<span class="cin-prompt-option-hint">不可用</span></li>
+              <li class="cin-prompt-menu-empty" role="presentation" hidden>没有匹配的命令</li>
+            </ul>
+
+            <ul class="cin-prompt-menu" data-menu="mention" role="listbox" aria-label="引用来源" hidden>
+              <li class="cin-prompt-menu-title" role="presentation">引用来源</li>
+              <li class="cin-prompt-option" role="option" data-kind="文件" data-value="2025 年度合同汇总.pdf">2025 年度合同汇总.pdf<span class="cin-prompt-option-hint">文件</span></li>
+              <li class="cin-prompt-option" role="option" data-kind="表格" data-value="供应商对账明细">供应商对账明细<span class="cin-prompt-option-hint">表格</span></li>
+              <li class="cin-prompt-option" role="option" data-kind="网页" data-value="厂商报价页">厂商报价页<span class="cin-prompt-option-hint">网页</span></li>
+              <li class="cin-prompt-menu-empty" role="presentation" hidden>没有匹配的来源</li>
+            </ul>
+
+            <ul class="cin-prompt-menu" data-menu="model" role="listbox" aria-label="选择模型" hidden>
+              <li class="cin-prompt-menu-title" role="presentation">选择模型</li>
+              <li class="cin-prompt-option" role="option" data-value="Fast-8B">Fast-8B<span class="cin-prompt-option-hint">本地 · 快</span></li>
+              <li class="cin-prompt-option" role="option" data-value="Balanced-32B">Balanced-32B<span class="cin-prompt-option-hint">默认</span></li>
+              <li class="cin-prompt-option" role="option" data-value="Deep-70B">Deep-70B<span class="cin-prompt-option-hint">准 · 慢</span></li>
+            </ul>
+
+            <div class="cin-prompt-foot">
+              <button type="button" class="cin-prompt-tool" data-trigger="mention" aria-expanded="false" aria-haspopup="listbox">
+                <span class="cin-i cin-i-paperclip" data-size="sm" aria-hidden="true"></span>来源
+              </button>
+              <button type="button" class="cin-prompt-tool" data-trigger="command" aria-expanded="false" aria-haspopup="listbox">
+                <span class="cin-i cin-i-rows-3" data-size="sm" aria-hidden="true"></span>命令
+              </button>
+              <button type="button" class="cin-prompt-model" aria-expanded="false" aria-haspopup="listbox">
+                <span class="cin-i cin-i-cpu" data-size="sm" aria-hidden="true"></span>
+                <span class="cin-prompt-model-label">模型</span>
+                <span class="cin-prompt-model-value">Balanced-32B</span>
+                <input type="hidden" name="model" value="Balanced-32B">
+              </button>
+              <button type="button" class="cin-prompt-tool cin-prompt-mic" data-dictate aria-pressed="false">
+                <span class="cin-i cin-i-activity" data-size="sm" aria-hidden="true"></span>听写
+              </button>
+              <button type="submit" class="cin-btn cin-prompt-send" data-variant="primary" data-size="sm">
+                <span class="cin-i cin-i-arrow-up" data-size="sm" aria-hidden="true"></span>发送
+              </button>
+            </div>
+            <input type="hidden" name="command" value="">
+          </form>
+          <pre class="cin-code" id="prompt-log" aria-live="polite">（等待事件：cin:prompt-submit / cin:prompt-model / cin:prompt-dictate）</pre>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">状态：working（听写中）/ failed</h2>
+          <p class="cin-caption">失败态必须带文字原因（不允许只变边框色）；听写态用内描边而非无限动画。</p>
+
+          <form class="cin-prompt" data-state="working">
+            <div class="cin-prompt-refs">
+              <span class="cin-prompt-ref">
+                <span class="cin-prompt-ref-kind">文件</span>
+                <span class="cin-prompt-ref-name">2025 年度合同汇总.pdf</span>
+                <button type="button" class="cin-prompt-ref-remove" aria-label="移除来源 2025 年度合同汇总.pdf">&times;</button>
+              </span>
+            </div>
+            <textarea class="cin-prompt-field" rows="1" placeholder="正在听……">把这份合同的付款条款整理成表</textarea>
+            <div class="cin-prompt-foot">
+              <button type="button" class="cin-prompt-tool cin-prompt-mic" data-dictate data-dictate-static aria-pressed="true">
+                <span class="cin-i cin-i-activity" data-size="sm" aria-hidden="true"></span>停止听写
+              </button>
+              <button type="submit" class="cin-btn cin-prompt-send" data-variant="primary" data-size="sm">发送</button>
+            </div>
+          </form>
+
+          <form class="cin-prompt" data-state="failed" data-cin-no-init>
+            <div class="cin-prompt-refs"></div>
+            <textarea class="cin-prompt-field" rows="1" aria-invalid="true">把这批发票按月份归类</textarea>
+            <p class="cin-prompt-error">发送失败：网络中断，草稿已保留</p>
+            <div class="cin-prompt-foot">
+              <button type="submit" class="cin-btn cin-prompt-send" data-variant="primary" data-size="sm">重试</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">窄屏：320px 容器内不塌</h2>
+          <p class="cin-caption">工具条换行、模型名让位、输入区不被压成一条线。</p>
+          <div style="width:320px;max-width:100%">
+            <form class="cin-prompt">
+              <div class="cin-prompt-refs"></div>
+              <textarea class="cin-prompt-field" rows="1" placeholder="窄屏下也能正常输入与选择"></textarea>
+              <div class="cin-prompt-foot">
+                <button type="button" class="cin-prompt-tool" data-trigger="mention"><span class="cin-i cin-i-paperclip" data-size="sm" aria-hidden="true"></span>来源</button>
+                <button type="button" class="cin-prompt-tool" data-trigger="command"><span class="cin-i cin-i-rows-3" data-size="sm" aria-hidden="true"></span>命令</button>
+                <button type="button" class="cin-prompt-model">
+                  <span class="cin-i cin-i-cpu" data-size="sm" aria-hidden="true"></span>
+                  <span class="cin-prompt-model-label">模型</span>
+                  <span class="cin-prompt-model-value">Balanced-32B</span>
+                </button>
+                <button type="submit" class="cin-btn cin-prompt-send" data-variant="primary" data-size="sm">发送</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">无 JS：一个普通表单</h2>
+          <p class="cin-caption">不加载 cinder.js 时手写按钮不显示、菜单保持 hidden，textarea 与提交按钮照常可用（下表刻意不带脚本接管）。</p>
+          <form class="cin-prompt" action="#" onsubmit="event.preventDefault(); document.getElementById('prompt-log').textContent='原生表单已提交（无 JS 路径）';">
+            <textarea class="cin-prompt-field" name="prompt" rows="2" placeholder="没有脚本也能写、也能提交"></textarea>
+            <div class="cin-prompt-foot">
+              <button type="submit" class="cin-btn cin-prompt-send" data-variant="secondary" data-size="sm">原生提交</button>
+            </div>
+          </form>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js" defer></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const log = document.getElementById("prompt-log");
+      const root = document.getElementById("prompt-basic");
+      const write = (name, detail) => {
+        log.textContent = name + " " + JSON.stringify(detail, null, 2);
+      };
+      root.addEventListener("cin:prompt-submit", (e) => write("cin:prompt-submit", e.detail));
+      root.addEventListener("cin:prompt-model", (e) => write("cin:prompt-model", e.detail));
+      root.addEventListener("cin:prompt-dictate", (e) => write("cin:prompt-dictate", e.detail));
+      root.addEventListener("cin:prompt-refs", (e) => write("cin:prompt-refs", e.detail));
+      // 失败态演示：输入 fail 提交时走 setError，验证原因文本落点
+      root.addEventListener("cin:prompt-submit", (e) => {
+        if (e.detail.text === "fail") root.cinPrompt?.setError("发送失败：演示用的失败原因");
+      });
+    });
+  </script>
+</body>
+</html>

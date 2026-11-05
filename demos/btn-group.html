@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 按钮组</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">btn-group</span>
+      <span class="cin-caption">共享边框与两端圆角，横竖可切、可撑满；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础三连（表格行操作）</h2>
+          <div class="cin-btn-group" id="group-basic" role="group" aria-label="单据行操作">
+            <button class="cin-btn" data-variant="secondary" type="button">查看</button>
+            <button class="cin-btn" data-variant="secondary" type="button">编辑</button>
+            <button class="cin-btn" data-variant="secondary" type="button">作废</button>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">无边框分隔（ghost 工具栏）</h2>
+          <div class="cin-btn-group" id="group-divided" data-divided role="group" aria-label="文本格式">
+            <button class="cin-btn" data-variant="ghost" type="button">加粗</button>
+            <button class="cin-btn" data-variant="ghost" type="button">斜体</button>
+            <button class="cin-btn" data-variant="ghost" type="button">下划线</button>
+            <button class="cin-btn" data-variant="ghost" type="button">清除格式</button>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">纵向（侧栏操作栈）</h2>
+          <div class="cin-btn-group" id="group-vertical" data-orientation="vertical" role="group" aria-label="批次操作">
+            <button class="cin-btn" data-variant="secondary" type="button">拆分批次</button>
+            <button class="cin-btn" data-variant="secondary" type="button">合并批次</button>
+            <button class="cin-btn" data-variant="secondary" type="button">调整优先级</button>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">撑满（表单底部主次操作）</h2>
+          <div class="cin-btn-group" id="group-full" data-full role="group" aria-label="提交或取消">
+            <button class="cin-btn" data-variant="secondary" type="button">取消</button>
+            <button class="cin-btn" data-variant="primary" type="button">提交审批</button>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">可换行（筛选标签）</h2>
+          <div class="cin-btn-group" id="group-wrap" data-wrap role="group" aria-label="快捷筛选" style="max-inline-size:420px">
+            <button class="cin-btn" data-size="sm" data-variant="secondary" type="button">待我审批</button>
+            <button class="cin-btn" data-size="sm" data-variant="secondary" type="button">本周新增</button>
+            <button class="cin-btn" data-size="sm" data-variant="secondary" type="button">超期未处理</button>
+            <button class="cin-btn" data-size="sm" data-variant="secondary" type="button">已撤回</button>
+            <button class="cin-btn" data-size="sm" data-variant="secondary" type="button">我发起的</button>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">组级禁用</h2>
+          <div class="cin-btn-group" id="group-disabled" data-disabled role="group" aria-label="归档操作">
+            <button class="cin-btn" data-variant="secondary" type="button" disabled>归档</button>
+            <button class="cin-btn" data-variant="secondary" type="button" disabled>删除</button>
+          </div>
+          <p class="cin-caption">已归档单据不可再操作；组级禁用只做视觉与指针拦截，按钮自身仍需 disabled。</p>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

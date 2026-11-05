@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>视觉基线 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html" aria-current="page">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>视觉基线</h1>
+        <p class="site-lead">像素回归阈值与更新纪律</p>
+      </header>
+<blockquote>
+<p>状态：已落地（基础设施第 18 项 ◐ → ●）。51 个演示页全量快照，固定环境渲染，像素比对阈值 0.2%。</p>
+</blockquote>
+<h2 id="s-1-为什么需要它">1. 为什么需要它</h2>
+<p>现有 50 组验收脚本是<strong>结构性断言</strong>：类名存在、变量有定义、状态选择器齐备、demo 含某个节点。它们能守住&quot;该有的都有&quot;，守不住&quot;看起来变了&quot;——改一条 <code>gap</code>、动一个 <code>border-radius</code>、把断点从 720 挪到 768，断言全绿，界面已经走形。</p>
+<p>视觉回归补的就是这一层：<strong>同一份 HTML，在同一视口下渲染出的像素必须与基线一致</strong>。</p>
+<h2 id="s-2-命令">2. 命令</h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+<th>耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npm run visual</code></td>
+<td>生成 / 更新全部基线（51 页）</td>
+<td>约 95s</td>
+</tr>
+<tr>
+<td><code>npm run visual:check</code></td>
+<td>全量比对（发版前 / CI）</td>
+<td>约 90s</td>
+</tr>
+<tr>
+<td><code>node scripts/visual-baseline.mjs --only icons thinking</code></td>
+<td>只处理名字含关键字的页</td>
+<td>按页数</td>
+</tr>
+<tr>
+<td><code>node scripts/acceptance-all.mjs visual</code></td>
+<td>验收批内的快速档（8 个关键页）</td>
+<td>约 15s</td>
+</tr>
+</tbody>
+</table>
+<p><code>acceptance-all</code> 只跑 8 个关键页（<code>icons</code> / <code>thinking</code> / <code>tool-chips</code> / <code>approval-card</code> / <code>base</code> / <code>overlay</code> / <code>skins</code> / <code>erp-dashboard</code>），避免每次全量验收多花 90 秒；改样式后仍应手动跑一次全量。</p>
+<h2 id="s-3-固定条件-改了就失去可比性">3. 固定条件（改了就失去可比性）</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>值</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>视口</td>
+<td>1280 × 900，<code>deviceScaleFactor: 1</code></td>
+<td>高分屏缩放会引入亚像素差</td>
+</tr>
+<tr>
+<td>动画</td>
+<td>截图前注入 <code>animation/transition: none</code>，<code>animations: &quot;disabled&quot;</code></td>
+<td>转圈、脉冲类组件帧位置不确定</td>
+</tr>
+<tr>
+<td>减少动效</td>
+<td><code>reducedMotion: &quot;reduce&quot;</code></td>
+<td>强制走静止分支</td>
+</tr>
+<tr>
+<td>字体</td>
+<td>等 <code>document.fonts.ready</code></td>
+<td>字体回退会整页位移</td>
+</tr>
+<tr>
+<td>file:// 权限</td>
+<td><code>--allow-file-access-from-files</code></td>
+<td>图标走 <code>mask</code> 引用 <code>icons/*.svg</code>，否则被 CORS 拦成空块</td>
+</tr>
+<tr>
+<td>抖动等待</td>
+<td>120ms</td>
+<td>让布局稳定，不掩盖真实差异</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-4-阈值与产物">4. 阈值与产物</h2>
+<ul>
+<li>差异像素比例 &gt; <strong>0.2%</strong> 判失败（<code>THRESHOLD</code>）。</li>
+<li>尺寸变化单独报错，不走比例比较——页面变高变矮是最常见的真回归。</li>
+<li>基线：<code>tests/visual/baseline/&lt;页名&gt;.png</code>（入 git，共 5.7 MB / 平均 119 KB 一页）。</li>
+<li>差异图：<code>tests/visual/diff/&lt;页名&gt;.diff.png</code>（不入 git，每次比对重算）。</li>
+</ul>
+<h2 id="s-5-更新纪律">5. 更新纪律</h2>
+<ol>
+<li><code>visual:check</code> 失败时<strong>先看 diff 图</strong>，判断是&quot;我想要的改动&quot;还是&quot;意外回归&quot;。</li>
+<li>确认是预期改动，才跑 <code>npm run visual</code> 覆盖基线，并在同一次提交里说明改了哪几个页、为什么。</li>
+<li><strong>禁止</strong>在断言失败的情况下顺手更新基线——那等于把回归洗白。这条与预算基线的纪律同源（见 <code>CONTRIBUTING.md</code> 的「预算纪律」）。</li>
+<li>新增演示页必须同时补基线，否则 <code>--check</code> 会报缺基线。</li>
+</ol>
+<h2 id="s-6-已知边界">6. 已知边界</h2>
+<ul>
+<li>跨机器字体不同会带来整体抖动；阈值 0.2% 能吸收小差异，但换字体的环境建议重建基线。</li>
+<li>含时间戳、随机数、滚动位置的页面天然不稳定，这类页面不要纳入基线。</li>
+<li>快照只覆盖浅色 + 桌面视口；深色与窄屏靠 <code>skins.html</code> 与人工回归，未做双份基线。</li>
+<li>基线是二进制，diff 不可读；配合 CHANGELOG 的说明才能追溯意图。
+<em>（内容由AI生成，仅供参考）</em></li>
+</ul>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-1-为什么需要它" data-level="2">1. 为什么需要它</a>
+      <a href="#s-2-命令" data-level="2">2. 命令</a>
+      <a href="#s-3-固定条件-改了就失去可比性" data-level="2">3. 固定条件（改了就失去可比性）</a>
+      <a href="#s-4-阈值与产物" data-level="2">4. 阈值与产物</a>
+      <a href="#s-5-更新纪律" data-level="2">5. 更新纪律</a>
+      <a href="#s-6-已知边界" data-level="2">6. 已知边界</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

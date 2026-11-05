@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 浮层面板</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">popover</span>
+      <span class="cin-caption">锚点四向弹出 + 三段内容；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">默认向下（data-open 展开）</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-400); min-height:220px; align-items:flex-start">
+            <div class="cin-popover-wrap">
+              <button class="cin-btn cin-popover-trigger" type="button" aria-expanded="true" aria-controls="pv-default">筛选</button>
+              <div class="cin-popover" id="pv-default" role="dialog" aria-label="筛选条件" data-open>
+                <span class="cin-popover-title">筛选条件</span>
+                <div class="cin-popover-body">
+                  <p>按状态与时间范围筛选当前列表，条件在关闭面板后仍然保留。</p>
+                </div>
+                <div class="cin-popover-foot">
+                  <button class="cin-btn" data-size="sm" type="button">重置</button>
+                  <button class="cin-btn" data-size="sm" data-variant="primary" type="button">应用</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="cin-popover-wrap">
+              <button class="cin-btn cin-popover-trigger" type="button" aria-expanded="true" aria-controls="pv-auto">列显示</button>
+              <div class="cin-popover" id="pv-auto" role="dialog" aria-label="列显示" data-open data-width="auto">
+                <div class="cin-popover-body">表头固定 · 斑马纹 · 紧凑行高</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">向上弹出（data-side="top"）</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-400); margin-block-start:180px">
+            <div class="cin-popover-wrap">
+              <button class="cin-btn cin-popover-trigger" type="button" aria-expanded="true" aria-controls="pv-top">更多</button>
+              <div class="cin-popover" id="pv-top" data-side="top" role="region" aria-label="更多操作" data-open>
+                <span class="cin-popover-title">更多操作</span>
+                <div class="cin-popover-body">导出、复制链接、归档。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">侧向弹出（data-side="end" / "start"）</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-800); margin-block-start:140px">
+            <div class="cin-popover-wrap">
+              <button class="cin-btn cin-popover-trigger" type="button" aria-expanded="true" aria-controls="pv-end">右侧面板</button>
+              <div class="cin-popover" id="pv-end" data-side="end" role="region" aria-label="右侧面板" data-open data-width="auto">
+                <div class="cin-popover-body">侧向面板，与触发器顶端对齐。</div>
+              </div>
+            </div>
+            <div class="cin-popover-wrap">
+              <button class="cin-btn cin-popover-trigger" type="button" aria-expanded="true" aria-controls="pv-start">左侧面板</button>
+              <div class="cin-popover" id="pv-start" data-side="start" role="region" aria-label="左侧面板" data-open data-width="auto">
+                <div class="cin-popover-body">侧向面板，向左展开。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">焦点驱动（无 data-open，点按钮即可看）</h2>
+          <p class="cin-caption">触发器获得焦点时展开，失焦即收起；生产环境用脚本切 <code>data-open</code> 并同步 <code>aria-expanded</code>。</p>
+          <div class="cin-toolbar" style="gap:var(--cin-space-400); min-height:150px; align-items:flex-start">
+            <div class="cin-popover-wrap">
+              <button class="cin-btn cin-popover-trigger" type="button" id="pv-focus-trigger" aria-expanded="false" aria-controls="pv-focus">快捷操作</button>
+              <div class="cin-popover" id="pv-focus" role="region" aria-label="快捷操作">
+                <span class="cin-popover-title">快捷操作</span>
+                <div class="cin-popover-body">Tab 进入按钮即可展开，移出后自动收起。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">无箭头与宽面板</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-400); min-height:200px; align-items:flex-start">
+            <div class="cin-popover-wrap">
+              <button class="cin-btn cin-popover-trigger" type="button" aria-expanded="true" aria-controls="pv-wide">详情</button>
+              <div class="cin-popover" id="pv-wide" data-arrow="none" data-width="wide" role="dialog" aria-label="条目详情" data-open>
+                <span class="cin-popover-title">SO-20261101-001</span>
+                <div class="cin-popover-body">客户：云栖智造；金额：12,480.00 元；状态：待发货。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

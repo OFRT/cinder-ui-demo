@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 选项组</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">option-group</span>
+      <span class="cin-caption">多选 / 单选成组，纵向、横排、网格与卡片式；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">多选（通知渠道，纵向）</h2>
+          <fieldset class="cin-option-group" id="group-checkbox">
+            <legend>到货提醒渠道</legend>
+            <label class="cin-option">
+              <input type="checkbox" name="channel" value="app" checked>
+              <span class="cin-option-text">
+                <span class="cin-option-title">App 推送</span>
+                <span class="cin-option-desc">实时到达，支持点击直达单据</span>
+              </span>
+            </label>
+            <label class="cin-option">
+              <input type="checkbox" name="channel" value="sms">
+              <span class="cin-option-text">
+                <span class="cin-option-title">短信</span>
+                <span class="cin-option-desc">仅在工作日 9:00–20:00 发送</span>
+              </span>
+            </label>
+            <label class="cin-option">
+              <input type="checkbox" name="channel" value="mail" disabled>
+              <span class="cin-option-text">
+                <span class="cin-option-title">邮件（需管理员开启）</span>
+                <span class="cin-option-desc">当前租户未开通 SMTP，暂不可选</span>
+              </span>
+            </label>
+          </fieldset>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">单选（配送时段，横排）</h2>
+          <fieldset class="cin-option-group" id="group-radio-inline" data-layout="inline">
+            <legend>期望送达时段</legend>
+            <label class="cin-option">
+              <input type="radio" name="slot" value="am" checked>
+              <span class="cin-option-text"><span class="cin-option-title">上午</span></span>
+            </label>
+            <label class="cin-option">
+              <input type="radio" name="slot" value="pm">
+              <span class="cin-option-text"><span class="cin-option-title">下午</span></span>
+            </label>
+            <label class="cin-option">
+              <input type="radio" name="slot" value="night">
+              <span class="cin-option-text"><span class="cin-option-title">夜间</span></span>
+            </label>
+          </fieldset>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">卡片式（支付方式，网格）</h2>
+          <fieldset class="cin-option-group" id="group-card" data-variant="card" data-layout="grid">
+            <legend>支付方式</legend>
+            <label class="cin-option">
+              <input type="radio" name="pay" value="balance" checked>
+              <span class="cin-option-text">
+                <span class="cin-option-title">账户余额</span>
+                <span class="cin-option-desc">可用 ¥ 8,420.00，支付后即时到账</span>
+              </span>
+            </label>
+            <label class="cin-option">
+              <input type="radio" name="pay" value="transfer">
+              <span class="cin-option-text">
+                <span class="cin-option-title">对公转账</span>
+                <span class="cin-option-desc">1–2 个工作日核销，需上传回单</span>
+              </span>
+            </label>
+            <label class="cin-option">
+              <input type="radio" name="pay" value="credit">
+              <span class="cin-option-text">
+                <span class="cin-option-title">账期支付</span>
+                <span class="cin-option-desc">月结 30 天，本单将占用授信额度</span>
+              </span>
+            </label>
+          </fieldset>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">校验失败</h2>
+          <fieldset class="cin-option-group" id="group-invalid" data-invalid aria-describedby="invalid-hint">
+            <legend>必选一项</legend>
+            <label class="cin-option">
+              <input type="checkbox" name="agree" value="a" aria-invalid="true">
+              <span class="cin-option-text"><span class="cin-option-title">我已阅读并同意补货协议</span></span>
+            </label>
+          </fieldset>
+          <p class="cin-field-error" id="invalid-hint">请先勾选协议再提交</p>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">整组禁用</h2>
+          <fieldset class="cin-option-group" id="group-disabled" data-disabled>
+            <legend>已完成分拣，不可修改</legend>
+            <label class="cin-option">
+              <input type="checkbox" name="done" value="x" checked disabled>
+              <span class="cin-option-text"><span class="cin-option-title">已按波次分拣</span></span>
+            </label>
+            <label class="cin-option">
+              <input type="checkbox" name="done" value="y" disabled>
+              <span class="cin-option-text"><span class="cin-option-title">贴标复核</span></span>
+            </label>
+          </fieldset>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

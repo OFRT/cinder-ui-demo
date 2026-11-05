@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 进度环</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">ring</span>
+      <span class="cin-caption">conic-gradient + mask 挖空，变量驱动数值；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">进度梯度（0 / 32 / 64 / 100）</h2>
+          <div style="display:flex; align-items:center; gap:var(--cin-space-300); flex-wrap:wrap">
+            <div class="cin-ring" id="ring-zero" data-value="0" style="--cin-ring-value:0" role="progressbar" aria-label="已完成 0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span class="cin-ring-label">0<small>%</small></span>
+            </div>
+            <div class="cin-ring" id="ring-low" style="--cin-ring-value:32" role="progressbar" aria-label="已完成 32%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="32">
+              <span class="cin-ring-label">32<small>%</small></span>
+            </div>
+            <div class="cin-ring" id="ring-mid" style="--cin-ring-value:64" role="progressbar" aria-label="已完成 64%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64">
+              <span class="cin-ring-label">64<small>%</small></span>
+            </div>
+            <div class="cin-ring" id="ring-full" style="--cin-ring-value:100" role="progressbar" aria-label="已完成 100%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+              <span class="cin-ring-label">100<small>%</small></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">尺寸档（sm / 默认 / lg）</h2>
+          <div style="display:flex; align-items:center; gap:var(--cin-space-300); flex-wrap:wrap">
+            <div class="cin-ring" id="ring-sm" data-size="sm" style="--cin-ring-value:45" role="progressbar" aria-label="小尺寸 45%" aria-valuenow="45">
+              <span class="cin-ring-label">45</span>
+            </div>
+            <div class="cin-ring" id="ring-md" style="--cin-ring-value:45" role="progressbar" aria-label="默认 45%" aria-valuenow="45">
+              <span class="cin-ring-label">45<small>%</small></span>
+            </div>
+            <div class="cin-ring" id="ring-lg" data-size="lg" style="--cin-ring-value:45" role="progressbar" aria-label="大尺寸 45%" aria-valuenow="45">
+              <span class="cin-ring-label">45<small>%</small></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">语义色（success / warning / danger / neutral）</h2>
+          <div style="display:flex; align-items:center; gap:var(--cin-space-300); flex-wrap:wrap">
+            <div class="cin-ring" id="ring-success" data-tone="success" style="--cin-ring-value:88" role="progressbar" aria-label="履约率 88%" aria-valuenow="88">
+              <span class="cin-ring-label">88<small>%</small></span>
+            </div>
+            <div class="cin-ring" id="ring-warning" data-tone="warning" style="--cin-ring-value:72" role="progressbar" aria-label="库存占用 72%" aria-valuenow="72">
+              <span class="cin-ring-label">72<small>%</small></span>
+            </div>
+            <div class="cin-ring" id="ring-danger" data-tone="danger" style="--cin-ring-value:96" role="progressbar" aria-label="授信占用 96%" aria-valuenow="96">
+              <span class="cin-ring-label">96<small>%</small></span>
+            </div>
+            <div class="cin-ring" id="ring-neutral" data-tone="neutral" style="--cin-ring-value:18" role="progressbar" aria-label="参考值 18%" aria-valuenow="18">
+              <span class="cin-ring-label">18<small>%</small></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">不确定进度</h2>
+          <div style="display:flex; align-items:center; gap:var(--cin-space-300)">
+            <div class="cin-ring" id="ring-indeterminate" data-indeterminate role="progressbar" aria-label="正在计算" aria-busy="true">
+              <span class="cin-ring-label">--</span>
+            </div>
+            <p class="cin-caption">对账数据仍在拉取，尚未得到可用百分比；中心数值隐藏。</p>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">放进卡片</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(var(--cin-container-card-stack), 1fr)); gap:var(--cin-space-200)">
+            <article class="cin-card">
+              <div class="cin-card-head">
+                <div class="cin-card-heading">
+                  <h3 class="cin-card-title">本月出库任务</h3>
+                  <span class="cin-card-subtitle">华东仓 · 截至 11-01</span>
+                </div>
+              </div>
+              <div class="cin-card-body" style="display:flex; align-items:center; gap:var(--cin-space-200)">
+                <div class="cin-ring" data-size="lg" style="--cin-ring-value:63" role="progressbar" aria-label="出库完成 63%" aria-valuenow="63">
+                  <span class="cin-ring-label">63<small>%</small></span>
+                </div>
+                <div>
+                  <p>已完成 1,260 / 2,000 单</p>
+                  <p class="cin-caption">按当前速度预计 11-09 收口</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base · 文件选择</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.3</span>
+      <span class="cin-caption">拖拽、校验、图片预览与上传进度</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">文件</div>
+        <a class="cin-navitem" href="#image">单图拖拽</a>
+        <a class="cin-navitem" href="#docs">多文件与限制</a>
+        <a class="cin-navitem" href="#compact">紧凑行内</a>
+        <a class="cin-navitem" href="#progress">上传进度</a>
+        <a class="cin-navitem" href="#existing">已有文件</a>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">文件选择</h1>
+                  <p class="cin-caption">label 包 input 保证无 JS 可点选；JS 补拖拽、类型/体积/数量校验、图片预览与列表渲染</p>
+                </div>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="image">
+              <div class="cin-panel-header">
+                <h2 class="cin-title3">单图拖拽</h2>
+                <p class="cin-caption">只收图片，最大 5 MB；选中后立即本地预览，上传由业务层处理</p>
+              </div>
+              <label class="cin-dropzone" data-max-size="5" data-max-files="1" data-filelist="#list-image">
+                <input class="cin-sr-only" type="file" accept="image/*">
+                <span class="cin-dropzone-icon" aria-hidden="true"></span>
+                <span class="cin-dropzone-title">拖入图片，或点击选择</span>
+                <span class="cin-dropzone-hint">JPG / PNG / WebP，单个不超过 5 MB</span>
+              </label>
+              <ul class="cin-filelist" id="list-image"></ul>
+              <p class="cin-caption" id="log-image">等待选择</p>
+            </section>
+
+            <section class="cin-panel" id="docs">
+              <div class="cin-panel-header">
+                <h2 class="cin-title3">多文件与限制</h2>
+                <p class="cin-caption">最多 3 个、单个 2 MB、仅 PDF 与图片；超限文件单独标红并给出原因</p>
+              </div>
+              <label class="cin-dropzone" data-max-size="2" data-max-files="3" data-filelist="#list-docs">
+                <input class="cin-sr-only" type="file" multiple accept=".pdf,image/*">
+                <span class="cin-dropzone-icon" aria-hidden="true"></span>
+                <span class="cin-dropzone-title">拖入合同扫描件</span>
+                <span class="cin-dropzone-hint">PDF / JPG / PNG，最多 3 个，单个不超过 2 MB</span>
+              </label>
+              <ul class="cin-filelist" id="list-docs"></ul>
+            </section>
+
+            <section class="cin-panel" id="compact">
+              <div class="cin-panel-header">
+                <h2 class="cin-title3">紧凑行内</h2>
+                <p class="cin-caption">放在表单字段里时用 data-compact，不占整行高度</p>
+              </div>
+              <div class="cin-field">
+                <span class="cin-field-label">报关资料</span>
+                <label class="cin-dropzone" data-compact data-max-size="1" data-max-files="1" data-filelist="#list-compact">
+                  <input class="cin-sr-only" type="file" accept=".pdf">
+                  <span class="cin-dropzone-icon" aria-hidden="true"></span>
+                  <span class="cin-dropzone-text">
+                    <span class="cin-dropzone-title">上传 PDF</span>
+                    <span class="cin-dropzone-hint">不超过 1 MB</span>
+                  </span>
+                </label>
+                <ul class="cin-filelist" id="list-compact"></ul>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="progress">
+              <div class="cin-panel-header">
+                <h2 class="cin-title3">上传进度</h2>
+                <p class="cin-caption">行为层不发起请求，只提供状态：<code>Cinder.setFileProgress(el, 0-100)</code></p>
+              </div>
+              <label class="cin-dropzone" data-auto-done="false" data-max-files="2" data-filelist="#list-progress">
+                <input class="cin-sr-only" type="file" multiple>
+                <span class="cin-dropzone-icon" aria-hidden="true"></span>
+                <span class="cin-dropzone-title">选择后走上传态</span>
+                <span class="cin-dropzone-hint">选完点“模拟上传”看进度条</span>
+              </label>
+              <ul class="cin-filelist" id="list-progress"></ul>
+              <div class="cin-toolbar">
+                <button class="cin-btn" data-size="sm" id="fake-upload" type="button">模拟上传</button>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="existing">
+              <div class="cin-panel-header">
+                <h2 class="cin-title3">已有文件</h2>
+                <p class="cin-caption">服务端带回的文件行可直接用同一套类名渲染，不需要行为层参与</p>
+              </div>
+              <ul class="cin-filelist">
+                <li class="cin-fileitem" data-status="done">
+                  <span class="cin-filethumb" aria-hidden="true">pdf</span>
+                  <div class="cin-fileitem-main">
+                    <span class="cin-fileitem-name">供货协议-2026Q3.pdf</span>
+                    <span class="cin-fileitem-meta">1.8 MB · 2026-10-21 上传</span>
+                  </div>
+                  <button class="cin-fileitem-remove" type="button" aria-label="移除 供货协议-2026Q3.pdf">×</button>
+                </li>
+              </ul>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js" defer></script>
+  <script defer>
+    window.addEventListener("DOMContentLoaded", () => {
+      const logImage = document.getElementById("log-image");
+      document.addEventListener("cin:files", (e) => {
+        if (e.target.closest("#image")) {
+          const { accepted, rejected, source } = e.detail;
+          const bits = [];
+          if (accepted.length) bits.push((source === "drop" ? "拖入 " : "选择 ") + accepted.map((f) => f.name).join("、"));
+          if (rejected.length) bits.push("拒绝 " + rejected.map((r) => r.name + "（" + r.reason + "）").join("、"));
+          logImage.textContent = bits.join(" · ") || "等待选择";
+        }
+      });
+
+      document.querySelectorAll("#existing .cin-fileitem-remove").forEach((btn) => {
+        btn.addEventListener("click", () => btn.closest(".cin-fileitem").remove());
+      });
+
+      document.getElementById("fake-upload").addEventListener("click", () => {
+        const items = document.querySelectorAll("#list-progress .cin-fileitem[data-status='uploading']");
+        items.forEach((item, index) => {
+          let pct = 0;
+          const timer = setInterval(() => {
+            pct = Math.min(100, pct + 20);
+            window.Cinder.setFileProgress(item, pct);
+            if (pct >= 100) clearInterval(timer);
+          }, 120 + index * 60);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

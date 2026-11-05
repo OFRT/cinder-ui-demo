@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 虚拟滚动数据表</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.7</span>
+      <span class="cin-caption">定高行窗口渲染，一万行也只留三十来个 tr</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">虚拟滚动</div>
+        <a class="cin-navitem" href="#basic">一万行基础表</a>
+        <a class="cin-navitem" href="#api">滚动与数据 API</a>
+        <a class="cin-navitem" href="#small">少数据不铺白</a>
+        <a class="cin-navitem" href="#events">事件与日志</a>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-page cin-stack">
+          <div class="cin-page-header">
+            <div class="cin-page-header-main">
+              <div class="cin-page-header-titles">
+                <h1 class="cin-title2">虚拟滚动数据表</h1>
+                <p class="cin-caption">data-virtual 开启窗口渲染：tbody 只放视口内的行，上下占位行撑出真实滚动高度；首末列可 sticky 固定</p>
+              </div>
+            </div>
+            <div class="cin-page-header-actions">
+              <button class="cin-btn" data-variant="secondary" data-size="sm" id="toEvents">跳到「事件与日志」</button>
+            </div>
+          </div>
+
+          <section class="cin-panel" id="basic">
+            <div class="cin-panel-head">
+              <div class="cin-panel-titles">
+                <h2 class="cin-title3">一万行基础表</h2>
+                <p class="cin-caption">列由 thead 决定；数据通过 setRows 传入，行高 44px，容器高 520px</p>
+              </div>
+              <div class="cin-panel-actions">
+                <span class="cin-tag" data-tone="muted" id="stat">初始化中</span>
+              </div>
+            </div>
+
+            <div class="cin-dg" id="grid" data-virtual data-height="520" data-row-height="44" data-overscan="8">
+              <div class="cin-dg-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="cin-dg-check"><input type="checkbox" aria-label="全选" data-check-all></th>
+                      <th data-key="code" data-sort="code" data-sticky>单号</th>
+                      <th data-key="item" data-sort="item">物料</th>
+                      <th data-key="qty" data-align="end" data-sort="qty">数量</th>
+                      <th data-key="price" data-align="end">单价</th>
+                      <th data-key="amount" data-align="end" data-sort="amount">金额</th>
+                      <th data-key="status">状态</th>
+                      <th class="cin-dg-actions" data-align="end" data-sticky="end">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="cin-dg-check"><input type="checkbox" data-check></td>
+                      <td data-sticky>PO-000001</td>
+                      <td>白桃乌龙茶 500ml×12</td>
+                      <td data-align="end">42</td>
+                      <td data-align="end">¥18.90</td>
+                      <td data-align="end">¥793.80</td>
+                      <td><span class="cin-tag" data-tone="success">正常</span></td>
+                      <td class="cin-dg-actions" data-align="end" data-sticky="end"><button class="cin-btn" data-variant="link" data-size="sm">明细</button></td>
+                    </tr>
+                    <tr>
+                      <td class="cin-dg-check"><input type="checkbox" data-check></td>
+                      <td data-sticky>PO-000002</td>
+                      <td>冷链鲜奶 1L</td>
+                      <td data-align="end">10</td>
+                      <td data-align="end">¥12.50</td>
+                      <td data-align="end">¥125.00</td>
+                      <td><span class="cin-tag" data-tone="muted">待检</span></td>
+                      <td class="cin-dg-actions" data-align="end" data-sticky="end"><button class="cin-btn" data-variant="link" data-size="sm">明细</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p class="cin-caption" style="margin-block-start:var(--cin-space-150)">未开脚本时上面两行静态数据照常可读；开脚本后接管为 10000 行虚拟数据。</p>
+          </section>
+
+          <section class="cin-panel" id="api">
+            <div class="cin-panel-head">
+              <div class="cin-panel-titles">
+                <h2 class="cin-title3">滚动与数据 API</h2>
+                <p class="cin-caption">scrollToIndex / setRows / appendRows / refresh 均在控制器上，返回绑定对象</p>
+              </div>
+            </div>
+            <div class="cin-toolbar">
+              <button class="cin-btn" data-variant="secondary" data-size="sm" id="toEnd">跳到第 10000 行</button>
+              <button class="cin-btn" data-variant="secondary" data-size="sm" id="toMid">居中第 5000 行</button>
+              <button class="cin-btn" data-variant="ghost" data-size="sm" id="addRows">追加 1000 行</button>
+              <button class="cin-btn" data-variant="ghost" data-size="sm" id="dense">行高 32px</button>
+              <button class="cin-btn" data-variant="ghost" data-size="sm" id="normal">行高 44px</button>
+              <button class="cin-btn" data-variant="ghost" data-size="sm" id="clearSel">清空选择</button>
+            </div>
+            <p class="cin-caption" id="apiOut" style="margin-block-start:var(--cin-space-150)">等待操作</p>
+          </section>
+
+          <section class="cin-panel" id="small">
+            <div class="cin-panel-head">
+              <div class="cin-panel-titles">
+                <h2 class="cin-title3">少数据不铺白</h2>
+                <p class="cin-caption">行数少于视口容量时窗口等于全量，占位行高度为 0，不会出现假空白</p>
+              </div>
+            </div>
+            <div class="cin-dg" id="gridSmall" data-virtual data-height="240" data-row-height="44">
+              <div class="cin-dg-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th data-key="code" data-sticky>单号</th>
+                      <th data-key="item">物料</th>
+                      <th data-key="qty" data-align="end">数量</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="cin-panel" id="events">
+            <div class="cin-panel-head">
+              <div class="cin-panel-titles">
+                <h2 class="cin-title3">事件与日志</h2>
+                <p class="cin-caption">cin:virtualrange 窗口变化、cin:rowclick 行点击、cin:selection 选择、cin:sort 排序请求</p>
+              </div>
+            </div>
+            <div class="cin-panel-body">
+              <ul class="cin-list" data-divider id="log">
+                <li class="cin-list-item"><span class="cin-caption">暂无事件</span></li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js"></script>
+  <script>
+    (function () {
+      const C = window.Cinder;
+      const grid = document.querySelector("#grid");
+      const small = document.querySelector("#gridSmall");
+      const stat = document.querySelector("#stat");
+      const out = document.querySelector("#apiOut");
+      const log = document.querySelector("#log");
+
+      const items = ["白桃乌龙茶 500ml×12", "冷链鲜奶 1L", "不锈钢法兰 DN50", "六角螺栓 M6×40", "瓦楞纸箱 五层", "硅胶密封圈", "工业酒精 5L", "轴承 6204-2RS"];
+      const statuses = [["正常", "success"], ["待检", "muted"], ["超期", "danger"]];
+
+      const makeRows = (from, count) => {
+        const out = [];
+        for (let i = from; i < from + count; i += 1) {
+          const qty = (i % 97) + 1;
+          const price = 12.5 + (i % 13);
+          const st = statuses[i % statuses.length];
+          out.push({
+            cells: [
+              "PO-" + String(i + 1).padStart(6, "0"),
+              items[i % items.length],
+              qty,
+              "¥" + price.toFixed(2),
+              "¥" + (qty * price).toFixed(2),
+              { html: '<span class="cin-tag" data-tone="' + st[1] + '">' + st[0] + "</span>" },
+              { html: '<button class="cin-btn" data-variant="link" data-size="sm">明细</button>' }
+            ],
+            tone: i % 211 === 0 ? "danger" : ""
+          });
+        }
+        return out;
+      };
+
+      const api = C.virtualGrid(grid);
+      const apiSmall = C.virtualGrid(small);
+      if (!api) {
+        stat.textContent = "初始化失败";
+        return;
+      }
+
+      api.setRows(makeRows(0, 10000));
+      if (apiSmall) {
+        apiSmall.setRows(makeRows(0, 7).map((r) => ({ cells: r.cells.slice(0, 3) })));
+      }
+
+      const paintStat = () => {
+        const domRows = grid.querySelectorAll("tbody tr[data-vrow]").length;
+        stat.textContent = "共 " + api.total + " 行 · 窗口 " + (api.range.start + 1) + "-" + api.range.end + " · DOM " + domRows + " 行";
+      };
+      paintStat();
+
+      const push = (text) => {
+        if (log.querySelector(".cin-caption")) log.textContent = "";
+        const li = document.createElement("li");
+        li.className = "cin-list-item";
+        li.innerHTML = '<span class="cin-caption">' + text + "</span>";
+        log.insertBefore(li, log.firstChild);
+        while (log.children.length > 8) log.lastElementChild.remove();
+      };
+
+      grid.addEventListener("cin:virtualrange", (e) => {
+        paintStat();
+        push("virtualrange " + e.detail.start + " → " + e.detail.end + "（共 " + e.detail.total + "）");
+      });
+      grid.addEventListener("cin:rowclick", (e) => push("rowclick #" + (e.detail.index + 1) + " " + e.detail.row.cells[0]));
+      grid.addEventListener("cin:selection", (e) => push("selection " + e.detail.count + " 行"));
+      grid.addEventListener("cin:sort", (e) => push("sort " + e.detail.key + " " + e.detail.dir));
+
+      document.querySelector("#toEnd").addEventListener("click", () => {
+        api.scrollToIndex(api.total - 1, { align: "end" });
+        out.textContent = "scrollTop=" + Math.round(api.scroller.scrollTop) + " · 窗口 " + api.range.start + "-" + api.range.end;
+      });
+      document.querySelector("#toMid").addEventListener("click", () => {
+        api.scrollToIndex(5000, { align: "center" });
+        out.textContent = "scrollTop=" + Math.round(api.scroller.scrollTop) + " · 窗口 " + api.range.start + "-" + api.range.end;
+      });
+      document.querySelector("#addRows").addEventListener("click", () => {
+        const n = api.appendRows(makeRows(api.total, 1000));
+        out.textContent = "追加后共 " + n + " 行";
+        paintStat();
+      });
+      document.querySelector("#dense").addEventListener("click", () => {
+        grid.dataset.rowHeight = "32";
+        api.refresh();
+        out.textContent = "行高 " + api.rowHeight + "px";
+        paintStat();
+      });
+      document.querySelector("#normal").addEventListener("click", () => {
+        grid.dataset.rowHeight = "44";
+        api.refresh();
+        out.textContent = "行高 " + api.rowHeight + "px";
+        paintStat();
+      });
+      document.querySelector("#clearSel").addEventListener("click", () => {
+        api.clearSelection();
+        out.textContent = "选择已清空";
+      });
+      document.querySelector("#toEvents").addEventListener("click", () => {
+        document.querySelector("#events").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    })();
+  </script>
+</body>
+</html>

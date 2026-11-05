@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 取色器</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.4</span>
+      <span class="cin-caption">原生 color 打底，脚本没跑也能取色</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">取色器</div>
+        <a class="cin-navitem" href="#basic">基础取色</a>
+        <a class="cin-navitem" href="#alpha">带透明度</a>
+        <a class="cin-navitem" href="#formats">输出格式</a>
+        <a class="cin-navitem" href="#presets">预设色板</a>
+        <a class="cin-navitem" href="#states">禁用与表单</a>
+        <a class="cin-navitem" href="#events">事件与 API</a>
+      </aside>
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">取色器</h1>
+                  <p class="cin-caption">面板负责调色与格式转换，触发器里始终留着原生 input[type=color] 兜底</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="secondary" data-size="sm" id="toEvents">跳到「事件与 API」</button>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="basic">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">基础取色</h2>
+                <span class="cin-caption">默认输出十六进制；点面板里的色域拖选，或用色相条与数值框精调</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <div class="cin-colorpicker" data-colorpicker data-value="#C04229">
+                    <div class="cin-colorpicker-trigger">
+                      <input class="cin-colorpicker-native" type="color" aria-label="选择主题色">
+                      <span class="cin-colorpicker-chip"></span>
+                      <span class="cin-colorpicker-value"></span>
+                    </div>
+                    <div class="cin-colorpicker-pop" role="dialog" aria-label="取色面板">
+                      <div class="cin-colorpicker-area"><span class="cin-colorpicker-area-thumb"></span></div>
+                      <input class="cin-colorpicker-range cin-colorpicker-hue" type="range" min="0" max="360" step="1" aria-label="色相">
+                      <input class="cin-colorpicker-range cin-colorpicker-alpha" type="range" min="0" max="100" step="1" aria-label="不透明度" hidden>
+                      <div class="cin-colorpicker-fields">
+                        <label class="cin-colorpicker-field" data-span>HEX<input data-hex spellcheck="false" autocomplete="off"></label>
+                        <label class="cin-colorpicker-field">R<input data-r type="number" min="0" max="255"></label>
+                        <label class="cin-colorpicker-field">G<input data-g type="number" min="0" max="255"></label>
+                        <label class="cin-colorpicker-field">B<input data-b type="number" min="0" max="255"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="cin-caption">品牌主色（十六进制）</span>
+                </div>
+
+                <div class="cin-toolbar">
+                  <div class="cin-colorpicker" data-colorpicker data-value="#3E5A73">
+                    <div class="cin-colorpicker-trigger">
+                      <input class="cin-colorpicker-native" type="color" aria-label="选择信息色">
+                      <span class="cin-colorpicker-chip"></span>
+                      <span class="cin-colorpicker-value"></span>
+                    </div>
+                    <div class="cin-colorpicker-pop" role="dialog" aria-label="取色面板">
+                      <div class="cin-colorpicker-area"><span class="cin-colorpicker-area-thumb"></span></div>
+                      <input class="cin-colorpicker-range cin-colorpicker-hue" type="range" min="0" max="360" step="1" aria-label="色相">
+                      <div class="cin-colorpicker-fields">
+                        <label class="cin-colorpicker-field" data-span>HEX<input data-hex spellcheck="false" autocomplete="off"></label>
+                        <label class="cin-colorpicker-field">R<input data-r type="number" min="0" max="255"></label>
+                        <label class="cin-colorpicker-field">G<input data-g type="number" min="0" max="255"></label>
+                        <label class="cin-colorpicker-field">B<input data-b type="number" min="0" max="255"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="cin-caption">信息蓝（同一个面板，去掉透明度条）</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="alpha">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">带透明度</h2>
+                <span class="cin-caption">容器加 data-alpha 才出现透明度条与 A 数值框，十六进制同时输出 8 位</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <div class="cin-colorpicker" data-colorpicker data-alpha data-value="#C04229CC">
+                    <div class="cin-colorpicker-trigger">
+                      <input class="cin-colorpicker-native" type="color" aria-label="选择遮罩色">
+                      <span class="cin-colorpicker-chip"></span>
+                      <span class="cin-colorpicker-value"></span>
+                    </div>
+                    <div class="cin-colorpicker-pop" role="dialog" aria-label="取色面板">
+                      <div class="cin-colorpicker-area"><span class="cin-colorpicker-area-thumb"></span></div>
+                      <input class="cin-colorpicker-range cin-colorpicker-hue" type="range" min="0" max="360" step="1" aria-label="色相">
+                      <input class="cin-colorpicker-range cin-colorpicker-alpha" type="range" min="0" max="100" step="1" aria-label="不透明度">
+                      <div class="cin-colorpicker-fields">
+                        <label class="cin-colorpicker-field" data-span>HEX<input data-hex spellcheck="false" autocomplete="off"></label>
+                        <label class="cin-colorpicker-field">R<input data-r type="number" min="0" max="255"></label>
+                        <label class="cin-colorpicker-field">G<input data-g type="number" min="0" max="255"></label>
+                        <label class="cin-colorpicker-field">B<input data-b type="number" min="0" max="255"></label>
+                        <label class="cin-colorpicker-field">A<input data-a type="number" min="0" max="100"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="cin-caption">80% 不透明，色块透出棋盘格</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="formats">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">输出格式</h2>
+                <span class="cin-caption">data-format 切 hex / rgb / hsl，值同时写到 data-value 与隐藏域</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <div class="cin-colorpicker" data-colorpicker data-format="rgb" data-value="rgb(58, 113, 78)">
+                    <div class="cin-colorpicker-trigger">
+                      <input class="cin-colorpicker-native" type="color" aria-label="选择成功色 rgb">
+                      <span class="cin-colorpicker-chip"></span>
+                      <span class="cin-colorpicker-value"></span>
+                    </div>
+                    <div class="cin-colorpicker-pop" role="dialog" aria-label="取色面板">
+                      <div class="cin-colorpicker-area"><span class="cin-colorpicker-area-thumb"></span></div>
+                      <input class="cin-colorpicker-range cin-colorpicker-hue" type="range" min="0" max="360" step="1" aria-label="色相">
+                      <div class="cin-colorpicker-fields">
+                        <label class="cin-colorpicker-field" data-span>HEX<input data-hex spellcheck="false" autocomplete="off"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="cin-caption">rgb()</span>
+                </div>
+
+                <div class="cin-toolbar">
+                  <div class="cin-colorpicker" data-colorpicker data-format="hsl" data-value="hsl(28 62% 44%)">
+                    <div class="cin-colorpicker-trigger">
+                      <input class="cin-colorpicker-native" type="color" aria-label="选择提醒色 hsl">
+                      <span class="cin-colorpicker-chip"></span>
+                      <span class="cin-colorpicker-value"></span>
+                    </div>
+                    <div class="cin-colorpicker-pop" role="dialog" aria-label="取色面板">
+                      <div class="cin-colorpicker-area"><span class="cin-colorpicker-area-thumb"></span></div>
+                      <input class="cin-colorpicker-range cin-colorpicker-hue" type="range" min="0" max="360" step="1" aria-label="色相">
+                      <div class="cin-colorpicker-fields">
+                        <label class="cin-colorpicker-field" data-span>HEX<input data-hex spellcheck="false" autocomplete="off"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="cin-caption">hsl()</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="presets">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">预设色板</h2>
+                <span class="cin-caption">预设来自 DOM 里的 data-color，不写死在脚本里；命中当前色时标 aria-pressed</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <div class="cin-colorpicker" data-colorpicker data-value="#C04229">
+                    <div class="cin-colorpicker-trigger">
+                      <input class="cin-colorpicker-native" type="color" aria-label="选择标签色">
+                      <span class="cin-colorpicker-chip"></span>
+                      <span class="cin-colorpicker-value"></span>
+                    </div>
+                    <div class="cin-colorpicker-pop" role="dialog" aria-label="取色面板">
+                      <div class="cin-colorpicker-area"><span class="cin-colorpicker-area-thumb"></span></div>
+                      <input class="cin-colorpicker-range cin-colorpicker-hue" type="range" min="0" max="360" step="1" aria-label="色相">
+                      <div class="cin-colorpicker-fields">
+                        <label class="cin-colorpicker-field" data-span>HEX<input data-hex spellcheck="false" autocomplete="off"></label>
+                      </div>
+                      <div class="cin-colorpicker-presets">
+                        <button class="cin-colorpicker-preset" type="button" data-color="#C04229" data-name="陶土红"></button>
+                        <button class="cin-colorpicker-preset" type="button" data-color="#9A5F1C" data-name="琥珀"></button>
+                        <button class="cin-colorpicker-preset" type="button" data-color="#3A714E" data-name="鼠尾草绿"></button>
+                        <button class="cin-colorpicker-preset" type="button" data-color="#3E5A73" data-name="石板蓝"></button>
+                        <button class="cin-colorpicker-preset" type="button" data-color="#7A281A" data-name="深褐红"></button>
+                        <button class="cin-colorpicker-preset" type="button" data-color="#5F584B" data-name="灰褐"></button>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="cin-caption">六个常用业务色</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="states">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">禁用与表单</h2>
+                <span class="cin-caption">data-disabled 整块降透明度且不响应；隐藏域随取色一起更新，可直接随表单提交</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <div class="cin-colorpicker" data-colorpicker data-disabled data-value="#9E9382">
+                    <div class="cin-colorpicker-trigger">
+                      <input class="cin-colorpicker-native" type="color" aria-label="禁用的取色器" disabled>
+                      <span class="cin-colorpicker-chip"></span>
+                      <span class="cin-colorpicker-value"></span>
+                    </div>
+                    <div class="cin-colorpicker-pop" role="dialog" aria-label="取色面板">
+                      <div class="cin-colorpicker-area"><span class="cin-colorpicker-area-thumb"></span></div>
+                    </div>
+                  </div>
+                  <span class="cin-caption">禁用态</span>
+                </div>
+
+                <div class="cin-toolbar">
+                  <div class="cin-colorpicker" data-colorpicker data-value="#5F584B">
+                    <div class="cin-colorpicker-trigger">
+                      <input class="cin-colorpicker-native" type="color" aria-label="选择备注色">
+                      <span class="cin-colorpicker-chip"></span>
+                      <span class="cin-colorpicker-value"></span>
+                    </div>
+                    <div class="cin-colorpicker-pop" role="dialog" aria-label="取色面板">
+                      <div class="cin-colorpicker-area"><span class="cin-colorpicker-area-thumb"></span></div>
+                      <input class="cin-colorpicker-range cin-colorpicker-hue" type="range" min="0" max="360" step="1" aria-label="色相">
+                      <div class="cin-colorpicker-fields">
+                        <label class="cin-colorpicker-field" data-span>HEX<input data-hex spellcheck="false" autocomplete="off"></label>
+                      </div>
+                    </div>
+                    <input type="hidden" name="remarkColor">
+                  </div>
+                  <span class="cin-caption">隐藏域同步：<code id="hiddenOut">#5F584B</code></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="events">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">事件与 API</h2>
+                <span class="cin-caption">cin:colorinput 连续触发，cin:colorchange 表示落定</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" id="apiSet">setColorPicker 改成石板蓝</button>
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiRgb">用 rgb() 字符串赋值</button>
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiBad">塞个非法值</button>
+                </div>
+                <div class="cin-panel" style="padding: var(--cin-space-200)">
+                  <div class="cin-caption">事件日志</div>
+                  <ul class="cin-log" id="log" style="margin:0; padding-inline-start: var(--cin-space-300); font-family: var(--cin-family-mono); font-size: var(--cin-text-caption-size)"></ul>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script defer src="../dist/cinder.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const log = document.getElementById("log");
+      const hiddenOut = document.getElementById("hiddenOut");
+      const put = (text) => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        log.prepend(li);
+        while (log.children.length > 8) log.lastElementChild.remove();
+      };
+
+      document.body.addEventListener("cin:colorchange", (event) => {
+        const root = event.target.closest("[data-colorpicker]");
+        if (!root) return;
+        put(`落定：${event.detail.value} · ${event.detail.hex} · ${event.detail.rgb.r}/${event.detail.rgb.g}/${event.detail.rgb.b}`);
+        if (root.querySelector("input[type=hidden]")) hiddenOut.textContent = event.detail.value;
+      });
+
+      let inputCount = 0;
+      document.body.addEventListener("cin:colorinput", () => {
+        inputCount += 1;
+        if (inputCount % 12 === 0) put(`拖动中：已连续触发 ${inputCount} 次`);
+      });
+
+      const first = document.querySelector("[data-colorpicker]");
+      document.getElementById("apiSet").addEventListener("click", () => {
+        put(`setColorPicker → ${Cinder.setColorPicker(first, "#3E5A73")}`);
+      });
+      document.getElementById("apiRgb").addEventListener("click", () => {
+        put(`setColorPicker → ${Cinder.setColorPicker(first, "rgb(154, 95, 28)")}`);
+      });
+      document.getElementById("apiBad").addEventListener("click", () => {
+        const out = Cinder.setColorPicker(first, "not-a-color");
+        put(`非法值返回 ${out === null ? "null，状态未变" : out}`);
+      });
+
+      document.getElementById("toEvents").addEventListener("click", () => {
+        document.getElementById("events").scrollIntoView({ block: "start" });
+      });
+    });
+  </script>
+</body>
+</html>

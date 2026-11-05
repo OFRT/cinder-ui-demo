@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 工具调用标签</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">tool-chips</span>
+      <span class="cin-caption">把工具调用压成小胶囊：执行中 / 完成 / 失败三态，长参数单行省略</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">三态</h2>
+          <div class="cin-tool-chips" role="group" aria-label="工具调用记录">
+            <span class="cin-tool-chip" data-state="done">
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">搜索 已完成</span>
+              <span class="cin-tool-chip-detail">12 条</span>
+            </span>
+            <span class="cin-tool-chip" data-state="running">
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">读取 执行中</span>
+              <span class="cin-tool-chip-detail">report.md</span>
+            </span>
+            <span class="cin-tool-chip" data-state="failed">
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">执行 失败</span>
+              <span class="cin-tool-chip-detail">权限不足</span>
+            </span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">可点开明细</h2>
+          <div class="cin-tool-chips" role="group" aria-label="工具调用记录">
+            <button class="cin-tool-chip" type="button" data-state="done" aria-label="读取 已完成，3 个文件">
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">读取</span>
+              <span class="cin-tool-chip-detail">3 个文件</span>
+            </button>
+            <button class="cin-tool-chip" type="button" data-state="done" aria-label="改代码 已完成，2 处">
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">改代码</span>
+              <span class="cin-tool-chip-detail">2 处</span>
+            </button>
+            <button class="cin-tool-chip" type="button" data-state="done" aria-label="跑测试 已完成，46 通过">
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">跑测试</span>
+              <span class="cin-tool-chip-detail">46 通过</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">紧凑 / 实心底 / 长参数省略</h2>
+          <div class="cin-tool-chips" role="group" aria-label="紧凑模式">
+            <span class="cin-tool-chip" data-state="done" data-compact>
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">搜索</span>
+            </span>
+            <span class="cin-tool-chip" data-state="done" data-compact>
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">读取</span>
+            </span>
+          </div>
+          <div class="cin-tool-chips" role="group" aria-label="实心底" style="margin-block-start:var(--cin-space-150)">
+            <span class="cin-tool-chip" data-state="done" data-variant="solid">
+              <span class="cin-tool-chip-icon" aria-hidden="true"></span>
+              <span class="cin-tool-chip-name">检索</span>
+              <span class="cin-tool-chip-detail">凭证号 A-2026-000123 · 已找到对应单据</span>
+            </span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

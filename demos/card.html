@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 卡片</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">card</span>
+      <span class="cin-caption">媒体 / 头 / 体 / 尾四段，可点与选中；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">带媒体（16:9）</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(var(--cin-container-card-stack), 1fr)); gap:var(--cin-space-200)">
+            <article class="cin-card" id="card-media">
+              <div class="cin-card-media">
+                <img alt="示例封面" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='%23cfe8e4'/%3E%3Ccircle cx='160' cy='82' r='34' fill='%230ea5a4'/%3E%3Crect x='70' y='132' width='180' height='12' rx='6' fill='%230ea5a4'/%3E%3C/svg%3E">
+              </div>
+              <div class="cin-card-head">
+                <div class="cin-card-heading">
+                  <h3 class="cin-card-title">华东仓补货计划</h3>
+                  <span class="cin-card-subtitle">仓储运营</span>
+                </div>
+                <span class="cin-card-extra">高优先级</span>
+              </div>
+              <div class="cin-card-body">
+                <p class="cin-card-desc">按近四周出库速度推算，A 类物料周转天数低于安全线，需要在 11 月 8 日前完成补货下单，避免影响双十一大促的履约时效。</p>
+              </div>
+              <div class="cin-card-foot" data-divided>
+                <button class="cin-btn" data-size="sm" type="button">查看明细</button>
+                <button class="cin-btn" data-size="sm" data-variant="primary" type="button">去下单</button>
+              </div>
+            </article>
+
+            <article class="cin-card" id="card-ratio" data-ratio="4:3">
+              <div class="cin-card-media">
+                <img alt="方形封面" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' fill='%23e8ded0'/%3E%3C/svg%3E">
+              </div>
+              <div class="cin-card-body">
+                <p>4:3 比例媒体区，用于商品与设备图。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">横向卡片与紧凑尺寸</h2>
+          <div style="display:grid; gap:var(--cin-space-200)">
+            <article class="cin-card" id="card-horizontal" data-orientation="horizontal">
+              <div class="cin-card-media">
+                <img alt="设备图" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23d7e6f2'/%3E%3Crect x='40' y='60' width='120' height='80' rx='8' fill='%23335f80'/%3E%3C/svg%3E">
+              </div>
+              <div class="cin-card-content">
+                <div class="cin-card-head">
+                  <div class="cin-card-heading">
+                    <h3 class="cin-card-title">扫码枪 HS-220</h3>
+                    <span class="cin-card-subtitle">PDA 配件 · 编号 HS-220-0417</span>
+                  </div>
+                </div>
+                <div class="cin-card-body">
+                  <p>无线连接，续航约 12 小时，支持一维码与二维码。</p>
+                </div>
+                <div class="cin-card-foot" data-divided>
+                  <button class="cin-btn" data-size="sm" type="button">查看</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="cin-card" data-size="sm" style="max-inline-size:var(--cin-container-card-stack)">
+              <div class="cin-card-head">
+                <div class="cin-card-heading">
+                  <h3 class="cin-card-title">紧凑卡片</h3>
+                  <span class="cin-card-subtitle">data-size="sm"</span>
+                </div>
+              </div>
+              <div class="cin-card-body">
+                <p>内边距与圆角同步收紧，用于密集列表与侧栏。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">可点与选中</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(var(--cin-container-card-stack), 1fr)); gap:var(--cin-space-200)">
+            <a class="cin-card" id="card-interactive" href="#card-interactive" data-interactive>
+              <div class="cin-card-body">
+                <h3 class="cin-card-title">整卡可点</h3>
+                <p>悬停描边加深并抬出轻阴影，键盘 Tab 有焦点环。</p>
+              </div>
+            </a>
+            <article class="cin-card" data-selected aria-selected="true">
+              <div class="cin-card-body">
+                <h3 class="cin-card-title">已选中</h3>
+                <p>强调色描边 + 内描边，配合 aria-selected 表意。</p>
+              </div>
+            </article>
+            <article class="cin-card" data-disabled aria-disabled="true">
+              <div class="cin-card-body">
+                <h3 class="cin-card-title">不可用</h3>
+                <p>整体降透明度并阻断指针事件。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">无媒体 / flush</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(var(--cin-container-card-stack), 1fr)); gap:var(--cin-space-200)">
+            <article class="cin-card" id="card-text">
+              <div class="cin-card-head">
+                <div class="cin-card-heading"><h3 class="cin-card-title">纯文本卡片</h3></div>
+              </div>
+              <div class="cin-card-body"><p>没有媒体区时头部直接顶到上边框，不产生空白缺口。</p></div>
+            </article>
+            <article class="cin-card" data-flush>
+              <div class="cin-card-head">
+                <div class="cin-card-heading"><h3 class="cin-card-title">flush 去内边距</h3></div>
+              </div>
+              <div class="cin-card-body"><p>data-flush 去掉头 / 体 / 尾的内边距，内容贴边，适合嵌图片或表格。</p></div>
+            </article>
+            <article class="cin-card" data-divided>
+              <div class="cin-card-head">
+                <div class="cin-card-heading"><h3 class="cin-card-title">脚部分隔</h3></div>
+              </div>
+              <div class="cin-card-body"><p>data-divided 在脚部上方画一条细线。</p></div>
+              <div class="cin-card-foot">
+                <button class="cin-btn" data-size="sm" type="button">次要</button>
+                <button class="cin-btn" data-size="sm" data-variant="primary" type="button">主要</button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 检索上下文卡</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="../dist/cinder-icons.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">context-card</span>
+      <span class="cin-caption">来源可点可核；位置可定位；超长片段折叠不截断</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础：来源 / 位置 / 字符数 / 折叠</h2>
+          <p class="cin-caption">来源必须是链接；字符数精确到全文，折叠只是视角不是截断。</p>
+
+          <figure class="cin-context">
+            <div class="cin-context-head">
+              <a class="cin-context-source" href="https://example.com/contract.pdf#L12" rel="noopener">季度销售合同.pdf</a>
+              <span class="cin-context-loc">第 12 行</span>
+              <span class="cin-context-chars">128 字符</span>
+            </div>
+            <blockquote class="cin-context-quote"><mark>华东区</mark>回款延迟不影响本次结算。</blockquote>
+            <details class="cin-context-more">
+              <summary>展开全文（共 1280 字符）</summary>
+              <p class="cin-context-full">（完整原文示例）双方确认，<mark>华东区</mark>部分项目的回款周期调整为 45 天；该调整不影响本协议项下已到期款项的结算义务，乙方仍应按合同约定履行交付义务。本段为示意性长文，用于展示折叠在超长片段下的表现，实际长度由宿主检索结果决定。</p>
+            </details>
+          </figure>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">短片段：不需要折叠</h2>
+          <p class="cin-caption">片段不足一屏时宿主可以不渲染 <code>details</code>，只保留引用块。</p>
+
+          <figure class="cin-context">
+            <div class="cin-context-head">
+              <a class="cin-context-source" href="https://example.com/doc#L3" rel="noopener">会议纪要 1101.md</a>
+              <span class="cin-context-loc">第 3 行</span>
+              <span class="cin-context-chars">46 字符</span>
+            </div>
+            <blockquote class="cin-context-quote">下周二 14:00 评审 G6 批次全部演示页。</blockquote>
+          </figure>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">多来源并列</h2>
+          <p class="cin-caption">同一答案引了两份材料，宿主用网格排布；每卡单源，不堆叠。</p>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 22em), 1fr)); gap:var(--cin-space-150)">
+            <figure class="cin-context">
+              <div class="cin-context-head">
+                <a class="cin-context-source" href="https://example.com/api.html#L20" rel="noopener">API 文档 v2</a>
+                <span class="cin-context-loc">第 20 行</span>
+                <span class="cin-context-chars">64 字符</span>
+              </div>
+              <blockquote class="cin-context-quote"><mark>list_mcp_tools</mark> 返回候选工具及其参数概览。</blockquote>
+            </figure>
+            <figure class="cin-context">
+              <div class="cin-context-head">
+                <a class="cin-context-source" href="https://example.com/changelog#v2.4" rel="noopener">更新日志 v2.4</a>
+                <span class="cin-context-loc">v2.4 段</span>
+                <span class="cin-context-chars">31 字符</span>
+              </div>
+              <blockquote class="cin-context-quote">自 v2.4 起 <mark>list_mcp_tools</mark> 支持按服务过滤。</blockquote>
+            </figure>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">失效来源与缺失元数据</h2>
+          <p class="cin-caption">来源不可达时加「（已失效）」前缀但保留链接；字符数缺失时整项省略，不写 0。</p>
+
+          <figure class="cin-context">
+            <div class="cin-context-head">
+              <a class="cin-context-source" href="https://example.com/gone" rel="noopener">（已失效）历史快照.txt</a>
+              <span class="cin-context-loc">全文</span>
+            </div>
+            <blockquote class="cin-context-quote">此链接当前无法访问，保留链接供你自行核对。</blockquote>
+          </figure>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">窄屏</h2>
+          <p class="cin-caption">320px 下头部元数据换行、引用竖线贴边、折叠箭头不丢。</p>
+          <div style="max-inline-size:320px">
+            <figure class="cin-context">
+              <div class="cin-context-head">
+                <a class="cin-context-source" href="https://example.com/long-path/very-long-file-name-for-testing-wrap.pdf#L120" rel="noopener">very-long-file-name-for-testing-wrap.pdf</a>
+                <span class="cin-context-loc">第 120 行</span>
+                <span class="cin-context-chars">2048 字符</span>
+              </div>
+              <blockquote class="cin-context-quote">长文件名与长片段在窄屏下应当换行而不是撑破卡片。</blockquote>
+              <details class="cin-context-more">
+                <summary>展开全文（共 2048 字符）</summary>
+                <p class="cin-context-full">窄屏折叠全文示意：此处应有宿主检索到的完整原文，长度超过一屏时用本折叠承载，绝不截断。</p>
+              </details>
+            </figure>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</body>
+</html>

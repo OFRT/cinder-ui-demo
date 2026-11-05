@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 轮播</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.6</span>
+      <span class="cin-caption">原生 scroll-snap 打底，断 JS 仍能手动滑动</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">轮播</div>
+        <a class="cin-navitem" href="#basic">基础单张</a>
+        <a class="cin-navitem" href="#grid">并排多张</a>
+        <a class="cin-navitem" href="#loop">循环与自动播放</a>
+        <a class="cin-navitem" href="#events">事件与 API</a>
+      </aside>
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">轮播</h1>
+                  <p class="cin-caption">横向滚动容器承载全部翻页，脚本只补按钮状态、指示点、键盘与自动播放</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="secondary" data-size="sm" id="toEvents">跳到「事件与 API」</button>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="basic">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">基础单张</h2>
+                  <p class="cin-caption">首尾不循环，到头时对应方向按钮置灰；左右方向键、Home / End 都能翻</p>
+                </div>
+              </div>
+              <div class="cin-carousel" data-carousel aria-label="产品图集">
+                <div class="cin-carousel-stage">
+                  <div class="cin-carousel-viewport">
+                    <ul class="cin-carousel-track">
+                      <li class="cin-carousel-slide">
+                        <div class="demo-slide demo-tone-1">
+                          <div>
+                            <p class="demo-slide-title">采购总览</p>
+                            <p class="demo-slide-note">本月在途 42 单，逾期 3 单</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="cin-carousel-slide">
+                        <div class="demo-slide demo-tone-2">
+                          <div>
+                            <p class="demo-slide-title">库存周转</p>
+                            <p class="demo-slide-note">周转天数 18.4，环比下降 2.1 天</p>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="cin-carousel-slide">
+                        <div class="demo-slide demo-tone-3">
+                          <div>
+                            <p class="demo-slide-title">应付账龄</p>
+                            <p class="demo-slide-note">30 天内占比 76%，需关注两笔长账龄</p>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <button class="cin-carousel-nav" data-carousel-prev aria-label="上一张">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+                  </button>
+                  <button class="cin-carousel-nav" data-carousel-next aria-label="下一张">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                  </button>
+                </div>
+                <div class="cin-carousel-footer">
+                  <div class="cin-carousel-dots"></div>
+                  <span class="cin-carousel-counter"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="grid">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">并排多张</h2>
+                  <p class="cin-caption">data-per-view="2" 一屏两张，窄屏自动回落单张；卡片间距跟随 token</p>
+                </div>
+              </div>
+              <div class="cin-carousel" data-carousel data-per-view="2" aria-label="门店动态">
+                <div class="cin-carousel-stage">
+                  <div class="cin-carousel-viewport">
+                    <ul class="cin-carousel-track">
+                      <li class="cin-carousel-slide">
+                        <div class="cin-carousel-slide-body">
+                          <span class="cin-badge">补货</span>
+                          <p class="demo-slide-title">华东仓完成补货</p>
+                          <p class="cin-carousel-caption">23 个 SKU 已入库，缺货率降到 1.2%</p>
+                        </div>
+                      </li>
+                      <li class="cin-carousel-slide">
+                        <div class="cin-carousel-slide-body">
+                          <span class="cin-badge">对账</span>
+                          <p class="demo-slide-title">月度对账完成</p>
+                          <p class="cin-carousel-caption">差异 2 笔，均已生成调整单</p>
+                        </div>
+                      </li>
+                      <li class="cin-carousel-slide">
+                        <div class="cin-carousel-slide-body">
+                          <span class="cin-badge">审核</span>
+                          <p class="demo-slide-title">付款审批提速</p>
+                          <p class="cin-carousel-caption">平均时长 6.2 小时，较上月缩短 1.4 小时</p>
+                        </div>
+                      </li>
+                      <li class="cin-carousel-slide">
+                        <div class="cin-carousel-slide-body">
+                          <span class="cin-badge">预警</span>
+                          <p class="demo-slide-title">供应商评级下调</p>
+                          <p class="cin-carousel-caption">两家供应商由 A 降为 B，需补充交付计划</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <button class="cin-carousel-nav" data-carousel-prev aria-label="上一张">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+                  </button>
+                  <button class="cin-carousel-nav" data-carousel-next aria-label="下一张">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                  </button>
+                </div>
+                <div class="cin-carousel-footer">
+                  <div class="cin-carousel-dots"></div>
+                  <span class="cin-carousel-counter"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="loop">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">循环与自动播放</h2>
+                  <p class="cin-caption">data-loop 首尾相接，data-autoplay="4000" 每 4 秒一张；悬停、聚焦、切到后台都暂停</p>
+                </div>
+              </div>
+              <div class="cin-carousel" data-carousel data-loop data-autoplay="4000" aria-label="公告轮播" id="loopCarousel">
+                <div class="cin-carousel-stage">
+                  <div class="cin-carousel-viewport">
+                    <ul class="cin-carousel-track">
+                      <li class="cin-carousel-slide">
+                        <div class="cin-carousel-slide-body">
+                          <p class="demo-slide-title">系统维护通知</p>
+                          <p class="cin-carousel-caption">本周日 22:00 至次日 02:00 停机升级，期间下单与审批不可用</p>
+                        </div>
+                      </li>
+                      <li class="cin-carousel-slide">
+                        <div class="cin-carousel-slide-body">
+                          <p class="demo-slide-title">新版对账规则上线</p>
+                          <p class="cin-carousel-caption">差异容忍度调整为 0.05 元，历史单据按新规则重算一次</p>
+                        </div>
+                      </li>
+                      <li class="cin-carousel-slide">
+                        <div class="cin-carousel-slide-body">
+                          <p class="demo-slide-title">移动端适配完成</p>
+                          <p class="cin-carousel-caption">手持终端已支持离线开单，联网后自动补传</p>
+                        </div>
+                      </li>
+                      <li class="cin-carousel-slide">
+                        <div class="cin-carousel-slide-body">
+                          <p class="demo-slide-title">季度合规自查</p>
+                          <p class="cin-carousel-caption">请各模块在本月 20 日前提交自查表，逾期进入提醒名单</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <button class="cin-carousel-nav" data-carousel-prev aria-label="上一张">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+                  </button>
+                  <button class="cin-carousel-nav" data-carousel-next aria-label="下一张">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                  </button>
+                </div>
+                <div class="cin-carousel-footer">
+                  <div class="cin-carousel-dots"></div>
+                  <span class="cin-carousel-counter"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="events">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">事件与 API</h2>
+                  <p class="cin-caption">翻页后在下方记录一条；按钮直接调控制器方法</p>
+                </div>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiPrev">上一张</button>
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiNext">下一张</button>
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiGo2">跳到第 2 张</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="apiClear">清空记录</button>
+                </div>
+                <ul class="cin-list" id="logList" aria-live="polite"></ul>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js"></script>
+  <script>
+    document.getElementById("toEvents").addEventListener("click", () => {
+      document.getElementById("events").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    const list = document.getElementById("logList");
+    const log = (text) => {
+      const li = document.createElement("li");
+      li.className = "cin-list-item";
+      li.textContent = text;
+      list.append(li);
+      while (list.children.length > 6) list.firstElementChild.remove();
+    };
+
+    document.querySelectorAll("[data-carousel]").forEach((root) => {
+      root.addEventListener("cin:carouselslide", (event) => {
+        const { index, count, reason } = event.detail;
+        log(`${root.getAttribute("aria-label")}：第 ${index + 1} / ${count} 张，来源 ${reason}`);
+      });
+    });
+
+    const api = () => Cinder.carousel(document.getElementById("loopCarousel"));
+    document.getElementById("apiPrev").addEventListener("click", () => api().prev("api"));
+    document.getElementById("apiNext").addEventListener("click", () => api().next("api"));
+    document.getElementById("apiGo2").addEventListener("click", () => api().goTo(1, "api"));
+    document.getElementById("apiClear").addEventListener("click", () => { list.innerHTML = ""; });
+  </script>
+</body>
+</html>

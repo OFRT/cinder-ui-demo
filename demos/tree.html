@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 树形目录</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.6</span>
+      <span class="cin-caption">多层目录用一级 DOM，断 JS 全部展开照样能读</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">树形目录</div>
+        <a class="cin-navitem" href="#nav">导航树</a>
+        <a class="cin-navitem" href="#check">多选与级联</a>
+        <a class="cin-navitem" href="#lazy">异步子节点</a>
+        <a class="cin-navitem" href="#filter">过滤与定位</a>
+        <a class="cin-navitem" href="#events">事件与 API</a>
+      </aside>
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">树形目录</h1>
+                  <p class="cin-caption">ul / li 承载结构，脚本只补展开收起、选中与键盘漫游，无 JS 时所有层级直接可见</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="secondary" data-size="sm" id="toEvents">跳到「事件与 API」</button>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="nav">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">导航树</h2>
+                  <p class="cin-caption">单选；点箭头或双击行展开收起，方向键上下走可见节点</p>
+                </div>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-tree" data-tree data-lines id="treeNav">
+                  <ul class="cin-tree-groups" aria-label="系统菜单">
+                    <li class="cin-tree-item">
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <span class="cin-tree-icon" aria-hidden="true">▤</span>
+                        <span class="cin-tree-label">采购管理</span>
+                        <span class="cin-tree-meta">4</span>
+                      </button>
+                      <ul class="cin-tree-group">
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">采购申请</span>
+                          </button>
+                        </li>
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">采购订单</span>
+                            <span class="cin-tree-meta">12</span>
+                          </button>
+                          <ul class="cin-tree-group">
+                            <li class="cin-tree-item">
+                              <button class="cin-tree-row" type="button">
+                                <span class="cin-tree-toggle" aria-hidden="true"></span>
+                                <span class="cin-tree-label">待审核</span>
+                                <span class="cin-tree-meta">3</span>
+                              </button>
+                            </li>
+                            <li class="cin-tree-item">
+                              <button class="cin-tree-row" type="button">
+                                <span class="cin-tree-toggle" aria-hidden="true"></span>
+                                <span class="cin-tree-label">已入库</span>
+                                <span class="cin-tree-meta">9</span>
+                              </button>
+                            </li>
+                          </ul>
+                        </li>
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button" aria-disabled="true">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">退货单（无权限）</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="cin-tree-item" data-collapsed>
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <span class="cin-tree-icon" aria-hidden="true">▦</span>
+                        <span class="cin-tree-label">仓储管理</span>
+                      </button>
+                      <ul class="cin-tree-group">
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">入库单</span>
+                          </button>
+                        </li>
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">出库单</span>
+                          </button>
+                        </li>
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">盘点任务</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="cin-tree-item">
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <span class="cin-tree-icon" aria-hidden="true">◍</span>
+                        <span class="cin-tree-label">报表中心</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <span class="cin-caption" id="navOut">未选中</span>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="check">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">多选与级联</h2>
+                  <p class="cin-caption">data-select="multiple" 配复选框；data-cascade 勾父带子，子节点半选回填父节点</p>
+                </div>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-tree" data-tree data-select="multiple" data-cascade id="treeCheck">
+                  <ul class="cin-tree-groups" aria-label="可见字段">
+                    <li class="cin-tree-item">
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <input class="cin-tree-check" type="checkbox" aria-label="基本信息">
+                        <span class="cin-tree-label">基本信息</span>
+                      </button>
+                      <ul class="cin-tree-group">
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <input class="cin-tree-check" type="checkbox" aria-label="客户名称" checked>
+                            <span class="cin-tree-label">客户名称</span>
+                          </button>
+                        </li>
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <input class="cin-tree-check" type="checkbox" aria-label="所属行业">
+                            <span class="cin-tree-label">所属行业</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="cin-tree-item">
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <input class="cin-tree-check" type="checkbox" aria-label="联系方式">
+                        <span class="cin-tree-label">联系方式</span>
+                      </button>
+                      <ul class="cin-tree-group">
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <input class="cin-tree-check" type="checkbox" aria-label="手机">
+                            <span class="cin-tree-label">手机</span>
+                          </button>
+                        </li>
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <input class="cin-tree-check" type="checkbox" aria-label="邮箱">
+                            <span class="cin-tree-label">邮箱</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="checkAll">全选</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="checkNone">清空</button>
+                  <span class="cin-caption" id="checkOut">已选 1 项</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="lazy">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">异步子节点</h2>
+                  <p class="cin-caption">行上标 data-lazy，首次展开抛 cin:treeload，业务在 done(nodes) 里回填即可</p>
+                </div>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-tree" data-tree id="treeLazy">
+                  <ul class="cin-tree-groups" aria-label="组织架构">
+                    <li class="cin-tree-item" data-lazy>
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <span class="cin-tree-icon" aria-hidden="true">◍</span>
+                        <span class="cin-tree-label">华东大区</span>
+                      </button>
+                      <ul class="cin-tree-group"></ul>
+                    </li>
+                    <li class="cin-tree-item" data-lazy>
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <span class="cin-tree-icon" aria-hidden="true">◍</span>
+                        <span class="cin-tree-label">华南大区</span>
+                      </button>
+                      <ul class="cin-tree-group"></ul>
+                    </li>
+                  </ul>
+                </div>
+                <span class="cin-caption" id="lazyOut">展开任一节点，300ms 后回填 3 个下级</span>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="filter">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">过滤与定位</h2>
+                  <p class="cin-caption">Cinder.filterTree 只动 hidden 与高亮，不重建 DOM；命中项自动展开祖先</p>
+                </div>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <input class="cin-input" id="filterInput" type="search" placeholder="输入「单」试试" aria-label="过滤节点" style="max-inline-size:16rem">
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="filterClear">清空</button>
+                  <span class="cin-caption" id="filterOut">6 个节点</span>
+                </div>
+                <div class="cin-tree" data-tree data-collapse="all" data-empty-text="没有匹配的节点" id="treeFilter">
+                  <ul class="cin-tree-groups" aria-label="单据目录">
+                    <li class="cin-tree-item">
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <span class="cin-tree-label">销售管理</span>
+                      </button>
+                      <ul class="cin-tree-group">
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">销售订单</span>
+                          </button>
+                        </li>
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">退货单</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="cin-tree-item">
+                      <button class="cin-tree-row" type="button">
+                        <span class="cin-tree-toggle" aria-hidden="true"></span>
+                        <span class="cin-tree-label">库存管理</span>
+                      </button>
+                      <ul class="cin-tree-group">
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">入库单</span>
+                          </button>
+                        </li>
+                        <li class="cin-tree-item">
+                          <button class="cin-tree-row" type="button">
+                            <span class="cin-tree-toggle" aria-hidden="true"></span>
+                            <span class="cin-tree-label">出库单</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="events">
+              <div class="cin-panel-head">
+                <div class="cin-panel-titles">
+                  <h2 class="cin-title3">事件与 API</h2>
+                  <p class="cin-caption">expand / collapse / select / check / load 五类事件，全部冒泡到 .cin-tree</p>
+                </div>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiExpand">全部展开</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="apiCollapse">全部收起</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="apiSelect">选中「采购订单」</button>
+                </div>
+                <table class="cin-table" data-size="sm">
+                  <thead>
+                    <tr><th style="inline-size:9rem">按键</th><th>行为</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>↑ / ↓</td><td>在可见节点间移动</td></tr>
+                    <tr><td>→</td><td>展开当前节点；已展开则进第一个子节点</td></tr>
+                    <tr><td>←</td><td>收起当前节点；无子或已收起则回父节点</td></tr>
+                    <tr><td>Home / End</td><td>跳到首 / 末个可见节点</td></tr>
+                    <tr><td>Enter / Space</td><td>选中（多选模式下切换勾选）</td></tr>
+                    <tr><td>*</td><td>展开同级全部节点</td></tr>
+                    <tr><td>字母键</td><td>按首字母在节点间跳转，600ms 内连打算一个词</td></tr>
+                  </tbody>
+                </table>
+                <pre class="cin-caption" id="treeLog" style="white-space:pre-wrap;margin:0">等待事件…</pre>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js"></script>
+  <script>
+    const log = (text) => {
+      document.getElementById("treeLog").textContent = text;
+    };
+    const navOut = document.getElementById("navOut");
+    const nav = document.getElementById("treeNav");
+    nav.addEventListener("cin:treeselect", (event) => {
+      navOut.textContent = `已选：${event.detail.label}`;
+      log(`cin:treeselect → ${event.detail.label}`);
+    });
+    const rowName = (event) => event.detail.row.querySelector(".cin-tree-label")?.textContent.trim() || "";
+    nav.addEventListener("cin:treeexpand", (event) => log(`cin:treeexpand → ${rowName(event)}`));
+    nav.addEventListener("cin:treecollapse", (event) => log(`cin:treecollapse → ${rowName(event)}`));
+
+    const check = document.getElementById("treeCheck");
+    const checkOut = document.getElementById("checkOut");
+    const boxes = () => Array.from(check.querySelectorAll(".cin-tree-check"));
+    const refreshCheck = () => {
+      const picked = boxes().filter((box) => box.checked).length;
+      checkOut.textContent = `已选 ${picked} 项`;
+    };
+    check.addEventListener("cin:treecheck", (event) => {
+      log(`cin:treecheck → ${event.detail.checked}（级联 ${event.detail.cascade}）`);
+      refreshCheck();
+    });
+    check.addEventListener("change", refreshCheck);
+    document.getElementById("checkAll").addEventListener("click", () => {
+      check.querySelectorAll(":scope > .cin-tree-groups > .cin-tree-item").forEach((item) => Cinder.tree.setChecked(item, true));
+      refreshCheck();
+      log("API：全选");
+    });
+    document.getElementById("checkNone").addEventListener("click", () => {
+      check.querySelectorAll(":scope > .cin-tree-groups > .cin-tree-item").forEach((item) => Cinder.tree.setChecked(item, false));
+      refreshCheck();
+      log("API：清空");
+    });
+
+    const lazy = document.getElementById("treeLazy");
+    const lazyOut = document.getElementById("lazyOut");
+    const makeItem = (label, meta) => {
+      const li = document.createElement("li");
+      li.className = "cin-tree-item";
+      li.innerHTML = `<button class="cin-tree-row" type="button"><span class="cin-tree-toggle" aria-hidden="true"></span><span class="cin-tree-label">${label}</span><span class="cin-tree-meta">${meta}</span></button>`;
+      return li;
+    };
+    lazy.addEventListener("cin:treeload", (event) => {
+      const { item, done } = event.detail;
+      const name = item.querySelector(".cin-tree-label").textContent;
+      lazyOut.textContent = `${name} 加载中…`;
+      log(`cin:treeload → ${name}`);
+      setTimeout(() => {
+        const nodes = ["一分公司", "二分公司", "三分公司"].map((n, i) => makeItem(n, String((i + 1) * 7)));
+        done(nodes);
+        lazyOut.textContent = `${name} 已回填 ${nodes.length} 个下级`;
+      }, 300);
+    });
+
+    const filterTree = document.getElementById("treeFilter");
+    const filterInput = document.getElementById("filterInput");
+    const filterOut = document.getElementById("filterOut");
+    const applyFilter = () => {
+      const hit = Cinder.filterTree(filterTree, filterInput.value);
+      filterOut.textContent = filterInput.value ? `命中 ${hit} 个节点` : "6 个节点";
+    };
+    filterInput.addEventListener("input", applyFilter);
+    document.getElementById("filterClear").addEventListener("click", () => {
+      filterInput.value = "";
+      applyFilter();
+    });
+
+    document.getElementById("apiExpand").addEventListener("click", () => {
+      nav.querySelectorAll(".cin-tree-item").forEach((item) => Cinder.tree.expand(item));
+      log("API：全部展开");
+    });
+    document.getElementById("apiCollapse").addEventListener("click", () => {
+      nav.querySelectorAll(".cin-tree-item").forEach((item) => Cinder.tree.collapse(item));
+      log("API：全部收起");
+    });
+    document.getElementById("apiSelect").addEventListener("click", () => {
+      const target = Array.from(nav.querySelectorAll(".cin-tree-row")).find((row) => row.textContent.includes("采购订单"));
+      if (target) {
+        Cinder.tree.select(target);
+        navOut.textContent = "已选：采购订单";
+      }
+    });
+    document.getElementById("toEvents").addEventListener("click", () => {
+      document.getElementById("events").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  </script>
+</body>
+</html>

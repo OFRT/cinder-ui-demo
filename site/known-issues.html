@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>已知问题 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html" aria-current="page">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>已知问题</h1>
+        <p class="site-lead">缺陷看守与不能修的边界</p>
+      </header>
+<blockquote>
+<p>维护规则：每条缺陷必须带<strong>看守断言位置</strong>。修好之前断言以 <code>XFAIL</code> 形式留在验收里，避免&quot;悄悄变好&quot;或&quot;悄悄变坏&quot;。
+新增缺陷编号递增；修复后移入文末&quot;已修复&quot;表并保留一行历史。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>组件</th>
+<th>现象</th>
+<th>严重度</th>
+<th>状态</th>
+<th>看守断言</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KN-001</td>
+<td>disclosure</td>
+<td><code>data-single</code> 单开互斥在快速连点时失效，出现两条同时展开</td>
+<td>中</td>
+<td>已修（2026-11-02，见文末）</td>
+<td><code>scripts/acceptance-disclosure.mjs</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="kn-001-disclosure-快速连点时单开互斥失效">KN-001 · disclosure 快速连点时单开互斥失效</h2>
+<p><strong>复现步骤</strong></p>
+<ol>
+<li>页面放一组 <code>data-single</code> 手风琴，含 a、b 两个条目，初始均收起。</li>
+<li>依次点击 a、再点击 b，间隔 200ms 以上 —— 表现正常：<code>a=false, b=true</code>。</li>
+<li>将间隔压到极短（连续两次点击，中间不等待动画帧）—— 异常：<code>a=true, b=true</code>，两条同时展开。</li>
+</ol>
+<p><strong>实际行为</strong>
+<code>afterB200 = (true, true)</code>：互斥没有生效，两个面板同时处于展开态。</p>
+<p><strong>期望行为</strong>
+任何时刻 <code>data-single</code> 组内最多一个条目处于展开态；后点开的条目必须先把先前条目关掉。</p>
+<p><strong>影响面</strong></p>
+<ul>
+<li>只影响视觉与信息密度，不丢数据、不阻断操作。</li>
+<li>高频连点的真实场景：用户快速浏览多条 FAQ、批量核对若干折叠项。</li>
+<li>依赖&quot;组内必有一条展开&quot;作为业务前提的页面，会因两条同开导致读取到错误条目的内容。</li>
+</ul>
+<p><strong>根因（初判，待验证）</strong>
+<code>setOpen</code> 中的互斥逻辑与&quot;关闭由动画驱动&quot;耦合：关闭要等过渡结束才真正落 <code>open=false</code>，而快速第二次点击发生在第一次关闭尚未落地时，关闭流程被后续状态覆盖或跳过，导致先开的那条停留在展开态。</p>
+<p><strong>临时规避</strong>
+对组内&quot;必须互斥&quot;的场景，先不要在快速连点路径上使用 <code>data-single</code>；改由宿主在点击时同步清空所有兄弟节点的展开态（不依赖动画时序）。</p>
+<p><strong>修复方向（选一）</strong></p>
+<ol>
+<li>互斥判定改为同步执行：先对所有兄弟节点强制置关闭态（不等待动画），再做展开。</li>
+<li>引入&quot;关闭中&quot;中间态，第二次点击若命中&quot;关闭中&quot;节点则直接接管，不叠加新状态。</li>
+<li>关闭动画只影响视觉，不参与状态机；状态与动画彻底解耦。</li>
+</ol>
+<p><strong>验收标准（修好后）</strong></p>
+<ul>
+<li>连续快速点击 a、b、c 各一次，最终仅 c 展开。</li>
+<li>关闭动画进行中点击同一节点可正常重新展开，不出现双开。</li>
+<li><code>acceptance-disclosure.mjs</code> 中 XFAIL 项转为 PASS，24/24 全绿且无 XFAIL。</li>
+</ul>
+<p><strong>修复记录（2026-11-02）</strong></p>
+<ul>
+<li>根因坐实：收起分支把 <code>item.open = false</code> 放在 <code>animate()</code> 的完成回调里，快速连点时前一项的关闭动画被后一项的展开覆盖（<code>clearSize</code> 只清定时器不清 <code>transitionend</code>），关闭回调永不落地，状态停在 <code>open=true</code>。</li>
+<li>改法：① <code>closeNow()</code> 同步强关，<code>data-single</code> 互斥走它，不再等动画；② 收起时置 <code>_cinClosing</code>，若此时要求打开则接管为展开并重开动画；③ <code>clearSize()</code> 一并移除 <code>transitionend</code>，防止旧回调补刀。</li>
+<li>结果：<code>acceptance-disclosure.mjs</code> 26/26 全绿，XFAIL 归零。</li>
+</ul>
+<hr>
+<h2 id="s-已修复">已修复</h2>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>组件</th>
+<th>现象</th>
+<th>修复版本</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KN-001</td>
+<td>disclosure</td>
+<td><code>data-single</code> 单开互斥在快速连点时失效，两条同时展开</td>
+<td>2026-11-02</td>
+<td>互斥改为同步强关（方向 1）+ 引入 <code>_cinClosing</code> 中间态接管（方向 2）；<code>clearSize</code> 一并摘除遗留 <code>transitionend</code> 监听。<code>acceptance-disclosure.mjs</code> 26/26 全绿，0 XFAIL</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#kn-001-disclosure-快速连点时单开互斥失效" data-level="2">KN-001 · disclosure 快速连点时单开互斥失效</a>
+      <a href="#s-已修复" data-level="2">已修复</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

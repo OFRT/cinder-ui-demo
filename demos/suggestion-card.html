@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 建议卡</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="../dist/cinder-icons.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">suggestion-card</span>
+      <span class="cin-caption">结论 + 置信度文字档 + 备选；虚线框表示可商量，不是闸门</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础：结论 + 置信度 + 备选 + 采纳</h2>
+          <p class="cin-caption">置信度同时给条与文字档，条只是装饰（<code>aria-hidden</code>），档位由 <code>data-confidence</code> 驱动。</p>
+
+          <div class="cin-suggest" data-confidence="high" id="suggest-basic">
+            <div class="cin-suggest-head">
+              <h4 class="cin-suggest-title">建议把标题改短</h4>
+            </div>
+            <p class="cin-suggest-body">「关于本季度华东区销售情况的复盘与下阶段计划」超出 20 字，列表页会折行两次。</p>
+            <span class="cin-suggest-confidence"><span class="cin-suggest-meter" aria-hidden="true"></span>置信度：高</span>
+            <ul class="cin-suggest-alts">
+              <li class="cin-suggest-alt"><span>华东区 Q3 销售复盘</span></li>
+              <li class="cin-suggest-alt"><span>Q3 华东销售：问题与下一步</span></li>
+            </ul>
+            <div class="cin-suggest-actions">
+              <button class="cin-btn" data-variant="ghost" type="button" data-act="dismiss">不采纳</button>
+              <button class="cin-btn" data-variant="primary" type="button" data-act="accept">采纳这条建议</button>
+            </div>
+            <p class="cin-suggest-verdict" role="status">已采纳：应用「华东区 Q3 销售复盘」</p>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">置信度三档</h2>
+          <p class="cin-caption">低置信度整体转中性色，避免把「没把握」说得跟「很确定」一样笃定。</p>
+
+          <div class="cin-suggest" data-confidence="high" style="margin-block-end:var(--cin-space-150)">
+            <div class="cin-suggest-head"><h4 class="cin-suggest-title">高：可直接采用</h4></div>
+            <p class="cin-suggest-body">发票号 <code>INV-2024-0917</code> 与本季度应开票据清单第 3 行完全一致。</p>
+            <span class="cin-suggest-confidence"><span class="cin-suggest-meter" aria-hidden="true"></span>置信度：高</span>
+            <div class="cin-suggest-actions">
+              <button class="cin-btn" data-variant="ghost" type="button">不采纳</button>
+              <button class="cin-btn" data-variant="primary" type="button">采纳这条建议</button>
+            </div>
+          </div>
+
+          <div class="cin-suggest" data-confidence="medium" style="margin-block-end:var(--cin-space-150)">
+            <div class="cin-suggest-head"><h4 class="cin-suggest-title">中：建议核对后采用</h4></div>
+            <p class="cin-suggest-body">这份合同的结算周期可能为 30 天，但第 8 条与附件二的表述不一致。</p>
+            <span class="cin-suggest-confidence"><span class="cin-suggest-meter" aria-hidden="true"></span>置信度：中</span>
+            <div class="cin-suggest-actions">
+              <button class="cin-btn" data-variant="ghost" type="button">不采纳</button>
+              <button class="cin-btn" data-variant="primary" type="button">采纳这条建议</button>
+            </div>
+          </div>
+
+          <div class="cin-suggest" data-confidence="low">
+            <div class="cin-suggest-head"><h4 class="cin-suggest-title">低：仅作线索</h4></div>
+            <p class="cin-suggest-body">检索到的三份材料指向不同的供应商名称，无法确认应以哪一份为准。</p>
+            <span class="cin-suggest-confidence"><span class="cin-suggest-meter" aria-hidden="true"></span>置信度：低</span>
+            <div class="cin-suggest-actions">
+              <button class="cin-btn" data-variant="ghost" type="button">不采纳</button>
+              <button class="cin-btn" data-variant="primary" type="button">采纳这条建议</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">终态：已采纳 / 已忽略</h2>
+          <p class="cin-caption">动作槽收起换一行结论，避免「还能再点一次」的错觉；终态不回退。</p>
+
+          <div class="cin-suggest" data-confidence="high" data-state="done" data-verdict="accepted" style="margin-block-end:var(--cin-space-150)">
+            <div class="cin-suggest-head"><h4 class="cin-suggest-title">已采纳的卡</h4></div>
+            <p class="cin-suggest-body">把第 4 列的金额统一格式化为两位小数。</p>
+            <span class="cin-suggest-confidence"><span class="cin-suggest-meter" aria-hidden="true"></span>置信度：高</span>
+            <div class="cin-suggest-actions">
+              <button class="cin-btn" data-variant="primary" type="button">采纳这条建议</button>
+            </div>
+            <p class="cin-suggest-verdict" role="status">已采纳：整列格式化为两位小数</p>
+          </div>
+
+          <div class="cin-suggest" data-confidence="low" data-state="done" data-verdict="dismissed">
+            <div class="cin-suggest-head"><h4 class="cin-suggest-title">已忽略的卡</h4></div>
+            <p class="cin-suggest-body">建议把这张表改成柱状图。</p>
+            <span class="cin-suggest-confidence"><span class="cin-suggest-meter" aria-hidden="true"></span>置信度：低</span>
+            <div class="cin-suggest-actions">
+              <button class="cin-btn" data-variant="primary" type="button">采纳这条建议</button>
+            </div>
+            <p class="cin-suggest-verdict" role="status">已忽略：保持表格形态</p>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">重试中：data-busy</h2>
+          <p class="cin-caption">动作区降透明度，按钮由宿主禁用；采纳后执行失败不回退本卡状态。</p>
+
+          <div class="cin-suggest" data-confidence="medium" data-busy>
+            <div class="cin-suggest-head"><h4 class="cin-suggest-title">正在应用建议…</h4></div>
+            <p class="cin-suggest-body">已请求把「客户名称」列重命名为「客户」。</p>
+            <span class="cin-suggest-confidence"><span class="cin-suggest-meter" aria-hidden="true"></span>置信度：中</span>
+            <div class="cin-suggest-actions">
+              <button class="cin-btn" data-variant="ghost" type="button" disabled>不采纳</button>
+              <button class="cin-btn" data-variant="primary" type="button" disabled>采纳这条建议</button>
+            </div>
+            <p class="cin-suggest-verdict" role="status">已采纳：列名变更已提交</p>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">窄屏：动作换行</h2>
+          <p class="cin-caption">容器宽 320px；动作按钮按顺序换行，不挤压标题。</p>
+          <div style="max-inline-size:320px">
+            <div class="cin-suggest" data-confidence="medium">
+              <div class="cin-suggest-head"><h4 class="cin-suggest-title">窄屏下的长标题会不会把置信度挤掉</h4></div>
+              <p class="cin-suggest-body">这段正文足够长，用来验证在 320px 宽度下正文换行、置信度整块下移、动作按钮不溢出容器。</p>
+              <span class="cin-suggest-confidence"><span class="cin-suggest-meter" aria-hidden="true"></span>置信度：中</span>
+              <div class="cin-suggest-actions">
+                <button class="cin-btn" data-size="sm" data-variant="ghost" type="button">不采纳</button>
+                <button class="cin-btn" data-size="sm" data-variant="primary" type="button">采纳这条建议</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    /* 纯演示：真实项目里终态由宿主写回，组件本身零脚本 */
+    document.querySelectorAll('.cin-suggest-actions [data-act]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.cin-suggest');
+        card.dataset.state = btn.dataset.act === 'accept' ? 'accepted' : 'dismissed';
+      });
+    });
+  </script>
+</body>
+</html>

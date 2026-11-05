@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>组件清单 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html" aria-current="page">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+
+<section class="site-hero site-hero--tight">
+<h1>组件清单</h1>
+<p class="site-lead">79 个组件、13 个原语、44 个行为，分布在 87 个按需入口里。数据直接读 <code>dist/cinder-manifest.json</code>，不手写、不会与产物脱节。</p>
+</section>
+<h2>base 层（通用）</h2>
+<p>通用层不含任何业务语义：组件只管形体、状态与可达性，命名不得出现业务名词。</p>
+<table>
+<thead>
+<tr>
+<th>入口</th>
+<th style="text-align:right">源文件</th>
+<th style="text-align:right">类名数</th>
+<th style="text-align:right">gzip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entries/base/overlay.css</code></td>
+<td style="text-align:right">components/overlay.css</td>
+<td style="text-align:right">54</td>
+<td style="text-align:right">7.57 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls.css</code></td>
+<td style="text-align:right">components/controls.css</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">6.94 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/mascot.css</code></td>
+<td style="text-align:right">components/mascot.css</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">6.51 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/prompt-bar.css</code></td>
+<td style="text-align:right">components/prompt-bar.css</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">6.47 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/colorpicker.css</code></td>
+<td style="text-align:right">components/colorpicker.css</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">6.46 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/feedback.css</code></td>
+<td style="text-align:right">components/feedback.css</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">6.34 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/approval-card.css</code></td>
+<td style="text-align:right">components/approval-card.css</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">6.32 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/thinking.css</code></td>
+<td style="text-align:right">components/thinking.css</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">6.28 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/suggestion-card.css</code></td>
+<td style="text-align:right">components/suggestion-card.css</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">6.26 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/sidenav.css</code></td>
+<td style="text-align:right">components/sidenav.css</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">6.26 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/task-rows.css</code></td>
+<td style="text-align:right">components/task-rows.css</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">6.14 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/glass.css</code></td>
+<td style="text-align:right">glass/glass.css</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">6.11 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/range-slider.css</code></td>
+<td style="text-align:right">components/range-slider.css</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">5.93 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/virtualgrid.css</code></td>
+<td style="text-align:right">components/virtualgrid.css</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">5.90 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/selection-actions.css</code></td>
+<td style="text-align:right">components/selection-actions.css</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">5.80 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/markdown.css</code></td>
+<td style="text-align:right">components/markdown.css</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">5.80 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/upload-queue.css</code></td>
+<td style="text-align:right">components/upload-queue.css</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">5.76 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/icons.css</code></td>
+<td style="text-align:right">components/icons.css</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">5.70 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/card.css</code></td>
+<td style="text-align:right">components/card.css</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">5.69 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/context-card.css</code></td>
+<td style="text-align:right">components/context-card.css</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">5.68 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/tool-chips.css</code></td>
+<td style="text-align:right">components/tool-chips.css</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5.67 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/slider.css</code></td>
+<td style="text-align:right">components/slider.css</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5.66 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/table.css</code></td>
+<td style="text-align:right">components/table.css</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">5.66 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/datepicker.css</code></td>
+<td style="text-align:right">components/datepicker.css</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">5.65 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/popover.css</code></td>
+<td style="text-align:right">components/popover.css</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">5.59 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/morph-button.css</code></td>
+<td style="text-align:right">components/morph-button.css</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">5.59 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/viz.css</code></td>
+<td style="text-align:right">components/viz.css</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">5.59 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/chat.css</code></td>
+<td style="text-align:right">components/chat.css</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">5.58 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/carousel.css</code></td>
+<td style="text-align:right">components/carousel.css</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">5.56 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/tree.css</code></td>
+<td style="text-align:right">components/tree.css</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">5.50 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/option-group.css</code></td>
+<td style="text-align:right">components/option-group.css</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5.49 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/tabs.css</code></td>
+<td style="text-align:right">components/tabs.css</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5.47 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/media.css</code></td>
+<td style="text-align:right">components/media.css</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5.40 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/stream-text.css</code></td>
+<td style="text-align:right">components/stream-text.css</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5.38 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/disclosure.css</code></td>
+<td style="text-align:right">components/disclosure.css</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5.32 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/splitpanel.css</code></td>
+<td style="text-align:right">components/splitpanel.css</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">5.32 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/calendar.css</code></td>
+<td style="text-align:right">components/calendar.css</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">5.31 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/fileinput.css</code></td>
+<td style="text-align:right">components/fileinput.css</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">5.30 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/copytarget.css</code></td>
+<td style="text-align:right">components/copytarget.css</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">5.26 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/list.css</code></td>
+<td style="text-align:right">components/list.css</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">5.25 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/entity.css</code></td>
+<td style="text-align:right">components/entity.css</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">5.24 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/avatar.css</code></td>
+<td style="text-align:right">components/avatar.css</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5.24 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/ring.css</code></td>
+<td style="text-align:right">components/ring.css</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">5.23 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/otp.css</code></td>
+<td style="text-align:right">components/otp.css</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5.22 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/details.css</code></td>
+<td style="text-align:right">components/details.css</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">5.21 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/rating.css</code></td>
+<td style="text-align:right">components/rating.css</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">5.16 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/scroll-area.css</code></td>
+<td style="text-align:right">components/scroll-area.css</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">5.16 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/btn-group.css</code></td>
+<td style="text-align:right">components/btn-group.css</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">5.14 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/shell.css</code></td>
+<td style="text-align:right">components/shell.css</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">5.13 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/cascader.css</code></td>
+<td style="text-align:right">components/cascader.css</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">5.12 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/result.css</code></td>
+<td style="text-align:right">components/result.css</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">5.12 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/comment.css</code></td>
+<td style="text-align:right">components/comment.css</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">5.10 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/input-number.css</code></td>
+<td style="text-align:right">components/input-number.css</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">5.05 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/watermark.css</code></td>
+<td style="text-align:right">components/watermark.css</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">5.05 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/timepicker.css</code></td>
+<td style="text-align:right">components/timepicker.css</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">5.04 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/notice-bar.css</code></td>
+<td style="text-align:right">components/notice-bar.css</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5.01 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/qrcode.css</code></td>
+<td style="text-align:right">components/qrcode.css</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">4.97 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/diff-view.css</code></td>
+<td style="text-align:right">components/diff-view.css</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">4.97 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/transfer.css</code></td>
+<td style="text-align:right">components/transfer.css</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">4.96 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/knowndate.css</code></td>
+<td style="text-align:right">components/knowndate.css</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4.95 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/toolbar.css</code></td>
+<td style="text-align:right">components/toolbar.css</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">4.89 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/segmented.css</code></td>
+<td style="text-align:right">components/segmented.css</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4.85 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/descriptions.css</code></td>
+<td style="text-align:right">components/descriptions.css</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4.83 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-check.css</code></td>
+<td style="text-align:right">components/controls-check.css</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4.76 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/command-palette.css</code></td>
+<td style="text-align:right">components/command-palette.css</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">4.69 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-select.css</code></td>
+<td style="text-align:right">components/controls-select.css</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4.67 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/lightbox.css</code></td>
+<td style="text-align:right">components/lightbox.css</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">4.66 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/pull-refresh.css</code></td>
+<td style="text-align:right">components/pull-refresh.css</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4.66 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/combobox.css</code></td>
+<td style="text-align:right">components/combobox.css</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">4.65 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/tag-input.css</code></td>
+<td style="text-align:right">components/tag-input.css</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">4.62 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/heatmap.css</code></td>
+<td style="text-align:right">components/heatmap.css</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">4.61 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/password-strength.css</code></td>
+<td style="text-align:right">components/password-strength.css</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">4.59 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/undo-bar.css</code></td>
+<td style="text-align:right">components/undo-bar.css</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4.58 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-stepper.css</code></td>
+<td style="text-align:right">components/controls-stepper.css</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4.56 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/inline-edit.css</code></td>
+<td style="text-align:right">components/inline-edit.css</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">4.55 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-segment.css</code></td>
+<td style="text-align:right">components/controls-segment.css</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4.54 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-switch.css</code></td>
+<td style="text-align:right">components/controls-switch.css</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4.54 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/currency-input.css</code></td>
+<td style="text-align:right">components/currency-input.css</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">4.54 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-search.css</code></td>
+<td style="text-align:right">components/controls-search.css</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4.48 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-reveal.css</code></td>
+<td style="text-align:right">components/controls-reveal.css</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4.47 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/base.css</code></td>
+<td style="text-align:right">base.css</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">4.27 KB</td>
+</tr>
+</tbody>
+</table>
+<h2>erp 层（定向定制）</h2>
+<p>定向层建立在通用层之上，只允许单向依赖（erp → base），不允许 base 反向引用业务词。</p>
+<table>
+<thead>
+<tr>
+<th>入口</th>
+<th style="text-align:right">源文件</th>
+<th style="text-align:right">类名数</th>
+<th style="text-align:right">gzip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entries/erp/pda.css</code></td>
+<td style="text-align:right">blocks/pda.css</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">5.17 KB</td>
+</tr>
+<tr>
+<td><code>entries/erp/line-items.css</code></td>
+<td style="text-align:right">blocks/line-items.css</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">5.09 KB</td>
+</tr>
+<tr>
+<td><code>entries/erp/document.css</code></td>
+<td style="text-align:right">blocks/document.css</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">5.01 KB</td>
+</tr>
+<tr>
+<td><code>entries/erp/picker.css</code></td>
+<td style="text-align:right">blocks/picker.css</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">4.93 KB</td>
+</tr>
+<tr>
+<td><code>entries/erp/approve.css</code></td>
+<td style="text-align:right">blocks/approve.css</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">4.74 KB</td>
+</tr>
+<tr>
+<td><code>entries/erp/print.css</code></td>
+<td style="text-align:right">blocks/print.css</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">4.69 KB</td>
+</tr>
+</tbody>
+</table>
+<h2>怎么选入口</h2>
+<ul>
+<li>只想用一个组件：直接引对应 <code>entries/</code> 下的单入口，令牌已内联。</li>
+<li>想要整套基础形体：引 <code>entries/base/base.css</code>。</li>
+<li>想换肤但不改组件：加 <code>dist/cinder-skins.css</code> + <code>&lt;html data-skin=&quot;…&quot;&gt;</code>。</li>
+<li>想改令牌：用 Playground 导出覆盖片段，放在 base 之后。</li>
+</ul>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 级联选择</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">cascader</span>
+      <span class="cin-caption">逐列下钻选叶子，路径按斜杠串提交；脚本没跑也能手输「浙江 / 杭州 / 西湖」</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础</h2>
+          <div class="cin-stack">
+            <label class="cin-field">
+              <span class="cin-field-label">所在地</span>
+              <div class="cin-cascader" data-cascader data-value="zj/hz/xh" data-label="所在地" data-options='[
+                {"value":"zj","label":"浙江","children":[
+                  {"value":"hz","label":"杭州","children":[
+                    {"value":"xh","label":"西湖区"},
+                    {"value":"sc","label":"上城区"}]},
+                  {"value":"nb","label":"宁波","children":[
+                    {"value":"hs","label":"海曙区"}]}]},
+                {"value":"js","label":"江苏","children":[
+                  {"value":"nj","label":"南京","children":[
+                    {"value":"gl","label":"鼓楼区"}]}]}
+              ]'>
+                <div class="cin-cascader-fields">
+                  <span class="cin-cascader-field"><input data-cascader-field aria-label="所在地"></span>
+                  <button class="cin-cascader-toggle" type="button" aria-label="打开层级面板"></button>
+                </div>
+              </div>
+              <span class="cin-field-help">提交值为 zj/hz/xh</span>
+            </label>
+
+            <label class="cin-field">
+              <span class="cin-field-label">类目（含禁用节点）</span>
+              <div class="cin-cascader" data-cascader data-label="类目" data-options='[
+                {"value":"food","label":"食品","children":[
+                  {"value":"snack","label":"零食"},
+                  {"value":"fresh","label":"生鲜","disabled":true}]},
+                {"value":"home","label":"家居","children":[
+                  {"value":"clean","label":"清洁"}]}
+              ]'>
+                <div class="cin-cascader-fields">
+                  <span class="cin-cascader-field"><input data-cascader-field aria-label="类目" placeholder="请选择类目"></span>
+                  <button class="cin-cascader-toggle" type="button" aria-label="打开层级面板"></button>
+                </div>
+              </div>
+              <span class="cin-field-help">生鲜当前不可选</span>
+            </label>
+
+            <label class="cin-field">
+              <span class="cin-field-label">小尺寸</span>
+              <div class="cin-cascader" data-cascader data-size="sm" data-label="小尺寸" data-options='[
+                {"value":"a","label":"一级 A","children":[{"value":"a1","label":"二级 A1"}]},
+                {"value":"b","label":"一级 B","children":[{"value":"b1","label":"二级 B1"}]}
+              ]'>
+                <div class="cin-cascader-fields">
+                  <span class="cin-cascader-field"><input data-cascader-field aria-label="小尺寸级联" placeholder="--"></span>
+                  <button class="cin-cascader-toggle" type="button" aria-label="打开层级面板"></button>
+                </div>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">脚本取值</h2>
+          <div class="cin-toolbar">
+            <button class="cin-btn" data-variant="outline" onclick="Cinder.setCascader(document.querySelector('[data-cascader]'), 'js/nj/gl'); document.getElementById('out').textContent = 'set -> ' + Cinder.cascader(document.querySelector('[data-cascader]')).value;">设为 江苏/南京/鼓楼</button>
+            <button class="cin-btn" data-variant="ghost" onclick="const c=Cinder.cascader(document.querySelector('[data-cascader]')); document.getElementById('out').textContent = 'value -> ' + c.value + ' | labels -> ' + c.labels;">读当前值</button>
+            <span class="cin-caption" id="out">value -> zj/hz/xh</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/cinder.js" defer></script>
+</body>
+</html>

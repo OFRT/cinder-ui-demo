@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 数字输入</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">input-number</span>
+      <span class="cin-caption">原生 number 打底；加减只夹取不改造，长按连加走 500ms / 80ms</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础</h2>
+          <div class="cin-stack">
+            <div class="cin-field">
+              <span class="cin-field-label">采购数量（0–20，步进 1）</span>
+              <div class="cin-input-number" data-input-number data-value="3" data-min="0" data-max="20" data-step="1">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" inputmode="numeric" aria-label="采购数量">
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+              <span class="cin-field-help">按到 0 或 20 时对应方向按钮自动禁用</span>
+            </div>
+
+            <div class="cin-field">
+              <span class="cin-field-label">重量（0.1–2.0，步进 0.1，无上限按钮）</span>
+              <div class="cin-input-number" data-input-number data-min="0.1" data-max="2" data-step="0.1" data-value="0.3">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" inputmode="decimal" step="0.1" aria-label="重量（kg）">
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+              <span class="cin-field-help">0.1 累加不漂：内部按 step 精度归一</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">尺寸与布局</h2>
+          <div class="cin-stack">
+            <div class="cin-row">
+              <div class="cin-input-number" data-size="sm" data-input-number data-value="1" data-min="0" data-max="9" data-step="1">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" aria-label="小号">
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+              <div class="cin-input-number" data-input-number data-value="5" data-min="0" data-max="99" data-step="1">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" aria-label="中号">
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+              <div class="cin-input-number" data-size="lg" data-input-number data-value="12" data-min="0" data-max="99" data-step="1">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" aria-label="大号">
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+            </div>
+            <div class="cin-field">
+              <span class="cin-field-label">撑满一行（data-block）</span>
+              <div class="cin-input-number" data-block data-input-number data-value="8" data-min="0" data-max="999" data-step="1">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" aria-label="整行数量">
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">边界与失败态</h2>
+          <div class="cin-stack">
+            <div class="cin-field">
+              <span class="cin-field-label">已到上限（10/10）</span>
+              <div class="cin-input-number" data-input-number data-value="10" data-min="0" data-max="10" data-step="1">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" aria-label="上限示例">
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+            </div>
+            <div class="cin-field">
+              <span class="cin-field-label">禁用</span>
+              <div class="cin-input-number" data-disabled data-input-number data-value="6" data-min="0" data-max="10" data-step="1">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" aria-label="禁用示例" disabled>
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+            </div>
+            <div class="cin-field">
+              <span class="cin-field-label">手输框（可试非法输入）</span>
+              <div class="cin-input-number" data-input-number data-min="1" data-max="999" data-step="1" data-value="1">
+                <button class="cin-input-number-step" type="button" data-step-dir="-1" aria-label="减少">−</button>
+                <input class="cin-input-number-field" type="number" aria-label="手输示例">
+                <button class="cin-input-number-step" type="button" data-step-dir="1" aria-label="增加">+</button>
+              </div>
+              <span class="cin-field-help">输入空值或超范围时边框转危险色，失焦后夹回边界值</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">API</h2>
+          <div class="cin-row">
+            <button class="cin-btn" data-size="sm" onclick="Cinder.setInputNumber(document.querySelector('[data-input-number]'), 7); document.getElementById('out-number').textContent = 'set -> ' + Cinder.inputNumber(document.querySelector('[data-input-number]')).value;">设为 7</button>
+            <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="Cinder.setInputNumber(document.querySelector('[data-input-number]'), 999); document.getElementById('out-number').textContent = 'set 999 -> ' + Cinder.inputNumber(document.querySelector('[data-input-number]')).value + '（已夹到 max）';">超限赋值</button>
+            <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const n=Cinder.inputNumber(document.querySelector('[data-input-number]')); n.stepBy(-1); document.getElementById('out-number').textContent = 'step(-1) -> ' + n.value;">步进 -1</button>
+            <span class="cin-caption" id="out-number">value -> 3</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll('[data-input-number]').forEach((el) => el.addEventListener('cin:numberchange', (e) => {
+      document.getElementById('out-number').textContent = 'change -> ' + e.detail.value + '（' + e.detail.reason + '）';
+    }));
+  </script>
+  <script src="../dist/cinder.js" defer></script>
+</body>
+</html>

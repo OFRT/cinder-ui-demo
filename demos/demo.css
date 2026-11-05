@@ -1,0 +1,80 @@
+/* demo 页面外壳：仅服务于示例，不属于组件库 */
+:root { --demo-rail: 232px; }
+
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--cin-color-bg-canvas); color: var(--cin-color-text-primary);
+  font: var(--cin-text-body-weight) var(--cin-text-body-size)/var(--cin-text-body-line) var(--cin-family-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.demo-shell { display: grid; grid-template-columns: var(--demo-rail) minmax(0, 1fr); min-height: 100vh; }
+.demo-rail {
+  display: flex; flex-direction: column; gap: var(--cin-space-200);
+  padding: var(--cin-space-200) var(--cin-space-150);
+  background: var(--cin-color-bg-surface); border-inline-end: 1px solid var(--cin-color-border-subtle);
+  position: sticky; inset-block-start: 0; height: 100vh; overflow-y: auto;
+}
+.demo-brand { display: flex; align-items: center; gap: var(--cin-space-100); padding: var(--cin-space-100); }
+.demo-brand b { font-size: var(--cin-text-title3-size); letter-spacing: var(--cin-text-display-tracking); }
+.demo-brand small { display: block; color: var(--cin-color-text-tertiary); font-size: var(--cin-text-caption-size); }
+.demo-rail nav { display: flex; flex-direction: column; gap: 2px; }
+.demo-rail nav a {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--cin-space-100);
+  padding: var(--cin-space-100) var(--cin-space-150); border-radius: var(--cin-radius-sm);
+  color: var(--cin-color-text-secondary); text-decoration: none; font-size: var(--cin-text-label-size);
+}
+.demo-rail nav a:hover { background: var(--cin-color-state-neutral-soft); color: var(--cin-color-text-primary); }
+.demo-rail nav a[aria-current="page"] { background: var(--cin-color-accent-soft); color: var(--cin-color-accent-hover); font-weight: 600; }
+.demo-rail nav a small { color: var(--cin-color-text-tertiary); font-size: 11px; }
+.demo-rail-foot { margin-block-start: auto; color: var(--cin-color-text-tertiary); font-size: var(--cin-text-caption-size); padding: var(--cin-space-100); }
+
+.demo-main { display: flex; flex-direction: column; min-width: 0; }
+
+@media (max-width: 900px) {
+  .demo-shell { grid-template-columns: minmax(0, 1fr); }
+  .demo-rail { position: static; height: auto; flex-direction: row; align-items: center; flex-wrap: wrap; overflow: hidden; border-inline-end: 0; border-block-end: 1px solid var(--cin-color-border-subtle); }
+  .demo-rail nav { flex-direction: row; flex-wrap: wrap; }
+  .demo-rail-foot, .demo-brand small { display: none; }
+}
+
+/* 示例内容区 */
+.demo-stack { display: flex; flex-direction: column; gap: var(--cin-space-200); }
+.demo-grid { display: grid; gap: var(--cin-space-200); }
+.demo-grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.demo-grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.demo-grid.cols-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.demo-note { color: var(--cin-color-text-tertiary); font-size: var(--cin-text-caption-size); }
+.demo-code { font: 12px/1.6 var(--cin-family-mono); background: var(--cin-color-bg-surface-sunken); border-radius: var(--cin-radius-sm); padding: var(--cin-space-150); overflow-x: auto; }
+.demo-swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--cin-space-100); }
+.demo-swatch { border: 1px solid var(--cin-color-border-subtle); border-radius: var(--cin-radius-sm); overflow: hidden; }
+.demo-swatch i { display: block; height: 44px; }
+.demo-swatch span { display: block; padding: var(--cin-space-050) var(--cin-space-100); font: 11px/1.4 var(--cin-family-mono); color: var(--cin-color-text-secondary); }
+.demo-pda-stage { display: grid; place-items: center; padding: var(--cin-space-300); background: var(--cin-color-bg-surface-sunken); border-radius: var(--cin-radius-lg); }
+.demo-pda-stage .cin-pda { width: min(360px, 100%); }
+
+/* 单据页在小屏取消左右留白 */
+.demo-doc { container: cin-page / inline-size; }
+
+.demo-pda-stage .cin-pda { min-height: 640px; }
+
+/* 窄屏（PDA 真机 320-430）：外壳让位给组件，避免页面级横向溢出 */
+@media (max-width: 480px) {
+  .demo-main[data-pda] { padding: var(--cin-space-150) !important; }
+  .demo-pda-stage { padding: 0; background: transparent; border-radius: 0; }
+}
+
+/* 轮播 demo：不引外链图片，用 token 混合出占位色块 */
+.demo-slide {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: flex-end;
+  min-block-size: 12rem;
+  padding: var(--cin-space-300);
+  background: var(--demo-tone, var(--cin-color-bg-surface-sunken));
+}
+.demo-tone-1 { --demo-tone: color-mix(in oklab, var(--cin-color-accent-default) 14%, var(--cin-color-bg-surface-sunken)); }
+.demo-tone-2 { --demo-tone: color-mix(in oklab, var(--cin-color-state-success) 14%, var(--cin-color-bg-surface-sunken)); }
+.demo-tone-3 { --demo-tone: color-mix(in oklab, var(--cin-color-state-warning) 18%, var(--cin-color-bg-surface-sunken)); }
+.demo-slide-title { margin: 0; font-size: var(--cin-text-body-strong-size); font-weight: var(--cin-text-body-strong-weight); color: var(--cin-color-text-primary); }
+.demo-slide-note { margin: 0; font-size: var(--cin-text-caption-size); color: var(--cin-color-text-secondary); }

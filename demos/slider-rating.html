@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 滑块与评分</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.3</span>
+      <span class="cin-caption">滑块与评分都基于原生控件，脚本没跑也能取值</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">滑块与评分</div>
+        <a class="cin-navitem" href="#basic">基础滑块</a>
+        <a class="cin-navitem" href="#formatted">数值格式化</a>
+        <a class="cin-navitem" href="#inline">行内排布</a>
+        <a class="cin-navitem" href="#states">禁用与步长</a>
+        <a class="cin-navitem" href="#rating">基础评分</a>
+        <a class="cin-navitem" href="#rating-size">评分尺寸与只读</a>
+        <a class="cin-navitem" href="#events">事件与 API</a>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">滑块与评分</h1>
+                  <p class="cin-caption">input[type=range] 与 radio 组承担交互，样式只做接管，取值与键盘保留原生行为</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="secondary" data-size="sm" id="toEvents">跳到「事件与 API」</button>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="basic">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">基础滑块</h2>
+                <span class="cin-caption">轨道填充比例由脚本写 --_p，没跑脚本时退回浏览器原生外观</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-slider" data-slider>
+                  <div class="cin-slider-head">
+                    <label class="cin-slider-label" for="sliderBasic">采购批次数量</label>
+                    <span class="cin-slider-value">80</span>
+                  </div>
+                  <div class="cin-slider-body">
+                    <input class="cin-slider-input" id="sliderBasic" type="range" min="0" max="200" step="5" value="80">
+                  </div>
+                  <div class="cin-slider-marks">
+                    <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span>
+                  </div>
+                </div>
+
+                <div class="cin-slider" data-slider data-bubble>
+                  <div class="cin-slider-head">
+                    <label class="cin-slider-label" for="sliderBubble">安全库存系数</label>
+                    <span class="cin-slider-value">1.5</span>
+                  </div>
+                  <div class="cin-slider-body">
+                    <input class="cin-slider-input" id="sliderBubble" type="range" min="1" max="3" step="0.1" value="1.5">
+                  </div>
+                  <div class="cin-slider-marks"><span>1.0</span><span>2.0</span><span>3.0</span></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="formatted">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">数值格式化</h2>
+                <span class="cin-caption">data-format 里用 {v} 占位，气泡与右侧读数同时生效</span>
+              </div>
+              <div class="cin-slider" data-slider data-bubble>
+                <div class="cin-slider-head">
+                  <label class="cin-slider-label" for="sliderPrice">单笔审批额度</label>
+                  <span class="cin-slider-value">¥4000</span>
+                </div>
+                <div class="cin-slider-body">
+                  <input class="cin-slider-input" id="sliderPrice" type="range" min="0" max="20000" step="500" value="4000" data-format="¥{v}">
+                </div>
+                <div class="cin-slider-marks"><span>0</span><span>5000</span><span>10000</span><span>15000</span><span>20000</span></div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="inline">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">行内排布</h2>
+                <span class="cin-caption">data-inline 把标签压到左侧固定宽，控件吃掉剩余空间</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-slider" data-slider data-inline>
+                  <div class="cin-slider-head">
+                    <label class="cin-slider-label" for="sliderRow1">折扣率</label>
+                    <span class="cin-slider-value">15%</span>
+                  </div>
+                  <div class="cin-slider-body">
+                    <input class="cin-slider-input" id="sliderRow1" type="range" min="0" max="50" step="1" value="15" data-format="{v}%">
+                  </div>
+                </div>
+                <div class="cin-slider" data-slider data-inline>
+                  <div class="cin-slider-head">
+                    <label class="cin-slider-label" for="sliderRow2">分批到货天数</label>
+                    <span class="cin-slider-value">7 天</span>
+                  </div>
+                  <div class="cin-slider-body">
+                    <input class="cin-slider-input" id="sliderRow2" type="range" min="1" max="30" step="1" value="7" data-format="{v} 天">
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="states">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">禁用与步长</h2>
+                <span class="cin-caption">禁用态只降不透明度并切断指针，值仍可被表单提交</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-slider" data-slider>
+                  <div class="cin-slider-head">
+                    <label class="cin-slider-label" for="sliderDisabled">结算冻结额度</label>
+                    <span class="cin-slider-value">60</span>
+                  </div>
+                  <div class="cin-slider-body">
+                    <input class="cin-slider-input" id="sliderDisabled" type="range" min="0" max="100" step="10" value="60" disabled>
+                  </div>
+                </div>
+                <div class="cin-slider" data-slider data-bubble>
+                  <div class="cin-slider-head">
+                    <label class="cin-slider-label" for="sliderStep">阶梯步长 25</label>
+                    <span class="cin-slider-value">75</span>
+                  </div>
+                  <div class="cin-slider-body">
+                    <input class="cin-slider-input" id="sliderStep" type="range" min="0" max="200" step="25" value="75">
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="rating">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">基础评分</h2>
+                <span class="cin-caption">radio 组保证方向键按视觉顺序走，点亮由 :checked 与 :has 完成</span>
+              </div>
+              <div class="cin-stack">
+                <fieldset class="cin-rating" data-rating>
+                  <legend class="cin-sr-only">供应商交付评分</legend>
+                  <div class="cin-rating-stars">
+                    <input class="cin-rating-input" type="radio" name="rateSupplier" id="rateSupplier-1" value="1"><label class="cin-rating-star" for="rateSupplier-1" title="1 星"><span class="cin-sr-only">1 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateSupplier" id="rateSupplier-2" value="2"><label class="cin-rating-star" for="rateSupplier-2" title="2 星"><span class="cin-sr-only">2 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateSupplier" id="rateSupplier-3" value="3"><label class="cin-rating-star" for="rateSupplier-3" title="3 星"><span class="cin-sr-only">3 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateSupplier" id="rateSupplier-4" value="4" checked><label class="cin-rating-star" for="rateSupplier-4" title="4 星"><span class="cin-sr-only">4 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateSupplier" id="rateSupplier-5" value="5"><label class="cin-rating-star" for="rateSupplier-5" title="5 星"><span class="cin-sr-only">5 星</span></label>
+                  </div>
+                  <output class="cin-rating-output">4.0</output>
+                  <span class="cin-rating-count">共 128 条评价</span>
+                </fieldset>
+
+                <fieldset class="cin-rating" data-rating>
+                  <legend class="cin-sr-only">到货及时性评分</legend>
+                  <div class="cin-rating-stars">
+                    <input class="cin-rating-input" type="radio" name="rateDelivery" id="rateDelivery-1" value="1"><label class="cin-rating-star" for="rateDelivery-1" title="1 星"><span class="cin-sr-only">1 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateDelivery" id="rateDelivery-2" value="2"><label class="cin-rating-star" for="rateDelivery-2" title="2 星"><span class="cin-sr-only">2 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateDelivery" id="rateDelivery-3" value="3"><label class="cin-rating-star" for="rateDelivery-3" title="3 星"><span class="cin-sr-only">3 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateDelivery" id="rateDelivery-4" value="4"><label class="cin-rating-star" for="rateDelivery-4" title="4 星"><span class="cin-sr-only">4 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateDelivery" id="rateDelivery-5" value="5"><label class="cin-rating-star" for="rateDelivery-5" title="5 星"><span class="cin-sr-only">5 星</span></label>
+                  </div>
+                  <output class="cin-rating-output"></output>
+                </fieldset>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="rating-size">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">评分尺寸与只读</h2>
+                <span class="cin-caption">data-size 调整星级字号；data-readonly 换成纯展示，radio 一并禁用</span>
+              </div>
+              <div class="cin-stack">
+                <fieldset class="cin-rating" data-rating data-size="sm">
+                  <legend class="cin-sr-only">包装完好度评分</legend>
+                  <div class="cin-rating-stars">
+                    <input class="cin-rating-input" type="radio" name="ratePack" id="ratePack-1" value="1"><label class="cin-rating-star" for="ratePack-1" title="1 星"><span class="cin-sr-only">1 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="ratePack" id="ratePack-2" value="2"><label class="cin-rating-star" for="ratePack-2" title="2 星"><span class="cin-sr-only">2 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="ratePack" id="ratePack-3" value="3" checked><label class="cin-rating-star" for="ratePack-3" title="3 星"><span class="cin-sr-only">3 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="ratePack" id="ratePack-4" value="4"><label class="cin-rating-star" for="ratePack-4" title="4 星"><span class="cin-sr-only">4 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="ratePack" id="ratePack-5" value="5"><label class="cin-rating-star" for="ratePack-5" title="5 星"><span class="cin-sr-only">5 星</span></label>
+                  </div>
+                  <output class="cin-rating-output">3.0</output>
+                </fieldset>
+
+                <fieldset class="cin-rating" data-rating data-size="lg">
+                  <legend class="cin-sr-only">综合服务评分</legend>
+                  <div class="cin-rating-stars">
+                    <input class="cin-rating-input" type="radio" name="rateService" id="rateService-1" value="1"><label class="cin-rating-star" for="rateService-1" title="1 星"><span class="cin-sr-only">1 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateService" id="rateService-2" value="2"><label class="cin-rating-star" for="rateService-2" title="2 星"><span class="cin-sr-only">2 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateService" id="rateService-3" value="3"><label class="cin-rating-star" for="rateService-3" title="3 星"><span class="cin-sr-only">3 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateService" id="rateService-4" value="4"><label class="cin-rating-star" for="rateService-4" title="4 星"><span class="cin-sr-only">4 星</span></label>
+                    <input class="cin-rating-input" type="radio" name="rateService" id="rateService-5" value="5"><label class="cin-rating-star" for="rateService-5" title="5 星"><span class="cin-sr-only">5 星</span></label>
+                  </div>
+                  <output class="cin-rating-output"></output>
+                </fieldset>
+
+                <div class="cin-toolbar">
+                  <span class="cin-caption">只读展示</span>
+                  <fieldset class="cin-rating" data-rating data-readonly data-value="4" data-size="sm">
+                    <legend class="cin-sr-only">历史评分</legend>
+                    <div class="cin-rating-stars">
+                      <span class="cin-rating-star"></span>
+                      <span class="cin-rating-star"></span>
+                      <span class="cin-rating-star"></span>
+                      <span class="cin-rating-star"></span>
+                      <span class="cin-rating-star"></span>
+                    </div>
+                    <output class="cin-rating-output">4.0</output>
+                    <span class="cin-rating-count">2025-10-18</span>
+                  </fieldset>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="events">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">事件与 API</h2>
+                <span class="cin-caption">cin:slideinput 连续触发，cin:slidechange 与 cin:rate 表示落定</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiSlider">setSlider(120)</button>
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiRating">setRating(5)</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="apiReset">重置两组控件</button>
+                </div>
+                <p class="cin-caption" id="log">拖动滑块或点星星，这里显示最近一次事件</p>
+                <p class="cin-caption">脚本导出：Cinder.initSliders / Cinder.setSlider / Cinder.initRatings / Cinder.setRating</p>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const log = document.getElementById("log");
+      const put = (text) => { log.textContent = text; };
+
+      document.addEventListener("cin:slidechange", (e) => {
+        const id = e.target.id || e.target.querySelector("input")?.id || "slider";
+        put(`${id} 落定：${e.detail.value}`);
+      });
+      document.addEventListener("cin:rate", (e) => {
+        const name = e.target.querySelector("input")?.name || "rating";
+        put(`${name} 落定：${e.detail.value} / ${e.detail.max}`);
+      });
+
+      document.getElementById("apiSlider").addEventListener("click", () => {
+        Cinder.setSlider(document.getElementById("sliderBasic"), 120);
+      });
+      document.getElementById("apiRating").addEventListener("click", () => {
+        Cinder.setRating(document.getElementById("rateSupplier-1").closest("[data-rating]"), 5);
+      });
+      document.getElementById("apiReset").addEventListener("click", () => {
+        Cinder.setSlider(document.getElementById("sliderBasic"), 80);
+        Cinder.setRating(document.getElementById("rateSupplier-1").closest("[data-rating]"), 4);
+        put("已重置为初始值");
+      });
+      document.getElementById("toEvents").addEventListener("click", () => {
+        document.getElementById("events").scrollIntoView({ block: "start" });
+      });
+    });
+  </script>
+</body>
+</html>

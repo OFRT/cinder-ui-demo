@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder 分层 UI · 示例导航</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-page cin-stack">
+    <div class="cin-page-header">
+      <div class="cin-page-header-main">
+        <div class="cin-page-header-titles">
+          <h1 class="cin-title2">Cinder 分层 UI</h1>
+          <p class="cin-caption">通用层 + 定向定制层，两层可叠加、互不串样式；通用层不绑定任何项目</p>
+        </div>
+      </div>
+      <div class="cin-page-header-actions">
+        <span class="cin-tag" data-tone="success">校验通过 · 0 错误</span>
+      </div>
+    </div>
+
+    <section class="cin-panel">
+      <div class="cin-panel-head">
+        <h2 class="cin-panel-title">通用基础库</h2>
+        <span class="cin-caption">仅引 cinder-base.css</span>
+      </div>
+      <div class="cin-grid">
+        <a class="cin-panel" href="glass.html">
+          <strong>液态玻璃材质</strong>
+          <p class="cin-caption">材质属性非组件 / 三档 tint / 四级降级 / 局部反选 / 吸附条</p>
+        </a>
+        <a class="cin-panel" href="base.html">
+          <strong>基础组件总览</strong>
+          <p class="cin-caption">排版、控件、反馈、数据表、图表、外壳</p>
+        </a>
+        <a class="cin-panel" href="overlay.html">
+          <strong>弹窗与交互浮层</strong>
+          <p class="cin-caption">Toast / Tooltip / Popconfirm / Drawer / Modal / Alert / Tour</p>
+        </a>
+        <a class="cin-panel" href="fileinput.html">
+          <strong>文件选择</strong>
+          <p class="cin-caption">拖拽上传 / 类型体积校验 / 图片预览 / 进度条</p>
+        </a>
+        <a class="cin-panel" href="accordion.html">
+          <strong>折叠面板</strong>
+          <p class="cin-caption">details 骨架 + 高度过渡 / 同组互斥 / 键盘漫游</p>
+        </a>
+        <a class="cin-panel" href="tabs.html">
+          <strong>标签页</strong>
+          <p class="cin-caption">roving tabindex / 方向键切换 / 纵向与分段样式</p>
+        </a>
+        <a class="cin-panel" href="slider-rating.html">
+          <strong>滑块与评分</strong>
+          <p class="cin-caption">原生 range 接管 / 格式化读数 / 星级悬停预览与只读</p>
+        </a>
+        <a class="cin-panel" href="colorpicker.html">
+          <strong>取色器</strong>
+          <p class="cin-caption">原生 color 打底 / 自绘面板 / hex·rgb·hsl / 透明度与预设</p>
+        </a>
+        <a class="cin-panel" href="datepicker.html">
+          <strong>日期与时间</strong>
+          <p class="cin-caption">单选与区间日历 / min-max 与禁用日 / 键盘漫游 / 原生 time</p>
+        </a>
+        <a class="cin-panel" href="tree.html">
+          <strong>树形目录</strong>
+          <p class="cin-caption">键盘漫游 / 多选级联 / 懒加载回填 / 关键词过滤</p>
+        </a>
+        <a class="cin-panel" href="carousel.html">
+          <strong>轮播</strong>
+          <p class="cin-caption">单张翻页 / 并排多张 / 循环与自动播放</p>
+        </a>
+        <a class="cin-panel" href="virtualgrid.html">
+          <strong>虚拟滚动表格</strong>
+          <p class="cin-caption">一万行窗口渲染 / 底部定位 / 选择与排序 / 首列固定</p>
+        </a>
+        <a class="cin-panel" href="utility.html">
+          <strong>工具类</strong>
+          <p class="cin-caption">复制 / 分栏 / 验证码 / 格式化 / Markdown / 二维码</p>
+        </a>
+        <a class="cin-panel" href="icons.html">
+          <strong>图标库</strong>
+          <p class="cin-caption">104 个图标 / sprite + mask + 声明式三路径 / 尺寸与描边</p>
+        </a>
+        <a class="cin-panel" href="thinking.html">
+          <strong>思考过程</strong>
+          <p class="cin-caption">details 骨架 / 步骤时间轴 / 进行中·完成·失败三态</p>
+        </a>
+        <a class="cin-panel" href="tool-chips.html">
+          <strong>工具调用标签</strong>
+          <p class="cin-caption">调用压成胶囊 / 三态图标 / 紧凑与实心 / 长参数省略</p>
+        </a>
+        <a class="cin-panel" href="task-rows.html">
+          <strong>任务行</strong>
+          <p class="cin-caption">长任务逐行 / 进度单一变量 / 失败给原因 / 明细零脚本折叠</p>
+        </a>
+        <a class="cin-panel" href="prompt-bar.html">
+          <strong>输入器</strong>
+          <p class="cin-caption">@ 来源 / / 命令 / 模型槽 / 听写 / 窄屏换行 / 无 JS 退化为表单</p>
+        </a>
+        <a class="cin-panel" href="agent-states.html">
+          <strong>状态语汇对照</strong>
+          <p class="cin-caption">8 态统一词表 / 同一状态跨组件同表现 / 别名与迁移映射</p>
+        </a>
+        <a class="cin-panel" href="approval-card.html">
+          <strong>审批卡</strong>
+          <p class="cin-caption">风险分级 / 影响清单 / 待确认·已批准·已拒绝·已超时</p>
+        </a>
+        <a class="cin-panel" href="suggestion-card.html">
+          <strong>建议卡</strong>
+          <p class="cin-caption">结论 + 置信度文字档 / 备选列表 / 采纳·忽略两终态 / 虚线可商量</p>
+        </a>
+        <a class="cin-panel" href="context-card.html">
+          <strong>检索上下文卡</strong>
+          <p class="cin-caption">来源可点可核 / 位置可定位 / 字符数精确 / 折叠不截断</p>
+        </a>
+        <a class="cin-panel" href="i18n.html">
+          <strong>多语言</strong>
+          <p class="cin-caption">zh-CN / en 双字典 / 运行时切换 / register 扩展 / 静态标记刷新</p>
+        </a>
+        <a class="cin-panel" href="playground.html">
+          <strong>Playground 调参台</strong>
+          <p class="cin-caption">令牌实时预览 / 8 套皮肤切换 / 一键导出 CSS / hash 分享</p>
+        </a>
+        <a class="cin-panel" href="avatar.html">
+          <strong>头像</strong>
+          <p class="cin-caption">图片 / 文字 / 占位三态 + 状态点 + 叠加组</p>
+        </a>
+        <a class="cin-panel" href="btn-group.html">
+          <strong>按钮组</strong>
+          <p class="cin-caption">共享边框与两端圆角，横竖可切、可撑满</p>
+        </a>
+        <a class="cin-panel" href="button-guard.html">
+          <strong>按钮动效与确认闸门</strong>
+          <p class="cin-caption">四变体装饰动效（默认不开）+ 按住确认；glitch 仅限错误语义</p>
+        </a>
+        <a class="cin-panel" href="calendar.html">
+          <strong>月历</strong>
+          <p class="cin-caption">7 列等宽月份网格：今天 / 选中 / 区间 / 非本月 / 禁用 / 事件点六态</p>
+        </a>
+        <a class="cin-panel" href="card.html">
+          <strong>卡片</strong>
+          <p class="cin-caption">媒体 / 头 / 体 / 尾四段，可点与选中</p>
+        </a>
+        <a class="cin-panel" href="cascader.html">
+          <strong>级联选择</strong>
+          <p class="cin-caption">逐列下钻选叶子，路径按斜杠串提交；无脚本可手输</p>
+        </a>
+        <a class="cin-panel" href="chat.html">
+          <strong>对话气泡</strong>
+          <p class="cin-caption">头像 + 名称 + 气泡 + 状态，自己 / 对方 / 系统三向切换</p>
+        </a>
+        <a class="cin-panel" href="comment.html">
+          <strong>评论</strong>
+          <p class="cin-caption">头像 + 作者 + 正文 + 操作，嵌套回复靠缩进</p>
+        </a>
+        <a class="cin-panel" href="descriptions.html">
+          <strong>描述列表</strong>
+          <p class="cin-caption">dl/dt/dd 语义，列数走 CSS 变量，窄屏自动降列</p>
+        </a>
+        <a class="cin-panel" href="entity.html">
+          <strong>身份行</strong>
+          <p class="cin-caption">头像 + 名字 + 副信息 + 徽标 + 状态点，可点由外层 a/button 决定</p>
+        </a>
+        <a class="cin-panel" href="input-number.html">
+          <strong>数字输入</strong>
+          <p class="cin-caption">原生 number 打底，加减只夹取不改造，长按连加走 500ms / 80ms</p>
+        </a>
+        <a class="cin-panel" href="list.html">
+          <strong>通用列表</strong>
+          <p class="cin-caption">媒体 + 主文 + 附加信息三栏，分隔线 / 悬停 / 密度走属性</p>
+        </a>
+        <a class="cin-panel" href="mascot.html">
+          <strong>助手形象</strong>
+          <p class="cin-caption">4 身形 × 3 表情 × 8 状态三轴正交；零脚本静态可读，注视行为可关</p>
+        </a>
+        <a class="cin-panel" href="media.html">
+          <strong>媒体对象</strong>
+          <p class="cin-caption">图或图标在左、文字在右、动作收尾，截断与排布全由属性决定</p>
+        </a>
+        <a class="cin-panel" href="morph-button.html">
+          <strong>形变按钮</strong>
+          <p class="cin-caption">提交 → 完成 → 撤销窗口完整序列，倒计时归零后恢复强调色</p>
+        </a>
+        <a class="cin-panel" href="notice-bar.html">
+          <strong>通告条</strong>
+          <p class="cin-caption">四类语义色、可关闭、可带一个动作入口，无脚本也能完整阅读</p>
+        </a>
+        <a class="cin-panel" href="option-group.html">
+          <strong>选项组</strong>
+          <p class="cin-caption">多选 / 单选成组，纵向、横排、网格与卡片式</p>
+        </a>
+        <a class="cin-panel" href="p0.html">
+          <strong>P0 行为件合集</strong>
+          <p class="cin-caption">stream-text / undo-bar / combobox / command-palette 等</p>
+        </a>
+        <a class="cin-panel" href="popover.html">
+          <strong>浮层面板</strong>
+          <p class="cin-caption">锚点四向弹出 + 三段内容；聚焦展开、失焦收起，无脚本可读</p>
+        </a>
+        <a class="cin-panel" href="range-slider.html">
+          <strong>区间滑块</strong>
+          <p class="cin-caption">两个原生 range 叠一条轨道，零脚本可拖、可键盘、可提交</p>
+        </a>
+        <a class="cin-panel" href="result.html">
+          <strong>结果页</strong>
+          <p class="cin-caption">五档语义状态 + 操作区 + 明细块，处理中遵循 reduce-motion</p>
+        </a>
+        <a class="cin-panel" href="ring.html">
+          <strong>进度环</strong>
+          <p class="cin-caption">conic-gradient + mask 挖空，变量驱动数值，无脚本</p>
+        </a>
+        <a class="cin-panel" href="scroll-area.html">
+          <strong>滚动容器</strong>
+          <p class="cin-caption">细滚动条 + 边缘渐隐 + 吸附，滚动行为交给浏览器</p>
+        </a>
+        <a class="cin-panel" href="segmented.html">
+          <strong>分段控件</strong>
+          <p class="cin-caption">同 name 原生 radio，选中态纯 CSS；脚本只同步 data-value 与方向键</p>
+        </a>
+        <a class="cin-panel" href="selection-actions.html">
+          <strong>划词操作条</strong>
+          <p class="cin-caption">选中文本浮出动作条，无 JS 时整条不出现</p>
+        </a>
+        <a class="cin-panel" href="sidenav.html">
+          <strong>侧栏导航</strong>
+          <p class="cin-caption">分组 / 子级 / 当前项 / 折叠图标栏 / 窄屏抽屉；无 JS 时子级全展开</p>
+        </a>
+        <a class="cin-panel" href="t26.html">
+          <strong>存量小补六项</strong>
+          <p class="cin-caption">加载耗时标签 / 思考轨迹 / 像素网格等六项存量补强（T26）</p>
+        </a>
+        <a class="cin-panel" href="timepicker.html">
+          <strong>时间选择器</strong>
+          <p class="cin-caption">手输 HH:mm 与面板点选双路；越界选项禁用，手输标红但不改值</p>
+        </a>
+        <a class="cin-panel" href="transfer.html">
+          <strong>穿梭框</strong>
+          <p class="cin-caption">左挑右放，值取右列；无脚本时两列复选框照常随表单提交</p>
+        </a>
+        <a class="cin-panel" href="upload-queue.html">
+          <strong>上传队列</strong>
+          <p class="cin-caption">排队 / 传输中 / 完成 / 失败 / 暂停五态，条目不因状态变化而跳动</p>
+        </a>
+        <a class="cin-panel" href="watermark.html">
+          <strong>水印</strong>
+          <p class="cin-caption">不拦指针的斜向平铺水印，密度 / 明暗 / 角标三档，无脚本</p>
+        </a>
+        <a class="cin-panel" href="../site/index.html">
+          <strong>文档站</strong>
+          <p class="cin-caption">19 页文档 / 全站搜索（Ctrl+K） / 组件清单 / 本索引内嵌</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="cin-panel">
+      <div class="cin-panel-head">
+        <h2 class="cin-panel-title">定向定制层（erp 方向）</h2>
+        <span class="cin-caption">引 cinder-all.css（base + erp）</span>
+      </div>
+      <div class="cin-grid">
+        <a class="cin-panel" href="erp/index.html"><strong>组件总览</strong><p class="cin-caption">业务组件清单</p></a>
+        <a class="cin-panel" href="erp/dashboard.html"><strong>经营看板</strong><p class="cin-caption">指标 + 图表 + 面板</p></a>
+        <a class="cin-panel" href="erp/inventory.html"><strong>库存列表</strong><p class="cin-caption">数据表 + 筛选 + 批量</p></a>
+        <a class="cin-panel" href="erp/purchase-order.html"><strong>采购单</strong><p class="cin-caption">单据骨架 + 明细行</p></a>
+        <a class="cin-panel" href="erp/sales-outbound.html"><strong>销售出库</strong><p class="cin-caption">选择器 + 流程</p></a>
+        <a class="cin-panel" href="erp/pda.html"><strong>PDA 模式</strong><p class="cin-caption">扫码 + 大按键</p></a>
+        <a class="cin-panel" href="skins.html"><strong>皮肤配色</strong><p class="cin-caption">8 套主题一键对比</p></a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

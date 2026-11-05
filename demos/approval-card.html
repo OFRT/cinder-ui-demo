@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 审批卡</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">approval-card</span>
+      <span class="cin-caption">AI 动关键东西之前先停一下：风险分级 + 影响清单 + 一次明确答复</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">高风险 · 待确认</h2>
+          <section class="cin-approval" data-state="pending" data-risk="high" role="group" aria-labelledby="ap-1">
+            <div class="cin-approval-head">
+              <span class="cin-approval-risk">高风险</span>
+              <h3 class="cin-approval-title" id="ap-1">删除 128 个构建产物</h3>
+            </div>
+            <p class="cin-approval-desc">将清空 dist/legacy/ 目录。该目录未纳入版本控制，删除后无法用 git 恢复。</p>
+            <ul class="cin-approval-facts">
+              <li class="cin-approval-fact"><span>影响范围</span><strong>dist/legacy/ · 128 个文件</strong></li>
+              <li class="cin-approval-fact"><span>可否撤销</span><strong>否</strong></li>
+              <li class="cin-approval-fact"><span>触发来源</span><strong>Agent · 清理任务</strong></li>
+            </ul>
+            <div class="cin-approval-actions">
+              <button class="cin-btn" data-variant="ghost" type="button">拒绝</button>
+              <button class="cin-btn" data-variant="danger" type="button">批准执行</button>
+            </div>
+            <div class="cin-approval-verdict" role="status">已批准，正在执行</div>
+          </section>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">中风险 · 待确认</h2>
+          <section class="cin-approval" data-state="pending" data-risk="medium" role="group" aria-labelledby="ap-2">
+            <div class="cin-approval-head">
+              <span class="cin-approval-risk">中风险</span>
+              <h3 class="cin-approval-title" id="ap-2">覆盖 3 个配置文件</h3>
+            </div>
+            <p class="cin-approval-desc">将以本地改动覆盖远端同名文件，冲突部分以本地为准。</p>
+            <ul class="cin-approval-facts">
+              <li class="cin-approval-fact"><span>影响范围</span><strong>config/*.json · 3 个文件</strong></li>
+              <li class="cin-approval-fact"><span>可否撤销</span><strong>是（撤销条 10s）</strong></li>
+            </ul>
+            <div class="cin-approval-actions">
+              <button class="cin-btn" data-variant="ghost" type="button">拒绝</button>
+              <button class="cin-btn" type="button">批准覆盖</button>
+            </div>
+            <div class="cin-approval-verdict" role="status">已批准，正在执行</div>
+          </section>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">终态：已批准 / 已拒绝 / 已超时</h2>
+          <div class="cin-stack">
+            <section class="cin-approval" data-state="approved" data-risk="medium" role="group" aria-labelledby="ap-3">
+              <div class="cin-approval-head">
+                <span class="cin-approval-risk">中风险</span>
+                <h3 class="cin-approval-title" id="ap-3">覆盖 3 个配置文件</h3>
+              </div>
+              <ul class="cin-approval-facts">
+                <li class="cin-approval-fact"><span>影响范围</span><strong>config/*.json · 3 个文件</strong></li>
+              </ul>
+              <div class="cin-approval-actions">
+                <button class="cin-btn" data-variant="ghost" type="button">拒绝</button>
+                <button class="cin-btn" type="button">批准覆盖</button>
+              </div>
+              <div class="cin-approval-verdict" role="status">已批准 · 10:32</div>
+            </section>
+
+            <section class="cin-approval" data-state="rejected" data-risk="high" role="group" aria-labelledby="ap-4">
+              <div class="cin-approval-head">
+                <span class="cin-approval-risk">高风险</span>
+                <h3 class="cin-approval-title" id="ap-4">对外发送 42 封通知邮件</h3>
+              </div>
+              <ul class="cin-approval-facts">
+                <li class="cin-approval-fact"><span>影响范围</span><strong>客户联系人 · 42 人</strong></li>
+              </ul>
+              <div class="cin-approval-actions">
+                <button class="cin-btn" data-variant="ghost" type="button">拒绝</button>
+                <button class="cin-btn" data-variant="danger" type="button">批准执行</button>
+              </div>
+              <div class="cin-approval-verdict" role="status">已拒绝 · 未发送任何邮件</div>
+            </section>
+
+            <section class="cin-approval" data-state="expired" data-risk="low" role="group" aria-labelledby="ap-5">
+              <div class="cin-approval-head">
+                <span class="cin-approval-risk">低风险</span>
+                <h3 class="cin-approval-title" id="ap-5">同步 1 份周报到共享盘</h3>
+              </div>
+              <ul class="cin-approval-facts">
+                <li class="cin-approval-fact"><span>影响范围</span><strong>team/weekly-44.md</strong></li>
+              </ul>
+              <div class="cin-approval-actions">
+                <button class="cin-btn" data-variant="ghost" type="button">拒绝</button>
+                <button class="cin-btn" type="button">批准同步</button>
+              </div>
+              <div class="cin-approval-verdict" role="status">超时未处理 · 已失效</div>
+            </section>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">决策中（data-busy）</h2>
+          <section class="cin-approval" data-state="pending" data-risk="high" data-busy role="group" aria-labelledby="ap-6">
+            <div class="cin-approval-head">
+              <span class="cin-approval-risk">高风险</span>
+              <h3 class="cin-approval-title" id="ap-6">回滚数据库迁移</h3>
+            </div>
+            <p class="cin-approval-desc">已提交批准，等待执行回执。</p>
+            <ul class="cin-approval-facts">
+              <li class="cin-approval-fact"><span>影响范围</span><strong>orders · 约 12 万行</strong></li>
+            </ul>
+            <div class="cin-approval-actions">
+              <button class="cin-btn" data-variant="ghost" type="button" disabled>拒绝</button>
+              <button class="cin-btn" data-variant="danger" type="button" disabled>批准执行</button>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

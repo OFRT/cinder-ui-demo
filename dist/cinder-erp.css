@@ -1,0 +1,198 @@
+@layer tokens, base, components, erp;
+
+/* Cinder ERP tokens（增量）· 只新增业务结构性变量。 */
+:root {
+  --cin-size-doc-toolbar: 56px;
+  --cin-size-doc-toolbar-desktop: 48px;
+  --cin-size-doc-footer: 72px;
+  --cin-size-doc-footer-desktop: 64px;
+  --cin-size-doc-summary: 300px;
+  --cin-size-doc-label-col: 96px;
+  --cin-size-pda-scan: 64px;
+  --cin-size-pda-keypad: 72px;
+  --cin-size-pda-tile: 132px;
+  --cin-size-touch-pda: 56px;
+  --cin-size-row-line: 52px;
+  --cin-size-row-line-pda: 64px;
+  --cin-container-doc-summary: 300px;
+  --cin-container-pda-task: 320px;
+  --cin-erp-table-check-col: 44px;
+  --cin-erp-table-index-col: 48px;
+  --cin-erp-table-action-col: 72px;
+  --cin-erp-table-min-col: 96px;
+  --cin-erp-table-sticky-shadow: inset -8px 0 8px -8px rgba(20,18,16,0.10);
+  --cin-erp-line-items-row: 52px;
+  --cin-erp-line-items-row-pda: 64px;
+  --cin-erp-line-items-max-rows: 200px;
+  --cin-erp-doc-no-prefix: SO;
+  --cin-erp-doc-code-width: 140px;
+  --cin-erp-pda-scan-timeout: 800px;
+  --cin-erp-pda-beep-duration: 90px;
+}
+
+/* ---- blocks/approve.css ---- */
+@layer erp {
+  /* ================= 审批卡 ================= */
+  .cin-approve { display: flex; flex-direction: column; gap: var(--cin-space-150); }
+  .cin-approve-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--cin-space-100); flex-wrap: wrap; }
+  .cin-approve-main { display: flex; flex-direction: column; gap: var(--cin-space-050); min-width: 0; }
+  .cin-approve-main > strong { font-size: var(--cin-text-body-strong-size); font-weight: var(--cin-text-body-strong-weight); }
+  .cin-approve-meta { display: flex; flex-wrap: wrap; gap: var(--cin-space-050) var(--cin-space-150); font-size: var(--cin-text-caption-size); color: var(--cin-color-text-tertiary); }
+  .cin-approve-amount { font-size: var(--cin-text-numeral-lg-size); font-weight: var(--cin-text-numeral-lg-weight); font-variant-numeric: tabular-nums; letter-spacing: var(--cin-text-numeral-lg-tracking); }
+  .cin-approve-reason { padding: var(--cin-space-100) var(--cin-space-150); border-radius: var(--cin-radius-xs);
+    background: var(--cin-color-bg-surface-sunken); font-size: var(--cin-text-label-size); color: var(--cin-color-text-secondary); }
+  .cin-approve-actions { display: flex; gap: var(--cin-space-100); flex-wrap: wrap; }
+  .cin-approve-actions > .cin-btn { flex: 1 1 120px; min-height: var(--cin-size-touch-min); }
+}
+
+
+/* ---- blocks/document.css ---- */
+@layer erp {
+  /* ================= 单据骨架：工具栏 + 头 + 明细 + 尾 ================= */
+  .cin-doc { display: flex; flex-direction: column; min-width: 0; }
+  .cin-doc-bar { position: sticky; inset-block-start: 0; z-index: var(--cin-z-sticky); display: flex; flex-wrap: wrap; align-items: center; gap: var(--cin-space-100);
+    padding: var(--cin-space-100) 0; background: var(--cin-color-bg-canvas); border-block-end: 1px solid var(--cin-color-border-subtle); }
+  .cin-doc-bar > .cin-spacer { flex: 1; }
+  .cin-doc-body { display: flex; flex-direction: column; gap: var(--cin-space-200); padding-block: var(--cin-space-200); }
+  .cin-doc-head { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--cin-space-150); }
+  .cin-doc-head > .cin-span-2 { grid-column: span 2; }
+  @container cin-page (max-width: 360px) { .cin-doc-head > .cin-span-2 { grid-column: auto; } }
+
+  .cin-doc-section { background: var(--cin-color-bg-surface); border: 1px solid var(--cin-color-border-subtle); border-radius: var(--cin-radius-md); padding: var(--cin-space-200); display: flex; flex-direction: column; gap: var(--cin-space-150); min-width: 0; }
+  .cin-doc-section-head { display: flex; align-items: center; justify-content: space-between; gap: var(--cin-space-100); flex-wrap: wrap; }
+  .cin-doc-section-title { font-size: var(--cin-text-body-strong-size); font-weight: var(--cin-text-body-strong-weight); display: flex; align-items: center; gap: var(--cin-space-100); }
+  .cin-doc-section-title > .cin-count { font-size: var(--cin-text-caption-size); color: var(--cin-color-text-tertiary); font-weight: 400; }
+
+  .cin-doc-sum { display: flex; flex-direction: column; gap: var(--cin-space-050); align-items: flex-end; padding: var(--cin-space-150) var(--cin-space-200);
+    background: var(--cin-color-bg-surface-sunken); border-radius: var(--cin-radius-md); border: 1px solid var(--cin-color-border-subtle); }
+  .cin-doc-sum > div { display: flex; justify-content: space-between; gap: var(--cin-space-300); min-width: min(100%, 280px); font-size: var(--cin-text-label-size); color: var(--cin-color-text-secondary); }
+  .cin-doc-sum > div > b { color: var(--cin-color-text-primary); font-variant-numeric: tabular-nums; font-weight: 500; }
+  .cin-doc-sum > .cin-doc-total { font-size: var(--cin-text-body-size); padding-block-start: var(--cin-space-050); border-block-start: 1px dashed var(--cin-color-border-subtle); }
+  .cin-doc-sum > .cin-doc-total > b { font-size: var(--cin-text-numeral-lg-size); font-weight: var(--cin-text-numeral-lg-weight); letter-spacing: var(--cin-text-numeral-lg-tracking); }
+  .cin-doc-sum > .cin-doc-total > b[data-neg="true"] { color: var(--cin-color-state-danger); }
+
+  .cin-doc-foot { position: sticky; inset-block-end: 0; z-index: var(--cin-z-sticky); display: flex; align-items: center; gap: var(--cin-space-100);
+    flex-wrap: wrap; padding: var(--cin-space-100) 0; background: var(--cin-color-bg-canvas); border-block-start: 1px solid var(--cin-color-border-subtle); }
+  .cin-doc-foot > .cin-spacer { flex: 1; }
+}
+
+
+/* ---- blocks/line-items.css ---- */
+@layer erp {
+  /* ================= 明细行（含批次/效期/多单位） ================= */
+  .cin-lines { min-width: 0; }
+  .cin-lines-scroll { overflow-x: auto; }
+  .cin-lines table { width: 100%; display: block; min-width: 0; font-size: var(--cin-text-data-size); }
+  .cin-lines thead { display: none; }
+  .cin-lines tbody { display: grid; gap: var(--cin-space-100); }
+  .cin-lines tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cin-space-100);
+    padding: var(--cin-space-150); border: 1px solid var(--cin-color-border-subtle); border-radius: var(--cin-radius-sm); background: var(--cin-color-bg-surface); }
+  .cin-lines tbody td { padding: 0; border: 0; min-width: 0; }
+  .cin-lines tbody td[data-label]::before { content: attr(data-label); display: block; font-size: var(--cin-text-caption-size); color: var(--cin-color-text-tertiary); }
+  .cin-lines tbody td[data-line-primary] { grid-column: 1 / -1; }
+  .cin-lines .cin-line-name { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .cin-lines .cin-line-name > small { color: var(--cin-color-text-tertiary); font-size: var(--cin-text-caption-size); }
+  .cin-lines input, .cin-lines .cin-input { min-height: var(--cin-size-control-sm); font-size: var(--cin-text-data-size); }
+  .cin-lines .cin-input-num { width: 100%; min-width: 64px; text-align: end; font-variant-numeric: tabular-nums; }
+  .cin-lines .cin-unit-suffix { color: var(--cin-color-text-tertiary); font-size: var(--cin-text-caption-size); }
+  .cin-lines-batch { display: flex; flex-wrap: wrap; gap: var(--cin-space-050); }
+  .cin-lines .cin-line-sub td { font-size: var(--cin-text-caption-size); color: var(--cin-color-text-secondary); }
+
+  @container cin-page (min-width: 600px) {
+    .cin-lines table { display: table; min-width: 640px; }
+    .cin-lines thead { display: table-header-group; }
+    .cin-lines tbody { display: block; }
+    .cin-lines thead th { padding: var(--cin-space-100) var(--cin-space-100); text-align: start; font-size: var(--cin-text-caption-size);
+      color: var(--cin-color-text-tertiary); font-weight: 500; white-space: nowrap; border-block-end: 1px solid var(--cin-color-border-subtle); }
+    .cin-lines thead th[data-align="end"] { text-align: end; }
+    .cin-lines tbody tr { display: table-row; padding: 0; border: 0; border-radius: 0; background: transparent; }
+    .cin-lines tbody td { display: table-cell; padding: var(--cin-space-050) var(--cin-space-100);
+      border-block-end: 1px solid var(--cin-color-border-subtle); vertical-align: middle; }
+    .cin-lines tbody td[data-label]::before { content: none; }
+    .cin-lines tbody td[data-align="end"] { text-align: end; }
+    .cin-lines tbody tr:last-child td { border-block-end: 0; }
+    .cin-lines tbody tr:hover td { background: color-mix(in srgb, var(--cin-color-accent-default) 3%, transparent); }
+    .cin-lines .cin-line-sub td { background: var(--cin-color-bg-surface-sunken); padding-inline-start: var(--cin-space-200); }
+  }
+}
+
+
+/* ---- blocks/pda.css ---- */
+@layer erp {
+  /* ================= PDA 模式 ================= */
+  .cin-pda { display: flex; flex-direction: column; gap: var(--cin-space-100); min-height: 100dvh; padding: var(--cin-space-100); box-sizing: border-box; }
+  .cin-pda-tasks { display: grid; gap: var(--cin-space-100); grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); }
+  .cin-task-tile { display: flex; flex-direction: column; justify-content: space-between; gap: var(--cin-space-100); min-height: var(--cin-size-pda-tile);
+    padding: var(--cin-space-150); border-radius: var(--cin-radius-sm); border: 1px solid var(--cin-color-border-subtle);
+    background: var(--cin-color-bg-surface); text-align: start; }
+  .cin-task-tile > .cin-task-top { display: flex; align-items: center; justify-content: space-between; gap: var(--cin-space-050); }
+  .cin-task-tile > .cin-task-top > .cin-task-icon { width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--cin-radius-xs); background: var(--cin-color-accent-soft); color: var(--cin-color-accent-default); }
+  .cin-task-tile > .cin-task-num { font-size: var(--cin-text-numeral-lg-size); font-weight: var(--cin-text-numeral-lg-weight); font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .cin-task-tile > .cin-task-label { font-size: var(--cin-text-label-size); color: var(--cin-color-text-secondary); }
+  .cin-task-tile[data-tone="warning"] { border-color: var(--cin-color-state-warning); }
+  .cin-task-tile[data-tone="danger"] { border-color: var(--cin-color-state-danger); }
+  .cin-task-tile:active { transform: scale(0.99); }
+
+  .cin-pda-bar { display: flex; gap: var(--cin-space-100); align-items: center; padding: var(--cin-space-100); border-radius: var(--cin-radius-sm);
+    background: var(--cin-color-bg-surface); border: 1px solid var(--cin-color-border-subtle); }
+  .cin-pda-bar > .cin-pda-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .cin-pda-bar > .cin-pda-main > strong { font-size: var(--cin-text-body-size); }
+  .cin-pda-bar > .cin-pda-main > small { font-size: var(--cin-text-caption-size); color: var(--cin-color-text-tertiary); }
+
+  .cin-pda-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cin-space-100); }
+  .cin-pda-actions > .cin-btn { min-height: var(--cin-size-touch-pda); font-size: var(--cin-text-body-strong-size); }
+  .cin-pda-actions > .cin-span-2 { grid-column: 1 / -1; }
+
+  .cin-keypad { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cin-space-050); }
+  .cin-keypad > button { min-height: 52px; border-radius: var(--cin-radius-xs); background: var(--cin-color-bg-surface);
+    border: 1px solid var(--cin-color-border-subtle); font-size: var(--cin-text-body-strong-size); font-variant-numeric: tabular-nums; }
+  .cin-keypad > button:active { background: var(--cin-color-state-neutral-soft); }
+  .cin-keypad > button[data-key="ok"] { grid-column: span 2; background: var(--cin-color-accent-default); color: var(--cin-color-text-on-accent); border-color: transparent; }
+}
+@layer erp {
+.cin-beep { animation: cin-beep var(--cin-erp-pda-beep-duration) ease-out; }
+  @keyframes cin-beep { 0% { box-shadow: 0 0 0 0 var(--cin-color-focus-ring); } 100% { box-shadow: 0 0 0 12px transparent; } }
+
+  /* 降级：不动画，改用静态描边传达"需要关注"（T44 纪律） */
+  @media (prefers-reduced-motion: reduce) {
+    .cin-beep { animation: none; outline: 2px solid var(--cin-color-border-strong); outline-offset: 1px; }
+  }
+}
+
+
+/* ---- blocks/picker.css ---- */
+@layer erp {
+  /* ================= 选择器（商品/往来单位/仓库） ================= */
+  .cin-picker { display: flex; flex-direction: column; gap: var(--cin-space-100); min-width: 0; }
+  .cin-picker-list { display: flex; flex-direction: column; max-height: min(60vh, 420px); overflow-y: auto; }
+  .cin-picker-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--cin-space-050) var(--cin-space-150);
+    align-items: center; padding: var(--cin-space-150); border-block-end: 1px solid var(--cin-color-border-subtle); text-align: start; }
+  .cin-picker-item:hover { background: var(--cin-color-state-neutral-soft); }
+  .cin-picker-item[aria-selected="true"] { background: var(--cin-color-accent-soft); }
+  .cin-picker-item > .cin-picker-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .cin-picker-item > .cin-picker-main > strong { font-size: var(--cin-text-body-size); font-weight: 500; }
+  .cin-picker-item > .cin-picker-main > small { font-size: var(--cin-text-caption-size); color: var(--cin-color-text-tertiary); }
+  .cin-picker-item > .cin-picker-side { text-align: end; font-variant-numeric: tabular-nums; font-size: var(--cin-text-data-size); }
+
+  .cin-scan { display: flex; align-items: center; gap: var(--cin-space-100); padding: var(--cin-space-100) var(--cin-space-150);
+    border: 1px dashed var(--cin-color-border-strong); border-radius: var(--cin-radius-sm); background: var(--cin-color-bg-surface-sunken); }
+  .cin-scan > input { flex: 1; min-width: 0; background: transparent; border: 0; min-height: var(--cin-size-control-md); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+  .cin-scan > input:focus { outline: none; }
+  .cin-scan[data-state="ok"] { border-color: var(--cin-color-state-success); border-style: solid; }
+  .cin-scan[data-state="error"] { border-color: var(--cin-color-state-danger); border-style: solid; }
+}
+
+
+/* ---- blocks/print.css ---- */
+@layer erp {
+  /* ================= 打印/对账单 ================= */
+  @media print {
+    .cin-doc-bar, .cin-doc-foot, .cin-tabbar, .cin-topbar, .cin-sidebar, .cin-toolbar, .cin-filterbar, .cin-bulkbar { display: none !important; }
+    .cin-doc-section, .cin-panel, .cin-stat { break-inside: avoid; border-color: var(--cin-color-border-strong); }
+    .cin-print-only { display: block !important; }
+    .cin-dg { overflow: visible; border: 0; }
+    .cin-dg-scroll { overflow: visible; }
+  }
+  .cin-print-only { display: none; }
+}
+

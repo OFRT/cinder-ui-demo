@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 身份行</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">entity</span>
+      <span class="cin-caption">头像 + 名字 + 副信息 + 徽标 + 状态点；可点由外层 a/button 决定，无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础（头像 + 姓名 + 部门 + 状态点）</h2>
+          <div class="cin-entity" id="et-basic">
+            <div class="cin-entity-figure">
+              <span class="cin-avatar" data-size="md" aria-hidden="true"><span class="cin-avatar-text">张</span></span>
+              <span class="cin-entity-dot" data-state="online" aria-label="在线"></span>
+            </div>
+            <div class="cin-entity-main">
+              <div class="cin-entity-name"><span>张启明</span></div>
+              <div class="cin-entity-sub">财务共享中心 · 应付会计</div>
+            </div>
+            <div class="cin-entity-tags">
+              <span class="cin-badge">管理员</span>
+            </div>
+            <div class="cin-entity-actions">
+              <button class="cin-btn" data-size="sm" data-variant="ghost" type="button" aria-label="给张启明发消息">发消息</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">状态点四态（online / busy / away / offline）</h2>
+          <div class="cin-toolbar" id="et-states">
+            <div class="cin-entity" data-compact>
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="sm" aria-hidden="true"><span class="cin-avatar-text">李</span></span>
+                <span class="cin-entity-dot" data-state="online" aria-label="在线"></span>
+              </div>
+              <div class="cin-entity-main"><div class="cin-entity-name"><span>李慕白</span></div><div class="cin-entity-sub">在线</div></div>
+            </div>
+            <div class="cin-entity" data-compact>
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="sm" aria-hidden="true"><span class="cin-avatar-text">王</span></span>
+                <span class="cin-entity-dot" data-state="busy" aria-label="忙碌"></span>
+              </div>
+              <div class="cin-entity-main"><div class="cin-entity-name"><span>王雪</span></div><div class="cin-entity-sub">忙碌</div></div>
+            </div>
+            <div class="cin-entity" data-compact>
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="sm" aria-hidden="true"><span class="cin-avatar-text">陈</span></span>
+                <span class="cin-entity-dot" data-state="away" aria-label="离开"></span>
+              </div>
+              <div class="cin-entity-main"><div class="cin-entity-name"><span>陈昊</span></div><div class="cin-entity-sub">离开</div></div>
+            </div>
+            <div class="cin-entity" data-compact>
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="sm" aria-hidden="true"><span class="cin-avatar-text">赵</span></span>
+                <span class="cin-entity-dot" data-state="offline" aria-label="离线"></span>
+              </div>
+              <div class="cin-entity-main"><div class="cin-entity-name"><span>赵一鸣</span></div><div class="cin-entity-sub">离线</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">紧凑档（列表行，一行一个）</h2>
+          <div id="et-compact" style="max-inline-size:520px">
+            <div class="cin-entity" data-compact>
+              <div class="cin-entity-figure"><span class="cin-avatar" data-size="sm" aria-hidden="true"><span class="cin-avatar-text">孙</span></span></div>
+              <div class="cin-entity-main">
+                <div class="cin-entity-name"><span>孙可</span></div>
+                <div class="cin-entity-sub">采购部 · 已提交 3 张待审单</div>
+              </div>
+              <div class="cin-entity-actions"><span class="cin-caption">09:24</span></div>
+            </div>
+            <div class="cin-entity" data-compact>
+              <div class="cin-entity-figure"><span class="cin-avatar" data-size="sm" aria-hidden="true"><span class="cin-avatar-text">周</span></span></div>
+              <div class="cin-entity-main">
+                <div class="cin-entity-name"><span>周航</span></div>
+                <div class="cin-entity-sub">仓储部 · 已提交 1 张待审单</div>
+              </div>
+              <div class="cin-entity-actions"><span class="cin-caption">昨天</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">可点态（外层 a，键盘可 Tab）</h2>
+          <a class="cin-entity" id="et-clickable" href="#et-clickable" style="inline-size:100%; text-align:start">
+            <div class="cin-entity-figure">
+              <span class="cin-avatar" data-size="md" aria-hidden="true"><span class="cin-avatar-text">吴</span></span>
+            </div>
+            <div class="cin-entity-main">
+              <div class="cin-entity-name"><span>吴桐</span><span class="cin-badge">外部协作</span></div>
+              <div class="cin-entity-sub">点击查看该联系人的历史协作记录</div>
+            </div>
+            <div class="cin-entity-actions"><span class="cin-caption">详情</span></div>
+          </a>
+          <p class="cin-caption">可点必须是 a 或 button；用 div 加 onclick 拿不到焦点环，也进不了 Tab 序列。</p>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">反白档（压在深色条上）</h2>
+          <div id="et-inverse" style="background:var(--cin-color-bg-overlay); padding:var(--cin-space-200); border-radius:var(--cin-radius-md); max-inline-size:520px">
+            <div class="cin-entity" data-tone="inverse">
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="sm" aria-hidden="true"><span class="cin-avatar-text">郑</span></span>
+              </div>
+              <div class="cin-entity-main">
+                <div class="cin-entity-name"><span>郑楠</span></div>
+                <div class="cin-entity-sub">值班经理 · 今日在岗</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">竖排档（成员墙）</h2>
+          <div class="cin-toolbar" id="et-stacked">
+            <div class="cin-entity" data-stacked style="inline-size:120px">
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="lg" aria-hidden="true"><span class="cin-avatar-text">何</span></span>
+                <span class="cin-entity-dot" data-state="online" aria-label="在线"></span>
+              </div>
+              <div class="cin-entity-main">
+                <div class="cin-entity-name"><span>何佳</span></div>
+                <div class="cin-entity-sub">产品</div>
+              </div>
+            </div>
+            <div class="cin-entity" data-stacked style="inline-size:120px">
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="lg" aria-hidden="true"><span class="cin-avatar-text">马</span></span>
+                <span class="cin-entity-dot" data-state="away" aria-label="离开"></span>
+              </div>
+              <div class="cin-entity-main">
+                <div class="cin-entity-name"><span>马骁</span></div>
+                <div class="cin-entity-sub">研发</div>
+              </div>
+            </div>
+            <div class="cin-entity" data-stacked style="inline-size:120px">
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="lg" aria-hidden="true"><span class="cin-avatar-text">徐</span></span>
+                <span class="cin-entity-dot" data-state="busy" aria-label="忙碌"></span>
+              </div>
+              <div class="cin-entity-main">
+                <div class="cin-entity-name"><span>徐蕾</span></div>
+                <div class="cin-entity-sub">设计</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">长文本换行（data-wrap）</h2>
+          <div id="et-wrap" style="max-inline-size:360px">
+            <div class="cin-entity" data-wrap>
+              <div class="cin-entity-figure">
+                <span class="cin-avatar" data-size="md" aria-hidden="true"><span class="cin-avatar-text">欧</span></span>
+              </div>
+              <div class="cin-entity-main">
+                <div class="cin-entity-name"><span>欧阳明远（华东区域仓配一体化项目负责人）</span></div>
+                <div class="cin-entity-sub">ouyangmingyuan@hongyuan-tech.example.com · 转 8042</div>
+              </div>
+            </div>
+          </div>
+          <p class="cin-caption">默认单行省略；需要露出全文时开 data-wrap，由容器宽度决定折几行。</p>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

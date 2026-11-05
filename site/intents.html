@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>意图契约模板 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html" aria-current="page">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>意图契约模板</h1>
+        <p class="site-lead">新组件的四段式契约写法</p>
+      </header>
+<blockquote>
+<p>每个组件在 <code>packages/base/src/intents/&lt;组件名&gt;.md</code> 写一份。文件名必须与 <code>packages/base/src/components/&lt;组件名&gt;.css</code> 同名。
+<code>build.mjs --check</code> 会校验：缺文件且不在 <code>intent-allowlist.json</code> 豁免名单 → 构建失败；已有文件却仍挂白名单 → 同样失败（白名单只减不增）。
+本文件的四个段落就是四段硬约束，缺任一即视为契约不完整。</p>
+</blockquote>
+<hr>
+<h2 id="s-一-边界-必填-写实">一、边界（必填，写实）</h2>
+<ul>
+<li><strong>负责</strong>：这个组件在视觉与行为上承诺做到的事，3~6 条，必须能在 CSS/JS 里找到对应实现。</li>
+<li><strong>明确不负责</strong>：3~5 条&quot;容易被误用为本组件职责、实际不属于&quot;的事项，并指明应由谁承担（原生能力 / 宿主应用 / 其他组件 / 平台 API）。</li>
+</ul>
+<blockquote>
+<p>判断标准：若一件事写&quot;不负责&quot;，就必须能回答&quot;那谁负责&quot;。写不出承接方的，说明它其实属于本组件。</p>
+</blockquote>
+<h2 id="s-二-状态机与失败态-必填">二、状态机与失败态（必填）</h2>
+<ul>
+<li>列出命名的状态属性及取值：<code>data-state</code> / <code>data-cin-status</code> / <code>data-invalid</code> / <code>data-loading</code> / <code>data-open</code> 等，取值必须与源码一致。</li>
+<li>明确<strong>失败态</strong>：空数据、加载中、加载失败、校验不通过、禁用、权限不足，各自落到哪个属性、哪段文案位、是否可见。</li>
+<li>明确<strong>状态转移禁令</strong>：例如&quot;error 态不得直接跳到 done，须经 loading&quot;、&quot;关闭动画期间不得重入&quot;。</li>
+</ul>
+<h2 id="s-三-可访问性-必填">三、可访问性（必填）</h2>
+<ul>
+<li>语义与角色：用了哪些原生元素、哪些 role / aria-* 属性，谁是可聚焦主体。</li>
+<li>键盘：列出必须支持的按键与行为（Enter / Space / Esc / 方向键 / Home / End / Tab 顺序）。</li>
+<li>焦点：打开与关闭后焦点落点、是否焦点陷阱、<code>aria-activedescendant</code> 或 roving tabindex 的方案。</li>
+<li>对比度与动效：正文对比度下限、<code>prefers-reduced-motion</code> 下的降级行为。</li>
+</ul>
+<h2 id="s-四-ai-选型提示-必填">四、AI 选型提示（必填）</h2>
+<ul>
+<li><strong>什么时候选它</strong>：2~3 条触发场景，用业务语言而非技术语言描述。</li>
+<li><strong>什么时候别选它</strong>：指向替代组件（写具体组件名）。</li>
+<li><strong>最小正确用法</strong>：一段可直接复制的 HTML 骨架，属性齐、不依赖 JS 也能读。</li>
+<li><strong>常见误用</strong>：2~3 条，写&quot;错在哪、会坏什么&quot;。</li>
+</ul>
+<hr>
+<h2 id="s-五-写作约定">五、写作约定</h2>
+<table>
+<thead>
+<tr>
+<th>约定</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>篇幅</td>
+<td>精写 ≤60 行；骨架 ≥15 行且&quot;边界&quot;段必须写实</td>
+</tr>
+<tr>
+<td>事实来源</td>
+<td>只能写 CSS/JS 里查得到的东西，禁止想象未实现的属性或 API</td>
+</tr>
+<tr>
+<td>禁止复制</td>
+<td>不做 CSS 类名的二次罗列，只写承诺与禁忌</td>
+</tr>
+<tr>
+<td>与 moments 互引</td>
+<td>需要示例数据时引用 <code>moments/</code>，不在此重复贴大段 HTML</td>
+</tr>
+<tr>
+<td>更新时机</td>
+<td>组件行为变更必须同批更新 intent.md，否则视为契约过期</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-一-边界-必填-写实" data-level="2">一、边界（必填，写实）</a>
+      <a href="#s-二-状态机与失败态-必填" data-level="2">二、状态机与失败态（必填）</a>
+      <a href="#s-三-可访问性-必填" data-level="2">三、可访问性（必填）</a>
+      <a href="#s-四-ai-选型提示-必填" data-level="2">四、AI 选型提示（必填）</a>
+      <a href="#s-五-写作约定" data-level="2">五、写作约定</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

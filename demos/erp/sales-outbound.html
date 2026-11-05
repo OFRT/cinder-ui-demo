@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>销售出库 · Cinder ERP</title>
+<link rel="stylesheet" href="../../dist/cinder-all.css">
+<link rel="stylesheet" href="../demo.css">
+<script defer src="../../dist/cinder.js"></script>
+</head>
+<body>
+<div class="demo-shell">
+  <aside class="demo-rail">
+    <div class="demo-brand"><b>Cinder ERP</b><small>零依赖组件库</small></div>
+    <nav>
+      <a href="index.html">组件总览 <small>0</small></a>
+      <a href="dashboard.html">工作台 <small>1</small></a>
+      <a href="purchase-order.html">采购订单 <small>2</small></a>
+      <a href="sales-outbound.html" aria-current="page">销售出库 <small>3</small></a>
+      <a href="inventory.html">库存查询 <small>4</small></a>
+      <a href="pda.html">PDA 拣货 <small>5</small></a>
+    </nav>
+    <div class="demo-rail-foot">手机上同页可完成扫码 → 选批次 → 提交</div>
+  </aside>
+
+  <main class="demo-main">
+    <header class="cin-topbar" data-tone="canvas">
+      <div class="cin-breadcrumb"><a href="index.html">首页</a> / <a href="dashboard.html">销售</a> / <span aria-current="page">销售出库</span></div>
+      <div class="cin-spacer"></div>
+      <span class="cin-tag" data-tone="warning">拣货中</span>
+    </header>
+
+    <div class="cin-page demo-doc">
+      <div class="cin-doc">
+        <div class="cin-doc-bar">
+          <div>
+            <div class="cin-title3">销售出库 XS-20261031-018</div>
+            <div class="cin-caption">客户：鲜丰便利（杭州），应收 ¥18,240.00 · 信用可用 ¥64,000</div>
+          </div>
+          <div class="cin-spacer"></div>
+          <button class="cin-btn" data-variant="secondary" data-size="sm">整单拣货</button>
+        </div>
+
+        <div class="cin-doc-body">
+          <div class="cin-scan" data-state="ok">
+            <span class="cin-caption">扫码</span>
+            <input inputmode="none" placeholder="扫描商品条码 / 库位码" value="6901234567892">
+            <button class="cin-btn" data-variant="ghost" data-size="sm" data-shape="square" aria-label="相机">◉</button>
+            <span class="cin-tag" data-tone="success">已识别 SKU-1024</span>
+          </div>
+
+          <section class="cin-doc-section">
+            <div class="cin-doc-section-head">
+              <div class="cin-doc-section-title">拣货明细 <span class="cin-count">3 行 · 已完成 1 行</span></div>
+              <div class="cin-segment" role="tablist">
+                <button role="tab" aria-selected="true">待拣</button>
+                <button role="tab">已拣</button>
+              </div>
+            </div>
+
+            <div class="cin-lines">
+              <div class="cin-lines-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th data-line-primary>商品 / 库位</th>
+                      <th>批次</th>
+                      <th data-align="end">应发</th>
+                      <th data-align="end">实发</th>
+                      <th>状态</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-line-primary data-label="商品 / 库位">
+                        <div class="cin-line-name"><strong>白桃乌龙茶 500ml×12</strong><small>A-03-02 · 可用 42 箱</small></div>
+                      </td>
+                      <td data-label="批次"><span class="cin-tag" data-tone="muted">B2609</span></td>
+                      <td data-label="应发" data-align="end">20 箱</td>
+                      <td data-label="实发" data-align="end"><input class="cin-input cin-input-num" value="20"></td>
+                      <td data-label="状态"><span class="cin-tag" data-tone="success">已拣</span></td>
+                      <td><button class="cin-btn" data-variant="link" data-size="sm">改批</button></td>
+                    </tr>
+                    <tr>
+                      <td data-line-primary data-label="商品 / 库位">
+                        <div class="cin-line-name"><strong>冷链鲜奶 1L</strong><small>C-01-05（冷藏） · 可用 18 箱</small></div>
+                      </td>
+                      <td data-label="批次">
+                        <div class="cin-lines-batch">
+                          <span class="cin-tag" data-tone="warning">B2610 效期 11-09</span>
+                          <span class="cin-tag" data-tone="muted">B2611 11-16</span>
+                        </div>
+                      </td>
+                      <td data-label="应发" data-align="end">12 箱</td>
+                      <td data-label="实发" data-align="end"><input class="cin-input cin-input-num" placeholder="0"></td>
+                      <td data-label="状态"><span class="cin-tag">待拣</span></td>
+                      <td><button class="cin-btn" data-variant="link" data-size="sm">选批</button></td>
+                    </tr>
+                    <tr>
+                      <td data-line-primary data-label="商品 / 库位">
+                        <div class="cin-line-name"><strong>瓦楞纸箱 5 层 60×40×40</strong><small>B-07-01 · 可用 320 捆</small></div>
+                      </td>
+                      <td data-label="批次"><span class="cin-caption">无需批次</span></td>
+                      <td data-label="应发" data-align="end">15 捆</td>
+                      <td data-label="实发" data-align="end"><input class="cin-input cin-input-num" placeholder="0"></td>
+                      <td data-label="状态"><span class="cin-tag">待拣</span></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="cin-doc-sum">
+              <div><span>应发合计</span><b>47 箱 / 捆</b></div>
+              <div><span>已拣</span><b>20</b></div>
+              <div class="cin-doc-total"><span>应收金额</span><b>¥18,240.00</b></div>
+            </div>
+          </section>
+
+          <section class="cin-doc-section">
+            <div class="cin-doc-section-head"><div class="cin-doc-section-title">选择批次</div><span class="cin-caption">先进先出已按效期排序</span></div>
+            <div class="cin-picker">
+              <div class="cin-search"><input class="cin-input" placeholder="搜索批次号"></div>
+              <div class="cin-picker-list">
+                <button class="cin-picker-item" aria-selected="true">
+                  <span class="cin-picker-main"><strong>B2610</strong><small>效期 2026-11-09，C-01-05 · 可用 10 箱</small></span>
+                  <span class="cin-picker-side">10</span>
+                </button>
+                <button class="cin-picker-item">
+                  <span class="cin-picker-main"><strong>B2611</strong><small>效期 2026-11-16，C-01-06 · 可用 8 箱</small></span>
+                  <span class="cin-picker-side">8</span>
+                </button>
+                <button class="cin-picker-item" aria-disabled="true">
+                  <span class="cin-picker-main"><strong>B2608</strong><small>效期 2026-11-02 · 已锁定（预留）</small></span>
+                  <span class="cin-picker-side">0</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="cin-doc-foot">
+          <span class="cin-caption">已拣 20 / 47</span>
+          <div class="cin-spacer"></div>
+          <button class="cin-btn" data-variant="ghost">暂存</button>
+          <button class="cin-btn" data-variant="primary">完成拣货并复核</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

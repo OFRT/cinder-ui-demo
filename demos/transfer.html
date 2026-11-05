@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 穿梭框</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">transfer</span>
+      <span class="cin-caption">左挑右放，值取右列；脚本没跑时两列复选框照常随表单提交</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础</h2>
+          <div class="cin-stack">
+            <div class="cin-field">
+              <span class="cin-field-label">可访问模块</span>
+              <div class="cin-transfer" data-transfer data-value="order,stock">
+                <div class="cin-transfer-panel">
+                  <header class="cin-transfer-head"><span class="cin-transfer-title">待选</span><span class="cin-transfer-count"></span></header>
+                  <div class="cin-transfer-list" data-side="source" role="group" aria-label="待选模块">
+                    <label class="cin-transfer-item" data-value="order"><input type="checkbox"><span>订单管理</span></label>
+                    <label class="cin-transfer-item" data-value="finance"><input type="checkbox"><span>财务对账</span></label>
+                    <label class="cin-transfer-item" data-value="stock"><input type="checkbox"><span>库存看板</span></label>
+                    <label class="cin-transfer-item" data-value="member"><input type="checkbox"><span>会员中心</span></label>
+                    <label class="cin-transfer-item" data-value="report"><input type="checkbox"><span>经营报表</span></label>
+                  </div>
+                </div>
+                <div class="cin-transfer-actions">
+                  <button class="cin-transfer-move" type="button" data-transfer-to="target" aria-label="移入已选">→</button>
+                  <button class="cin-transfer-move" type="button" data-transfer-to="source" aria-label="移回待选">←</button>
+                </div>
+                <div class="cin-transfer-panel">
+                  <header class="cin-transfer-head"><span class="cin-transfer-title">已选</span><span class="cin-transfer-count"></span></header>
+                  <div class="cin-transfer-list" data-side="target" role="group" aria-label="已选模块"></div>
+                </div>
+              </div>
+              <span class="cin-field-help">默认已选：订单管理、库存看板</span>
+            </div>
+
+            <div class="cin-field">
+              <span class="cin-field-label">小尺寸空态</span>
+              <div class="cin-transfer" data-transfer data-size="sm">
+                <div class="cin-transfer-panel">
+                  <header class="cin-transfer-head"><span class="cin-transfer-title">候选</span><span class="cin-transfer-count"></span></header>
+                  <div class="cin-transfer-list" data-side="source" role="group" aria-label="候选">
+                    <label class="cin-transfer-item" data-value="a"><input type="checkbox"><span>候选 A</span></label>
+                    <label class="cin-transfer-item" data-value="b"><input type="checkbox"><span>候选 B</span></label>
+                  </div>
+                </div>
+                <div class="cin-transfer-actions">
+                  <button class="cin-transfer-move" type="button" data-transfer-to="target" aria-label="移入已选">→</button>
+                  <button class="cin-transfer-move" type="button" data-transfer-to="source" aria-label="移回待选">←</button>
+                </div>
+                <div class="cin-transfer-panel">
+                  <header class="cin-transfer-head"><span class="cin-transfer-title">已选</span><span class="cin-transfer-count"></span></header>
+                  <div class="cin-transfer-list" data-side="target" role="group" aria-label="已选"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">脚本取值</h2>
+          <div class="cin-toolbar">
+            <button class="cin-btn" data-variant="outline" onclick="Cinder.setTransfer(document.querySelector('[data-transfer]'), ['finance','member']); document.getElementById('out').textContent = 'set -> ' + Cinder.transfer(document.querySelector('[data-transfer]')).value.join(',');">设为 财务 + 会员</button>
+            <button class="cin-btn" data-variant="ghost" onclick="const t=Cinder.transfer(document.querySelector('[data-transfer]')); document.getElementById('out').textContent = 'value -> ' + t.value.join(',') + ' | source -> ' + t.source.join(',');">读当前值</button>
+            <span class="cin-caption" id="out">value -> order,stock</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/cinder.js" defer></script>
+</body>
+</html>

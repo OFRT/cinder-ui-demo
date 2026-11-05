@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base · 折叠面板</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.3</span>
+      <span class="cin-caption">原生 details 骨架，无 JS 也能折叠</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">折叠</div>
+        <a class="cin-navitem" href="#basic">基础折叠</a>
+        <a class="cin-navitem" href="#single">同组互斥</a>
+        <a class="cin-navitem" href="#card">卡片式设置项</a>
+        <a class="cin-navitem" href="#nested">嵌套与禁用</a>
+        <a class="cin-navitem" href="#events">事件与 API</a>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">折叠面板</h1>
+                  <p class="cin-caption">summary 与面板结构即语义，JS 只做增强：高度过渡、同组互斥、aria-expanded 同步、方向键漫游</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="secondary" data-size="sm" id="expandAll">全部展开</button>
+                <button class="cin-btn" data-variant="ghost" data-size="sm" id="collapseAll">全部收起</button>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="basic">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">基础折叠</h2>
+                <span class="cin-caption">默认首项展开，其余收起</span>
+              </div>
+              <div class="cin-accordion">
+                <details class="cin-accordion-item" open>
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">单据审核规则</span>
+                    <span class="cin-accordion-meta">3 条</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">
+                      <p>采购单金额超过 5 万需二级审核；库存调整单一律由仓管主管复核；退货单必须关联原始出库单号。</p>
+                    </div>
+                  </div>
+                </details>
+                <details class="cin-accordion-item">
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">对账周期</span>
+                    <span class="cin-accordion-meta">月结</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">
+                      <p>每月 5 日前完成上月对账，差异超过 0.5% 触发人工复核并冻结后续发货。</p>
+                    </div>
+                  </div>
+                </details>
+                <details class="cin-accordion-item">
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">权限说明</span>
+                    <span class="cin-accordion-meta">只读</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">
+                      <p>当前账号为只读角色，可查看全部单据，不能修改金额与客户信息。</p>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="single">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">同组互斥</h2>
+                <span class="cin-caption">data-single：打开一项自动收起同组其他项</span>
+              </div>
+              <div class="cin-accordion" data-single>
+                <details class="cin-accordion-item">
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">待处理</span>
+                    <span class="cin-accordion-meta">12</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">12 张待审核单据，其中 2 张超期 3 天。</div>
+                  </div>
+                </details>
+                <details class="cin-accordion-item">
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">已驳回</span>
+                    <span class="cin-accordion-meta">4</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">4 张单据因金额不符被驳回，需业务员修正后重新提交。</div>
+                  </div>
+                </details>
+                <details class="cin-accordion-item">
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">已完成</span>
+                    <span class="cin-accordion-meta">86</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">本月已完成 86 张，平均处理时长 4.2 小时。</div>
+                  </div>
+                </details>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="card">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">卡片式设置项</h2>
+                <span class="cin-caption">data-variant="card"：每项独立描边，适合分组设置</span>
+              </div>
+              <div class="cin-accordion" data-variant="card">
+                <details class="cin-accordion-item">
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">通知方式</span>
+                    <span class="cin-accordion-meta">短信 + 站内</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">
+                      <label class="cin-check"><input type="checkbox" checked> 短信通知</label>
+                      <label class="cin-check"><input type="checkbox" checked> 站内消息</label>
+                      <label class="cin-check"><input type="checkbox"> 邮件通知</label>
+                    </div>
+                  </div>
+                </details>
+                <details class="cin-accordion-item">
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">库存预警阈值</span>
+                    <span class="cin-accordion-meta">安全库存 20</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">
+                      <label class="cin-field">
+                        <span class="cin-field-label">低于该数量时提醒</span>
+                        <input class="cin-input" type="number" value="20">
+                      </label>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="nested">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">嵌套与禁用</h2>
+                <span class="cin-caption">内层折叠缩进一级；data-disabled 只读不可展开</span>
+              </div>
+              <div class="cin-accordion">
+                <details class="cin-accordion-item">
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">区域仓分布</span>
+                    <span class="cin-accordion-meta">3 个</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">
+                      <div class="cin-accordion">
+                        <details class="cin-accordion-item">
+                          <summary class="cin-accordion-trigger"><span class="cin-accordion-title">华东仓</span></summary>
+                          <div class="cin-accordion-panel">
+                            <div class="cin-accordion-body">上海、杭州、南京三个前置点，日均出库 420 单。</div>
+                          </div>
+                        </details>
+                        <details class="cin-accordion-item">
+                          <summary class="cin-accordion-trigger"><span class="cin-accordion-title">华南仓</span></summary>
+                          <div class="cin-accordion-panel">
+                            <div class="cin-accordion-body">广州、深圳两个前置点，日均出库 380 单。</div>
+                          </div>
+                        </details>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+                <details class="cin-accordion-item" data-disabled>
+                  <summary class="cin-accordion-trigger">
+                    <span class="cin-accordion-title">西部仓（未开放）</span>
+                    <span class="cin-accordion-meta">无权限</span>
+                  </summary>
+                  <div class="cin-accordion-panel">
+                    <div class="cin-accordion-body">当前账号未开通西部仓数据权限。</div>
+                  </div>
+                </details>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="events">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">事件与 API</h2>
+                <span class="cin-caption">cin:accordiontoggle 冒泡到 .cin-accordion-item；Cinder.setAccordion 可编程控制</span>
+              </div>
+              <div class="cin-cluster">
+                <button class="cin-btn" data-size="sm" data-variant="secondary" id="openSecond">展开「对账周期」</button>
+              </div>
+              <p class="cin-caption" id="log" aria-live="polite">等待交互</p>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const log = document.getElementById("log");
+      document.addEventListener("cin:accordiontoggle", (e) => {
+        const title = e.target.querySelector(".cin-accordion-title");
+        log.textContent = `${title ? title.textContent : "折叠项"} → ${e.detail.open ? "展开" : "收起"}（${e.detail.source}）`;
+      });
+
+      document.getElementById("openSecond").addEventListener("click", () => {
+        const item = document.querySelectorAll("#basic .cin-accordion-item")[1];
+        Cinder.setAccordion(item, true);
+      });
+      document.getElementById("expandAll").addEventListener("click", () => {
+        document.querySelectorAll(".cin-accordion-item").forEach((el) => Cinder.setAccordion(el, true));
+      });
+      document.getElementById("collapseAll").addEventListener("click", () => {
+        document.querySelectorAll(".cin-accordion-item").forEach((el) => Cinder.setAccordion(el, false));
+      });
+    });
+  </script>
+</body>
+</html>

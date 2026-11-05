@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cinder Playground · 令牌实时调参</title>
+<link rel="stylesheet" href="../dist/cinder-all.css">
+<link rel="stylesheet" href="../dist/cinder-skins.css">
+<link rel="stylesheet" href="../dist/cinder-view-transition.css">
+<script src="../dist/cinder.js" defer></script>
+<style>
+  /* 仅 Playground 自身外壳样式，全部 .pg- 前缀，不参与组件样式 */
+  .pg-shell { min-height: 100vh; background: var(--cin-color-bg-canvas); }
+  .pg-top {
+    position: sticky; inset-block-start: 0; z-index: var(--cin-z-sticky);
+    display: flex; flex-wrap: wrap; gap: var(--cin-space-150); align-items: center;
+    padding: var(--cin-space-150) var(--cin-space-200);
+    background: var(--cin-color-bg-surface);
+    border-block-end: 1px solid var(--cin-color-border-subtle);
+  }
+  .pg-brand { font-weight: 600; font-size: var(--cin-text-body-size); margin-inline-end: auto; }
+  .pg-brand small { font-weight: 400; color: var(--cin-color-text-tertiary); margin-inline-start: var(--cin-space-100); }
+  .pg-layout {
+    display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: var(--cin-space-200);
+    padding: var(--cin-space-200); align-items: start;
+  }
+  @media (max-width: 900px) { .pg-layout { grid-template-columns: 1fr; } }
+  .pg-panel {
+    background: var(--cin-color-bg-surface); border: 1px solid var(--cin-color-border-subtle);
+    border-radius: var(--cin-radius-md); padding: var(--cin-space-200);
+  }
+  .pg-panel + .pg-panel { margin-block-start: var(--cin-space-200); }
+  .pg-h { font-size: var(--cin-text-label-size); text-transform: uppercase; letter-spacing: .04em;
+    color: var(--cin-color-text-tertiary); margin: 0 0 var(--cin-space-150); }
+  .pg-row { display: grid; gap: var(--cin-space-050); margin-block-end: var(--cin-space-150); }
+  .pg-row > label { font-size: var(--cin-text-label-size); color: var(--cin-color-text-secondary); }
+  .pg-row input[type="color"] { inline-size: 100%; block-size: var(--cin-size-control-sm); padding: 0;
+    border: 1px solid var(--cin-color-border-subtle); border-radius: var(--cin-radius-sm); background: none; }
+  .pg-row input[type="range"] { inline-size: 100%; accent-color: var(--cin-color-accent-default); }
+  .pg-val { font-variant-numeric: tabular-nums; color: var(--cin-color-text-tertiary); font-size: var(--cin-text-caption-size); }
+  .pg-swatch { display: flex; gap: var(--cin-space-050); flex-wrap: wrap; margin-block-start: var(--cin-space-050); }
+  .pg-swatch > button {
+    block-size: 24px; inline-size: 24px; border-radius: var(--cin-radius-xs);
+    border: 1px solid var(--cin-color-border-strong); cursor: pointer;
+  }
+  .pg-grid { display: grid; gap: var(--cin-space-200); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .pg-box { border: 1px dashed var(--cin-color-border-subtle); border-radius: var(--cin-radius-md); padding: var(--cin-space-150); }
+  .pg-box > h3 { margin: 0 0 var(--cin-space-100); font-size: var(--cin-text-caption-size);
+    color: var(--cin-color-text-tertiary); font-weight: 500; letter-spacing: .04em; }
+  .pg-stack { display: flex; flex-wrap: wrap; gap: var(--cin-space-100); align-items: center; }
+  .pg-out { margin: 0; padding: var(--cin-space-150); background: var(--cin-color-bg-surface-sunken);
+    border-radius: var(--cin-radius-sm); font-family: var(--cin-family-mono); font-size: 12px;
+    line-height: 1.6; white-space: pre-wrap; word-break: break-all; max-height: 260px; overflow: auto; }
+  .pg-toast { position: fixed; inset-block-end: var(--cin-space-200); inset-inline-end: var(--cin-space-200);
+    background: var(--cin-color-text-primary); color: var(--cin-color-bg-surface);
+    padding: var(--cin-space-100) var(--cin-space-150); border-radius: var(--cin-radius-sm);
+    font-size: var(--cin-text-label-size); opacity: 0; pointer-events: none;
+    transition: opacity var(--cin-motion-fast-duration); }
+  .pg-toast[data-show] { opacity: 1; }
+</style>
+</head>
+<body class="pg-shell">
+<header class="pg-top">
+  <div class="pg-brand">Cinder Playground <small>通用层令牌实时调参，导出即用</small></div>
+  <label class="cin-field" for="pg-skin">皮肤</label>
+  <select class="cin-select" id="pg-skin" aria-label="皮肤预设"></select>
+  <button class="cin-btn" data-size="sm" type="button" id="pg-reset">重置</button>
+  <button class="cin-btn" data-size="sm" type="button" id="pg-copy">复制 CSS</button>
+  <button class="cin-btn" data-size="sm" data-variant="primary" type="button" id="pg-download">下载 CSS</button>
+</header>
+
+<main class="pg-layout">
+  <section aria-label="调参面板">
+    <div class="pg-panel">
+      <h2 class="pg-h">颜色</h2>
+      <div class="pg-row">
+        <label for="pg-accent">品牌色</label>
+        <input type="color" id="pg-accent" value="#C04229">
+        <div class="pg-swatch" id="pg-swatch"></div>
+      </div>
+      <div class="pg-row">
+        <label for="pg-canvas">画布底色</label>
+        <input type="color" id="pg-canvas" value="#F7F5F2">
+      </div>
+      <div class="pg-row">
+        <label for="pg-surface">表面色</label>
+        <input type="color" id="pg-surface" value="#FFFFFF">
+      </div>
+    </div>
+
+    <div class="pg-panel">
+      <h2 class="pg-h">形状与密度</h2>
+      <div class="pg-row">
+        <label for="pg-radius">圆角基准 <span class="pg-val" id="pg-radius-val">12px</span></label>
+        <input type="range" id="pg-radius" min="0" max="24" step="1" value="12">
+      </div>
+      <div class="pg-row">
+        <label for="pg-density">密度</label>
+        <select class="cin-select" id="pg-density">
+          <option value="comfortable">舒适</option>
+          <option value="compact">紧凑</option>
+        </select>
+        <span class="pg-val">紧凑密度仅在宽屏且鼠标设备生效（库内既有约束）</span>
+      </div>
+      <div class="pg-row">
+        <label for="pg-shadow">阴影强度 <span class="pg-val" id="pg-shadow-val">100%</span></label>
+        <input type="range" id="pg-shadow" min="0" max="100" step="5" value="100">
+      </div>
+    </div>
+
+    <div class="pg-panel">
+      <h2 class="pg-h">字体</h2>
+      <div class="pg-row">
+        <label for="pg-body">正文字号 <span class="pg-val" id="pg-body-val">16px</span></label>
+        <input type="range" id="pg-body" min="14" max="19" step="1" value="16">
+      </div>
+      <div class="pg-row">
+        <label for="pg-font">字族</label>
+        <select class="cin-select" id="pg-font">
+          <option value="sans">无衬线（默认）</option>
+          <option value="serif">衬线</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="预览">
+    <div class="pg-panel">
+      <h2 class="pg-h">组件预览</h2>
+      <div class="pg-grid">
+        <div class="pg-box">
+          <h3>按钮</h3>
+          <div class="pg-stack">
+            <button class="cin-btn" data-variant="primary" type="button">主操作</button>
+            <button class="cin-btn" data-variant="secondary" type="button">次操作</button>
+            <button class="cin-btn" data-variant="outline" type="button">描边</button>
+            <button class="cin-btn" data-variant="ghost" type="button">幽灵</button>
+            <button class="cin-btn" data-variant="danger" type="button">危险</button>
+            <button class="cin-btn" type="button" disabled>禁用</button>
+          </div>
+        </div>
+
+        <div class="pg-box">
+          <h3>表单</h3>
+          <label class="cin-field" for="pg-demo-input">名称</label>
+          <input class="cin-input" id="pg-demo-input" placeholder="请输入名称">
+          <label class="cin-field" for="pg-demo-select">类型</label>
+          <select class="cin-select" id="pg-demo-select">
+            <option>选项一</option><option>选项二</option>
+          </select>
+        </div>
+
+        <div class="pg-box">
+          <h3>徽标与标签</h3>
+          <div class="pg-stack">
+            <span class="cin-badge">12</span>
+            <span class="cin-pill" data-tone="accent">进行中</span>
+            <span class="cin-pill" data-tone="success">已完成</span>
+            <span class="cin-pill" data-tone="warning">待确认</span>
+            <span class="cin-pill" data-tone="danger">已驳回</span>
+          </div>
+        </div>
+
+        <div class="pg-box">
+          <h3>卡片</h3>
+          <article class="cin-card">
+            <div class="cin-card-head">
+              <div class="cin-card-heading">
+                <h3 class="cin-card-title">卡片标题</h3>
+                <span class="cin-card-subtitle">副标题</span>
+              </div>
+              <span class="cin-card-extra">高优先级</span>
+            </div>
+            <div class="cin-card-body">
+              <p class="cin-card-desc">正文会跟着令牌一起变：圆角、字号、表面色、强调色全部实时生效。</p>
+            </div>
+            <div class="cin-card-foot" data-divided>
+              <button class="cin-btn" data-size="sm" type="button">查看明细</button>
+              <button class="cin-btn" data-size="sm" data-variant="primary" type="button">去处理</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg-panel">
+      <h2 class="pg-h">数据表</h2>
+      <table class="cin-dg">
+        <thead>
+          <tr><th>名称</th><th>规格</th><th>数量</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>条目 A</td><td>标准</td><td>128</td><td><span class="cin-pill" data-tone="success">充足</span></td></tr>
+          <tr><td>条目 B</td><td>加急</td><td>36</td><td><span class="cin-pill" data-tone="warning">偏低</span></td></tr>
+          <tr><td>条目 C</td><td>标准</td><td>0</td><td><span class="cin-pill" data-tone="danger">缺货</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pg-panel">
+      <h2 class="pg-h">导出</h2>
+      <pre class="pg-out" id="pg-out" aria-live="polite"></pre>
+    </div>
+  </section>
+</main>
+
+<div class="pg-toast" id="pg-toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SKINS = [
+    { id: '', label: '无皮肤（base 默认）' },
+    { id: 'paper', label: 'paper 暖纸' },
+    { id: 'porcelain', label: 'porcelain 瓷白' },
+    { id: 'mist', label: 'mist 薄雾' },
+    { id: 'sage', label: 'sage 鼠尾草' },
+    { id: 'ledger', label: 'ledger 账本' },
+    { id: 'industrial', label: 'industrial 工业' },
+    { id: 'graphite', label: 'graphite 石墨（深色）' },
+    { id: 'ink', label: 'ink 墨黑（深色）' }
+  ];
+
+  var ACCENT_PRESETS = ['#C04229', '#2F6F5E', '#335F80', '#6B4FA0', '#B07C2A', '#3C3C3C'];
+
+  var DEFAULTS = {
+    skin: '', accent: '#C04229', canvas: '#F7F5F2', surface: '#FFFFFF',
+    radius: 12, density: 'comfortable', shadow: 100, body: 16, font: 'sans'
+  };
+
+  var OVERRIDES = ['--cin-color-accent-default','--cin-color-accent-hover','--cin-color-accent-pressed',
+    '--cin-color-accent-soft','--cin-color-text-on-accent','--cin-color-focus-ring',
+    '--cin-color-bg-canvas','--cin-color-bg-surface','--cin-radius-xs','--cin-radius-sm',
+    '--cin-radius-md','--cin-radius-lg','--cin-shadow-sm','--cin-shadow-lg',
+    '--cin-text-body-size','--cin-text-caption-size','--cin-text-label-size',
+    '--cin-text-display-size','--cin-family-sans'];
+
+  var state = Object.assign({}, DEFAULTS);
+  var root = document.documentElement;
+  var $ = function (id) { return document.getElementById(id); };
+  var out = $('pg-out');
+  var toastEl = $('pg-toast');
+
+  function toast(text) {
+    toastEl.textContent = text;
+    toastEl.setAttribute('data-show', '');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { toastEl.removeAttribute('data-show'); }, 1600);
+  }
+
+  /* ---------- 颜色工具：只做派生，不猜语义 ---------- */
+  function relativeLuminance(hex) {
+    var v = hex.replace('#', '');
+    if (v.length === 3) { v = v.split('').map(function (c) { return c + c; }).join(''); }
+    var rgb = [0, 2, 4].map(function (i) {
+      var s = parseInt(v.slice(i, i + 2), 16) / 255;
+      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  }
+  function readableOn(hex) {
+    // 与库内 on-accent 令牌同口径：按背景亮度二选一
+    return relativeLuminance(hex) > 0.5 ? '#1A1A1A' : '#FFFFFF';
+  }
+
+  function shadows() {
+    var k = Number(state.shadow) / 100;
+    return {
+      sm: k === 0 ? 'none' : '0 1px 2px rgba(20,18,16,' + (0.06 * k).toFixed(3) + ')',
+      lg: k === 0 ? 'none' : '0 16px 48px -16px rgba(20,18,16,' + (0.28 * k).toFixed(3) + ')'
+    };
+  }
+
+  /* ---------- 令牌：只产出库内真实存在的变量 ---------- */
+  function tokens() {
+    var r = Number(state.radius);
+    var body = Number(state.body);
+    var sh = shadows();
+    var accent = state.accent;
+    var t = [
+      ['--cin-color-accent-default', accent],
+      ['--cin-color-accent-hover', 'color-mix(in oklab, ' + accent + ' 88%, #000)'],
+      ['--cin-color-accent-pressed', 'color-mix(in oklab, ' + accent + ' 76%, #000)'],
+      ['--cin-color-accent-soft', 'color-mix(in oklab, ' + accent + ' 12%, #fff)'],
+      ['--cin-color-text-on-accent', readableOn(accent)],
+      ['--cin-color-focus-ring', 'color-mix(in oklab, ' + accent + ' 60%, transparent)'],
+      ['--cin-color-bg-canvas', state.canvas],
+      ['--cin-color-bg-surface', state.surface],
+      ['--cin-radius-xs', Math.round(r * 0.33) + 'px'],
+      ['--cin-radius-sm', Math.round(r * 0.66) + 'px'],
+      ['--cin-radius-md', r + 'px'],
+      ['--cin-radius-lg', Math.round(r * 1.66) + 'px'],
+      ['--cin-shadow-sm', sh.sm],
+      ['--cin-shadow-lg', sh.lg],
+      ['--cin-text-body-size', body + 'px'],
+      ['--cin-text-caption-size', Math.max(11, body - 3) + 'px'],
+      ['--cin-text-label-size', Math.max(12, body - 2) + 'px'],
+      ['--cin-text-display-size', Math.round(body * 1.75) + 'px']
+    ];
+    if (state.font === 'serif') {
+      t.push(['--cin-family-sans', 'Georgia, "Songti SC", "SimSun", serif']);
+    }
+    return t;
+  }
+
+  function exportCss() {
+    var lines = tokens().map(function (kv) { return '  ' + kv[0] + ': ' + kv[1] + ';'; });
+    var out2 = '/* Cinder Playground 导出 · ' + new Date().toISOString().slice(0, 10) + ' */\n';
+    out2 += '/* 放在 cinder-base.css 之后覆盖即可；皮肤仍用 <html data-skin="…"> */\n';
+    if (state.skin) { out2 += '/* 当前预览皮肤：data-skin="' + state.skin + '" */\n'; }
+    if (state.density === 'compact') {
+      out2 += '/* 当前预览密度：data-density="compact"（仅宽屏且 hover 设备生效） */\n';
+    }
+    return out2 + ':root {\n' + lines.join('\n') + '\n}\n';
+  }
+
+  function apply() {
+    var t = tokens();
+    for (var i = 0; i < t.length; i++) { root.style.setProperty(t[i][0], t[i][1]); }
+    if (window.Cinder && Cinder.Primitives.skin) { Cinder.Primitives.skin.apply(state.skin); }
+    else if (state.skin) { root.setAttribute('data-skin', state.skin); }
+    else { root.removeAttribute('data-skin'); }
+    if (state.density === 'compact') { root.setAttribute('data-density', 'compact'); }
+    else { root.removeAttribute('data-density'); }
+    out.textContent = exportCss();
+    syncHash();
+  }
+
+  /* ---------- 分享链接：状态全在 hash，不依赖后端 ---------- */
+  function syncHash() {
+    try {
+      history.replaceState(null, '', '#' + encodeURIComponent(JSON.stringify(state)));
+    } catch (e) { /* 隐私模式忽略 */ }
+  }
+  function readHash() {
+    if (!location.hash) { return; }
+    try {
+      var raw = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+      Object.keys(DEFAULTS).forEach(function (k) {
+        if (raw[k] !== undefined) { state[k] = raw[k]; }
+      });
+    } catch (e) { /* 非法 hash 直接忽略 */ }
+  }
+
+  function syncControls() {
+    $('pg-skin').value = state.skin;
+    $('pg-accent').value = state.accent;
+    $('pg-canvas').value = state.canvas;
+    $('pg-surface').value = state.surface;
+    $('pg-radius').value = state.radius;
+    $('pg-radius-val').textContent = state.radius + 'px';
+    $('pg-density').value = state.density;
+    $('pg-shadow').value = state.shadow;
+    $('pg-shadow-val').textContent = state.shadow + '%';
+    $('pg-body').value = state.body;
+    $('pg-body-val').textContent = state.body + 'px';
+    $('pg-font').value = state.font;
+  }
+
+  function download() {
+    var blob = new Blob([exportCss()], { type: 'text/css;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'cinder-theme.css';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    toast('已下载 cinder-theme.css');
+  }
+
+  function copy() {
+    var text = exportCss();
+    var fallback = function () {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.insetBlockStart = '-1000px';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove();
+      toast(ok ? 'CSS 已复制' : '复制受限，请手动选中导出框');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast('CSS 已复制'); }, fallback);
+    } else { fallback(); }
+  }
+
+  function bind(el, key, transform) {
+    el.addEventListener('input', function () {
+      state[key] = transform ? transform(el.value) : el.value;
+      syncControls();
+      if (key === 'skin' && window.Cinder && Cinder.Primitives.skin) {
+        // 皮肤切换走统一入口：支持 View Transitions 渐进增强，reduce 下自动降级为直切
+        Cinder.Primitives.skin.set(el.value, { commit: apply });
+        return;
+      }
+      apply();
+    });
+  }
+
+  function init() {
+    var skinSel = $('pg-skin');
+    SKINS.forEach(function (s) {
+      var o = document.createElement('option');
+      o.value = s.id;
+      o.textContent = s.label;
+      skinSel.appendChild(o);
+    });
+
+    var sw = $('pg-swatch');
+    ACCENT_PRESETS.forEach(function (c) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.style.background = c;
+      b.setAttribute('aria-label', '使用品牌色 ' + c);
+      b.addEventListener('click', function () {
+        state.accent = c;
+        syncControls();
+        apply();
+      });
+      sw.appendChild(b);
+    });
+
+    bind(skinSel, 'skin');
+    bind($('pg-accent'), 'accent');
+    bind($('pg-canvas'), 'canvas');
+    bind($('pg-surface'), 'surface');
+    bind($('pg-radius'), 'radius', Number);
+    bind($('pg-density'), 'density');
+    bind($('pg-shadow'), 'shadow', Number);
+    bind($('pg-body'), 'body', Number);
+    bind($('pg-font'), 'font');
+
+    $('pg-reset').addEventListener('click', function () {
+      state = Object.assign({}, DEFAULTS);
+      OVERRIDES.forEach(function (v) { root.style.removeProperty(v); });
+      syncControls();
+      apply();
+      toast('已恢复库内默认令牌');
+    });
+
+    $('pg-copy').addEventListener('click', copy);
+    $('pg-download').addEventListener('click', download);
+
+    readHash();
+    syncControls();
+    apply();
+    root.setAttribute('data-pg-ready', '');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>

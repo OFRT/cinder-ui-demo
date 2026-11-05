@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 侧栏导航</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <button class="cin-btn" data-size="sm" data-variant="ghost" id="drawerOpen" aria-controls="demoNav" aria-expanded="false">导航</button>
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">sidenav</span>
+      <span class="cin-caption">宽屏常驻侧栏，窄屏（&lt;900px）变抽屉</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" id="collapseBtn">折叠</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <nav class="cin-sidenav" id="demoNav" aria-label="主导航" data-drawer>
+          <button class="cin-sidenav-toggle" type="button" hidden>
+            <span class="cin-sidenav-icon" aria-hidden="true">☰</span>
+            <span class="cin-sidenav-text">导航</span>
+          </button>
+          <div class="cin-sidenav-group">
+            <p class="cin-sidenav-label">业务</p>
+            <a class="cin-sidenav-item" href="#orders" aria-current="page" aria-label="订单">
+              <span class="cin-sidenav-icon" aria-hidden="true">▤</span>
+              <span class="cin-sidenav-text">订单</span>
+              <span class="cin-sidenav-badge">12</span>
+            </a>
+            <button class="cin-sidenav-item" type="button" aria-controls="subStock" aria-expanded="true" aria-label="库存">
+              <span class="cin-sidenav-icon" aria-hidden="true">▦</span>
+              <span class="cin-sidenav-text">库存</span>
+              <span class="cin-sidenav-chevron" aria-hidden="true">›</span>
+            </button>
+            <div class="cin-sidenav-sub" id="subStock">
+              <a class="cin-sidenav-item" href="#stock/onhand"><span class="cin-sidenav-text">现存量</span></a>
+              <a class="cin-sidenav-item" href="#stock/move"><span class="cin-sidenav-text">出入库流水</span></a>
+              <a class="cin-sidenav-item" href="#stock/check"><span class="cin-sidenav-text">盘点任务</span><span class="cin-sidenav-badge">3</span></a>
+            </div>
+            <button class="cin-sidenav-item" type="button" aria-controls="subFinance" aria-expanded="false" aria-label="财务">
+              <span class="cin-sidenav-icon" aria-hidden="true">▥</span>
+              <span class="cin-sidenav-text">财务</span>
+              <span class="cin-sidenav-chevron" aria-hidden="true">›</span>
+            </button>
+            <div class="cin-sidenav-sub" id="subFinance">
+              <a class="cin-sidenav-item" href="#finance/receipt"><span class="cin-sidenav-text">应收</span></a>
+              <a class="cin-sidenav-item" href="#finance/pay"><span class="cin-sidenav-text">应付</span></a>
+            </div>
+            <a class="cin-sidenav-item" href="#reports" aria-label="报表">
+              <span class="cin-sidenav-icon" aria-hidden="true">▧</span>
+              <span class="cin-sidenav-text">报表</span>
+            </a>
+          </div>
+          <div class="cin-sidenav-group">
+            <p class="cin-sidenav-label">系统</p>
+            <a class="cin-sidenav-item" href="#settings" aria-label="设置">
+              <span class="cin-sidenav-icon" aria-hidden="true">⚙</span>
+              <span class="cin-sidenav-text">设置</span>
+            </a>
+            <a class="cin-sidenav-item" href="#danger" data-danger aria-label="归档清理">
+              <span class="cin-sidenav-icon" aria-hidden="true">⌫</span>
+              <span class="cin-sidenav-text">归档清理</span>
+              <span class="cin-sidenav-badge">99+</span>
+            </a>
+          </div>
+        </nav>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">侧栏导航</h1>
+                  <p class="cin-caption">分组、子级、当前项、折叠图标栏、窄屏抽屉；无 JS 时子级全展开且折叠按钮不出现。</p>
+                </div>
+              </div>
+            </div>
+
+            <section class="cin-card cin-stack">
+              <h2 class="cin-title3">键位</h2>
+              <ul class="cin-list">
+                <li><span class="cin-caption">顶层项</span> ↑ ↓ 漫游，Home / End 跳两端，→ 展开子级，← 收起</li>
+                <li><span class="cin-caption">子级项</span> ↑ ↓ 顺排移动，← 回父级并收起</li>
+                <li><span class="cin-caption">抽屉</span> Esc 关闭、点遮罩关闭，焦点归还触发按钮</li>
+              </ul>
+            </section>
+
+            <section class="cin-card cin-stack">
+              <h2 class="cin-title3">状态</h2>
+              <p class="cin-body-text" id="log">等待交互。</p>
+              <div class="cin-toolbar">
+                <button class="cin-btn" data-size="sm" id="apiCollapse">折叠（API）</button>
+                <button class="cin-btn" data-size="sm" id="apiExpand">展开（API）</button>
+                <button class="cin-btn" data-size="sm" id="apiCloseSub">收起全部子级</button>
+                <button class="cin-btn" data-size="sm" id="apiDrawer">打开抽屉（API）</button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const nav = document.getElementById("demoNav");
+      const log = document.getElementById("log");
+      const drawerBtn = document.getElementById("drawerOpen");
+      const toggleBtn = document.getElementById("collapseBtn");
+      const api = nav.cinSidenav;
+      const say = (t) => { log.textContent = t; };
+
+      drawerBtn.addEventListener("click", () => {
+        if (nav.hasAttribute("data-open")) api.close();
+        else api.open(drawerBtn);
+      });
+      toggleBtn.addEventListener("click", () => api.toggle());
+
+      document.addEventListener("cin:sidenav-toggle", (e) => {
+        say(e.detail.collapsed ? "已折叠为图标栏。" : "已展开为完整导航。");
+        drawerBtn.setAttribute("aria-expanded", nav.hasAttribute("data-open") ? "true" : "false");
+      });
+      document.addEventListener("cin:sidenav-open", () => {
+        say("抽屉已打开。");
+        drawerBtn.setAttribute("aria-expanded", "true");
+      });
+      document.addEventListener("cin:sidenav-close", (e) => {
+        say(`抽屉已关闭（${e.detail.reason}）。`);
+        drawerBtn.setAttribute("aria-expanded", "false");
+      });
+      document.getElementById("demoNav").addEventListener("click", (e) => {
+        const item = e.target.closest(".cin-sidenav-item");
+        if (!item) return;
+        const label = item.getAttribute("aria-label") || item.textContent.trim();
+        if (item.tagName === "A") say(`导航到：${label}`);
+      });
+
+      document.getElementById("apiCollapse").addEventListener("click", () => api.toggle(true));
+      document.getElementById("apiExpand").addEventListener("click", () => api.toggle(false));
+      document.getElementById("apiCloseSub").addEventListener("click", () => { api.closeAllSub(); say("子级已全部收起。"); });
+      document.getElementById("apiDrawer").addEventListener("click", () => api.open(document.getElementById("apiDrawer")));
+    });
+  </script>
+</body>
+</html>

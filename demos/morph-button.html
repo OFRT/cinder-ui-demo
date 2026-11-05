@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>morph-button · 形变按钮</title>
+<link rel="stylesheet" href="../dist/cinder-base.css">
+<style>
+  body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; display: grid; gap: 28px; }
+  h2 { font-size: 15px; margin: 0 0 10px; color: #333; }
+  .row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; min-height: 56px; }
+  .note { font-size: 13px; color: #666; margin: 6px 0 0; }
+  .log { font-size: 13px; color: #444; min-height: 20px; }
+  [data-role="states"] .cin-morph { pointer-events: none; }
+</style>
+</head>
+<body>
+
+<section>
+  <h2>五态（静态展示，点击无效）</h2>
+  <div class="row" data-role="states">
+    <button type="button" class="cin-morph" data-state="idle"><span class="cin-morph-label">发送</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span></button>
+    <button type="button" class="cin-morph" data-state="hover"><span class="cin-morph-label">发送</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span></button>
+    <button type="button" class="cin-morph" data-state="press"><span class="cin-morph-label">发送</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span></button>
+    <button type="button" class="cin-morph" data-state="loading" aria-busy="true"><span class="cin-morph-label">发送</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span></button>
+    <button type="button" class="cin-morph" data-state="interrupted" aria-label="发送已中断，点击重试"><span class="cin-morph-label">发送</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span></button>
+  </div>
+</section>
+
+<section>
+  <h2>完整序列：点击提交 → 1.2s 后完成 → 5s 撤销窗口</h2>
+  <div class="row">
+    <button type="button" class="cin-morph" id="flow" data-state="idle">
+      <span class="cin-morph-label">提交审批</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span>
+    </button>
+    <span class="log" id="flow-log" aria-live="polite">等待操作</span>
+  </div>
+  <p class="note">撤销窗口内点击按钮即撤回；倒计时归零后按钮恢复强调色。</p>
+</section>
+
+<section>
+  <h2>中断与重试</h2>
+  <div class="row">
+    <button type="button" class="cin-morph" id="broken" data-state="interrupted" aria-label="上传已中断，点击重试">
+      <span class="cin-morph-label">上传</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span>
+    </button>
+    <span class="log" id="broken-log" aria-live="polite">上次上传被中断</span>
+  </div>
+</section>
+
+<section>
+  <h2>长文案与禁用宽度</h2>
+  <div class="row">
+    <button type="button" class="cin-morph" style="--cin-morph-w-idle: 10rem" data-state="idle">
+      <span class="cin-morph-label">生成周报摘要</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span>
+    </button>
+    <button type="button" class="cin-morph" style="--cin-morph-w-idle: 10rem" data-state="loading" aria-busy="true">
+      <span class="cin-morph-label">生成周报摘要</span><span class="cin-morph-icon"></span><span class="cin-morph-undo"></span>
+    </button>
+  </div>
+</section>
+
+<script src="../dist/cinder.js"></script>
+<script>
+  const flow = document.getElementById("flow");
+  const log = document.getElementById("flow-log");
+  flow.addEventListener("click", () => {
+    if (flow.dataset.undo === "1") return;
+    if (flow.dataset.state !== "idle") return;
+    Cinder.morph.setState(flow, "loading");
+    log.textContent = "提交中……";
+    setTimeout(() => {
+      Cinder.morph.settle(flow, { ms: 5000 });
+      log.textContent = "已提交，5 秒内可撤回";
+    }, 1200);
+  });
+  flow.addEventListener("cin:morph-undo", () => { log.textContent = "已撤回"; });
+  flow.addEventListener("cin:morph-undo-expired", () => { log.textContent = "撤销窗口已结束"; });
+  flow.addEventListener("cin:morph-state", (e) => { flow.dataset.log = e.detail.state; });
+
+  const broken = document.getElementById("broken");
+  const blog = document.getElementById("broken-log");
+  broken.addEventListener("cin:morph-retry", () => {
+    Cinder.morph.setState(broken, "loading");
+    blog.textContent = "重新上传中……";
+    setTimeout(() => {
+      Cinder.morph.settle(broken, { undo: false });
+      blog.textContent = "上传完成";
+    }, 900);
+  });
+</script>
+</body>
+</html>

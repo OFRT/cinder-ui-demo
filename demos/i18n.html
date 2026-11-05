@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 多语言</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">i18n</span>
+      <span class="cin-caption">一套字典管住 aria-label、空态与相对时间，切语言不用改组件</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" data-set-locale="zh-CN">中文</button>
+        <button class="cin-btn" data-size="sm" data-variant="ghost" data-set-locale="en">English</button>
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="cin-card" style="margin-block-end:16px">
+        <h2 style="margin-block:0 8px">静态标记：写死一次，切语言自动刷新</h2>
+        <p class="cin-caption" data-i18n="tree.noMatch">没有匹配的节点</p>
+        <p class="cin-caption">当前语言：<strong data-current-locale>zh-CN</strong></p>
+        <div class="cin-toolbar">
+          <button class="cin-btn" data-size="sm" data-i18n="copy.done" data-i18n-aria="copy.done">已复制</button>
+          <button class="cin-btn" data-size="sm" data-i18n="overlay.tourDone" data-i18n-aria="overlay.tourDone">完成</button>
+        </div>
+      </section>
+
+      <section class="cin-card" style="margin-block-end:16px">
+        <h2 style="margin-block:0 8px">组件取词：面板标签、列名与按钮文字同源</h2>
+        <input data-timepicker data-value="09:30" aria-label="时间">
+        <p class="cin-caption">打开面板后，屏幕阅读器读到的「选择时间 / 小时 / 分钟」来自同一张字典。</p>
+      </section>
+
+      <section class="cin-card">
+        <h2 style="margin-block:0 8px">API 取词：t / tIn / 插值</h2>
+        <pre id="apiOutput" class="cin-caption" style="margin:0;white-space:pre-wrap"></pre>
+      </section>
+    </main>
+  </div>
+
+  <script src="../dist/cinder.js"></script>
+  <script>
+    (function () {
+      const api = window.Cinder.Primitives.i18n;
+      const out = document.getElementById("apiOutput");
+      const paint = () => {
+        out.textContent = [
+          't("datepicker.today")            → ' + api.t("datepicker.today"),
+          't("otp.digit", null, {n: 3})      → ' + api.t("otp.digit", null, { n: 3 }),
+          't("fileinput.rejectSize", null…) → ' + api.t("fileinput.rejectSize", null, { n: 5 }),
+          't("overlay.tourStep", null…)     → ' + api.t("overlay.tourStep", null, { n: 2, total: 5 }),
+          'tIn("en", "copy.done")           → ' + api.tIn("en", "copy.done"),
+          'getLocale()                      → ' + api.getLocale(),
+        ].join("\n");
+        document.querySelectorAll("[data-current-locale]").forEach((el) => {
+          el.textContent = api.getLocale();
+        });
+      };
+      document.querySelectorAll("[data-set-locale]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          api.setLocale(btn.dataset.setLocale);
+          paint();
+        });
+      });
+      api.onLocaleChange(paint);
+      paint();
+    })();
+  </script>
+</body>
+</html>

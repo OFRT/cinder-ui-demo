@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 助手形象</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">mascot</span>
+      <span class="cin-caption">4 身形 × 3 表情 × 8 状态，三轴正交；零脚本静态可读，注视行为可关</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" id="toggle-theme">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">身形四档（表情固定 calm，状态固定 idle）</h2>
+          <div class="cin-toolbar" style="flex-wrap:wrap;gap:var(--cin-space-300)">
+            <span class="cin-mascot" role="img" aria-label="助手：圆脸" data-shape="round" data-mood="calm" data-state="idle">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手：豆形" data-shape="bean" data-mood="calm" data-state="idle">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手：楔形" data-shape="wedge" data-mood="calm" data-state="idle">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手：徽章" data-shape="badge" data-mood="calm" data-state="idle">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">表情三档（round 身形，idle 状态）</h2>
+          <div class="cin-toolbar" style="flex-wrap:wrap;gap:var(--cin-space-300)">
+            <span class="cin-mascot" role="img" aria-label="助手：平静" data-shape="round" data-mood="calm" data-state="idle">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手：好奇" data-shape="round" data-mood="curious" data-state="idle">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手：愉悦" data-shape="round" data-mood="pleased" data-state="idle">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">状态八态（calm 表情）</h2>
+          <div class="cin-toolbar" style="flex-wrap:wrap;gap:var(--cin-space-400)">
+            <span class="cin-mascot" role="img" aria-label="助手空闲" data-shape="round" data-mood="calm" data-state="idle">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手排队中" data-shape="round" data-mood="calm" data-state="queued">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手执行中，进度 45%" data-shape="round" data-mood="calm" data-state="running" style="--cin-mascot-progress:45%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手正在思考" data-shape="round" data-mood="curious" data-state="working">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手已暂停，等待确认" data-shape="round" data-mood="calm" data-state="paused">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手已完成" data-shape="round" data-mood="pleased" data-state="done">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手执行失败：文件不可读" data-shape="round" data-mood="calm" data-state="failed">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手提醒：结果可能不完整" data-shape="round" data-mood="curious" data-state="alert">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">尺寸两档（48px / 160px）</h2>
+          <div class="cin-toolbar" style="align-items:flex-end;gap:var(--cin-space-400)">
+            <span class="cin-mascot" role="img" aria-label="助手：小号" data-size="sm" data-shape="round" data-mood="pleased" data-state="done">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="助手：大号" data-size="lg" data-shape="badge" data-mood="curious" data-state="working">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">双轴矩阵抽样（4 身形 × 3 表情，状态固定 running）</h2>
+          <div class="cin-toolbar" style="flex-wrap:wrap;gap:var(--cin-space-300)">
+            <span class="cin-mascot" role="img" aria-label="圆脸平静运行中" data-size="sm" data-shape="round" data-mood="calm" data-state="running" style="--cin-mascot-progress:30%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="圆脸好奇运行中" data-size="sm" data-shape="round" data-mood="curious" data-state="running" style="--cin-mascot-progress:60%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="圆脸愉悦运行中" data-size="sm" data-shape="round" data-mood="pleased" data-state="running" style="--cin-mascot-progress:80%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="豆形平静运行中" data-size="sm" data-shape="bean" data-mood="calm" data-state="running" style="--cin-mascot-progress:30%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="豆形好奇运行中" data-size="sm" data-shape="bean" data-mood="curious" data-state="running" style="--cin-mascot-progress:60%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="豆形愉悦运行中" data-size="sm" data-shape="bean" data-mood="pleased" data-state="running" style="--cin-mascot-progress:80%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="楔形平静运行中" data-size="sm" data-shape="wedge" data-mood="calm" data-state="running" style="--cin-mascot-progress:30%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="楔形好奇运行中" data-size="sm" data-shape="wedge" data-mood="curious" data-state="running" style="--cin-mascot-progress:60%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="楔形愉悦运行中" data-size="sm" data-shape="wedge" data-mood="pleased" data-state="running" style="--cin-mascot-progress:80%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="徽章平静运行中" data-size="sm" data-shape="badge" data-mood="calm" data-state="running" style="--cin-mascot-progress:30%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="徽章好奇运行中" data-size="sm" data-shape="badge" data-mood="curious" data-state="running" style="--cin-mascot-progress:60%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+            <span class="cin-mascot" role="img" aria-label="徽章愉悦运行中" data-size="sm" data-shape="badge" data-mood="pleased" data-state="running" style="--cin-mascot-progress:80%">
+              <span class="cin-mascot-body" aria-hidden="true"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+            </span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">纯装饰用法（状态已由文字给出）</h2>
+          <p class="cin-caption">旁边已有「正在检索 3 个来源」的说明，形象层写 aria-hidden，读屏不重复播报。</p>
+          <span class="cin-mascot" aria-hidden="true" data-shape="round" data-mood="curious" data-state="working">
+            <span class="cin-mascot-body"><span class="cin-mascot-eye cin-mascot-eye--l"></span><span class="cin-mascot-eye cin-mascot-eye--r"></span><span class="cin-mascot-mouth"></span></span>
+          </span>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/cinder.js"></script>
+  <script>
+    document.getElementById("toggle-theme").addEventListener("click", () => {
+      const r = document.documentElement;
+      r.getAttribute("data-theme") === "ink" ? r.removeAttribute("data-theme") : r.setAttribute("data-theme", "ink");
+    });
+  </script>
+</body>
+</html>

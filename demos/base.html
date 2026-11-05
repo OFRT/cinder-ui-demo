@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base · 通用组件基础库</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.1</span>
+      <span class="cin-caption">只引 cinder-base.css，零业务依赖</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">基础</div>
+        <a class="cin-navitem" href="#">排版与栅格</a>
+        <a class="cin-navitem" href="#">控件</a>
+        <a class="cin-navitem" href="#">反馈</a>
+        <a class="cin-navitem" href="#">数据表</a>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">通用组件基础库</h1>
+                  <p class="cin-caption">tokens → 基础样式 → 6 组通用组件，可被任意定向库复用</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="ghost">导出</button>
+                <button class="cin-btn" data-variant="primary">新建</button>
+              </div>
+            </div>
+
+            <section class="cin-region cin-grid">
+              <div class="cin-panel">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">按钮</h2></div>
+                <div class="cin-cluster">
+                  <button class="cin-btn" data-variant="primary">主要</button>
+                  <button class="cin-btn" data-variant="secondary">次要</button>
+                  <button class="cin-btn" data-variant="ghost">幽灵</button>
+                  <button class="cin-btn" data-variant="danger">危险</button>
+                  <button class="cin-btn" data-variant="link">链接</button>
+                  <button class="cin-btn" data-variant="primary" data-loading>提交中</button>
+                  <button class="cin-btn" disabled>禁用</button>
+                </div>
+              </div>
+
+              <div class="cin-panel">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">尺寸</h2></div>
+                <div class="cin-cluster">
+                  <button class="cin-btn" data-size="sm">小</button>
+                  <button class="cin-btn">默认</button>
+                  <button class="cin-btn" data-size="lg">大</button>
+                  <button class="cin-btn" data-size="lg" data-shape="square" aria-label="搜索">⌕</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel">
+              <div class="cin-panel-head"><h2 class="cin-panel-title">表单控件</h2></div>
+              <div class="cin-grid">
+                <label class="cin-field">
+                  <span class="cin-field-label" data-required>客户名称</span>
+                  <input class="cin-input" placeholder="请输入客户名称">
+                  <span class="cin-field-help">用于对账与开票</span>
+                </label>
+                <label class="cin-field">
+                  <span class="cin-field-label">结算方式</span>
+                  <select class="cin-select">
+                    <option>月结 30 天</option>
+                    <option>货到付款</option>
+                  </select>
+                </label>
+                <label class="cin-field">
+                  <span class="cin-field-label">折扣</span>
+                  <div class="cin-stepper" data-size="sm">
+                    <button type="button" aria-label="减少">−</button>
+                    <input value="95" inputmode="numeric" aria-label="折扣">
+                    <button type="button" aria-label="增加">+</button>
+                  </div>
+                </label>
+                <label class="cin-field">
+                  <span class="cin-field-label">搜索</span>
+                  <div class="cin-search">
+                    <span class="cin-icon">⌕</span>
+                    <input class="cin-input" placeholder="编号 / 名称">
+                  </div>
+                  <span class="cin-field-error">该编号已存在</span>
+                </label>
+              </div>
+              <div class="cin-cluster" style="margin-block-start:var(--cin-space-200)">
+                <span class="cin-segment">
+                  <label><input type="radio" name="seg" checked><span>全部</span></label>
+                  <label><input type="radio" name="seg"><span>在库</span></label>
+                  <label><input type="radio" name="seg"><span>缺货</span></label>
+                </span>
+                <label class="cin-switch"><input type="checkbox" checked>启用</label>
+                <label class="cin-check"><input type="checkbox" checked><span>含税</span></label>
+              </div>
+            </section>
+
+            <section class="cin-region cin-grid">
+              <div class="cin-panel">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">指标</h2></div>
+                <div class="cin-grid">
+                  <div class="cin-stat">
+                    <span class="cin-stat-label">本月销售额</span>
+                    <span class="cin-stat-value cin-numeral">¥ 1,286,400</span>
+                    <span class="cin-stat-foot"><span class="cin-delta">+12.4%</span> 环比上月</span>
+                  </div>
+                  <div class="cin-stat">
+                    <span class="cin-stat-label">库存周转</span>
+                    <span class="cin-stat-value cin-numeral">4.8</span>
+                    <span class="cin-stat-foot">次 / 月</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cin-panel">
+                <div class="cin-chart">
+                  <div class="cin-chart-head">
+                    <span class="cin-chart-title">品类贡献</span>
+                    <span class="cin-chart-sub">近 7 日</span>
+                  </div>
+                  <div class="cin-bars">
+                    <div class="cin-bar-row"><span>食品</span><span class="cin-bar-track"><span class="cin-bar-value" style="--_w:82%"></span></span><span class="cin-numeral">82%</span></div>
+                    <div class="cin-bar-row"><span>日化</span><span class="cin-bar-track"><span class="cin-bar-value" style="--_w:54%"></span></span><span class="cin-numeral">54%</span></div>
+                    <div class="cin-bar-row"><span>百货</span><span class="cin-bar-track"><span class="cin-bar-value" style="--_w:31%"></span></span><span class="cin-numeral">31%</span></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">数据表（容器查询自适应）</h2>
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="ghost">列设置</button>
+                  <button class="cin-btn" data-size="sm">导出</button>
+                </div>
+              </div>
+              <div class="cin-dg-wrap">
+                <div class="cin-dg-scroll">
+                  <table class="cin-dg">
+                    <thead>
+                      <tr>
+                        <th class="cin-dg-check"><input type="checkbox" aria-label="全选"></th>
+                        <th class="cin-dg-index">#</th>
+                        <th>物料</th>
+                        <th>规格</th>
+                        <th>库存</th>
+                        <th>状态</th>
+                        <th class="cin-dg-actions">操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="cin-dg-check"><input type="checkbox" aria-label="选择"></td>
+                        <td class="cin-dg-index">1</td>
+                        <td data-label="物料">特级面粉</td>
+                        <td data-label="规格">25kg / 袋</td>
+                        <td data-label="库存" class="cin-numeral">128</td>
+                        <td data-label="状态"><span class="cin-tag" data-tone="success">充足</span></td>
+                        <td class="cin-dg-actions"><button class="cin-btn" data-size="sm" data-variant="ghost">详情</button></td>
+                      </tr>
+                      <tr>
+                        <td class="cin-dg-check"><input type="checkbox" aria-label="选择"></td>
+                        <td class="cin-dg-index">2</td>
+                        <td data-label="物料">食用调和油</td>
+                        <td data-label="规格">5L / 桶</td>
+                        <td data-label="库存" class="cin-numeral">6</td>
+                        <td data-label="状态"><span class="cin-tag" data-tone="warning">偏低</span></td>
+                        <td class="cin-dg-actions"><button class="cin-btn" data-size="sm" data-variant="ghost">详情</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="cin-dg-foot">
+                  <div class="cin-pagination">
+                    <span>共 2 条</span>
+                    <div class="cin-pagination-pages">
+                      <button class="cin-pagebtn" disabled>‹</button>
+                      <button class="cin-pagebtn" aria-current="page">1</button>
+                      <button class="cin-pagebtn">›</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-region cin-grid">
+              <div class="cin-panel">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">徽标与提示</h2></div>
+                <div class="cin-cluster">
+                  <span class="cin-pill">默认</span>
+                  <span class="cin-badge">12</span>
+                  <span class="cin-tag" data-tone="success">已完成</span>
+                  <span class="cin-tag" data-tone="danger">已作废</span>
+                  <span class="cin-chip">本月</span>
+                </div>
+                <div class="cin-stack" style="margin-block-start:var(--cin-space-200)">
+                  <div class="cin-inline-alert" data-tone="info">库存低于安全线，建议补货。</div>
+                  <div class="cin-inline-alert" data-tone="warning">该客户存在逾期账款。</div>
+                </div>
+              </div>
+
+              <div class="cin-panel">
+                <div class="cin-panel-head"><h2 class="cin-panel-title">空态与加载</h2></div>
+                <div class="cin-empty">
+                  <span class="cin-empty-icon">◍</span>
+                  <strong>暂无数据</strong>
+                  <p>调整筛选条件后重试</p>
+                </div>
+                <div class="cin-loading-block"><span class="cin-spinner"></span> 加载中</div>
+                <div class="cin-skeleton" style="block-size:12px;margin-block-start:var(--cin-space-100)"></div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <nav class="cin-tabbar">
+      <a class="cin-navitem" aria-current="page" href="#">首页</a>
+      <a class="cin-navitem" href="#">单据</a>
+      <a class="cin-navitem" href="#">我的</a>
+    </nav>
+  </div>
+  <script src="../dist/cinder.js" defer></script>
+</body>
+</html>

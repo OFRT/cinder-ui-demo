@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 时间选择器</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">timepicker</span>
+      <span class="cin-caption">手输 HH:mm 与面板点选两条路都通，脚本没跑也能提交</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础</h2>
+          <div class="cin-stack">
+            <label class="cin-field">
+              <span class="cin-field-label">开始时间</span>
+              <div class="cin-timepicker" data-timepicker data-value="09:30">
+                <div class="cin-timepicker-fields">
+                  <span class="cin-timepicker-field"><input data-time-field aria-label="开始时间"></span>
+                  <button class="cin-timepicker-toggle" type="button" aria-label="打开时间面板"></button>
+                </div>
+              </div>
+              <span class="cin-field-help">默认 5 分钟粒度</span>
+            </label>
+
+            <label class="cin-field">
+              <span class="cin-field-label">营业开始（08:00–18:00，15 分钟粒度）</span>
+              <div class="cin-timepicker" data-timepicker data-min="08:00" data-max="18:00" data-minute-step="15" data-value="10:15">
+                <div class="cin-timepicker-fields">
+                  <span class="cin-timepicker-field"><input data-time-field aria-label="营业开始"></span>
+                  <button class="cin-timepicker-toggle" type="button" aria-label="打开时间面板"></button>
+                </div>
+              </div>
+              <span class="cin-field-help">越界选项禁用，手输 07:00 标红但不改值</span>
+            </label>
+
+            <label class="cin-field">
+              <span class="cin-field-label">小尺寸空态</span>
+              <div class="cin-timepicker" data-timepicker data-size="sm">
+                <div class="cin-timepicker-fields">
+                  <span class="cin-timepicker-field"><input data-time-field aria-label="小尺寸时间" placeholder="--:--"></span>
+                  <button class="cin-timepicker-toggle" type="button" aria-label="打开时间面板"></button>
+                </div>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">脚本取值</h2>
+          <div class="cin-toolbar">
+            <button class="cin-btn" data-variant="outline" onclick="Cinder.setTimePicker(document.querySelector('[data-timepicker]'), '14:45'); document.getElementById('out').textContent = 'set -> ' + Cinder.timePicker(document.querySelector('[data-timepicker]')).value;">设为 14:45</button>
+            <button class="cin-btn" data-variant="ghost" onclick="document.getElementById('out').textContent = 'value -> ' + Cinder.timePicker(document.querySelector('[data-timepicker]')).value;">读当前值</button>
+            <span class="cin-caption" id="out">value -> 09:30</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/cinder.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Skins · 8 套皮肤配色</title>
+  <link rel="stylesheet" href="../dist/cinder-all.css">
+  <link rel="stylesheet" href="../dist/cinder-skins.css">
+  <link rel="stylesheet" href="demo.css">
+  <style>
+    .skins-page { padding: 28px clamp(12px, 3vw, 24px) 56px; }
+    .skins-head { margin-bottom: 24px; }
+    .skins-title { font-size: 26px; line-height: 32px; font-weight: 600; letter-spacing: -0.015em; margin: 0 0 6px; }
+    .skins-sub { font-size: 14px; line-height: 22px; color: var(--cin-color-text-secondary); margin: 0; }
+    .skins-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 20px;
+    }
+    .skin-card {
+      border: 1px solid var(--cin-color-border-subtle); border-radius: 12px; overflow: hidden;
+      background: var(--cin-color-bg-surface); color: var(--cin-color-text-primary);
+      display: flex; flex-direction: column;
+    }
+    .skin-card-head {
+      padding: 14px 16px 12px; border-bottom: 1px solid var(--cin-color-border-subtle);
+      background: var(--cin-color-bg-canvas);
+    }
+    .skin-card-name { font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
+    .skin-card-name code {
+      font-family: var(--cin-family-mono); font-size: 12px; font-weight: 400;
+      color: var(--cin-color-text-tertiary); margin-inline-start: 6px;
+    }
+    .skin-card-desc { font-size: 12px; line-height: 18px; color: var(--cin-color-text-secondary); margin-top: 4px; }
+    .skin-swatches { display: grid; grid-template-columns: repeat(7, 1fr); height: 34px; }
+    .skin-swatches span { display: block; }
+    .skin-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+    .skin-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .skin-stat { display: flex; flex-direction: column; gap: 2px; }
+    .skin-stat-label { font-size: 12px; line-height: 16px; color: var(--cin-color-text-secondary); }
+    .skin-stat-value { font-size: 22px; line-height: 28px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .skin-mini-table { border: 1px solid var(--cin-color-border-subtle); border-radius: 8px; overflow: hidden; font-size: 12px; }
+    .skin-mini-row { display: flex; justify-content: space-between; padding: 7px 10px; border-top: 1px solid var(--cin-color-border-subtle); }
+    .skin-mini-row:first-child { border-top: 0; background: var(--cin-color-bg-surface-sunken); color: var(--cin-color-text-secondary); }
+    .skin-soft-demo { display: flex; gap: 6px; flex-wrap: wrap; }
+    .skin-soft-demo b {
+      font-weight: 500; font-size: 12px; line-height: 18px; padding: 2px 8px; border-radius: 999px;
+    }
+    .skins-foot { margin-top: 28px; font-size: 12px; line-height: 20px; color: var(--cin-color-text-secondary); }
+    .skins-foot code { font-family: var(--cin-family-mono); }
+  </style>
+</head>
+<body class="cin-body">
+  <div class="skins-page">
+    <header class="skins-head">
+      <h1 class="skins-title">8 套皮肤配色</h1>
+      <p class="skins-sub">同一套语义 token，切换 <code>data-skin</code> 即换肤；8 套皮肤的关键文字组合全部通过 WCAG AA（≥4.5:1）。</p>
+    </header>
+
+    <div class="skins-grid" id="skins-grid"></div>
+
+    <p class="skins-foot">
+      引入顺序：<code>cinder-all.css</code> → <code>cinder-skins.css</code>；用法：<code>&lt;html data-skin="porcelain"&gt;</code>。<br>
+      皮肤只覆盖颜色语义层（30 个变量），尺寸、字体、动效、密度均继承基座，组件结构与响应式规则完全不变。
+    </p>
+  </div>
+
+  <script>
+    const SKINS = [
+      { id: 'paper', label: '暖纸', desc: '默认基线，通用中后台与日常操作' },
+      { id: 'porcelain', label: '冷瓷', desc: '办公报表与对外导出，最中性的一套' },
+      { id: 'mist', label: '雾青', desc: '仓储库存、调拨盘点，冷静的数据核对场景' },
+      { id: 'sage', label: '苔绿', desc: '生鲜、农资、环保类业务，弱化屏幕攻击性' },
+      { id: 'ledger', label: '账页', desc: '财务对账与票据，米色账页配朱红' },
+      { id: 'industrial', label: '工业', desc: '车间与 PDA 强光环境，高对比优先' },
+      { id: 'graphite', label: '石墨', desc: '夜间值守与监控大屏，琥珀主强调' },
+      { id: 'ink', label: '午夜', desc: '深色长时段操作，延续品牌陶土红' }
+    ];
+    const SW = ['--cin-color-bg-canvas', '--cin-color-bg-surface', '--cin-color-accent-default',
+                '--cin-color-state-success', '--cin-color-state-warning',
+                '--cin-color-state-danger', '--cin-color-state-info'];
+
+    const grid = document.getElementById('skins-grid');
+    SKINS.forEach(s => {
+      const card = document.createElement('section');
+      card.className = 'skin-card';
+      card.dataset.skin = s.id;
+      card.dataset.skinId = s.id;
+      card.innerHTML = `
+        <div class="skin-card-head">
+          <div class="skin-card-name">${s.label}<code>${s.id}</code></div>
+          <div class="skin-card-desc">${s.desc}</div>
+        </div>
+        <div class="skin-swatches">
+          ${SW.map(v => `<span style="background:var(${v})" title="${v}"></span>`).join('')}
+        </div>
+        <div class="skin-body">
+          <div class="skin-row">
+            <button class="cin-btn" data-variant="primary" data-size="sm">新建单据</button>
+            <button class="cin-btn" data-size="sm">导出</button>
+            <button class="cin-btn" data-variant="ghost" data-size="sm">更多</button>
+          </div>
+          <div class="skin-row">
+            <input class="cin-input" data-size="sm" value="SO-20261031-0042" aria-label="单号">
+          </div>
+          <div class="skin-stat">
+            <span class="skin-stat-label">本月销售额</span>
+            <span class="skin-stat-value">¥ 1,284,600</span>
+          </div>
+          <div class="skin-soft-demo">
+            <b style="background:var(--cin-color-accent-soft);color:var(--cin-color-accent-pressed)">待审核 6</b>
+            <b style="background:var(--cin-color-state-success-soft);color:var(--cin-color-state-success)">已完成</b>
+            <b style="background:var(--cin-color-state-warning-soft);color:var(--cin-color-state-warning)">部分到货</b>
+            <b style="background:var(--cin-color-state-danger-soft);color:var(--cin-color-state-danger)">逾期 4</b>
+          </div>
+          <div class="skin-mini-table">
+            <div class="skin-mini-row"><span>商品 / 客户</span><span>金额</span></div>
+            <div class="skin-mini-row"><span>陶瓷马克杯 350ml</span><span>¥ 128.00</span></div>
+            <div class="skin-mini-row"><span>亚麻餐垫（米白）</span><span>¥ 46.50</span></div>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>

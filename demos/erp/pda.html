@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PDA 拣货 · Cinder ERP</title>
+<link rel="stylesheet" href="../../dist/cinder-all.css">
+<link rel="stylesheet" href="../demo.css">
+<script defer src="../../dist/cinder.js"></script>
+</head>
+<body>
+<div class="demo-shell">
+  <aside class="demo-rail">
+    <div class="demo-brand"><b>Cinder ERP</b><small>零依赖组件库</small></div>
+    <nav>
+      <a href="index.html">组件总览 <small>0</small></a>
+      <a href="dashboard.html">工作台 <small>1</small></a>
+      <a href="purchase-order.html">采购订单 <small>2</small></a>
+      <a href="sales-outbound.html">销售出库 <small>3</small></a>
+      <a href="inventory.html">库存查询 <small>4</small></a>
+      <a href="pda.html" aria-current="page">PDA 拣货 <small>5</small></a>
+    </nav>
+    <div class="demo-rail-foot">PDA 界面按 360×640 设计：<br>单手拇指区按钮 ≥56px</div>
+  </aside>
+
+  <main class="demo-main" data-pda>
+    <h1 class="cin-title2" style="margin-block: 0 var(--cin-space-150)">PDA 拣货（任务单）</h1>
+    <p class="cin-caption" style="margin-block: 0 var(--cin-space-300)">单任务聚焦、扫码优先、颜色与图标表达状态，不出现多级菜单。</p>
+
+    <div class="demo-pda-stage">
+      <div class="cin-pda">
+        <div class="cin-pda-bar">
+          <div class="cin-pda-main">
+            <strong>XS-20261031-018 · 鲜丰便利</strong>
+            <small>12 行 华东仓 · 预计 18:00 前完成</small>
+          </div>
+          <button class="cin-btn" data-variant="ghost" data-size="sm" data-shape="square" aria-label="更多">⋯</button>
+        </div>
+
+        <div class="cin-progress" role="progressbar" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100">
+          <span style="width: 42%"></span>
+        </div>
+        <div class="cin-caption">已拣 5 / 12 行 · 剩余 7 行</div>
+
+        <div class="cin-scan">
+          <input inputmode="none" placeholder="扫描库位或商品条码" autofocus>
+          <button class="cin-btn" data-variant="primary" data-size="sm" data-shape="square" aria-label="扫码">▣</button>
+        </div>
+
+        <div class="cin-pda-bar">
+          <div class="cin-pda-main">
+            <strong>白桃乌龙茶 500ml×12</strong>
+            <small>库位 A-03-02，需拣 4 箱 · 当前批次 B2609</small>
+          </div>
+          <span class="cin-tag" data-tone="success">已到位</span>
+        </div>
+
+        <div class="cin-pda-bar">
+          <div class="cin-pda-main">
+            <strong>实拣数量</strong>
+            <small>按箱录入，可切换瓶（1 箱 = 12 瓶）</small>
+          </div>
+          <span class="cin-numeral">4</span>
+        </div>
+
+        <div class="cin-keypad">
+          <button>1</button><button>2</button><button>3</button>
+          <button>4</button><button>5</button><button>6</button>
+          <button>7</button><button>8</button><button>9</button>
+          <button>.</button><button>0</button><button>⌫</button>
+        </div>
+
+        <div class="cin-pda-actions">
+          <button class="cin-btn" data-variant="secondary">报告缺货</button>
+          <button class="cin-btn" data-variant="secondary">切换批次</button>
+          <button class="cin-btn cin-span-2" data-variant="primary">确认并下一行</button>
+        </div>
+
+        <div class="cin-pda-tasks" style="margin-block-start: var(--cin-space-100)">
+          <button class="cin-task-tile">
+            <span class="cin-task-top"><span class="cin-task-icon">拣</span><span class="cin-tag" data-tone="warning">待办</span></span>
+            <span class="cin-task-num">7</span>
+            <span class="cin-task-label">待拣行</span>
+          </button>
+          <button class="cin-task-tile" data-tone="danger">
+            <span class="cin-task-top"><span class="cin-task-icon">缺</span><span class="cin-tag" data-tone="danger">异常</span></span>
+            <span class="cin-task-num">1</span>
+            <span class="cin-task-label">缺货待处理</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

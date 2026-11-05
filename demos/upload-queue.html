@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 上传队列</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.3</span>
+      <span class="cin-caption">进度只认 --cin-upload-progress，状态只认 data-status</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">上传队列</div>
+        <a class="cin-navitem" href="#all">五种状态</a>
+        <a class="cin-navitem" href="#long">长文件名与缩略图</a>
+        <a class="cin-navitem" href="#summary">带汇总条</a>
+        <a class="cin-navitem" href="#narrow">窄屏折行</a>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">上传队列</h1>
+                  <p class="cin-caption">排队、传输中、完成、失败、暂停各有明确外观，条目不因状态变化而跳动</p>
+                </div>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="all">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">五种状态</h2>
+                <span class="cin-caption">状态文字是主信号，颜色只是辅助；失败原因写在 hint 行</span>
+              </div>
+              <ul class="cin-upload-queue">
+                <li class="cin-upload-item" data-status="uploading" style="--cin-upload-progress:42%">
+                  <span class="cin-upload-thumb">pdf</span>
+                  <div class="cin-upload-body">
+                    <span class="cin-upload-name">2026 年 Q3 合同汇总.pdf</span>
+                    <span class="cin-upload-meta"><span class="cin-upload-state">上传中 42%</span><span>·</span><span>2.4 MB / 5.7 MB</span></span>
+                    <div class="cin-upload-bar" role="progressbar" aria-label="2026 年 Q3 合同汇总.pdf 上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42">
+                      <span class="cin-upload-fill"></span>
+                    </div>
+                    <p class="cin-upload-hint"></p>
+                  </div>
+                  <div class="cin-upload-actions">
+                    <button class="cin-btn" data-size="sm" data-variant="ghost" aria-label="暂停上传 2026 年 Q3 合同汇总.pdf">暂停</button>
+                  </div>
+                </li>
+
+                <li class="cin-upload-item" data-status="queued" style="--cin-upload-progress:0%">
+                  <span class="cin-upload-thumb">xlsx</span>
+                  <div class="cin-upload-body">
+                    <span class="cin-upload-name">门店盘点明细.xlsx</span>
+                    <span class="cin-upload-meta"><span class="cin-upload-state">排队中</span><span>·</span><span>待上传 1.2 MB</span></span>
+                    <div class="cin-upload-bar" role="progressbar" aria-label="门店盘点明细.xlsx 上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                      <span class="cin-upload-fill"></span>
+                    </div>
+                    <p class="cin-upload-hint"></p>
+                  </div>
+                  <div class="cin-upload-actions">
+                    <button class="cin-btn" data-size="sm" data-variant="ghost" aria-label="取消上传 门店盘点明细.xlsx">取消</button>
+                  </div>
+                </li>
+
+                <li class="cin-upload-item" data-status="done" style="--cin-upload-progress:100%">
+                  <span class="cin-upload-thumb">docx</span>
+                  <div class="cin-upload-body">
+                    <span class="cin-upload-name">产品评审纪要.docx</span>
+                    <span class="cin-upload-meta"><span class="cin-upload-state">已完成</span><span>·</span><span>856 KB</span></span>
+                    <div class="cin-upload-bar" role="progressbar" aria-label="产品评审纪要.docx 上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                      <span class="cin-upload-fill"></span>
+                    </div>
+                    <p class="cin-upload-hint"></p>
+                  </div>
+                  <div class="cin-upload-actions">
+                    <button class="cin-btn" data-size="sm" data-variant="ghost">查看</button>
+                  </div>
+                </li>
+
+                <li class="cin-upload-item" data-status="failed" style="--cin-upload-progress:68%">
+                  <span class="cin-upload-thumb">zip</span>
+                  <div class="cin-upload-body">
+                    <span class="cin-upload-name">历史版本归档.zip</span>
+                    <span class="cin-upload-meta"><span class="cin-upload-state">上传失败</span><span>·</span><span>68% 处中断</span></span>
+                    <div class="cin-upload-bar" role="progressbar" aria-label="历史版本归档.zip 上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68">
+                      <span class="cin-upload-fill"></span>
+                    </div>
+                    <p class="cin-upload-hint">网络中断，剩余 312 MB 未传完，可重试。</p>
+                  </div>
+                  <div class="cin-upload-actions">
+                    <button class="cin-btn" data-size="sm" data-variant="secondary" aria-label="重试上传 历史版本归档.zip">重试</button>
+                  </div>
+                </li>
+
+                <li class="cin-upload-item" data-status="paused" style="--cin-upload-progress:23%">
+                  <span class="cin-upload-thumb">mp4</span>
+                  <div class="cin-upload-body">
+                    <span class="cin-upload-name">培训录像-第三讲.mp4</span>
+                    <span class="cin-upload-meta"><span class="cin-upload-state">已暂停</span><span>·</span><span>23%</span></span>
+                    <div class="cin-upload-bar" role="progressbar" aria-label="培训录像-第三讲.mp4 上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="23">
+                      <span class="cin-upload-fill"></span>
+                    </div>
+                    <p class="cin-upload-hint"></p>
+                  </div>
+                  <div class="cin-upload-actions">
+                    <button class="cin-btn" data-size="sm" data-variant="ghost">继续</button>
+                    <button class="cin-btn" data-size="sm" data-variant="ghost">取消</button>
+                  </div>
+                </li>
+              </ul>
+            </section>
+
+            <section class="cin-panel" id="long">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">长文件名与缩略图</h2>
+                <span class="cin-caption">文件名单行省略、不撑破卡片；有图用图，没图回落扩展名</span>
+              </div>
+              <div style="max-inline-size:420px">
+              <ul class="cin-upload-queue">
+                <li class="cin-upload-item" data-status="uploading" style="--cin-upload-progress:77%">
+                  <span class="cin-upload-thumb">
+                    <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23c9d6ff'/%3E%3Ccircle cx='13' cy='14' r='5' fill='%23ffffff'/%3E%3Cpath d='M0 40 L16 20 L26 30 L34 22 L40 40 Z' fill='%23ffffff'/%3E%3C/svg%3E" alt="">
+                  </span>
+                  <div class="cin-upload-body">
+                    <span class="cin-upload-name" title="华东大区-2026-10-门店巡检照片-第一批-共 128 张-打包.zip">华东大区-2026-10-门店巡检照片-第一批-共 128 张-打包.zip</span>
+                    <span class="cin-upload-meta"><span class="cin-upload-state">上传中 77%</span><span>·</span><span>128 张 · 42.6 MB</span></span>
+                    <div class="cin-upload-bar" role="progressbar" aria-label="巡检照片打包上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="77">
+                      <span class="cin-upload-fill"></span>
+                    </div>
+                    <p class="cin-upload-hint"></p>
+                  </div>
+                  <div class="cin-upload-actions">
+                    <button class="cin-btn" data-size="sm" data-variant="ghost">暂停</button>
+                  </div>
+                </li>
+
+                <li class="cin-upload-item" data-status="queued" style="--cin-upload-progress:0%">
+                  <span class="cin-upload-thumb">csv</span>
+                  <div class="cin-upload-body">
+                    <span class="cin-upload-name">import_2026_10_28_full.csv</span>
+                    <span class="cin-upload-meta"><span class="cin-upload-state">排队中</span><span>·</span><span>待上传 9.8 MB</span></span>
+                    <div class="cin-upload-bar" role="progressbar" aria-label="CSV 导入文件上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                      <span class="cin-upload-fill"></span>
+                    </div>
+                    <p class="cin-upload-hint"></p>
+                  </div>
+                  <div class="cin-upload-actions">
+                    <button class="cin-btn" data-size="sm" data-variant="ghost">取消</button>
+                  </div>
+                </li>
+              </ul>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="summary">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">带汇总条</h2>
+                <span class="cin-caption">汇总用 toolbar 拼一行，队列只负责单条</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar" style="justify-content:space-between">
+                  <span class="cin-caption">共 5 项 · 已完成 1 · 失败 1</span>
+                  <div class="cin-toolbar">
+                    <button class="cin-btn" data-size="sm" data-variant="ghost">全部暂停</button>
+                    <button class="cin-btn" data-size="sm" data-variant="secondary">重试失败项</button>
+                  </div>
+                </div>
+                <ul class="cin-upload-queue">
+                  <li class="cin-upload-item" data-status="done" style="--cin-upload-progress:100%">
+                    <span class="cin-upload-thumb">png</span>
+                    <div class="cin-upload-body">
+                      <span class="cin-upload-name">品牌主视觉.png</span>
+                      <span class="cin-upload-meta"><span class="cin-upload-state">已完成</span><span>·</span><span>3.1 MB</span></span>
+                      <div class="cin-upload-bar" role="progressbar" aria-label="品牌主视觉.png 上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                        <span class="cin-upload-fill"></span>
+                      </div>
+                      <p class="cin-upload-hint"></p>
+                    </div>
+                    <div class="cin-upload-actions">
+                      <button class="cin-btn" data-size="sm" data-variant="ghost">查看</button>
+                    </div>
+                  </li>
+                  <li class="cin-upload-item" data-status="failed" style="--cin-upload-progress:12%">
+                    <span class="cin-upload-thumb">psd</span>
+                    <div class="cin-upload-body">
+                      <span class="cin-upload-name">详情页分层稿.psd</span>
+                      <span class="cin-upload-meta"><span class="cin-upload-state">上传失败</span><span>·</span><span>12% 处中断</span></span>
+                      <div class="cin-upload-bar" role="progressbar" aria-label="详情页分层稿.psd 上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="12">
+                        <span class="cin-upload-fill"></span>
+                      </div>
+                      <p class="cin-upload-hint">文件超过单次上限 200 MB，请压缩后重试。</p>
+                    </div>
+                    <div class="cin-upload-actions">
+                      <button class="cin-btn" data-size="sm" data-variant="secondary">重试</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="narrow">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">窄屏折行</h2>
+                <span class="cin-caption">480px 以下动作行折到第二行，正文保持可读宽度</span>
+              </div>
+              <div style="max-inline-size:360px">
+                <ul class="cin-upload-queue">
+                  <li class="cin-upload-item" data-status="uploading" style="--cin-upload-progress:55%">
+                    <span class="cin-upload-thumb">mov</span>
+                    <div class="cin-upload-body">
+                      <span class="cin-upload-name">门店短片-竖版-最终.mov</span>
+                      <span class="cin-upload-meta"><span class="cin-upload-state">上传中 55%</span></span>
+                      <div class="cin-upload-bar" role="progressbar" aria-label="门店短片上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55">
+                        <span class="cin-upload-fill"></span>
+                      </div>
+                      <p class="cin-upload-hint"></p>
+                    </div>
+                    <div class="cin-upload-actions">
+                      <button class="cin-btn" data-size="sm" data-variant="ghost">暂停</button>
+                      <button class="cin-btn" data-size="sm" data-variant="ghost">取消</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

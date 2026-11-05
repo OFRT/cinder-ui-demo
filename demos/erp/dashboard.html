@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>工作台 · Cinder ERP</title>
+<link rel="stylesheet" href="../../dist/cinder-all.css">
+<link rel="stylesheet" href="../demo.css">
+<script defer src="../../dist/cinder.js"></script>
+</head>
+<body>
+<div class="demo-shell">
+  <aside class="demo-rail">
+    <div class="demo-brand"><b>Cinder ERP</b><small>零依赖组件库</small></div>
+    <nav>
+      <a href="index.html">组件总览 <small>0</small></a>
+      <a href="dashboard.html" aria-current="page">工作台 <small>1</small></a>
+      <a href="purchase-order.html">采购订单 <small>2</small></a>
+      <a href="sales-outbound.html">销售出库 <small>3</small></a>
+      <a href="inventory.html">库存查询 <small>4</small></a>
+      <a href="pda.html">PDA 拣货 <small>5</small></a>
+    </nav>
+    <div class="demo-rail-foot">tokens 233 · 组件 7 组<br>拉伸窗口看三形态切换</div>
+  </aside>
+
+  <main class="demo-main">
+    <header class="cin-topbar" data-tone="canvas">
+      <div class="cin-page-header-titles">
+        <div class="cin-breadcrumb"><a href="index.html">首页</a> / <span aria-current="page">工作台</span></div>
+      </div>
+      <div class="cin-spacer"></div>
+      <button class="cin-btn" data-variant="ghost" data-size="sm" data-shape="square" aria-label="通知">
+        <span class="cin-badge">3</span>铃
+      </button>
+      <button class="cin-btn" data-variant="secondary" data-size="sm">2026-10-31</button>
+    </header>
+
+    <div class="cin-page" data-width="wide">
+      <div class="cin-page-header" data-sticky>
+        <div class="cin-page-header-main">
+          <div class="cin-page-header-titles">
+            <h1 class="cin-title2">工作台</h1>
+            <p class="cin-caption">今日待办 12 项，3 个仓库 · 数据截止 17:40</p>
+          </div>
+          <div class="cin-page-header-actions">
+            <button class="cin-btn" data-variant="ghost">导出</button>
+            <button class="cin-btn" data-variant="primary">新建单据</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-stack">
+        <section class="demo-grid cols-4">
+          <article class="cin-panel cin-stat">
+            <div class="cin-stat-label">本月销售额</div>
+            <div class="cin-stat-value">¥ 1,284,600</div>
+            <div class="cin-stat-foot"><span class="cin-delta">▲ 12.4%</span> 环比上月</div>
+          </article>
+          <article class="cin-panel cin-stat">
+            <div class="cin-stat-label">采购在途</div>
+            <div class="cin-stat-value">18 单</div>
+            <div class="cin-stat-foot"><span class="cin-delta" data-dir="flat">持平</span> 预计 3 天到货</div>
+          </article>
+          <article class="cin-panel cin-stat">
+            <div class="cin-stat-label">库存金额</div>
+            <div class="cin-stat-value">¥ 4,127,900</div>
+            <div class="cin-stat-foot"><span class="cin-delta" data-dir="down">▼ 2.1%</span> 周转 6.8 次/年</div>
+          </article>
+          <article class="cin-panel cin-stat">
+            <div class="cin-stat-label">待收款</div>
+            <div class="cin-stat-value">¥ 386,200</div>
+            <div class="cin-stat-foot"><span class="cin-tag" data-tone="danger">逾期 4 笔</span></div>
+          </article>
+        </section>
+
+        <section class="demo-grid cols-2">
+          <article class="cin-panel">
+            <div class="cin-panel-head">
+              <div class="cin-chart">
+                <div class="cin-chart-head">
+                  <div>
+                    <div class="cin-chart-title">近 12 月销售额</div>
+                    <div class="cin-chart-sub">单位：万元</div>
+                  </div>
+                  <div class="cin-segment" role="tablist">
+                    <button role="tab" aria-selected="true">销售额</button>
+                    <button role="tab">毛利</button>
+                  </div>
+                </div>
+                <div class="cin-columns">
+                  <div class="cin-col"><span class="cin-bar-value">62</span><div class="cin-col-bar" style="height:62%"></div><span class="cin-col-label">1月</span></div>
+                  <div class="cin-col"><span class="cin-bar-value">78</span><div class="cin-col-bar" style="height:78%"></div><span class="cin-col-label">2月</span></div>
+                  <div class="cin-col"><span class="cin-bar-value">55</span><div class="cin-col-bar" style="height:55%"></div><span class="cin-col-label">3月</span></div>
+                  <div class="cin-col"><span class="cin-bar-value">91</span><div class="cin-col-bar" style="height:91%"></div><span class="cin-col-label">4月</span></div>
+                  <div class="cin-col"><span class="cin-bar-value">84</span><div class="cin-col-bar" style="height:84%"></div><span class="cin-col-label">5月</span></div>
+                  <div class="cin-col"><span class="cin-bar-value">97</span><div class="cin-col-bar" style="height:97%"></div><span class="cin-col-label">6月</span></div>
+                  <div class="cin-col" data-tone="muted"><span class="cin-bar-value">71</span><div class="cin-col-bar" style="height:71%"></div><span class="cin-col-label">7月</span></div>
+                  <div class="cin-col" data-tone="muted"><span class="cin-bar-value">68</span><div class="cin-col-bar" style="height:68%"></div><span class="cin-col-label">8月</span></div>
+                  <div class="cin-col"><span class="cin-bar-value">88</span><div class="cin-col-bar" style="height:88%"></div><span class="cin-col-label">9月</span></div>
+                  <div class="cin-col"><span class="cin-bar-value">102</span><div class="cin-col-bar" style="height:100%"></div><span class="cin-col-label">10月</span></div>
+                  <div class="cin-col" data-tone="muted"><span class="cin-bar-value">45</span><div class="cin-col-bar" style="height:45%"></div><span class="cin-col-label">11月</span></div>
+                  <div class="cin-col" data-tone="muted"><span class="cin-bar-value">38</span><div class="cin-col-bar" style="height:38%"></div><span class="cin-col-label">12月</span></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="cin-panel">
+            <div class="cin-panel-head">
+              <div class="cin-chart">
+                <div class="cin-chart-head">
+                  <div>
+                    <div class="cin-chart-title">库存结构</div>
+                    <div class="cin-chart-sub">按库龄分布 · 合计 ¥412.8 万</div>
+                  </div>
+                </div>
+                <div class="cin-donut">
+                  <div class="cin-donut-ring" style="background: conic-gradient(var(--cin-color-state-success) 0 46%, var(--cin-color-accent-default) 46% 74%, var(--cin-color-state-warning) 74% 90%, var(--cin-color-state-danger) 90% 100%)"></div>
+                  <div class="cin-legend">
+                    <div><i data-tone="success"></i>0-30 天 <b>46%</b></div>
+                    <div><i></i>31-90 天 <b>28%</b></div>
+                    <div><i data-tone="warning"></i>91-180 天 <b>16%</b></div>
+                    <div><i data-tone="danger" style="background: var(--cin-color-state-danger)"></i>180 天以上 <b>10%</b></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="cin-panel">
+          <div class="cin-toolbar">
+            <div class="cin-doc-section-title">库存预警 <span class="cin-count">共 5 条</span></div>
+            <div class="cin-spacer"></div>
+            <div class="cin-segment" role="tablist">
+              <button role="tab" aria-selected="true">低于安全库存</button>
+              <button role="tab">临期</button>
+              <button role="tab">滞销</button>
+            </div>
+            <button class="cin-btn" data-variant="secondary" data-size="sm">全部处理</button>
+          </div>
+
+          <div class="cin-dg-wrap">
+            <div class="cin-dg">
+              <div class="cin-dg-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="cin-dg-check"><input type="checkbox" aria-label="全选" data-check-all></th>
+                      <th data-sort="sku" data-priority="1">商品</th>
+                      <th data-sort="warehouse">仓库</th>
+                      <th data-align="end" data-sort="stock">现存量</th>
+                      <th data-align="end" data-priority="2">安全库存</th>
+                      <th data-align="end" data-priority="3">缺口</th>
+                      <th data-priority="4">状态</th>
+                      <th class="cin-dg-actions">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="cin-dg-check"><input type="checkbox" data-check value="SKU-1024"></td>
+                      <td data-label="商品" data-primary><div class="cin-cell-primary"><strong>白桃乌龙茶 500ml×12</strong><span>SKU-1024 · 饮品</span></div></td>
+                      <td data-label="仓库">华东仓</td>
+                      <td data-label="现存量" data-align="end">12 箱</td>
+                      <td data-label="安全库存" data-align="end" data-priority="2">80 箱</td>
+                      <td data-label="缺口" data-align="end" data-priority="3">-68</td>
+                      <td data-label="状态" data-priority="4"><span class="cin-tag" data-tone="danger">紧急</span></td>
+                      <td class="cin-dg-actions"><button class="cin-btn" data-variant="link" data-size="sm">补货</button></td>
+                    </tr>
+                    <tr>
+                      <td class="cin-dg-check"><input type="checkbox" data-check value="SKU-2077"></td>
+                      <td data-label="商品" data-primary><div class="cin-cell-primary"><strong>冷链鲜奶 1L</strong><span>SKU-2077 生鲜 · 批次 B2610</span></div></td>
+                      <td data-label="仓库">华东仓</td>
+                      <td data-label="现存量" data-align="end">240 瓶</td>
+                      <td data-label="安全库存" data-align="end" data-priority="2">300 瓶</td>
+                      <td data-label="缺口" data-align="end" data-priority="3">-60</td>
+                      <td data-label="状态" data-priority="4"><span class="cin-tag" data-tone="warning">临期 5 天</span></td>
+                      <td class="cin-dg-actions"><button class="cin-btn" data-variant="link" data-size="sm">处理</button></td>
+                    </tr>
+                    <tr>
+                      <td class="cin-dg-check"><input type="checkbox" data-check value="SKU-3310"></td>
+                      <td data-label="商品" data-primary><div class="cin-cell-primary"><strong>A4 复印纸 70g</strong><span>SKU-3310 · 办公</span></div></td>
+                      <td data-label="仓库">华南仓</td>
+                      <td data-label="现存量" data-align="end">1,860 包</td>
+                      <td data-label="安全库存" data-align="end" data-priority="2">600 包</td>
+                      <td data-label="缺口" data-align="end" data-priority="3">+1,260</td>
+                      <td data-label="状态" data-priority="4"><span class="cin-tag" data-tone="muted">积压</span></td>
+                      <td class="cin-dg-actions"><button class="cin-btn" data-variant="link" data-size="sm">调拨</button></td>
+                    </tr>
+                    <tr>
+                      <td class="cin-dg-check"><input type="checkbox" data-check value="SKU-4412"></td>
+                      <td data-label="商品" data-primary><div class="cin-cell-primary"><strong>工业润滑脂 2kg</strong><span>SKU-4412 · 五金</span></div></td>
+                      <td data-label="仓库">中心仓</td>
+                      <td data-label="现存量" data-align="end">0 桶</td>
+                      <td data-label="安全库存" data-align="end" data-priority="2">40 桶</td>
+                      <td data-label="缺口" data-align="end" data-priority="3">-40</td>
+                      <td data-label="状态" data-priority="4"><span class="cin-tag" data-tone="danger">缺货</span></td>
+                      <td class="cin-dg-actions"><button class="cin-btn" data-variant="link" data-size="sm">补货</button></td>
+                    </tr>
+                    <tr>
+                      <td class="cin-dg-check"><input type="checkbox" data-check value="SKU-5090"></td>
+                      <td data-label="商品" data-primary><div class="cin-cell-primary"><strong>医用口罩 50 只装</strong><span>SKU-5090 · 防护</span></div></td>
+                      <td data-label="仓库">中心仓</td>
+                      <td data-label="现存量" data-align="end">96 盒</td>
+                      <td data-label="安全库存" data-align="end" data-priority="2">120 盒</td>
+                      <td data-label="缺口" data-align="end" data-priority="3">-24</td>
+                      <td data-label="状态" data-priority="4"><span class="cin-tag" data-tone="warning">偏低</span></td>
+                      <td class="cin-dg-actions"><button class="cin-btn" data-variant="link" data-size="sm">补货</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="cin-dg-foot">
+                <span>已选 <b data-bulk-count>0</b> 项</span>
+                <div class="cin-spacer"></div>
+                <span>合计缺口 <b>-108</b></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cin-bulkbar" data-bulk hidden>
+            <span>已选 <strong data-bulk-count>0</strong> 项</span>
+            <button class="cin-btn" data-variant="secondary" data-size="sm">批量补货</button>
+            <button class="cin-btn" data-variant="ghost" data-size="sm">导出</button>
+          </div>
+        </section>
+
+        <section class="demo-grid cols-2">
+          <article class="cin-panel">
+            <div class="cin-panel-head"><div class="cin-panel-title">今日动态</div><button class="cin-btn" data-variant="link" data-size="sm">全部</button></div>
+            <div class="cin-timeline">
+              <div class="cin-timeline-item" data-state="done">
+                <span class="cin-timeline-dot"></span>
+                <div class="cin-timeline-body">
+                  <div class="cin-timeline-head">采购入库 CG-20261031-004 已过账</div>
+                  <div class="cin-timeline-meta">17:32 王敏 · 华东仓 42 件</div>
+                </div>
+              </div>
+              <div class="cin-timeline-item" data-state="done">
+                <span class="cin-timeline-dot"></span>
+                <div class="cin-timeline-body">
+                  <div class="cin-timeline-head">销售出库 XS-20261031-018 拣货完成</div>
+                  <div class="cin-timeline-meta">16:05 李强 · 待复核</div>
+                </div>
+              </div>
+              <div class="cin-timeline-item">
+                <span class="cin-timeline-dot"></span>
+                <div class="cin-timeline-body">
+                  <div class="cin-timeline-head">采购订单 CG-20261031-011 待审批</div>
+                  <div class="cin-timeline-meta">15:48 ¥86,400 · 审批人：赵总</div>
+                </div>
+              </div>
+              <div class="cin-timeline-item">
+                <span class="cin-timeline-dot"></span>
+                <div class="cin-timeline-body">
+                  <div class="cin-timeline-head">盘点任务 PD-1028 差异 3 项待确认</div>
+                  <div class="cin-timeline-meta">14:20 · 中心仓</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="cin-panel">
+            <div class="cin-panel-head"><div class="cin-panel-title">待审批</div><span class="cin-tag" data-tone="warning">2</span></div>
+            <div class="demo-stack">
+              <div class="cin-approve">
+                <div class="cin-approve-head">
+                  <div class="cin-approve-main"><strong>采购订单 CG-20261031-011</strong><small>供应商：杭州立诚包装，8 行 · 2 天前提交</small></div>
+                  <div class="cin-approve-amount">¥86,400</div>
+                </div>
+                <div class="cin-approve-reason">超出月度预算 12%，需二级审批。</div>
+                <div class="cin-approve-actions">
+                  <button class="cin-btn" data-variant="secondary" data-size="sm">驳回</button>
+                  <button class="cin-btn" data-variant="primary" data-size="sm">通过</button>
+                </div>
+              </div>
+              <div class="cin-approve">
+                <div class="cin-approve-head">
+                  <div class="cin-approve-main"><strong>销售退货 XT-20261030-006</strong><small>客户：鲜丰便利 · 3 行</small></div>
+                  <div class="cin-approve-amount">¥2,180</div>
+                </div>
+                <div class="cin-approve-actions">
+                  <button class="cin-btn" data-variant="secondary" data-size="sm">驳回</button>
+                  <button class="cin-btn" data-variant="primary" data-size="sm">通过</button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

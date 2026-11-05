@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 液态玻璃</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="../dist/entries/base/glass.css">
+  <link rel="stylesheet" href="demo.css">
+  <style>
+    /* 演示页专用：给玻璃一块有内容的背景，否则看不出模糊 */
+    .glass-stage {
+      border-radius: var(--cin-radius-md);
+      padding: var(--cin-space-400);
+      background:
+        radial-gradient(60% 80% at 12% 20%, #7fd6c8 0%, transparent 60%),
+        radial-gradient(50% 70% at 82% 28%, #9f8bff 0%, transparent 62%),
+        radial-gradient(70% 90% at 50% 100%, #ffb185 0%, transparent 60%),
+        linear-gradient(140deg, #f7f4ef, #e9eef6);
+      background-size: 180% 180%;
+    }
+    .glass-stage p { margin: 0; }
+    .glass-row { display: flex; flex-wrap: wrap; gap: var(--cin-space-200); align-items: flex-start; }
+    .glass-box {
+      min-width: 168px;
+      padding: var(--cin-space-300);
+      border-radius: var(--cin-radius-md);
+    }
+    .glass-demo-text { font-size: var(--cin-text-body-size); line-height: var(--cin-text-body-line); }
+  </style>
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">glass</span>
+      <span class="cin-caption">材质属性，非组件；四级降级，取消透明后仍是实底</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" id="toggle-theme">切换主题</button>
+        <span class="cin-caption" id="glass-support"></span>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">一、三档 tint（同一材质，只换 tint 与 rim）</h2>
+          <div class="glass-stage">
+            <div class="glass-row">
+              <div class="cin-card glass-box" data-surface="glass" data-tint="tide">
+                <p class="glass-demo-text"><strong>tide</strong><br>青绿，缺省档。适合工具条、通知条这类"在场但不抢戏"的浮层。</p>
+              </div>
+              <div class="cin-card glass-box" data-surface="glass" data-tint="aurora">
+                <p class="glass-demo-text"><strong>aurora</strong><br>紫蓝。适合对话、检索结果这类需要一点"被点亮"感的容器。</p>
+              </div>
+              <div class="cin-card glass-box" data-surface="glass" data-tint="ember">
+                <p class="glass-demo-text"><strong>ember</strong><br>暖橙。适合待确认、待处理的提示类容器，仍不承担错误语义。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">二、容器矩阵（白名单才生效）</h2>
+          <div class="glass-stage">
+            <div class="glass-row">
+              <div class="cin-card glass-box" data-surface="glass">
+                <p class="glass-demo-text"><strong>card</strong> · 面板</p>
+              </div>
+              <div class="cin-toolbar glass-box" data-surface="glass">
+                <button class="cin-btn" data-size="sm" data-variant="ghost">工具条</button>
+                <button class="cin-btn" data-size="sm" data-variant="ghost">可挂</button>
+              </div>
+              <div class="cin-notice-bar glass-box" data-surface="glass">
+                <p class="glass-demo-text">notice-bar · 通知条（浮起但不遮正文）</p>
+              </div>
+              <div class="cin-bulkbar glass-box" data-surface="glass">
+                <p class="glass-demo-text">bulkbar · 批量操作条</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">三、局部反选（data-glass="none"）</h2>
+          <div class="glass-stage">
+            <div class="cin-card glass-box" data-surface="glass" style="min-width:320px">
+              <p class="glass-demo-text">外层是玻璃，下面这块要读长文本，所以反选回实底：</p>
+              <div class="cin-card" data-glass="none" style="margin-block-start:var(--cin-space-200);padding:var(--cin-space-200)">
+                <p class="glass-demo-text">反选块：背景回到 <code>--cin-color-bg-surface</code>，无模糊、无颗粒、无投影。父层的玻璃不会渗进来。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">四、吸附条（scroll-snap 静态可用 + 可选增强）</h2>
+          <div class="glass-stage">
+            <div class="cin-glass-dock" data-surface="glass" data-glass-dock tabindex="0" aria-label="玻璃吸附条示例">
+              <button class="cin-btn" data-variant="ghost">今天</button>
+              <button class="cin-btn" data-variant="ghost">本周</button>
+              <button class="cin-btn" data-variant="ghost">本季</button>
+              <button class="cin-btn" data-variant="ghost">近一年</button>
+              <button class="cin-btn" data-variant="ghost">全部</button>
+            </div>
+            <p class="cin-caption" style="margin-block-start:var(--cin-space-200)">不加载 <code>glass-dock.js</code> 时：可横向滚动、可键盘 Tab，只是不吸附。加载后：滚轮转横向、方向键切换并居中。</p>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">五、降级对照（四级）</h2>
+          <div class="glass-stage">
+            <div class="glass-row">
+              <div class="cin-card glass-box" data-surface="glass">
+                <p class="glass-demo-text"><strong>L1 真玻璃</strong><br>当前浏览器支持 <code>backdrop-filter</code> 时即本块的效果。</p>
+              </div>
+              <div class="cin-card glass-box" style="background:var(--cin-glass-tint);border:1px solid var(--cin-color-border-subtle);box-shadow:inset 0 1px 0 var(--cin-glass-rim)">
+                <p class="glass-demo-text"><strong>L2 伪玻璃</strong><br>半透明实色 + inset 高光，无模糊。旧版 Safari / Firefox 的老版本走这里。</p>
+              </div>
+              <div class="cin-card glass-box" style="background:var(--cin-color-bg-surface);border:1px solid var(--cin-color-border-subtle)">
+                <p class="glass-demo-text"><strong>L3 无透明</strong><br>系统开"减少透明度"或强制色模式时走这里，颗粒关闭。</p>
+              </div>
+              <div class="cin-card glass-box">
+                <p class="glass-demo-text"><strong>L4 无增强</strong><br>整份 <code>base/glass</code> 不加载：容器就是普通卡片，页面不塌。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">六、错误示范（反例，不要照抄）</h2>
+          <div class="glass-stage">
+            <div class="glass-row">
+              <div class="cin-card glass-box" data-surface="glass" style="min-width:280px">
+                <p class="glass-demo-text">玻璃套玻璃（第 2 层）——已到上限：</p>
+                <div class="cin-card" data-surface="glass" style="margin-block-start:var(--cin-space-200);padding:var(--cin-space-150)">
+                  <p class="glass-demo-text">第二层还能读，但模糊被叠加，代价翻倍。</p>
+                </div>
+                <div class="cin-card" data-surface="glass" style="margin-block-start:var(--cin-space-150);padding:var(--cin-space-150)">
+                  <p class="glass-demo-text">第三层：禁止。背景再花一点，字就看不清了。</p>
+                </div>
+              </div>
+              <div class="cin-card glass-box" style="min-width:280px">
+                <p class="glass-demo-text"><strong>反例 A · 列表行挂玻璃</strong><br>表格单元格与列表行永久排除：滚动时每行都要重新算模糊，帧率直接崩。</p>
+                <p class="glass-demo-text" style="margin-block-start:var(--cin-space-100)"><strong>反例 B · 文字用 opacity</strong><br>玻璃上的文字必须不透明；用 <code>opacity: .7</code> 压字会在花背景上直接失效。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/js/overlay.js"></script>
+  <script>
+    document.getElementById("toggle-theme").addEventListener("click", () => {
+      const root = document.documentElement;
+      root.dataset.theme = root.dataset.theme === "ink" ? "" : "ink";
+      if (!root.dataset.theme) delete root.dataset.theme;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 媒体对象</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">media</span>
+      <span class="cin-caption">图或图标在左、文字在右、动作收尾；截断与排布全由属性决定，无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础（图 + 标题 + 元信息 + 摘要 + 尾随按钮）</h2>
+          <div class="cin-media" id="md-basic">
+            <div class="cin-media-figure">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect width='160' height='160' fill='%23c9d4e2'/%3E%3Ccircle cx='80' cy='64' r='26' fill='%23879cb8'/%3E%3Crect x='40' y='104' width='80' height='12' rx='6' fill='%23879cb8'/%3E%3C/svg%3E" alt="采购合同扫描件缩略图">
+            </div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">2026 年度服务器采购合同</p>
+              <div class="cin-media-meta">PDF · 12 页 · 3.4 MB · 2026-10-28 上传</div>
+              <p class="cin-media-text">供应商：鸿远科技；含三年维保与上门实施，条款变更待法务确认。</p>
+            </div>
+            <div class="cin-media-actions">
+              <button class="cin-btn" data-size="sm" data-variant="ghost" type="button">预览</button>
+              <button class="cin-btn" data-size="sm" data-variant="secondary" type="button">下载</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">尺寸档（sm / 默认 md / lg）</h2>
+          <div class="cin-media" id="md-size-sm" data-size="sm">
+            <div class="cin-media-figure"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23d6dee9'/%3E%3C/svg%3E" alt="" aria-hidden="true"></div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">小图 24px</p>
+              <div class="cin-media-meta">列表行内缩略图，只有一行标题</div>
+            </div>
+          </div>
+          <div class="cin-media" id="md-size-md">
+            <div class="cin-media-figure"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%23cdd8e6'/%3E%3C/svg%3E" alt="" aria-hidden="true"></div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">默认 40px</p>
+              <div class="cin-media-meta">卡片或正文段落的默认档</div>
+            </div>
+          </div>
+          <div class="cin-media" id="md-size-lg" data-size="lg">
+            <div class="cin-media-figure"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23c3d0df'/%3E%3C/svg%3E" alt="" aria-hidden="true"></div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">大图 56px</p>
+              <div class="cin-media-meta">详情页头部、商品主图位</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">原始比例（data-size="auto"，截图不裁切；配 data-stack-sm 窄屏退竖排）</h2>
+          <div class="cin-media" id="md-auto" data-size="auto" data-align="center" data-stack-sm>
+            <div class="cin-media-figure">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='%23e2e8f0'/%3E%3Crect x='16' y='16' width='288' height='28' fill='%23a9b8cc'/%3E%3Crect x='16' y='62' width='180' height='14' fill='%23c2cddd'/%3E%3Crect x='16' y='92' width='240' height='14' fill='%23c2cddd'/%3E%3C/svg%3E" alt="报表截图">
+            </div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">月度费用趋势截图</p>
+              <div class="cin-media-meta">16:9 原始比例，完整保留边缘刻度</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">图在右 + 垂直居中（消息流）</h2>
+          <div class="cin-media" id="md-reverse" data-reverse data-align="center">
+            <div class="cin-media-figure">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Crect width='96' height='96' fill='%23dbe4ef'/%3E%3C/svg%3E" alt="" aria-hidden="true">
+            </div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">审批已驳回</p>
+              <div class="cin-media-meta">财务共享中心 · 10 分钟前</div>
+              <p class="cin-media-text">驳回原因：发票抬头与合同主体不一致。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">竖排居中（图库/成员墙）</h2>
+          <div class="cin-toolbar">
+            <div class="cin-media" id="md-stacked" data-stacked data-align="center" data-size="lg">
+              <div class="cin-media-figure">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect width='160' height='160' fill='%23cfdae8'/%3E%3C/svg%3E" alt="" aria-hidden="true">
+              </div>
+              <div class="cin-media-body">
+                <p class="cin-media-title">华东仓</p>
+                <div class="cin-media-meta">在库 12,480 件</div>
+              </div>
+            </div>
+            <div class="cin-media" data-stacked data-align="center" data-size="lg">
+              <div class="cin-media-figure">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect width='160' height='160' fill='%23d8e0ec'/%3E%3C/svg%3E" alt="" aria-hidden="true">
+              </div>
+              <div class="cin-media-body">
+                <p class="cin-media-title">华南仓</p>
+                <div class="cin-media-meta">在库 8,120 件</div>
+              </div>
+            </div>
+            <div class="cin-media" data-stacked data-align="center" data-size="lg">
+              <div class="cin-media-figure">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect width='160' height='160' fill='%23e0e7f0'/%3E%3C/svg%3E" alt="" aria-hidden="true">
+              </div>
+              <div class="cin-media-body">
+                <p class="cin-media-title">西南仓</p>
+                <div class="cin-media-meta">在库 3,905 件</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">截断（标题两行 / 单行）</h2>
+          <div class="cin-media" id="md-truncate" data-truncate style="max-inline-size:420px">
+            <div class="cin-media-figure"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23d3dde9'/%3E%3C/svg%3E" alt="" aria-hidden="true"></div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">关于二〇二六年度第三季度华东区域仓配一体化服务框架协议补充条款的说明文件</p>
+              <div class="cin-media-meta">DOCX · 已归档 · 长元信息这里的滚动条应被省略号替代而不是换行</div>
+              <p class="cin-media-text">正文同样单行省略，只留给用户第一眼的判断依据，完整内容点开详情阅读。</p>
+            </div>
+          </div>
+          <div class="cin-media" id="md-truncate-1" data-truncate="1" style="max-inline-size:420px; margin-block-start:var(--cin-space-200)">
+            <div class="cin-media-figure"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23d3dde9'/%3E%3C/svg%3E" alt="" aria-hidden="true"></div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">单行截断：关于二〇二六年度第三季度华东区域仓配一体化服务框架协议补充条款的说明文件</p>
+              <div class="cin-media-meta">只占一行，适合密集列表</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">窄屏退竖排（data-stack-sm）</h2>
+          <div class="cin-media" id="md-stack-sm" data-stack-sm data-size="lg" style="max-inline-size:520px">
+            <div class="cin-media-figure">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%23cbd7e5'/%3E%3C/svg%3E" alt="" aria-hidden="true">
+            </div>
+            <div class="cin-media-body">
+              <p class="cin-media-title">移动端把图提到上方</p>
+              <div class="cin-media-meta">≤600px 时整段转竖排，正文不再被挤成一条</div>
+            </div>
+            <div class="cin-media-actions">
+              <button class="cin-btn" data-size="sm" data-variant="secondary" type="button">查看详情</button>
+            </div>
+          </div>
+          <p class="cin-caption">把浏览器宽度收到 600px 以下可看到排布切换。</p>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

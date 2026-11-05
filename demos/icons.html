@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 图标库</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="../dist/cinder-icons.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">icons</span>
+      <span class="cin-caption">104 个图标 · 一个真源三产出（sprite / 单文件 / mask 类）· 一律 currentColor</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">三条路径，同一个图标</h2>
+          <p class="cin-caption" id="sprite-state">sprite 注入中…（file:// 下 fetch 会被拦，自动回退到 B 路径）</p>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(var(--cin-container-card-stack), 1fr)); gap:var(--cin-space-200)">
+            <article class="cin-card">
+              <div class="cin-card-head"><div class="cin-card-heading"><h3 class="cin-card-title">A · sprite + use</h3><span class="cin-card-subtitle">需 Cinder.Primitives.icons.mount() 或宿主内联 sprite</span></div></div>
+              <div class="cin-card-body" style="display:flex; align-items:center; gap:var(--cin-space-200)">
+                <svg class="cin-icon" data-size="lg" aria-hidden="true"><use href="#cin-i-package"/></svg>
+                <code class="cin-caption">&lt;svg class="cin-icon"&gt;&lt;use href="#cin-i-package"/&gt;&lt;/svg&gt;</code>
+              </div>
+            </article>
+            <article class="cin-card">
+              <div class="cin-card-head"><div class="cin-card-heading"><h3 class="cin-card-title">B · mask 类</h3><span class="cin-card-subtitle">无需 sprite，伪元素也能用</span></div></div>
+              <div class="cin-card-body" style="display:flex; align-items:center; gap:var(--cin-space-200)">
+                <span class="cin-i cin-i-package" data-size="lg" aria-hidden="true"></span>
+                <code class="cin-caption">&lt;span class="cin-i cin-i-package"&gt;&lt;/span&gt;</code>
+              </div>
+            </article>
+            <article class="cin-card">
+              <div class="cin-card-head"><div class="cin-card-heading"><h3 class="cin-card-title">C · 声明式</h3><span class="cin-card-subtitle">挂载后自动替换为 A 路径的 svg</span></div></div>
+              <div class="cin-card-body" style="display:flex; align-items:center; gap:var(--cin-space-200)">
+                <span data-cin-icon="package" data-size="lg" aria-hidden="true"></span>
+                <code class="cin-caption">&lt;span data-cin-icon="package"&gt;&lt;/span&gt;</code>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section" id="morph">
+          <h2 class="cin-section-title">变形：交叉淡化（M1）与真插值（M2）</h2>
+          <p class="cin-caption">两层图标同格叠加：切换 <code>data-morph</code> 只改 opacity 与轻微 scale/rotate，外框尺寸恒定、不推动布局。</p>
+          <div class="cin-grid" data-cols="3" data-gap="md">
+            <div class="cin-card">
+              <p class="cin-caption">M1 · 纯 CSS，任何图标对可用</p>
+              <div class="cin-row" style="gap:8px;align-items:center">
+                <span class="cin-icon-stack" id="stack-static" data-morph="on" data-size="lg">
+                  <svg data-state="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  <svg data-state="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/></svg>
+                </span>
+                <button class="cin-btn" data-size="sm" data-variant="line" onclick="const s=document.getElementById('stack-static'); s.dataset.morph = s.dataset.morph === 'off' ? 'on' : 'off'">切换</button>
+              </div>
+            </div>
+            <div class="cin-card">
+              <p class="cin-caption">M2 · 需引 <code>dist/entries/base/icon-morph.js</code></p>
+              <div class="cin-row" style="gap:8px;align-items:center">
+                <span class="cin-icon-stack" id="stack-morph" data-morph="on" data-size="lg">
+                  <svg data-state="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 5h8v14H8z"/></svg>
+                  <svg data-state="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l9 18H3z"/></svg>
+                </span>
+                <button class="cin-btn" data-size="sm" data-variant="line" id="morph-btn" aria-pressed="false" aria-label="切换为三角形">播放 ↔ 暂停</button>
+              </div>
+            </div>
+            <div class="cin-card">
+              <p class="cin-caption">24px 与 32px 两档同时变形，尺寸不跳</p>
+              <div class="cin-row" style="gap:12px;align-items:center">
+                <span class="cin-icon-stack" id="stack-md" data-morph="on">
+                  <svg data-state="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>
+                  <svg data-state="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4l8 16H4z"/></svg>
+                </span>
+                <span class="cin-icon-stack" id="stack-lg" data-morph="on" data-size="lg">
+                  <svg data-state="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg>
+                  <svg data-state="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4l8 16H4z"/></svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          <p class="cin-caption" style="margin-block-start:8px">错误示范一：只改形状不同步 <code>aria-label</code>，屏读会继续念旧状态。错误示范二：把 <code>.cin-icon-stack</code> 塞进可滚动列表行做逐行变形，会逐帧触发重绘。</p>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">尺寸与描边</h2>
+          <div style="display:flex; align-items:center; gap:var(--cin-space-300); flex-wrap:wrap">
+            <span class="cin-i cin-i-truck" data-size="sm" aria-hidden="true"></span>
+            <span class="cin-i cin-i-truck" aria-hidden="true"></span>
+            <span class="cin-i cin-i-truck" data-size="lg" aria-hidden="true"></span>
+            <span class="cin-caption">sm / md / lg 三档，跟随 --cin-size-icon-*</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:var(--cin-space-300); flex-wrap:wrap; margin-block-start:var(--cin-space-200)">
+            <svg class="cin-icon" aria-hidden="true"><use href="#cin-i-truck"/></svg>
+            <svg class="cin-icon" style="--cin-icon-stroke:1.75" aria-hidden="true"><use href="#cin-i-truck"/></svg>
+            <svg class="cin-icon" style="--cin-icon-stroke:2.5" aria-hidden="true"><use href="#cin-i-truck"/></svg>
+            <span class="cin-caption">描边 2（默认）/ 1.75（12–14px 推荐）/ 2.5（强调）</span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">着色：只认 currentColor</h2>
+          <div style="display:flex; align-items:center; gap:var(--cin-space-300); flex-wrap:wrap">
+            <span class="cin-i cin-i-circle-check" data-size="lg" aria-hidden="true" style="color:var(--cin-color-state-success)"></span>
+            <span class="cin-i cin-i-triangle-alert" data-size="lg" aria-hidden="true" style="color:var(--cin-color-state-warning)"></span>
+            <span class="cin-i cin-i-circle-x" data-size="lg" aria-hidden="true" style="color:var(--cin-color-state-danger)"></span>
+            <span class="cin-i cin-i-info" data-size="lg" aria-hidden="true" style="color:var(--cin-color-text-tertiary)"></span>
+            <span class="cin-caption">改色改 color；mask 不认 fill / stroke，写死颜色无效</span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">放进真实界面</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-200)">
+            <button class="cin-btn" data-variant="primary"><span class="cin-i cin-i-plus" data-size="sm" aria-hidden="true"></span>新建单据</button>
+            <button class="cin-btn"><span class="cin-i cin-i-download" data-size="sm" aria-hidden="true"></span>导出</button>
+            <button class="cin-btn" data-variant="ghost"><span class="cin-i cin-i-settings" data-size="sm" aria-hidden="true"></span>设置</button>
+            <button class="cin-btn" data-variant="danger"><span class="cin-i cin-i-trash-2" data-size="sm" aria-hidden="true"></span>删除</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(var(--cin-container-card-stack), 1fr)); gap:var(--cin-space-200); margin-block-start:var(--cin-space-300)">
+            <article class="cin-card">
+              <div class="cin-card-head"><div class="cin-card-heading"><h3 class="cin-card-title"><span class="cin-i cin-i-warehouse" data-size="sm" aria-hidden="true"></span> 华东仓</h3><span class="cin-card-subtitle">今日出库 1,260 单</span></div></div>
+              <div class="cin-card-body"><p class="cin-caption"><span class="cin-i cin-i-truck" data-size="sm" aria-hidden="true"></span> 在途 38 车 · <span class="cin-i cin-i-clock" data-size="sm" aria-hidden="true"></span> 平均 2.4 天签收</p></div>
+            </article>
+            <article class="cin-card">
+              <div class="cin-card-head"><div class="cin-card-heading"><h3 class="cin-card-title">语义图标配文字</h3><span class="cin-card-subtitle">颜色不作为唯一状态信号</span></div></div>
+              <div class="cin-card-body">
+                <p class="cin-caption" style="color:var(--cin-color-state-danger)"><span class="cin-i cin-i-circle-alert" data-size="sm" aria-hidden="true"></span> 授信超额，需审批</p>
+                <p class="cin-caption" style="color:var(--cin-color-state-success)"><span class="cin-i cin-i-circle-check" data-size="sm" aria-hidden="true"></span> 对账已通过</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">图标清单（104）</h2>
+          <p class="cin-caption">点任意格子复制类名；分类来自 dist/cinder-manifest.json。B 路径写法，无 JS 也完整可见。</p>
+          <div id="icon-groups"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js"></script>
+  <script src="../dist/entries/base/icon-morph.js"></script>
+  <script>
+    const GROUPS = [
+      ["action", "bookmark copy download external-link eye-off eye filter heart key link-2-off link lock log-in log-out minus pencil pin plus redo-2 refresh-cw save search settings share-2 star trash-2 undo-2 unlock upload x zoom-in zoom-out"],
+      ["nav", "arrow-down arrow-left-right arrow-left arrow-right arrow-up-down arrow-up chevron-down chevron-left chevron-right chevron-up menu panel-left"],
+      ["object", "archive banknote barcode boxes building-2 calendar chart-bar chart-line clock columns-3 cpu credit-card database file-text fingerprint folder-open folder house image inbox layout-grid mail map-pin package paperclip phone printer qr-code receipt rows-3 scan-line server sliders-horizontal table tag trending-down trending-up truck user users warehouse wifi"],
+      ["status", "activity bell check circle-alert circle-check circle-dot circle-help circle-pause circle-play circle-stop circle-x gauge hourglass info loader-circle shield-check sparkles triangle-alert"],
+    ];
+    const box = document.getElementById("icon-groups");
+    for (const [cat, names] of GROUPS) {
+      const sec = document.createElement("div");
+      sec.style.marginBlockEnd = "var(--cin-space-300)";
+      const h = document.createElement("h3");
+      h.className = "cin-section-title";
+      h.style.fontSize = "var(--cin-text-body-size)";
+      h.textContent = cat + " · " + names.split(" ").length;
+      sec.appendChild(h);
+      const grid = document.createElement("div");
+      grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:var(--cin-space-100)";
+      for (const name of names.split(" ")) {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = "cin-panel";
+        cell.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:var(--cin-space-100);padding:var(--cin-space-150);cursor:copy";
+        cell.title = "点击复制 .cin-i-" + name;
+        cell.innerHTML = '<span class="cin-i cin-i-' + name + '" data-size="lg" aria-hidden="true"></span><code style="font-size:var(--cin-text-caption-size)">' + name + "</code>";
+        cell.addEventListener("click", () => {
+          const cls = "cin-i-" + name;
+          if (navigator.clipboard) navigator.clipboard.writeText(cls);
+          cell.querySelector("code").textContent = "已复制";
+          setTimeout(() => (cell.querySelector("code").textContent = name), 900);
+        });
+        grid.appendChild(cell);
+      }
+      sec.appendChild(grid);
+      box.appendChild(sec);
+    }
+
+    const state = document.getElementById("sprite-state");
+    if (window.Cinder && Cinder.icons) {
+      Cinder.Primitives.icons.mount("../dist/cinder-icons.svg").then((ok) => {
+        state.textContent = ok
+          ? "sprite 已注入 · A/B/C 三路径可用"
+          : "sprite 未注入（多为 file:// 限制）· A 路径留空，B 路径照常可用";
+        state.setAttribute("data-cin-icon-state", ok ? "ready" : "fallback");
+      });
+    } else {
+      state.textContent = "未加载 cinder.js · A/C 路径不可用，B 路径照常可用";
+    }
+
+    // M2：真插值（不引 icon-morph.js 时本段不执行，M1 静态照常可用）
+    if (window.Cinder && Cinder.iconMorph) {
+      Cinder.iconMorph.initAll();
+      const btn = document.getElementById("morph-btn");
+      const st = document.getElementById("stack-morph");
+      const md = document.getElementById("stack-md");
+      const lg = document.getElementById("stack-lg");
+      if (btn) btn.addEventListener("click", () => {
+        const next = st.dataset.morph === "off" ? "on" : "off";
+        [st, md, lg].forEach((el) => el.__iconMorph && (el.__iconMorph.state = next));
+        btn.setAttribute("aria-pressed", next === "off" ? "true" : "false");
+        btn.setAttribute("aria-label", next === "off" ? "切换为方形" : "切换为三角形");
+      });
+    }
+  </script>
+</body>
+</html>

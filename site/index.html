@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>概览 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html" aria-current="page">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+
+
+<section class="site-hero">
+  <p class="site-eyebrow">v1.6.0 · 零依赖 · 不绑定项目</p>
+  <h1>一个能单文件拷走的通用 UI 组件库</h1>
+  <p class="site-lead">Cinder 由通用层（base）与按方向展开的定向定制层（当前 erp）组成。纯 CSS 负责形体，JS 只做渐进增强——删掉 JS，页面依然可读可操作。</p>
+  <div class="site-actions">
+    <a class="cin-btn" data-variant="primary" href="quickstart.html">快速开始</a>
+    <a class="cin-btn" href="demos.html">看演示</a>
+    <a class="cin-btn" data-variant="ghost" href="components.html">组件清单</a>
+  </div>
+</section>
+
+<div class="site-metrics">
+  <div class="site-metric"><strong>79</strong><span>组件（base）</span></div>
+  <div class="site-metric"><strong>13</strong><span>原语（base）</span></div>
+  <div class="site-metric"><strong>44</strong><span>行为（base）</span></div>
+  <div class="site-metric"><strong>6</strong><span>定向层（erp）组件</span></div>
+  <div class="site-metric"><strong>243</strong><span>设计令牌</span></div>
+  <div class="site-metric"><strong>104</strong><span>图标（Lucide，ISC）</span></div>
+  <div class="site-metric"><strong>87</strong><span>按需入口</span></div>
+</div>
+
+<h2 id="why">为什么不是又一套框架组件</h2>
+<p>框架组件把样式和运行时绑死，你的页面因此必须长在那个框架里。Cinder 只提供两样东西：语义化的类名与可覆盖的令牌。它不认识你的技术栈，也不需要认识。</p>
+
+<h2 id="three-rules">三条硬约定</h2>
+<ul>
+  <li><strong>零依赖</strong>：产物里没有第三方运行时，没有 CDN 请求，没有构建步骤也能用。</li>
+  <li><strong>可单文件拷贝</strong>：任何一个 <code>dist/entries/**</code> 入口都能单独拿走，已内联所需令牌。</li>
+  <li><strong>无中心注册表</strong>：不存在"必须先初始化一个全局实例"的前置条件。</li>
+</ul>
+
+<h2 id="size">体积基线</h2>
+<p>按入口考核，不按合订文件吓人：最重入口 <code>entries/base/overlay.css</code> = <strong>7.6 KB</strong>（gzip，构建超 8 KB 直接失败）。全量合订 <code>cinder-all.css</code> + <code>cinder.js</code> 合计 169.7 KB——那是"全都要"的代价，正常接入不这么用。</p>
+
+<h2 id="start">最短路径</h2>
+<pre><code>&lt;link rel="stylesheet" href="dist/entries/base/base.css"&gt;
+&lt;button class="cin-btn" data-variant="primary"&gt;保存&lt;/button&gt;</code></pre>
+<p>要换皮就加 <code>data-skin</code>，要调令牌就去 <a href="demos.html">Playground</a> 拉一份覆盖片段，要接业务就只在定向层里加组件。</p>
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

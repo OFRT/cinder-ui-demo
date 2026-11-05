@@ -1,0 +1,14 @@
+/* Cinder · 皮肤切换 View Transitions 渐进增强（T43）
+   可选层：仅在调用 Cinder.Primitives.skin.set() 时需要引入；不并入 cinder-base.css，
+   避免所有按需入口为其无谓增重。 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--cin-motion-base-duration);
+  animation-timing-function: var(--cin-motion-base-easing);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}

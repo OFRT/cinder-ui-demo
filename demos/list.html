@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 通用列表</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">list</span>
+      <span class="cin-caption">媒体 + 主文 + 附加信息三栏；分隔线 / 悬停 / 密度走属性</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础（带分隔线 + 悬停）</h2>
+          <ul class="cin-list" data-divided data-hoverable aria-label="待办事项">
+            <li class="cin-list-item">
+              <span class="cin-avatar" data-tone="accent" aria-hidden="true"><span class="cin-avatar-text">林</span></span>
+              <div class="cin-list-main">
+                <div class="cin-list-title-row">
+                  <span class="cin-list-title">采购申请待审批</span>
+                  <span class="cin-badge">一级</span>
+                </div>
+                <p class="cin-list-desc">PR-2026-1101-0042 由林洋提交，金额 12,480.00 元，需在本日内完成一级审批。</p>
+                <div class="cin-list-meta"><span>采购部</span><span>·</span><span>今天 09:24</span></div>
+              </div>
+              <div class="cin-list-extra">
+                <button class="cin-btn" data-size="sm" data-variant="ghost">查看</button>
+              </div>
+            </li>
+            <li class="cin-list-item">
+              <span class="cin-avatar" data-tone="info" aria-hidden="true"><span class="cin-avatar-text">周</span></span>
+              <div class="cin-list-main">
+                <div class="cin-list-title-row"><span class="cin-list-title">库存对账差异复核</span></div>
+                <p class="cin-list-desc">华东一仓 3 个 SKU 账面与实盘不一致，差异合计 42 件，已挂起出库。</p>
+                <div class="cin-list-meta"><span>仓储部</span><span>·</span><span>昨天 17:40</span></div>
+              </div>
+              <div class="cin-list-extra"><span class="cin-caption">待处理</span></div>
+            </li>
+            <li class="cin-list-item">
+              <span class="cin-avatar" data-tone="success" aria-hidden="true"><span class="cin-avatar-text">陈</span></span>
+              <div class="cin-list-main">
+                <div class="cin-list-title-row"><span class="cin-list-title">月度结算单已归档</span></div>
+                <p class="cin-list-desc">2026 年 10 月结算单（含发票 18 张）已完成归档，可在财务档案中检索。</p>
+                <div class="cin-list-meta"><span>财务部</span><span>·</span><span>10-31 11:02</span></div>
+              </div>
+              <div class="cin-list-extra"><span class="cin-caption">已归档</span></div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">紧凑密度（data-size="sm"）+ 放开截断</h2>
+          <ul class="cin-list" data-size="sm" data-clamp="none" aria-label="通知">
+            <li class="cin-list-item">
+              <span class="cin-list-item-media" aria-hidden="true">△</span>
+              <div class="cin-list-main">
+                <div class="cin-list-title-row"><span class="cin-list-title">服务窗口调整通知</span></div>
+                <p class="cin-list-desc">11 月 3 日起客服受理时间调整为 09:00–18:00，周末及法定节假日仅保留紧急工单通道；期间历史工单不受影响，超时提醒将顺延至下一个工作日早班统一推送。</p>
+              </div>
+              <div class="cin-list-extra"><span class="cin-caption">11-01</span></div>
+            </li>
+            <li class="cin-list-item">
+              <span class="cin-list-item-media" aria-hidden="true">◇</span>
+              <div class="cin-list-main">
+                <div class="cin-list-title-row"><span class="cin-list-title">系统维护完成</span></div>
+                <p class="cin-list-desc">本次维护升级了报表导出链路，导出 10 万行以内耗时下降约 40%。</p>
+              </div>
+              <div class="cin-list-extra"><span class="cin-caption">10-30</span></div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">放大密度（data-size="lg"）+ 长标题换行</h2>
+          <ul class="cin-list" data-size="lg" data-divided aria-label="文件">
+            <li class="cin-list-item">
+              <span class="cin-list-item-media" aria-hidden="true">▤</span>
+              <div class="cin-list-main">
+                <div class="cin-list-title-row"><span class="cin-list-title">2026Q3华东区域仓储与干线运输成本复盘及第四季度预算调整建议（终稿）.xlsx</span></div>
+                <div class="cin-list-meta"><span>2.4 MB</span><span>·</span><span>林洋</span></div>
+              </div>
+              <div class="cin-list-extra">
+                <button class="cin-btn" data-size="sm" data-variant="ghost">下载</button>
+              </div>
+            </li>
+            <li class="cin-list-item">
+              <span class="cin-list-item-media" aria-hidden="true">▤</span>
+              <div class="cin-list-main">
+                <div class="cin-list-title-row"><span class="cin-list-title">供应商准入资料包</span></div>
+                <div class="cin-list-meta"><span>18.6 MB</span><span>·</span><span>周舟</span></div>
+              </div>
+              <div class="cin-list-extra">
+                <button class="cin-btn" data-size="sm" data-variant="ghost">下载</button>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">空态</h2>
+          <ul class="cin-list" aria-label="空列表">
+            <li class="cin-list-empty">暂无待办，新的审批会出现在这里。</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

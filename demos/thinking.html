@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 思考步骤流</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">thinking</span>
+      <span class="cin-caption">多步推理可展开核对；进行中、完成、失败三态，零脚本可开合</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">进行中</h2>
+          <details class="cin-thinking" data-state="running" open>
+            <summary class="cin-thinking-head">
+              <span class="cin-thinking-icon" aria-hidden="true"></span>
+              <span class="cin-thinking-title">正在思考</span>
+              <span class="cin-thinking-meta">第 2 步 · 3.1s</span>
+            </summary>
+            <ol class="cin-thinking-steps">
+              <li class="cin-thinking-step" data-state="done">检索「合同模板」<span class="cin-thinking-note">命中 3 份 · 0.8s</span></li>
+              <li class="cin-thinking-step" data-state="running">比对条款差异</li>
+              <li class="cin-thinking-step" data-state="pending">给出结论</li>
+            </ol>
+          </details>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">已完成</h2>
+          <details class="cin-thinking" data-state="done">
+            <summary class="cin-thinking-head">
+              <span class="cin-thinking-icon" aria-hidden="true"></span>
+              <span class="cin-thinking-title">已思考 4 步</span>
+              <span class="cin-thinking-meta">用时 6.2s</span>
+            </summary>
+            <ol class="cin-thinking-steps">
+              <li class="cin-thinking-step" data-state="done">解析需求<span class="cin-thinking-note">识别 2 个约束</span></li>
+              <li class="cin-thinking-step" data-state="done">检索知识库<span class="cin-thinking-note">命中 12 条</span></li>
+              <li class="cin-thinking-step" data-state="done">核对数据口径</li>
+              <li class="cin-thinking-step" data-state="done">组织回答</li>
+            </ol>
+          </details>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">失败</h2>
+          <details class="cin-thinking" data-state="failed" open>
+            <summary class="cin-thinking-head">
+              <span class="cin-thinking-icon" aria-hidden="true"></span>
+              <span class="cin-thinking-title">思考中断</span>
+              <span class="cin-thinking-meta">第 3 步失败</span>
+            </summary>
+            <ol class="cin-thinking-steps">
+              <li class="cin-thinking-step" data-state="done">解析需求</li>
+              <li class="cin-thinking-step" data-state="failed">读取「预算表.xlsx」<span class="cin-thinking-note">文件已被占用，无法读取</span></li>
+              <li class="cin-thinking-step" data-state="pending">汇总差异</li>
+            </ol>
+          </details>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">无边框态（嵌在气泡里）</h2>
+          <div class="cin-card">
+            <div class="cin-msg-bubble">
+              <details class="cin-thinking" data-variant="plain" data-state="done">
+                <summary class="cin-thinking-head">
+                  <span class="cin-thinking-icon" aria-hidden="true"></span>
+                  <span class="cin-thinking-title">已思考 2 步</span>
+                  <span class="cin-thinking-meta">2.4s</span>
+                </summary>
+                <ol class="cin-thinking-steps">
+                  <li class="cin-thinking-step" data-state="done">确认口径：按含税金额</li>
+                  <li class="cin-thinking-step" data-state="done">汇总 10 月数据</li>
+                </ol>
+              </details>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

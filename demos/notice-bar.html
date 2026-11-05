@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 通告条</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">notice-bar</span>
+      <span class="cin-caption">四类语义色、可关闭、可带一个动作入口；脚本没跑也能完整阅读</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">四类语义</h2>
+          <div class="cin-stack">
+            <div class="cin-notice-bar" data-notice-bar data-type="info" role="status">
+              <span class="cin-notice-bar-icon" aria-hidden="true">i</span>
+              <div class="cin-notice-bar-content" data-notice-content>本月对账口径已更新，请在 11 月 5 日前完成确认。</div>
+              <button class="cin-notice-bar-action" type="button">查看说明</button>
+            </div>
+            <div class="cin-notice-bar" data-notice-bar data-type="success" data-closable>
+              <span class="cin-notice-bar-icon" aria-hidden="true">✓</span>
+              <div class="cin-notice-bar-content" data-notice-content>10 月账单已全部核销，共 128 笔。</div>
+              <button class="cin-notice-bar-close" type="button" aria-label="关闭"></button>
+            </div>
+            <div class="cin-notice-bar" data-notice-bar data-type="warning" data-closable>
+              <span class="cin-notice-bar-icon" aria-hidden="true">!</span>
+              <div class="cin-notice-bar-content" data-notice-content>有 3 个 SKU 库存低于安全线，建议今日补货。</div>
+              <button class="cin-notice-bar-action" type="button">去补货</button>
+              <button class="cin-notice-bar-close" type="button" aria-label="关闭"></button>
+            </div>
+            <div class="cin-notice-bar" data-notice-bar data-type="danger">
+              <span class="cin-notice-bar-icon" aria-hidden="true">×</span>
+              <div class="cin-notice-bar-content" data-notice-content>支付通道维护中，10:00–10:30 期间下单可能失败。</div>
+            </div>
+            <div class="cin-notice-bar" data-notice-bar data-type="info" data-marquee>
+              <span class="cin-notice-bar-icon" aria-hidden="true">i</span>
+              <div class="cin-notice-bar-content" data-notice-content><span>国庆期间物流时效延长 1–2 天，偏远地区可能延长 3 天，请提前与客户沟通交付预期。</span></div>
+              <button class="cin-notice-bar-close" type="button" aria-label="关闭"></button>
+            </div>
+            <div class="cin-notice-bar" data-notice-bar data-type="info" data-size="sm">
+              <div class="cin-notice-bar-content" data-notice-content>小尺寸：无图标也能对齐。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">脚本控制</h2>
+          <div class="cin-toolbar">
+            <button class="cin-btn" data-variant="outline" onclick="Cinder.noticeBar(document.querySelectorAll('[data-notice-bar]')[0]).setText('文案已被脚本替换：' + new Date().toLocaleTimeString()); document.getElementById('out').textContent = '第 1 条文案已替换';">替换第 1 条文案</button>
+            <button class="cin-btn" data-variant="outline" onclick="Cinder.noticeBar(document.querySelectorAll('[data-notice-bar]')[3]).hide(); document.getElementById('out').textContent = '第 4 条已隐藏'; document.querySelectorAll('[data-notice-bar]')[3].addEventListener('cin:noticeclose', (e) => console.log('closed', e.detail.reason), { once: true });">隐藏第 4 条</button>
+            <button class="cin-btn" data-variant="ghost" onclick="Cinder.noticeBar(document.querySelectorAll('[data-notice-bar]')[3]).show(); document.getElementById('out').textContent = '第 4 条已恢复';">恢复第 4 条</button>
+            <span class="cin-caption" id="out">就绪</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/cinder.js" defer></script>
+</body>
+</html>

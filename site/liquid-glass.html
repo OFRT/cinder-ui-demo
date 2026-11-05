@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>液态玻璃方案 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html" aria-current="page">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>液态玻璃方案</h1>
+        <p class="site-lead">G1–G4 的目标、决策与验收方式</p>
+      </header>
+<blockquote>
+<p>本方案已被总台账 <code>docs/ui-plan.md</code> 收录为 <strong>G1–G4（T1–T14）</strong>；排期、依赖与完成口径以总台账为准，本文只保留决策与设计细节。</p>
+</blockquote>
+<blockquote>
+<p>状态：<strong>已确认，编入任务计划（D1–D5 全按推荐）</strong>，等待施工。目标：把素材里的&quot;液态玻璃质感&quot;以<strong>纯 CSS 可选层</strong>的方式并入 Cinder，不改动既有 62 个入口的字节，不引入 WebGL / React 运行时。
+任务编号 T1–T14，分 G1–G4 四批，见第八节。批次出口闸门：<code>node build.mjs --check</code> 0 error、<code>acceptance-all</code> 全绿、视觉基线 diff ≤0.2%。</p>
+</blockquote>
+<h2 id="s-一-素材判定">一、素材判定</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>素材形态</td>
+<td>小红书/公众号图文，介绍 <code>CruxGarden/plasma-ui</code></td>
+</tr>
+<tr>
+<td>它是什么</td>
+<td>基于<strong>共享 WebGL 画布</strong>的 React 组件库：每块面板共享同一片等离子体材质，拖动时面板相互碰触会融合，能折射背景内容，松手吸附到网格或邻边</td>
+</tr>
+<tr>
+<td>内置能力</td>
+<td>拖拽 + 网格/邻边吸附；三种 mood（tidal / aurora / ember）与自定义；可调折射、霜化、着色、边缘光、颗粒、辉光、弹簧动效</td>
+</tr>
+<tr>
+<td>组件范围</td>
+<td><strong>仅容器类</strong>：面板、停靠栏、卡片、对话框；另有 5 个基础件：按钮、开关、滑块、标签页、手风琴；其余组件应当嵌套在容器内部使用</td>
+</tr>
+<tr>
+<td>它自述的限制</td>
+<td>适用于电脑端浏览器；<strong>每帧全屏渲染，手机上会很吃力</strong></td>
+</tr>
+<tr>
+<td>它自带的降级</td>
+<td>WebGL2 不可用时退到 CSS 霜化面板；服务端渲染出静态标记，水合后再接画布</td>
+</tr>
+<tr>
+<td>生态旁证</td>
+<td>第三方评测与社区讨论普遍认可技术质量，但认为&quot;液态玻璃作生产级 UI 范式&quot;性价比差；SVG 位移贴图做真折射的方案目前<strong>仅 Chromium 的 backdrop-filter 可用</strong>，且动态更新性能代价大</td>
+</tr>
+</tbody>
+</table>
+<p>结论：素材的价值不在&quot;这套组件&quot;，而在<strong>它给出的视觉语言</strong>与<strong>它的降级路径</strong>。前者可吸收，后者恰好印证 Cinder 的 CSS 优先路线是对的。</p>
+<h2 id="s-二-与-cinder-现行纪律的冲突矩阵">二、与 Cinder 现行纪律的冲突矩阵</h2>
+<table>
+<thead>
+<tr>
+<th>Cinder 纪律</th>
+<th>plasma-ui 的做法</th>
+<th>冲突判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSS 优先，删 JS 退化语义标签</td>
+<td>无 WebGL2 即失去主体材质；React 组件是唯一用法</td>
+<td>硬冲突</td>
+</tr>
+<tr>
+<td>去中心化自包含单文件</td>
+<td>全屏共享画布 + Provider 上下文，组件不可独立取用</td>
+<td>硬冲突</td>
+</tr>
+<tr>
+<td>手机端可用（通用库须覆盖移动浏览器）</td>
+<td>官方明示手机上很吃力</td>
+<td>硬冲突</td>
+</tr>
+<tr>
+<td>单入口 gzip ≥7KB 逐字节冻结</td>
+<td>引入 WebGL 运行时与着色器</td>
+<td>硬冲突</td>
+</tr>
+<tr>
+<td>无 JS 时视觉不塌</td>
+<td>依赖 canvas 渲染整块背景</td>
+<td>硬冲突</td>
+</tr>
+</tbody>
+</table>
+<p>因此<strong>不整体引入 plasma-ui</strong>，只做选择性吸收。以下为吸收边界。</p>
+<h2 id="s-三-三层拆解-收什么-弃什么">三、三层拆解：收什么、弃什么</h2>
+<h3 id="s-3-1-视觉层-收">3.1 视觉层（收）</h3>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>吸收方式</th>
+<th>实现载体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>半透明毛玻璃底</td>
+<td><code>backdrop-filter: blur() saturate()</code> + 半透明 tint</td>
+<td>纯 CSS</td>
+</tr>
+<tr>
+<td>边缘高光（rim）</td>
+<td>双层 inset 描边（外亮内暗）+ 顶边渐变亮线</td>
+<td>纯 CSS</td>
+</tr>
+<tr>
+<td>背景透光着色</td>
+<td><code>color-mix()</code> 混背景语义色，非硬编码 rgba</td>
+<td>纯 CSS + 令牌</td>
+</tr>
+<tr>
+<td>颗粒感（grain）</td>
+<td>内联 SVG <code>feTurbulence</code> 作低透明度底纹，或 1×1 噪声 data URI</td>
+<td>纯 CSS（≤300B）</td>
+</tr>
+<tr>
+<td>柔光投影</td>
+<td>双层阴影（近距硬 + 远距散）</td>
+<td>纯 CSS 令牌</td>
+</tr>
+<tr>
+<td>三种 mood</td>
+<td>映射为 3 组 glass 预设（<code>data-mood=&quot;tide|aurora|ember&quot;</code>），不叫 mood，叫 <code>data-tint</code></td>
+<td>3 组令牌</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-3-2-交互层-半收">3.2 交互层（半收）</h3>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>判定</th>
+<th>方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>面板拖拽</td>
+<td>收</td>
+<td>库内已有 <code>splitpanel</code>、<code>drawer</code> 拖拽逻辑，复用既有行为，不新写拖拽引擎</td>
+</tr>
+<tr>
+<td>释放吸附网格/邻边</td>
+<td>收（可选增强）</td>
+<td>优先 CSS：容器 <code>scroll-snap</code> + 吸附点；确需自由拖拽时给 40 行内的 <code>initGlassDock()</code>，不跑就静态可读</td>
+</tr>
+<tr>
+<td>碰触融合（plasma blend）</td>
+<td><strong>弃</strong></td>
+<td>需共享材质与逐帧混合，本质是 WebGL；CSS 无法等价，硬做只会变成&quot;假动画&quot;</td>
+</tr>
+<tr>
+<td>折射背景内容</td>
+<td><strong>弃</strong>（真折射）</td>
+<td>见 D3；只有 <code>backdrop-filter</code> 里塞 SVG 位移贴图能近似，仅 Chromium，动态代价高；降级方案是模糊而非折射</td>
+</tr>
+<tr>
+<td>弹簧动效</td>
+<td>部分收</td>
+<td>玻璃层只给&quot;出现/收起&quot;用 <code>cubic-bezier</code> 近似弹簧；<code>prefers-reduced-motion</code> 直接归零</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-3-3-架构层-弃">3.3 架构层（弃）</h3>
+<p>React 组件模型、Provider 上下文、WebGL 运行时、共享画布材质——全部不吸收。Cinder 的玻璃能力必须是<strong>一个 CSS 文件 + 一个 data 属性</strong>就能生效，删掉 JS 后仅失去吸附与拖拽，视觉不塌。</p>
+<h2 id="s-四-落地方案-base-glass-可选入口">四、落地方案：<code>base/glass</code> 可选入口</h2>
+<h3 id="s-4-1-文件与-api">4.1 文件与 API</h3>
+<pre><code>packages/base/src/glass/glass.tokens.css     # 4 组色系 × 6 个变量，含暗色与高对比覆盖
+packages/base/src/components/glass.css       # 材质本体 + 降级阶梯，约 260 行
+packages/base/src/intents/glass.md           # 意图契约（负责/不负责/状态机）
+demos/glass.html                             # 演示页：容器矩阵 + 降级对照
+scripts/acceptance-glass.mjs                 # 静态契约验收，纳入 acceptance-all
+dist/entries/base/glass.css                  # 构建产出的按需入口（预估 gzip 2.5–3.5KB，&lt;7KB 只记录不冻结）
+</code></pre>
+<p>用法（不新增重复组件，只给现有容器加一层材质）：</p>
+<pre><code class="language-html">&lt;article class=&quot;cin-card&quot; data-surface=&quot;glass&quot;&gt;…&lt;/article&gt;
+&lt;div class=&quot;cin-dialog-panel&quot; data-surface=&quot;glass&quot; data-tint=&quot;aurora&quot;&gt;…&lt;/div&gt;
+&lt;header class=&quot;cin-toolbar&quot; data-surface=&quot;glass&quot; data-glass=&quot;none&quot;&gt;…&lt;/header&gt;  &lt;!-- 局部反选 --&gt;
+</code></pre>
+<h3 id="s-4-2-令牌-新增-6-个-全部带---cin-glass--前缀-不覆盖既有令牌">4.2 令牌（新增 6 个，全部带 <code>--cin-glass-</code> 前缀，不覆盖既有令牌）</h3>
+<table>
+<thead>
+<tr>
+<th>令牌</th>
+<th>缺省</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--cin-glass-blur</code></td>
+<td><code>16px</code></td>
+<td>模糊半径，移动端降为 <code>10px</code></td>
+</tr>
+<tr>
+<td><code>--cin-glass-sat</code></td>
+<td><code>1.4</code></td>
+<td>饱和度增益</td>
+</tr>
+<tr>
+<td><code>--cin-glass-tint</code></td>
+<td><code>color-mix(in oklab, var(--cin-color-bg-surface) 62%, transparent)</code></td>
+<td>底色，随语义表面走</td>
+</tr>
+<tr>
+<td><code>--cin-glass-rim</code></td>
+<td><code>color-mix(in oklab, #fff 26%, transparent)</code></td>
+<td>边缘高光</td>
+</tr>
+<tr>
+<td><code>--cin-glass-grain</code></td>
+<td><code>0.035</code></td>
+<td>颗粒不透明度</td>
+</tr>
+<tr>
+<td><code>--cin-glass-shadow</code></td>
+<td>双层阴影组合值</td>
+<td>柔光投影</td>
+</tr>
+</tbody>
+</table>
+<p>三档 <code>data-tint</code>：<code>tide</code>（青绿，缺省）、<code>aurora</code>（紫蓝）、<code>ember</code>（暖橙），只用 <code>color-mix</code> 调 tint 与 rim，不改结构。</p>
+<h3 id="s-4-3-降级阶梯-四级-逐级可用">4.3 降级阶梯（四级，逐级可用）</h3>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>条件</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 真玻璃</td>
+<td>支持 <code>backdrop-filter</code> 且 <code>color-mix</code></td>
+<td>模糊 + 饱和 + 双层 rim + 颗粒</td>
+</tr>
+<tr>
+<td>L2 伪玻璃</td>
+<td>不支持 <code>backdrop-filter</code>（<code>@supports not</code>）</td>
+<td>半透明实色底 + inset 高光，无模糊，可读性优先</td>
+</tr>
+<tr>
+<td>L3 无透明</td>
+<td><code>prefers-reduced-transparency: reduce</code> 或 <code>forced-colors: active</code></td>
+<td>退回不透明 <code>--cin-color-bg-surface</code> + 1px 边框，颗粒关闭</td>
+</tr>
+<tr>
+<td>L4 无 CSS 增强</td>
+<td>浏览器极老</td>
+<td>等同于 L3（底色与边框都在基础组件里，仍成立）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4-4-性能与可读性硬约束-写进-intent-md-与验收脚本">4.4 性能与可读性硬约束（写进 intent.md 与验收脚本）</h3>
+<ol>
+<li><strong>白名单渲染位</strong>：<code>backdrop-filter</code> 只允许出现在固定/悬浮容器上（dialog-panel、drawer、popover、toolbar、bulkbar、notice-bar）。列表行、虚拟滚动行、表格单元格、卡片网格中的每一项<strong>一律禁止</strong>——<code>acceptance-glass.mjs</code> 按选择器白名单扫描 <code>backdrop-filter</code> 出现位置，越界即失败。</li>
+<li><strong>同屏 ≤3 层</strong>：<code>backdrop-filter</code> 元素嵌套不得超过 2 层，文档写明，演示页提供&quot;错误示范&quot;对照卡。</li>
+<li><strong>文字不透明</strong>：玻璃层内文字色必须用不透明语义令牌，禁止半透明文字压在玻璃上。</li>
+<li><strong>动效收敛</strong>：玻璃层不进 <code>transform</code> 长动画；<code>prefers-reduced-motion</code> 下吸附与位移归零。</li>
+<li><strong>预算</strong>：新入口只记录不冻结（&lt;7KB），不改 <code>budget-baseline.json</code> 中既有 62 个入口的任何字节；<code>build --check</code> 必须维持 0 error。</li>
+</ol>
+<h3 id="s-4-5-与现有组件的挂靠关系-不新增重复组件">4.5 与现有组件的挂靠关系（不新增重复组件）</h3>
+<table>
+<thead>
+<tr>
+<th>plasma-ui 的组件</th>
+<th>Cinder 对应物</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>面板 Panel</td>
+<td><code>card</code> / <code>splitpanel</code></td>
+<td>加 <code>data-surface=&quot;glass&quot;</code>，不新建 panel</td>
+</tr>
+<tr>
+<td>停靠栏 Dock</td>
+<td><code>toolbar</code> / <code>bulkbar</code></td>
+<td>同上</td>
+</tr>
+<tr>
+<td>卡片 Card</td>
+<td><code>card</code></td>
+<td>同上</td>
+</tr>
+<tr>
+<td>对话框 Dialog</td>
+<td><code>overlay</code> 内 <code>.cin-dialog-panel</code></td>
+<td>同上</td>
+</tr>
+<tr>
+<td>按钮</td>
+<td><code>controls</code> 的 <code>.cin-btn</code></td>
+<td>只允许 <code>data-variant=&quot;glass&quot;</code> 用于浮层内，正文区域不用</td>
+</tr>
+<tr>
+<td>开关 / 滑块</td>
+<td><code>controls</code> / <code>slider</code> / <code>range-slider</code></td>
+<td><strong>不加玻璃</strong>（可读性与命中区优先）</td>
+</tr>
+<tr>
+<td>标签页</td>
+<td><code>tabs</code></td>
+<td>只给 <code>.cin-tabs</code> 外层加玻璃，页签本体不加</td>
+</tr>
+<tr>
+<td>手风琴</td>
+<td><code>disclosure</code></td>
+<td>只给容器加玻璃，行内不加</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-五-分批与验收">五、分批与验收</h2>
+<table>
+<thead>
+<tr>
+<th>批次</th>
+<th>任务</th>
+<th>内容</th>
+<th>出口条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1</td>
+<td>T1–T4</td>
+<td><code>glass.tokens.css</code> + <code>glass.css</code>（含四级降级）</td>
+<td><code>build --check</code> 0 error；新入口 gzip 记录在 <code>report.json</code></td>
+</tr>
+<tr>
+<td>G2</td>
+<td>T5–T7</td>
+<td>6 个容器组件挂 <code>data-surface</code> 兼容（只加选择器，不改原样式）</td>
+<td>既有 51 组验收全绿；视觉基线关键页无像素漂移（阈值 0.2%）</td>
+</tr>
+<tr>
+<td>G3</td>
+<td>T8–T11</td>
+<td><code>demos/glass.html</code> + <code>acceptance-glass.mjs</code> + <code>intents/glass.md</code></td>
+<td>验收 52/52；<code>acceptance-glass</code> 进 <code>acceptance-all</code></td>
+</tr>
+<tr>
+<td>G4</td>
+<td>T12–T14</td>
+<td><code>initGlassDock()</code> 吸附增强（可选）+ 文档收口</td>
+<td>README 新增 5.38 节、CHANGELOG 1.6.0、能力矩阵补一行「视觉材质层」</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-六-决策点-已定稿-2026-11-03">六、决策点（已定稿 2026-11-03）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>决策</th>
+<th>选项</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>玻璃层形态</td>
+<td>A 独立可选入口 <code>base/glass</code>；B 并入 <code>base.css</code> 主包；C 做成第 9 套皮肤</td>
+<td><strong>A 已定</strong>：独立入口 <code>base/glass</code>，唯一不动既有字节、可单文件取用的形态</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>作用范围</td>
+<td>A 6 个容器白名单；B 再放开到表单控件与列表项；C 全组件</td>
+<td><strong>A 已定</strong>：<code>dialog-panel</code> / <code>drawer</code> / <code>popover</code> / <code>toolbar</code> / <code>bulkbar</code> / <code>notice-bar</code>；列表行与表格单元格永久排除</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>折射做到多少</td>
+<td>A 纯 CSS 近似；B SVG 位移贴图真折射（仅 Chromium）；C WebGL</td>
+<td><strong>A 已定</strong>：纯 CSS 近似。B 仅作实验分支前提，不进主包、不排期</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>吸附/拖拽</td>
+<td>A 收：<code>scroll-snap</code> 优先 + 40 行可选 JS；B 不收</td>
+<td><strong>A 已定</strong>：<code>scroll-snap</code> 必做，<code>initGlassDock()</code> 为可选增强，不跑不影响静态可用</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>碰触融合</td>
+<td>A 弃；B 用 CSS 伪造</td>
+<td><strong>A 已定，弃</strong>：伪造在拖动帧率与观感上都撑不住</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-七-明确否决项">七、明确否决项</h2>
+<ul>
+<li>引入 WebGL / 着色器 / 共享画布材质：与零依赖、单文件、移动端可用三条同时冲突。</li>
+<li>React 组件包装：Cinder 是框架无关的 CSS + 原生 JS 行为层，包 React 意味着 8 套框架包装的维护成本。</li>
+<li>全屏每帧渲染：素材自己都标注手机上吃力，而 Cinder 作为通用库必须覆盖手机端浏览器，不能假设只有桌面用户。</li>
+<li>把玻璃做成&quot;新组件&quot;：会产生 <code>glass-card</code> / <code>glass-dialog</code> 类重复组件，与现有 64 个组件的语义层冲突，只做&quot;材质属性&quot;。</li>
+</ul>
+<p>按 AGENTS.md §3「四族 × 五档」登记为 <strong>D 档（不做）</strong>：WebGL 运行时、React 包装、全屏逐帧渲染、玻璃独立组件、碰触融合。后续若有人再提，直接引本节回绝，不再重复评估。</p>
+<hr>
+<h2 id="s-八-任务计划-t1-t14">八、任务计划（T1–T14）</h2>
+<blockquote>
+<p>已编入，按批施工。每批收工须过闸门：<code>node build.mjs --check</code> 0 error → <code>acceptance-all</code> 全绿 → 视觉基线 diff ≤0.2%。批内任务可并行，跨批串行。</p>
+</blockquote>
+<h3 id="g1-材质本体-无外部依赖-先做">G1 · 材质本体（无外部依赖，先做）</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>内容</th>
+<th>产出</th>
+<th>完成判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>玻璃令牌：3 档 tint × 6 变量、暗色覆盖、高对比覆盖</td>
+<td><code>packages/base/src/glass/glass.tokens.css</code></td>
+<td>令牌全为 <code>--cin-glass-*</code> 前缀；不覆盖既有令牌；<code>build --check</code> 通过</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>主材质 L1（真玻璃）：模糊 + 饱和 + 双层 rim + tint</td>
+<td><code>packages/base/src/components/glass.css</code></td>
+<td><code>data-surface=&quot;glass&quot;</code> 生效；<code>data-tint</code> 三档差异可见</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>降级阶梯 L2 / L3 / L4</td>
+<td>同文件</td>
+<td>三条降级各自可验证：<code>@supports not (backdrop-filter)</code>、<code>prefers-reduced-transparency</code>、<code>forced-colors</code></td>
+</tr>
+<tr>
+<td>T4</td>
+<td>颗粒 + 柔光投影（噪声 data URI ≤300B）</td>
+<td>同文件</td>
+<td>颗粒可关（<code>--cin-glass-grain: 0</code>）；无外链图片</td>
+</tr>
+</tbody>
+</table>
+<p><strong>G1 出口</strong>：新入口 gzip 落在 2.5–3.5KB 区间（超 5KB 回头做体积优化再交付），既有 62 个入口字节零变化。</p>
+<h3 id="g2-挂靠既有容器-不改原样式-只加选择器">G2 · 挂靠既有容器（不改原样式，只加选择器）</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>内容</th>
+<th>产出</th>
+<th>完成判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T5</td>
+<td>6 个白名单容器挂 <code>data-surface</code> 兼容</td>
+<td>overlay / popover / toolbar / notice-bar / card / splitpanel 各自 CSS 末段</td>
+<td>只新增选择器，不修改现有规则；无 <code>data-surface</code> 时渲染结果与升级前一致</td>
+</tr>
+<tr>
+<td>T6</td>
+<td><code>data-glass=&quot;none&quot;</code> 局部反选 + <code>data-tint</code> 抑制</td>
+<td>同 T5</td>
+<td>父容器开玻璃、子块反选时无模糊残留</td>
+</tr>
+<tr>
+<td>T7</td>
+<td>回归：既有 51 组验收 + 视觉基线关键页</td>
+<td><code>report.json</code> / <code>tests/visual/diff/</code></td>
+<td>51 组全绿；关键页 diff ≤0.2%，超阈值须逐像素确认后更新基线</td>
+</tr>
+</tbody>
+</table>
+<h3 id="g3-契约与守门-与-g1-并行起步-依赖-t2-t3-收口">G3 · 契约与守门（与 G1 并行起步，依赖 T2/T3 收口）</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>内容</th>
+<th>产出</th>
+<th>完成判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T8</td>
+<td>意图契约四段</td>
+<td><code>packages/base/src/intents/glass.md</code></td>
+<td>负责 / 不负责（写出承接方）/ 状态机 / 失败态齐全；缺契约构建失败闸门放行</td>
+</tr>
+<tr>
+<td>T9</td>
+<td>静态契约验收</td>
+<td><code>scripts/acceptance-glass.mjs</code></td>
+<td>断言：令牌定义齐、三级降级块存在、<code>backdrop-filter</code> 仅出现在白名单选择器、<code>reduced-transparency</code> 生效、玻璃内文字非半透明</td>
+</tr>
+<tr>
+<td>T10</td>
+<td>演示页 + 错误示范</td>
+<td><code>demos/glass.html</code>、首页加入口</td>
+<td>含容器矩阵、三档 tint、四级降级对照、玻璃套玻璃反例卡</td>
+</tr>
+<tr>
+<td>T11</td>
+<td>纳入总验收与视觉基线</td>
+<td><code>acceptance-all</code>、<code>visual-baseline</code> 基线页</td>
+<td>收录组数 51→52；玻璃页进视觉基线快照</td>
+</tr>
+</tbody>
+</table>
+<h3 id="g4-交互增强与收口">G4 · 交互增强与收口</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>内容</th>
+<th>产出</th>
+<th>完成判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T12</td>
+<td>吸附：<code>scroll-snap</code> 必做 + <code>initGlassDock()</code> 可选增强</td>
+<td><code>packages/base/src/behaviors/glass-dock.js</code></td>
+<td>40 行内；不跑时静态完全可用；<code>prefers-reduced-motion</code> 下无位移动画</td>
+</tr>
+<tr>
+<td>T13</td>
+<td>文档收口</td>
+<td>README 5.38、CHANGELOG 1.6.0、<code>moments</code> 重建</td>
+<td>版本 1.5.0 → 1.6.0；CHANGELOG 按 Keep a Changelog 写；<code>moments.md</code> 由脚本重建不手写</td>
+</tr>
+<tr>
+<td>T14</td>
+<td>能力矩阵登记</td>
+<td><code>docs/cinder-vs-webawesome-capability-matrix-v2.md</code></td>
+<td>新增「视觉材质层」一行并按实测给判定，不预先抬高</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-依赖与顺序">依赖与顺序</h3>
+<pre><code>T1 → T2 → T3 ─┬→ T6 → T7
+        └ T4 ─┘
+T8（可与 T1 并行）
+T2/T3 → T9 → T11
+T5 → T6
+T5 → T12 → T13 → T14
+T10 依赖 T2/T6
+</code></pre>
+<h3 id="s-风险与应对-施工前先读">风险与应对（施工前先读）</h3>
+<table>
+<thead>
+<tr>
+<th>风险</th>
+<th>应对</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>叠加 <code>backdrop-filter</code> 导致滚动手势掉帧（尤其 K80 端侧 WebView）</td>
+<td>白名单 + 同屏 ≤3 层硬约束；T7 在真机与桌面双端各测一次滚动帧率，掉帧即回退该容器</td>
+</tr>
+<tr>
+<td>视觉基线阈值被&quot;顺手更新&quot;掩盖走形</td>
+<td>更新基线必须逐像素看 diff 并写进提交说明，禁止 <code>--update-baseline</code> 一把过（前车之鉴：B8 基线整体重写曾掩盖增长）</td>
+</tr>
+<tr>
+<td><code>color-mix</code> 在旧内核不生效导致 tint 消失</td>
+<td>每个 tint 变量先写静态回退值，再接 <code>color-mix</code> 覆盖</td>
+</tr>
+<tr>
+<td>玻璃层与 <code>forced-colors</code> 模式下描边不可见</td>
+<td>L3 降级强制 <code>border: 1px solid CanvasText</code>，T9 有断言</td>
+</tr>
+<tr>
+<td>有人把玻璃往列表行/表格上糊</td>
+<td>T9 白名单断言直接失败，不靠 review 兜</td>
+</tr>
+<tr>
+<td><em>（内容由AI生成，仅供参考）</em></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-一-素材判定" data-level="2">一、素材判定</a>
+      <a href="#s-二-与-cinder-现行纪律的冲突矩阵" data-level="2">二、与 Cinder 现行纪律的冲突矩阵</a>
+      <a href="#s-三-三层拆解-收什么-弃什么" data-level="2">三、三层拆解：收什么、弃什么</a>
+      <a href="#s-3-1-视觉层-收" data-level="3">3.1 视觉层（收）</a>
+      <a href="#s-3-2-交互层-半收" data-level="3">3.2 交互层（半收）</a>
+      <a href="#s-3-3-架构层-弃" data-level="3">3.3 架构层（弃）</a>
+      <a href="#s-四-落地方案-base-glass-可选入口" data-level="2">四、落地方案：base/glass 可选入口</a>
+      <a href="#s-4-1-文件与-api" data-level="3">4.1 文件与 API</a>
+      <a href="#s-4-2-令牌-新增-6-个-全部带---cin-glass--前缀-不覆盖既有令牌" data-level="3">4.2 令牌（新增 6 个，全部带 --cin-glass- 前缀，不覆盖既有令牌）</a>
+      <a href="#s-4-3-降级阶梯-四级-逐级可用" data-level="3">4.3 降级阶梯（四级，逐级可用）</a>
+      <a href="#s-4-4-性能与可读性硬约束-写进-intent-md-与验收脚本" data-level="3">4.4 性能与可读性硬约束（写进 intent.md 与验收脚本）</a>
+      <a href="#s-4-5-与现有组件的挂靠关系-不新增重复组件" data-level="3">4.5 与现有组件的挂靠关系（不新增重复组件）</a>
+      <a href="#s-五-分批与验收" data-level="2">五、分批与验收</a>
+      <a href="#s-六-决策点-已定稿-2026-11-03" data-level="2">六、决策点（已定稿 2026-11-03）</a>
+      <a href="#s-七-明确否决项" data-level="2">七、明确否决项</a>
+      <a href="#s-八-任务计划-t1-t14" data-level="2">八、任务计划（T1–T14）</a>
+      <a href="#g1-材质本体-无外部依赖-先做" data-level="3">G1 · 材质本体（无外部依赖，先做）</a>
+      <a href="#g2-挂靠既有容器-不改原样式-只加选择器" data-level="3">G2 · 挂靠既有容器（不改原样式，只加选择器）</a>
+      <a href="#g3-契约与守门-与-g1-并行起步-依赖-t2-t3-收口" data-level="3">G3 · 契约与守门（与 G1 并行起步，依赖 T2/T3 收口）</a>
+      <a href="#g4-交互增强与收口" data-level="3">G4 · 交互增强与收口</a>
+      <a href="#s-依赖与顺序" data-level="3">依赖与顺序</a>
+      <a href="#s-风险与应对-施工前先读" data-level="3">风险与应对（施工前先读）</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

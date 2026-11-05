@@ -1,0 +1,284 @@
+/* Cinder Skins · 由 gen_skins.py 生成，勿手改。
+ * 用法：<html data-skin="porcelain">，需在 cinder-all.css 之后引入本文件。
+ * 覆盖范围：仅颜色语义层；尺寸/字体/动效仍继承 base tokens。
+ * 不包 @layer：base token 为未分层规则，包层会因层级优先级永远输给 base。 */
+/* 暖纸 · 默认基线，通用进销存后台与日常开单 */
+[data-skin="paper"] {
+  color-scheme: light;
+  --cin-color-bg-canvas: #F7F5F2;
+  --cin-color-bg-surface: #FEFDFB;
+  --cin-color-bg-surface-sunken: #F1EEE9;
+  --cin-color-bg-overlay: rgba(26,25,23,0.32);
+  --cin-color-text-primary: #1A1917;
+  --cin-color-text-secondary: #5F584B;
+  --cin-color-text-tertiary: #756F64;
+  --cin-color-text-on-accent: #FDFBF7;
+  --cin-color-border-subtle: #E5E0D7;
+  --cin-color-border-strong: #988769;
+  --cin-color-accent-default: #C04229;
+  --cin-color-accent-hover: #A13722;
+  --cin-color-accent-pressed: #862E1D;
+  --cin-color-accent-soft: #F8ECE8;
+  --cin-color-accent-on-soft: #BE4129;
+  --cin-color-state-success: #3A714E;
+  --cin-color-state-warning: #955C1B;
+  --cin-color-state-danger: #A83232;
+  --cin-color-state-info: #3E5A73;
+  --cin-color-focus-ring: rgba(192,66,41,0.40);
+  --cin-color-status-draft: #5F584B;
+  --cin-color-status-pending: #955C1B;
+  --cin-color-status-approved: #3A714E;
+  --cin-color-status-rejected: #A83232;
+  --cin-color-status-closed: #6F685D;
+  --cin-color-state-success-soft: #E5EBE5;
+  --cin-color-state-warning-soft: #F1E8DE;
+  --cin-color-state-danger-soft: #F3E3E1;
+  --cin-color-state-info-soft: #E5E8E9;
+  --cin-color-state-neutral-soft: #EEECE9;
+  --cin-color-text-link: #C04229;
+}
+/* 冷瓷 · 通用办公与经营报表、对外导出与打印，最中性的一套 */
+[data-skin="porcelain"] {
+  color-scheme: light;
+  --cin-color-bg-canvas: #F6F7F9;
+  --cin-color-bg-surface: #FEFDFB;
+  --cin-color-bg-surface-sunken: #EDF1F5;
+  --cin-color-bg-overlay: rgba(22,26,32,0.32);
+  --cin-color-text-primary: #161A20;
+  --cin-color-text-secondary: #4E5764;
+  --cin-color-text-tertiary: #6A727C;
+  --cin-color-text-on-accent: #FDFBF7;
+  --cin-color-border-subtle: #E2E6EC;
+  --cin-color-border-strong: #7C8CA5;
+  --cin-color-accent-default: #2F5BB7;
+  --cin-color-accent-hover: #274C9A;
+  --cin-color-accent-pressed: #214080;
+  --cin-color-accent-soft: #EBEEF5;
+  --cin-color-accent-on-soft: #2F5BB7;
+  --cin-color-state-success: #2C6B4C;
+  --cin-color-state-warning: #8A5A14;
+  --cin-color-state-danger: #A02F3D;
+  --cin-color-state-info: #33628C;
+  --cin-color-focus-ring: rgba(47,91,183,0.40);
+  --cin-color-status-draft: #4E5764;
+  --cin-color-status-pending: #8A5A14;
+  --cin-color-status-approved: #2C6B4C;
+  --cin-color-status-rejected: #A02F3D;
+  --cin-color-status-closed: #606873;
+  --cin-color-state-success-soft: #E3EAE4;
+  --cin-color-state-warning-soft: #EFE8DD;
+  --cin-color-state-danger-soft: #F2E2E2;
+  --cin-color-state-info-soft: #E4E9ED;
+  --cin-color-state-neutral-soft: #ECECEC;
+  --cin-color-text-link: #2F5BB7;
+}
+/* 雾青 · 仓储库存、调拨盘点等偏冷静的数据核对场景 */
+[data-skin="mist"] {
+  color-scheme: light;
+  --cin-color-bg-canvas: #F2F6F6;
+  --cin-color-bg-surface: #FBFDFD;
+  --cin-color-bg-surface-sunken: #E7EFEF;
+  --cin-color-bg-overlay: rgba(21,32,31,0.32);
+  --cin-color-text-primary: #15201F;
+  --cin-color-text-secondary: #4B5C5A;
+  --cin-color-text-tertiary: #647371;
+  --cin-color-text-on-accent: #FDFBF7;
+  --cin-color-border-subtle: #DCE7E6;
+  --cin-color-border-strong: #678F8B;
+  --cin-color-accent-default: #117969;
+  --cin-color-accent-hover: #0E6658;
+  --cin-color-accent-pressed: #0C554A;
+  --cin-color-accent-soft: #E6F1F0;
+  --cin-color-accent-on-soft: #117969;
+  --cin-color-state-success: #2B6E4E;
+  --cin-color-state-warning: #8A5F14;
+  --cin-color-state-danger: #9E3030;
+  --cin-color-state-info: #2F5F86;
+  --cin-color-focus-ring: rgba(17,121,105,0.40);
+  --cin-color-status-draft: #4B5C5A;
+  --cin-color-status-pending: #8A5F14;
+  --cin-color-status-approved: #2B6E4E;
+  --cin-color-status-rejected: #9E3030;
+  --cin-color-status-closed: #5D6C6A;
+  --cin-color-state-success-soft: #E0EAE6;
+  --cin-color-state-warning-soft: #ECE8DF;
+  --cin-color-state-danger-soft: #EFE2E2;
+  --cin-color-state-info-soft: #E0E8EE;
+  --cin-color-state-neutral-soft: #E9EDED;
+  --cin-color-text-link: #117969;
+}
+/* 苔绿 · 生鲜、农资、环保类业务，弱化屏幕攻击性 */
+[data-skin="sage"] {
+  color-scheme: light;
+  --cin-color-bg-canvas: #F4F6F0;
+  --cin-color-bg-surface: #FCFDF9;
+  --cin-color-bg-surface-sunken: #E9EEE2;
+  --cin-color-bg-overlay: rgba(27,32,26,0.32);
+  --cin-color-text-primary: #1B201A;
+  --cin-color-text-secondary: #525B4C;
+  --cin-color-text-tertiary: #6C7366;
+  --cin-color-text-on-accent: #FDFBF7;
+  --cin-color-border-subtle: #DEE5D5;
+  --cin-color-border-strong: #7A8F5F;
+  --cin-color-accent-default: #4C7A3F;
+  --cin-color-accent-hover: #406635;
+  --cin-color-accent-pressed: #35552C;
+  --cin-color-accent-soft: #ECF1E8;
+  --cin-color-accent-on-soft: #4A783E;
+  --cin-color-state-success: #37693F;
+  --cin-color-state-warning: #8B6116;
+  --cin-color-state-danger: #9C3434;
+  --cin-color-state-info: #3C5F7A;
+  --cin-color-focus-ring: rgba(76,122,63,0.40);
+  --cin-color-status-draft: #525B4C;
+  --cin-color-status-pending: #8B6116;
+  --cin-color-status-approved: #37693F;
+  --cin-color-status-rejected: #9C3434;
+  --cin-color-status-closed: #636B5D;
+  --cin-color-state-success-soft: #E2EAE1;
+  --cin-color-state-warning-soft: #EDE9DB;
+  --cin-color-state-danger-soft: #F0E3DF;
+  --cin-color-state-info-soft: #E3E8E8;
+  --cin-color-state-neutral-soft: #EBEDE8;
+  --cin-color-text-link: #4C7A3F;
+}
+/* 账页 · 财务对账、票据与往来账，中式账本纸感 + 朱红印章 */
+[data-skin="ledger"] {
+  color-scheme: light;
+  --cin-color-bg-canvas: #FAF7EE;
+  --cin-color-bg-surface: #FFFDF8;
+  --cin-color-bg-surface-sunken: #F1EBDD;
+  --cin-color-bg-overlay: rgba(33,29,25,0.32);
+  --cin-color-text-primary: #211D19;
+  --cin-color-text-secondary: #5C5347;
+  --cin-color-text-tertiary: #787065;
+  --cin-color-text-on-accent: #FDFBF7;
+  --cin-color-border-subtle: #E7E0CE;
+  --cin-color-border-strong: #988658;
+  --cin-color-accent-default: #8C2F2F;
+  --cin-color-accent-hover: #762727;
+  --cin-color-accent-pressed: #622121;
+  --cin-color-accent-soft: #F5EAE6;
+  --cin-color-accent-on-soft: #8C2F2F;
+  --cin-color-state-success: #3B6B49;
+  --cin-color-state-warning: #8A5C18;
+  --cin-color-state-danger: #A02A2A;
+  --cin-color-state-info: #3F5B70;
+  --cin-color-focus-ring: rgba(140,47,47,0.40);
+  --cin-color-status-draft: #5C5347;
+  --cin-color-status-pending: #8A5C18;
+  --cin-color-status-approved: #3B6B49;
+  --cin-color-status-rejected: #A02A2A;
+  --cin-color-status-closed: #6C6459;
+  --cin-color-state-success-soft: #E6EAE1;
+  --cin-color-state-warning-soft: #F0E8DB;
+  --cin-color-state-danger-soft: #F3E2DD;
+  --cin-color-state-info-soft: #E6E8E6;
+  --cin-color-state-neutral-soft: #EFECE6;
+  --cin-color-text-link: #8C2F2F;
+}
+/* 工业 · 车间、仓库 PDA、强光环境下扫码与快速确认，高对比优先 */
+[data-skin="industrial"] {
+  color-scheme: light;
+  --cin-color-bg-canvas: #F1F2F4;
+  --cin-color-bg-surface: #FEFDFB;
+  --cin-color-bg-surface-sunken: #E5E7EB;
+  --cin-color-bg-overlay: rgba(16,19,23,0.32);
+  --cin-color-text-primary: #101317;
+  --cin-color-text-secondary: #434A54;
+  --cin-color-text-tertiary: #686E75;
+  --cin-color-text-on-accent: #FDFBF7;
+  --cin-color-border-subtle: #D5D9DF;
+  --cin-color-border-strong: #798596;
+  --cin-color-accent-default: #B54619;
+  --cin-color-accent-hover: #983B15;
+  --cin-color-accent-pressed: #7F3112;
+  --cin-color-accent-soft: #F7EDE7;
+  --cin-color-accent-on-soft: #B54619;
+  --cin-color-state-success: #2B6B43;
+  --cin-color-state-warning: #8A5406;
+  --cin-color-state-danger: #A8241F;
+  --cin-color-state-info: #2E5878;
+  --cin-color-focus-ring: rgba(181,70,25,0.40);
+  --cin-color-status-draft: #434A54;
+  --cin-color-status-pending: #8A5406;
+  --cin-color-status-approved: #2B6B43;
+  --cin-color-status-rejected: #A8241F;
+  --cin-color-status-closed: #565C65;
+  --cin-color-state-success-soft: #E3EAE3;
+  --cin-color-state-warning-soft: #EFE7DB;
+  --cin-color-state-danger-soft: #F3E1DE;
+  --cin-color-state-info-soft: #E3E8EA;
+  --cin-color-state-neutral-soft: #EBEBEA;
+  --cin-color-text-link: #B54619;
+}
+/* 石墨 · 夜间值守、监控大屏与低光环境，琥珀色主强调 */
+[data-skin="graphite"] {
+  color-scheme: dark;
+  --cin-color-bg-canvas: #15171A;
+  --cin-color-bg-surface: #1D2025;
+  --cin-color-bg-surface-sunken: #111316;
+  --cin-color-bg-overlay: rgba(8,9,10,0.62);
+  --cin-color-text-primary: #E9EBEE;
+  --cin-color-text-secondary: #A5ACB7;
+  --cin-color-text-tertiary: #828891;
+  --cin-color-text-on-accent: #141210;
+  --cin-color-border-subtle: #2B2F35;
+  --cin-color-border-strong: #636B78;
+  --cin-color-accent-default: #E5A240;
+  --cin-color-accent-hover: #E9AF5B;
+  --cin-color-accent-pressed: #CA8F38;
+  --cin-color-accent-soft: #3D3529;
+  --cin-color-accent-on-soft: #E5A240;
+  --cin-color-state-success: #71AE86;
+  --cin-color-state-warning: #D9A24E;
+  --cin-color-state-danger: #E38080;
+  --cin-color-state-info: #8FB3D0;
+  --cin-color-focus-ring: rgba(229,162,64,0.48);
+  --cin-color-status-draft: #A5ACB7;
+  --cin-color-status-pending: #D9A24E;
+  --cin-color-status-approved: #71AE86;
+  --cin-color-status-rejected: #E38080;
+  --cin-color-status-closed: #9DA4AE;
+  --cin-color-state-success-soft: #2D3B37;
+  --cin-color-state-warning-soft: #41392D;
+  --cin-color-state-danger-soft: #422F33;
+  --cin-color-state-info-soft: #333C45;
+  --cin-color-state-neutral-soft: #2D3137;
+  --cin-color-text-link: #E9AF5B;
+}
+/* 午夜 · 深色主题长时段操作，陶土红强调延续默认品牌色 */
+[data-skin="ink"] {
+  color-scheme: dark;
+  --cin-color-bg-canvas: #0E0F10;
+  --cin-color-bg-surface: #191A1C;
+  --cin-color-bg-surface-sunken: #131416;
+  --cin-color-bg-overlay: rgba(8,9,10,0.62);
+  --cin-color-text-primary: #EDEBE7;
+  --cin-color-text-secondary: #A8A49C;
+  --cin-color-text-tertiary: #84827C;
+  --cin-color-text-on-accent: #141210;
+  --cin-color-border-subtle: #2A2C2F;
+  --cin-color-border-strong: #62666D;
+  --cin-color-accent-default: #E97960;
+  --cin-color-accent-hover: #EC8C76;
+  --cin-color-accent-pressed: #CD6A54;
+  --cin-color-accent-soft: #3A2927;
+  --cin-color-accent-on-soft: #E97960;
+  --cin-color-state-success: #6AA97F;
+  --cin-color-state-warning: #D59346;
+  --cin-color-state-danger: #E47474;
+  --cin-color-state-info: #8FB0CC;
+  --cin-color-focus-ring: rgba(233,121,96,0.48);
+  --cin-color-status-draft: #A8A49C;
+  --cin-color-status-pending: #D59346;
+  --cin-color-status-approved: #6AA97F;
+  --cin-color-status-rejected: #E47474;
+  --cin-color-status-closed: #9F9C94;
+  --cin-color-state-success-soft: #28352F;
+  --cin-color-state-warning-soft: #3D3124;
+  --cin-color-state-danger-soft: #3F282A;
+  --cin-color-state-info-soft: #2F363D;
+  --cin-color-state-neutral-soft: #2A2B2B;
+  --cin-color-text-link: #EC8C76;
+}

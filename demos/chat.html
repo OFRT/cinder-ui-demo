@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 对话气泡</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">chat</span>
+      <span class="cin-caption">头像 + 名称 + 气泡 + 状态，自己/对方/系统三向切换；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础会话（对方 / 自己）</h2>
+          <div class="cin-chat" id="chat-basic" role="log" aria-live="polite" aria-label="示例会话">
+            <div class="cin-chat-day">今天 10:24</div>
+
+            <article class="cin-msg" id="msg-other">
+              <span class="cin-avatar" data-size="sm" aria-hidden="true">李</span>
+              <div class="cin-msg-main">
+                <div class="cin-msg-head">
+                  <span class="cin-msg-name">李工</span>
+                  <span class="cin-msg-role">客服</span>
+                  <time class="cin-msg-meta" datetime="2026-11-02T10:24">10:24</time>
+                </div>
+                <div class="cin-msg-bubble">
+                  <p class="cin-msg-content">B8 批次的验收报告我看过了，第 3 页的签名栏是空的，麻烦补一下。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="cin-msg" data-self id="msg-self">
+              <span class="cin-avatar" data-size="sm" aria-hidden="true">我</span>
+              <div class="cin-msg-main">
+                <div class="cin-msg-head">
+                  <span class="cin-msg-name">我</span>
+                  <time class="cin-msg-meta" datetime="2026-11-02T10:26">10:26</time>
+                </div>
+                <div class="cin-msg-bubble">
+                  <p class="cin-msg-content">收到，我现在重新导出一份带签名的给你。</p>
+                </div>
+                <div class="cin-msg-status">已读</div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">连续发言（藏头像、收间距、换圆角）</h2>
+          <div class="cin-chat" id="chat-continue" role="log" aria-label="连续发言">
+            <article class="cin-msg" data-self>
+              <span class="cin-avatar" data-size="sm" aria-hidden="true">我</span>
+              <div class="cin-msg-main">
+                <div class="cin-msg-head">
+                  <span class="cin-msg-name">我</span>
+                  <time class="cin-msg-meta" datetime="2026-11-02T10:31">10:31</time>
+                </div>
+                <div class="cin-msg-bubble">
+                  <p class="cin-msg-content">这批清单我核对完了，一共 470 个类、52 组样式。</p>
+                </div>
+              </div>
+            </article>
+            <article class="cin-msg" data-self data-continue>
+              <span class="cin-avatar" data-size="sm" aria-hidden="true">我</span>
+              <div class="cin-msg-main">
+                <div class="cin-msg-head">
+                  <span class="cin-msg-name">我</span>
+                  <time class="cin-msg-meta" datetime="2026-11-02T10:31">10:31</time>
+                </div>
+                <div class="cin-msg-bubble">
+                  <p class="cin-msg-content">构建也过了，errors 是 0。</p>
+                </div>
+                <div class="cin-msg-status">送达</div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">引用回复 + 附件 + 发送态</h2>
+          <div class="cin-chat" id="chat-extra" role="log" aria-label="引用与附件">
+            <article class="cin-msg" data-self>
+              <span class="cin-avatar" data-size="sm" aria-hidden="true">我</span>
+              <div class="cin-msg-main">
+                <div class="cin-msg-head">
+                  <span class="cin-msg-name">我</span>
+                  <time class="cin-msg-meta" datetime="2026-11-02T10:35">10:35</time>
+                </div>
+                <div class="cin-msg-bubble">
+                  <blockquote class="cin-msg-quote">第 3 页的签名栏是空的，麻烦补一下。</blockquote>
+                  <p class="cin-msg-content">补好了，报告在附件里。</p>
+                  <a class="cin-msg-file" href="#">
+                    <span class="cin-msg-file-name">B8批次验收报告-20261102.pdf</span>
+                    <span class="cin-msg-file-meta">1.8 MB</span>
+                  </a>
+                </div>
+                <div class="cin-msg-status" id="status-sending">发送中…</div>
+              </div>
+            </article>
+
+            <article class="cin-msg" data-self>
+              <span class="cin-avatar" data-size="sm" aria-hidden="true">我</span>
+              <div class="cin-msg-main">
+                <div class="cin-msg-head">
+                  <span class="cin-msg-name">我</span>
+                  <time class="cin-msg-meta" datetime="2026-11-02T10:36">10:36</time>
+                </div>
+                <div class="cin-msg-bubble">
+                  <p class="cin-msg-content">附件太大了，压缩包我重新传一次。</p>
+                </div>
+                <div class="cin-msg-status" data-state="failed" id="status-failed">发送失败，点击重试</div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">系统提示 + 正在输入 + 长串断行</h2>
+          <div class="cin-chat" id="chat-system" role="log" aria-label="系统与输入态">
+            <article class="cin-msg" data-variant="system" role="status">
+              <div class="cin-msg-main">
+                <div class="cin-msg-bubble">对方已撤回一条消息</div>
+              </div>
+            </article>
+
+            <article class="cin-msg">
+              <span class="cin-avatar" data-size="sm" aria-hidden="true">李</span>
+              <div class="cin-msg-main">
+                <div class="cin-msg-head">
+                  <span class="cin-msg-name">李工</span>
+                  <time class="cin-msg-meta" datetime="2026-11-02T10:38">10:38</time>
+                </div>
+                <div class="cin-msg-bubble">
+                  <p class="cin-msg-content" id="long-text">压测地址：https://cinder.example.internal/base/dist/entries/base/btn-group.css?build=20261102&amp;token=8f3c1d9b7a6e5f4c3b2a1d0e9f8a7b6c5d4e3f2a1b0c9d8e</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="cin-msg">
+              <span class="cin-avatar" data-size="sm" aria-hidden="true">李</span>
+              <div class="cin-msg-main">
+                <div class="cin-msg-head">
+                  <span class="cin-msg-name">李工</span>
+                  <time class="cin-msg-meta" datetime="2026-11-02T10:39">10:39</time>
+                </div>
+                <div class="cin-msg-bubble">
+                  <div class="cin-chat-typing" id="typing" aria-label="对方正在输入" role="status">
+                    <span class="cin-chat-typing-dot"></span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">窄栏嵌入（侧边会话 / 手机宽度）</h2>
+          <div class="cin-card" style="max-inline-size:360px">
+            <div class="cin-chat" id="chat-narrow" role="log" aria-label="窄栏会话">
+              <article class="cin-msg">
+                <span class="cin-avatar" data-size="sm" aria-hidden="true">王</span>
+                <div class="cin-msg-main">
+                  <div class="cin-msg-head">
+                    <span class="cin-msg-name">王主管</span>
+                    <time class="cin-msg-meta" datetime="2026-11-02T10:40">10:40</time>
+                  </div>
+                  <div class="cin-msg-bubble">
+                    <p class="cin-msg-content">明天上午的评审会，你带上第 7 批的 demo 页。</p>
+                  </div>
+                  <div class="cin-msg-actions">
+                    <button class="cin-btn" data-size="sm" data-variant="ghost" type="button">复制</button>
+                    <button class="cin-btn" data-size="sm" data-variant="ghost" type="button">引用</button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

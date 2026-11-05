@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 划词操作条</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="../dist/cinder-icons.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">selection-actions</span>
+      <span class="cin-caption">选中文本浮出动作条；无 JS 时整条不出现</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础：选中正文 → 解释 / 改写 / 翻译 / 追问</h2>
+          <p class="cin-caption">用鼠标拖选下面任意一段文字，动作条贴着选区上方浮出；上方空间不足时自动翻到下方。</p>
+          <div style="max-inline-size:44rem">
+            <p>分层样式表的顺序决定覆盖结果。基础层只放通用结构与状态，业务层只放业务结构性尺寸；两库靠 cascade layer 顺序共存，同名类归基础层单一定义。</p>
+            <p>把「选中即问」做成独立组件而不是编辑器的一部分，是为了让阅读态的正文、表格、代码块共用同一套动作契约，也避免富文本编辑器把选区逻辑带进只读页面。</p>
+          </div>
+
+          <div class="cin-selactions" id="sel-basic" data-selactions>
+            <div class="cin-selactions-panel">
+              <p class="cin-selactions-quote"><span class="cin-selactions-quote-text"></span></p>
+              <div class="cin-selactions-bar" role="toolbar" aria-label="选中文本操作">
+                <button class="cin-selactions-action" type="button" data-action="explain">解释</button>
+                <button class="cin-selactions-action" type="button" data-action="rewrite">改写</button>
+                <button class="cin-selactions-action" type="button" data-action="translate">翻译</button>
+                <span class="cin-selactions-sep" aria-hidden="true"></span>
+                <button class="cin-selactions-action" type="button" data-action="ask">追问</button>
+                <button class="cin-selactions-dismiss" type="button" aria-label="关闭"><span aria-hidden="true">×</span></button>
+              </div>
+              <p class="cin-selactions-error" hidden aria-live="polite"></p>
+            </div>
+          </div>
+
+          <pre class="cin-caption" id="selactions-log" style="white-space:pre-wrap">事件日志：等待选中文本</pre>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">状态：处理中 / 失败带原因 / 复位</h2>
+          <p class="cin-caption">动作触发后由宿主决定终态；失败必须给文字原因，不能只改边框。</p>
+          <div class="cin-toolbar">
+            <button class="cin-btn" data-size="sm" data-variant="secondary" onclick="document.getElementById('sel-basic').cinSelectionActions?.setState('working')">切到处理中</button>
+            <button class="cin-btn" data-size="sm" data-variant="secondary" onclick="document.getElementById('sel-basic').cinSelectionActions?.setError('请求超时，请重试')">切到失败</button>
+            <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="document.getElementById('sel-basic').cinSelectionActions?.setState('idle')">复位</button>
+          </div>
+          <p class="cin-caption">先选中一段文字让动作条出现，再点上面的按钮观察。</p>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">窄屏：≤30rem 动作换行不溢出</h2>
+          <div style="inline-size:320px;max-inline-size:100%;padding:var(--cin-space-200);border:1px solid var(--cin-color-border-subtle);border-radius:var(--cin-radius-md)">
+            <p class="cin-caption" style="margin:0">把窗口宽度缩到 480px 以下（或手机打开本页），选中这段文字：动作条贴边、按钮换行、关闭键回到行尾，不会横向溢出。</p>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">无 JS：组件不出现</h2>
+          <p class="cin-caption">删除 <code>dist/cinder.js</code> 后，下面的标记仍在 DOM 里，但 CSS 基础态是 <code>display:none</code>，页面不会留下空壳或残影。</p>
+          <pre class="cin-caption" style="white-space:pre-wrap">&lt;div class="cin-selactions" data-selactions&gt;
+  &lt;div class="cin-selactions-panel"&gt;…&lt;/div&gt;
+&lt;/div&gt;</pre>
+          <p class="cin-caption">无脚本时正文照常可选中、可复制，只是不提供动作条。</p>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const log = document.getElementById("selactions-log");
+      const root = document.getElementById("sel-basic");
+      const write = (name, detail) => {
+        const text = String(detail && detail.text ? detail.text : "");
+        const short = text.length > 40 ? text.slice(0, 40) + "…" : text;
+        log.textContent = name + " " + JSON.stringify({ ...detail, text: short }, null, 2);
+      };
+      root.addEventListener("cin:selection-open", (e) => write("cin:selection-open", e.detail));
+      root.addEventListener("cin:selection-dismiss", (e) => write("cin:selection-dismiss", e.detail));
+      // 动作派发后给一个可预期的失败示例：action=translate 时走失败落点，其余走完成
+      root.addEventListener("cin:selection-action", (e) => {
+        write("cin:selection-action", e.detail);
+        const api = root.cinSelectionActions;
+        window.setTimeout(() => {
+          if (e.detail.action === "translate") api.setState("failed", "翻译服务暂时不可用");
+          else api.setState("done");
+        }, 900);
+      });
+    });
+  </script>
+</body>
+</html>

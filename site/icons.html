@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>图标库方案 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html" aria-current="page">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>图标库方案</h1>
+        <p class="site-lead">一个真源三产出的取舍</p>
+      </header>
+<blockquote>
+<p>状态：<strong>待确认</strong>。本文件只给方案与实测数据，确认后才落代码。
+2026-11-02 编制。对应能力矩阵基础设施 #10「图标库」。</p>
+</blockquote>
+<hr>
+<h2 id="s-1-现状-实测-不是估算">1. 现状（实测，不是估算）</h2>
+<table>
+<thead>
+<tr>
+<th>事实</th>
+<th>数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图标资产</td>
+<td><strong>0 个 SVG 文件</strong>（<code>find -name &quot;*.svg&quot;</code> 返回空）</td>
+</tr>
+<tr>
+<td>现有图标容器</td>
+<td><code>.cin-icon</code> + `data-size=&quot;sm</td>
+</tr>
+<tr>
+<td>现有图标实现方式</td>
+<td><strong>8 处 data URI 内联 SVG</strong>（<code>fileinput</code> / <code>disclosure</code> / <code>option-group</code> / <code>details</code> / <code>controls</code> / <code>copytarget</code>），各写各的，viewBox 有 16 也有 24，线宽不统一</td>
+</tr>
+<tr>
+<td>兜底手段</td>
+<td>demo 里用字符 <code>⌕</code> 顶替图标</td>
+</tr>
+<tr>
+<td>组件中的图标位</td>
+<td>搜索框、下拉箭头、折叠箭头、勾选框、复制按钮、上传区、轮播箭头、分页、结果页、空态、通知条等</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心问题</strong>：不是&quot;没有图标&quot;，而是<strong>同一批语义（箭头/勾/叉/上传）在不同组件里被重复手绘了 8 次，形状与线宽互不相同</strong>。所以这不是&quot;补一套图&quot;，是&quot;建一个唯一真源&quot;。</p>
+<hr>
+<h2 id="s-2-目标与边界">2. 目标与边界</h2>
+<p><strong>要做的</strong>：给 Cinder 一份可被 60 个组件共同引用的图标真源，形状统一、许可清晰、体积可控、可按需单取。</p>
+<p><strong>明确不做</strong>（写出来避免范围蔓延）：</p>
+<table>
+<thead>
+<tr>
+<th>不做</th>
+<th>理由 / 承接方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>品牌 logo / 插画 / 空态插图</td>
+<td>需专门绘制，走设计资源，不在图标库范围</td>
+</tr>
+<tr>
+<td>多字重（线框/实心/双色）三套并行</td>
+<td>首版只做 1.75–2px 单一描边；实心态用 CSS 填充或后续增量</td>
+</tr>
+<tr>
+<td>图标搜索页 / 在线浏览站</td>
+<td>属于文档站（基础设施 #4），图标库只交付资产与清单</td>
+</tr>
+<tr>
+<td>Figma 组件库同步</td>
+<td>基础设施 #19，独立评估</td>
+</tr>
+<tr>
+<td>自研图标编辑器</td>
+<td>不在范围</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="s-3-三条路线对比-含实测体积">3. 三条路线对比（含实测体积）</h2>
+<p>体积数据来自本轮真机拉取 <strong>104 个 Lucide 图标</strong>并 sprite 化后实测。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A. Lucide 单一真源</th>
+<th>B. 自绘全套</th>
+<th>C. 现成图标字体（iconfont）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>许可</td>
+<td>ISC（MIT 等价，可商用，需留版权声明）</td>
+<td>自有</td>
+<td>多为 OFL/商业授权混杂</td>
+</tr>
+<tr>
+<td>起步成本</td>
+<td>低（拉取 + 清洗 + 校验）</td>
+<td>高（104 个 × 逐个对齐网格，约 15–20 人日）</td>
+<td>低（下载字体）</td>
+</tr>
+<tr>
+<td>风格可控</td>
+<td>中（24 网格、stroke 2、round 端点，几何感强）</td>
+<td>高</td>
+<td>低（字体渲染不可控、无 currentColor 渐变）</td>
+</tr>
+<tr>
+<td>体积（104 个）</td>
+<td>sprite <strong>原始 20.3KB / gzip 4.9KB</strong>，均摊 48B/图标</td>
+<td>相近（路径数据量取决于简化程度）</td>
+<td>字体文件通常 20–60KB，且全量加载</td>
+</tr>
+<tr>
+<td>渐进增强 / 无 JS</td>
+<td>原生 <code>&lt;use&gt;</code>，无 JS 也能显示</td>
+<td>同</td>
+<td>纯 CSS，但字体阻塞首屏</td>
+</tr>
+<tr>
+<td>可单文件拷贝</td>
+<td>是（sprite 一个文件 / 单图标文件）</td>
+<td>是</td>
+<td>否（字体二进制）</td>
+</tr>
+<tr>
+<td>后续扩图标</td>
+<td>直接补文件</td>
+<td>每加一个都要画</td>
+<td>需重新生成字体（缓存失效）</td>
+</tr>
+<tr>
+<td>风险</td>
+<td>与既有 16 网格 data URI 需视觉对齐</td>
+<td>工期</td>
+<td>与&quot;零依赖、可读源码&quot;原则冲突</td>
+</tr>
+</tbody>
+</table>
+<p><strong>推荐 A</strong>，理由：许可最宽松、网格与现有 demo 里 <code>&lt;svg viewBox=&quot;0 0 24 24&quot;&gt;</code> 一致、体积实测已达标（4.9KB gzip 对图标库而言极小）、可单文件取用符合仓库去中心化原则。</p>
+<hr>
+<h2 id="s-4-推荐方案细则">4. 推荐方案细则</h2>
+<h3 id="s-4-1-目录与产物-一个源-三种产出">4.1 目录与产物（一个源，三种产出）</h3>
+<pre><code>packages/base/icons/                 # 唯一真源：一个语义一个文件
+  check.svg
+  chevron-down.svg
+  ...
+  index.json                         # 语义名 → 分类 / 是否 P0 / 替代名
+
+dist/                                # 构建产出（不进 git）
+  cinder-icons.svg                   # ① sprite：&lt;symbol id=&quot;cin-i-check&quot;&gt;
+  icons/check.svg                    # ② 单图标文件：&lt;img src&gt; / CSS url() 直取
+  cinder-icons.css                   # ③ 可选：.cin-i-check 类（data URI 内联，供伪元素用）
+  cinder-icons-manifest.json         # 清单：名字、分类、原始字节、gzip
+</code></pre>
+<p>三种产出对应用户的三种真实用法：</p>
+<table>
+<thead>
+<tr>
+<th>用法</th>
+<th>写法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTML 内图标（主路径）</td>
+<td><code>&lt;svg class=&quot;cin-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#cin-i-check&quot;/&gt;&lt;/svg&gt;</code></td>
+</tr>
+<tr>
+<td>伪元素 / select 箭头（CSS 内）</td>
+<td><code>background-image: url(&quot;icons/chevron-down.svg&quot;)</code> 或 <code>.cin-i-chevron-down</code> 类</td>
+</tr>
+<tr>
+<td>独立使用（不引整套）</td>
+<td><code>&lt;img src=&quot;icons/check.svg&quot; alt=&quot;&quot;&gt;</code>（着色需用 mask，img 无法 currentColor）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4-2-注入机制-解决-file-与跨域">4.2 注入机制（解决 file:// 与跨域）</h3>
+<p>外部 sprite <code>&lt;use href=&quot;cinder-icons.svg#cin-i-check&quot;&gt;</code> 在 <code>file://</code> 与跨域场景会被浏览器拦（CORS / 同源限制）。因此提供 <code>behaviors/icons.js</code>（可选，约 1.2KB）：</p>
+<ol>
+<li>页面存在 <code>&lt;svg data-cin-icons&gt;</code> 挂载点时，<code>Cinder.icons.mount()</code> 拉取 sprite 后<strong>内联注入 DOM</strong>，此后同文档 <code>#cin-i-check</code> 引用一律可用；</li>
+<li>无 JS 时：<code>&lt;use&gt;</code> 仍指向同文档 id（宿主自行内联 sprite 亦可），或退回使用 <code>cinder-icons.css</code> 的类方案；</li>
+<li>已内联过则用 <code>dataset.cinIconsReady</code> 防重复注入（与现有行为层同一约定）。</li>
+</ol>
+<p><strong>降级顺序</strong>：内联 sprite（JS）→ 宿主内联 sprite（无 JS）→ CSS 类 data URI（无 JS、无 sprite）→ 文字/<code>aria-label</code>（最终兜底）。</p>
+<h3 id="s-4-3-命名与-api">4.3 命名与 API</h3>
+<ul>
+<li>语义名：kebab-case，动词优先（<code>check</code>、<code>chevron-down</code>、<code>arrow-left</code>、<code>trash</code>、<code>circle-alert</code>）；</li>
+<li>symbol id：<strong><code>cin-i-&lt;name&gt;</code></strong>（带前缀，避免与宿主页面自己的 sprite 撞名；104 个图标多花约 0.5KB，值得）；</li>
+<li>尺寸：复用 <code>.cin-icon</code> 的 <code>data-size=&quot;sm|md|lg&quot;</code>，不新增尺寸体系；</li>
+<li>颜色：<code>stroke: currentColor</code>，继承文字色，不提供独立颜色 API；</li>
+<li>描边：默认 <code>stroke-width: 2</code>，暴露 <code>--cin-icon-stroke</code> 可覆盖（小尺寸 12–14px 时可调到 1.75）；</li>
+<li>可访问性：装饰性图标 <code>aria-hidden=&quot;true&quot;</code>；承载语义时用 <code>role=&quot;img&quot;</code> + <code>aria-label</code>，与 <code>docs/ACCESSIBILITY.md</code> 第 4 节一致。</li>
+</ul>
+<h3 id="s-4-4-起步清单-104-个-四组">4.4 起步清单（104 个，四组）</h3>
+<table>
+<thead>
+<tr>
+<th>组</th>
+<th>数量</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>状态与反馈</td>
+<td>18</td>
+<td><code>check</code> <code>circle-check</code> <code>circle-x</code> <code>triangle-alert</code> <code>circle-alert</code> <code>info</code> <code>circle-help</code> <code>loader-circle</code> <code>circle-dot</code> <code>shield-check</code></td>
+</tr>
+<tr>
+<td>方向与导航</td>
+<td>12</td>
+<td><code>chevron-down/up/left/right</code> <code>arrow-up/down/left/right</code> <code>arrow-left-right</code> <code>menu</code> <code>panel-left</code></td>
+</tr>
+<tr>
+<td>操作</td>
+<td>32</td>
+<td><code>search</code> <code>plus</code> <code>minus</code> <code>x</code> <code>pencil</code> <code>trash-2</code> <code>copy</code> <code>save</code> <code>upload</code> <code>download</code> <code>refresh-cw</code> <code>filter</code> <code>sort</code>（用 <code>arrow-up-down</code>）<code>share-2</code> <code>undo-2</code> <code>redo-2</code> <code>zoom-in/out</code> <code>external-link</code> <code>log-in/out</code></td>
+</tr>
+<tr>
+<td>对象与业务</td>
+<td>42</td>
+<td><code>user</code> <code>users</code> <code>building-2</code> <code>house</code> <code>package</code> <code>boxes</code> <code>truck</code> <code>warehouse</code> <code>barcode</code> <code>scan-line</code> <code>qr-code</code> <code>tag</code> <code>receipt</code> <code>credit-card</code> <code>banknote</code> <code>file-text</code> <code>folder</code> <code>printer</code> <code>calendar</code> <code>clock</code> <code>chart-bar</code> <code>chart-line</code> <code>table</code> <code>layout-grid</code> <code>database</code> <code>server</code> <code>key</code> <code>lock</code></td>
+</tr>
+</tbody>
+</table>
+<p>实测：<strong>104 个 sprite 原始 20.3KB / gzip 4.9KB</strong>，均摊 48B；单图标文件 300–550B；单处 HTML 引用写法 69B。</p>
+<h3 id="s-4-5-构建与闸门-接入-build-mjs-第-9-节">4.5 构建与闸门（接入 build.mjs 第 9 节）</h3>
+<table>
+<thead>
+<tr>
+<th>闸门</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>真源校验</td>
+<td><code>icons/*.svg</code> 必须 <code>viewBox=&quot;0 0 24 24&quot;</code>、无 <code>fill</code> 硬编码颜色、无 <code>&lt;script&gt;</code>/<code>on*</code> 属性、路径节点只允许 <code>path/circle/rect/line/polyline/polygon</code></td>
+</tr>
+<tr>
+<td>命名校验</td>
+<td>文件名 kebab-case；<code>index.json</code> 必须覆盖全部文件，反向不得有多余条目</td>
+</tr>
+<tr>
+<td>体积闸门</td>
+<td>sprite gzip ≤ 32KB 为软告警线（当前 4.9KB，余量 6.5 倍）；不进 entry 预算冻结阀——图标是独立资产，不参与 8KB 入口考核</td>
+</tr>
+<tr>
+<td>缺失拦截</td>
+<td>组件 CSS/HTML 引用 <code>#cin-i-xxx</code> 或 <code>url(icons/xxx.svg)</code> 而真源无此文件 → <code>build --check</code> <strong>error</strong>（防止引用幻觉）</td>
+</tr>
+<tr>
+<td>许可</td>
+<td>sprite 与单文件头部保留 <code>ISC</code> 版权注释；新增 <code>docs/THIRD-PARTY.md</code> 记录来源与版本号</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4-6-验收-scripts-acceptance-icons-mjs">4.6 验收（<code>scripts/acceptance-icons.mjs</code>）</h3>
+<ol>
+<li>sprite 内 symbol 数量 = <code>icons/</code> 文件数；</li>
+<li>每个 symbol 在 24×24 内有实际绘制（<code>getBBox</code> 非空，防止空壳图标）；</li>
+<li><code>&lt;use&gt;</code> 渲染后 <code>currentColor</code> 生效：父元素设 <code>color: red</code>，图标像素采样为红（Playwright 截图取色）；</li>
+<li>三档尺寸渲染高度分别等于 sm/md/lg 令牌值；</li>
+<li><code>prefers-reduced-motion</code> 下 <code>loader-circle</code> 静止；</li>
+<li>无 JS 场景：宿主内联 sprite 后图标可见（截图非空白）。</li>
+</ol>
+<h3 id="s-4-7-迁移计划-分两批-不一次性翻-8-处">4.7 迁移计划（分两批，不一次性翻 8 处）</h3>
+<table>
+<thead>
+<tr>
+<th>批次</th>
+<th>范围</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>第一批</strong>：新增 HTML 用法</td>
+<td><code>demos/</code> 里字符 <code>⌕</code> 与散落 <code>&lt;svg&gt;</code> 换成 <code>#cin-i-*</code>；新增 <code>demos/icons.html</code> 全量清单页</td>
+<td>低（只加不改）</td>
+</tr>
+<tr>
+<td><strong>第二批</strong>：替换组件内 data URI</td>
+<td><code>disclosure</code> / <code>details</code> / <code>option-group</code> / <code>controls</code> / <code>copytarget</code> / <code>fileinput</code> 共 8 处</td>
+<td>中：data URI 变长/变短都会触及 entry 预算冻结阀，必须逐处测字节，涨则按第 4 节流程显式改基线</td>
+</tr>
+</tbody>
+</table>
+<p>第二批之所以不并进第一批：这 8 处是 16 网格手绘图形，换成 24 网格图标存在<strong>视觉位移</strong>（箭头位置、勾的角度），必须一页一页比对截图，不能批量替换。</p>
+<hr>
+<h2 id="s-5-决策点-需确认">5. 决策点（需确认）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>决策</th>
+<th>选项</th>
+<th>我的建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>图标来源</td>
+<td>A Lucide（ISC）/ B 自绘 / C 图标字体</td>
+<td><strong>A</strong>：许可干净、体积已实测达标、可单文件拷贝</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>交付形态</td>
+<td>A sprite + 单文件 + CSS 类（三种）/ B 仅 sprite / C 仅 CSS mask</td>
+<td><strong>A</strong>：三种用法各有真实场景（HTML / 伪元素 / 独立）</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>起步清单范围</td>
+<td>A 104 个（覆盖 60 组件常用位）/ B 先 40 个核心再增量 / C 全量 1600+ 提前囤</td>
+<td><strong>A</strong>：够用且不囤积；按组件真实需要增量，禁止预囤</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>是否替换现有 8 处 data URI</td>
+<td>A 第二批统一替换 / B 保留现状只做新增</td>
+<td><strong>A</strong>，但单独一批、逐处测字节</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>描边默认值</td>
+<td>A 2px（Lucide 原值）/ B 1.75px（小尺寸更细腻）</td>
+<td><strong>A</strong>，用 <code>--cin-icon-stroke</code> 覆盖，不偏离上游</td>
+</tr>
+</tbody>
+</table>
+<p>确认后执行顺序：真源落库 → 构建第 9 节闸门 → sprite/单文件/CSS 三产出 → <code>icons.js</code> 注入 → 验收脚本 → <code>demos/icons.html</code> → 迁移第一批 → （另一批）替换 8 处 data URI。</p>
+<hr>
+<h2 id="s-6-风险">6. 风险</h2>
+<table>
+<thead>
+<tr>
+<th>风险</th>
+<th>说明</th>
+<th>措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网格不一致</td>
+<td>现有 8 处是 16 网格手绘，新图标 24 网格，混用会出现粗细/位置差</td>
+<td>第二批逐个截图比对，不批量替换</td>
+</tr>
+<tr>
+<td>sprite 命名冲突</td>
+<td>宿主页面若已有同名 <code>#check</code></td>
+<td>symbol 统一 <code>cin-i-</code> 前缀</td>
+</tr>
+<tr>
+<td>file:// 限制</td>
+<td>外部 <code>&lt;use href=&quot;file.svg#id&quot;&gt;</code> 被拦</td>
+<td><code>icons.js</code> 注入内联，或宿主内联 sprite</td>
+</tr>
+<tr>
+<td>许可署名遗漏</td>
+<td>ISC 要求保留版权与许可声明</td>
+<td>产物头注释 + <code>docs/THIRD-PARTY.md</code> + 构建闸门检查</td>
+</tr>
+<tr>
+<td>图标囤积</td>
+<td>提前收 1600 个图标导致产物臃肿、维护无主</td>
+<td>清单按组件真实引用反推，<code>index.json</code> 标注 <code>usedBy</code>，无引用者不收录</td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-1-现状-实测-不是估算" data-level="2">1. 现状（实测，不是估算）</a>
+      <a href="#s-2-目标与边界" data-level="2">2. 目标与边界</a>
+      <a href="#s-3-三条路线对比-含实测体积" data-level="2">3. 三条路线对比（含实测体积）</a>
+      <a href="#s-4-推荐方案细则" data-level="2">4. 推荐方案细则</a>
+      <a href="#s-4-1-目录与产物-一个源-三种产出" data-level="3">4.1 目录与产物（一个源，三种产出）</a>
+      <a href="#s-4-2-注入机制-解决-file-与跨域" data-level="3">4.2 注入机制（解决 file:// 与跨域）</a>
+      <a href="#s-4-3-命名与-api" data-level="3">4.3 命名与 API</a>
+      <a href="#s-4-4-起步清单-104-个-四组" data-level="3">4.4 起步清单（104 个，四组）</a>
+      <a href="#s-4-5-构建与闸门-接入-build-mjs-第-9-节" data-level="3">4.5 构建与闸门（接入 build.mjs 第 9 节）</a>
+      <a href="#s-4-6-验收-scripts-acceptance-icons-mjs" data-level="3">4.6 验收（scripts/acceptance-icons.mjs）</a>
+      <a href="#s-4-7-迁移计划-分两批-不一次性翻-8-处" data-level="3">4.7 迁移计划（分两批，不一次性翻 8 处）</a>
+      <a href="#s-5-决策点-需确认" data-level="2">5. 决策点（需确认）</a>
+      <a href="#s-6-风险" data-level="2">6. 风险</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

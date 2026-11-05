@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>可访问性 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html" aria-current="page">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>可访问性</h1>
+        <p class="site-lead">承诺层级、实测数据与已知缺口</p>
+      </header>
+<blockquote>
+<p>本文件是<strong>对外承诺 + 实现现状</strong>的合并声明，随版本更新。数据由仓库实测生成，不引用未验证的结论。
+最近核对：Cinder 1.6.0（2026-11-04）。</p>
+</blockquote>
+<hr>
+<h2 id="s-1-承诺层级">1. 承诺层级</h2>
+<p>Cinder 只对以下四类事项做承诺。不在此列表内的，视为未承诺。</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>承诺内容</th>
+<th>兑现方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语义优先</td>
+<td>能用原生元素的，一律用原生元素（<code>button</code> / <code>input</code> / <code>select</code> / <code>table</code> / <code>details</code> / <code>dialog</code>），不自造 div 控件</td>
+<td>组件 CSS 只做外观与状态，语义由 HTML 承担</td>
+</tr>
+<tr>
+<td>角色齐全</td>
+<td>复合控件补齐 <code>role</code> + <code>aria-*</code>，状态变化同步属性</td>
+<td>见第 2 节实测数据</td>
+</tr>
+<tr>
+<td>键盘可达</td>
+<td>交互组件支持 Enter / Space / Esc / 方向键 / Home / End / Tab 中的适用项</td>
+<td>见第 3 节</td>
+</tr>
+<tr>
+<td>动效可降级</td>
+<td>所有动画在 <code>prefers-reduced-motion: reduce</code> 下关闭或退化为静态</td>
+<td>49 个 CSS 文件 + 9 个 JS 行为含降级分支</td>
+</tr>
+</tbody>
+</table>
+<p><strong>不作承诺的部分</strong>：屏幕阅读器逐款实测（NVDA / JAWS / VoiceOver 组合矩阵）、WCAG AA 逐条认证、第三方审计报告。这些需要外部测试，当前无预算。</p>
+<hr>
+<h2 id="s-2-实现现状-实测">2. 实现现状（实测）</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>实测值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用 <code>role</code> 的语义角色</td>
+<td>30 种（含 <code>dialog</code> <code>grid</code> <code>listbox</code> <code>menu</code> <code>radiogroup</code> <code>slider</code> <code>tablist</code> <code>tree</code> 等）</td>
+</tr>
+<tr>
+<td>使用的 <code>aria-*</code> 属性</td>
+<td>32 种（含 <code>aria-expanded</code> <code>aria-selected</code> <code>aria-activedescendant</code> <code>aria-live</code> <code>aria-modal</code> <code>aria-setsize</code> / <code>aria-posinset</code> <code>aria-sort</code> <code>aria-valuetext</code> 等）</td>
+</tr>
+<tr>
+<td>含 ARIA 标注的源码文件</td>
+<td>44 个</td>
+</tr>
+<tr>
+<td>使用焦点可见样式的文件</td>
+<td>41 个（统一 <code>:focus-visible</code>，不使用 <code>:focus</code> 覆盖鼠标态）</td>
+</tr>
+<tr>
+<td>使用 <code>aria-live</code> 的文件</td>
+<td>19 个（提示、结果、流式输出、上传队列等异步反馈）</td>
+</tr>
+<tr>
+<td><code>prefers-reduced-motion</code> 降级</td>
+<td>49 个 CSS 文件（48 base + 1 erp）；另 9 个 JS 行为含 matchMedia 降级（合计 58）</td>
+</tr>
+<tr>
+<td>键盘事件处理文件</td>
+<td>27 个</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-2-1-焦点与键盘的既有约定">2.1 焦点与键盘的既有约定</h3>
+<ul>
+<li>焦点环走 <code>--cin-color-focus-ring</code> 令牌，禁止组件自定颜色，保证全局一致且随主题/暗色切换。</li>
+<li>浮层类（<code>dialog</code> / <code>popover</code> / <code>command-palette</code> / <code>cascader</code>）使用焦点陷阱 + Esc 关闭 + 关闭后焦点回到触发元素。</li>
+<li>列表类复合控件使用 roving tabindex 或 <code>aria-activedescendant</code>（二者在同一组件内不混用）。</li>
+<li>树、网格、轮播、分段控件补齐方向键与 Home / End。</li>
+</ul>
+<h3 id="s-2-2-非颜色编码">2.2 非颜色编码</h3>
+<p>状态不单靠颜色传达：危险态同时改边框样式与 <code>aria-invalid</code>；选中态同时改 <code>aria-selected</code> / <code>aria-checked</code>；必填项用文字或 <code>required</code> 属性而非仅红色星号。</p>
+<hr>
+<h2 id="s-3-已知缺口-如实列出">3. 已知缺口（如实列出）</h2>
+<table>
+<thead>
+<tr>
+<th>缺口</th>
+<th>影响</th>
+<th>计划</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无 axe-core 自动化扫描</td>
+<td>结构性问题只能靠人工与验收脚本，覆盖不全</td>
+<td>P1 待做（接入 CI，断言&quot;零 serious&quot;）</td>
+</tr>
+<tr>
+<td>无逐组件键盘矩阵文档</td>
+<td>每个组件支持哪些键位散落在 <code>intents/&lt;name&gt;.md</code> 第三段，没有汇总表</td>
+<td>P1 待做（从 60 份 intent 汇总生成）</td>
+</tr>
+<tr>
+<td>屏幕阅读器未实机验证</td>
+<td>实际朗读顺序可能与预期有偏差</td>
+<td>无预算，列为不承诺项</td>
+</tr>
+<tr>
+<td>对比度未自动化校验</td>
+<td>依赖令牌取值人工把关，浅色/暗色各 8 套皮肤可能有个别不达标</td>
+<td>P2 待做（令牌层校验）</td>
+</tr>
+<tr>
+<td><code>sr-only</code> 工具类仅 1 处定义</td>
+<td>需要视觉隐藏文本的场景覆盖薄弱</td>
+<td>随组件补齐</td>
+</tr>
+</tbody>
+</table>
+<p>任何缺口修复后必须同步更新本表，不允许&quot;改了代码不改声明&quot;。</p>
+<hr>
+<h2 id="s-4-使用方需要注意的两件事">4. 使用方需要注意的两件事</h2>
+<ol>
+<li><strong>不要移除原生语义</strong>。Cinder 的 CSS 以 <code>[data-*]</code> 属性做状态，不改标签名。用 <code>div</code> 替换 <code>button</code> 会直接失去键盘与朗读能力。</li>
+<li><strong>图标必须有可读名</strong>。<code>.cin-icon</code> 只是容器，装饰性图标加 <code>aria-hidden=&quot;true&quot;</code>，功能性图标必须配 <code>aria-label</code> 或可见文字。</li>
+</ol>
+<hr>
+<h2 id="s-5-反馈">5. 反馈</h2>
+<p>无障碍缺陷按 <code>docs/known-issues.md</code> 的 KN 编号流程登记，附看守断言位置；修复前断言以 <code>XFAIL</code> 留在验收里。
+<em>（内容由AI生成，仅供参考）</em></p>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-1-承诺层级" data-level="2">1. 承诺层级</a>
+      <a href="#s-2-实现现状-实测" data-level="2">2. 实现现状（实测）</a>
+      <a href="#s-2-1-焦点与键盘的既有约定" data-level="3">2.1 焦点与键盘的既有约定</a>
+      <a href="#s-2-2-非颜色编码" data-level="3">2.2 非颜色编码</a>
+      <a href="#s-3-已知缺口-如实列出" data-level="2">3. 已知缺口（如实列出）</a>
+      <a href="#s-4-使用方需要注意的两件事" data-level="2">4. 使用方需要注意的两件事</a>
+      <a href="#s-5-反馈" data-level="2">5. 反馈</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

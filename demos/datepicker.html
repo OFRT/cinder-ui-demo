@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 日期与时间</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.5</span>
+      <span class="cin-caption">文本框手输、日历点选、键盘漫游三条路都通</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">日期与时间</div>
+        <a class="cin-navitem" href="#single">单选日期</a>
+        <a class="cin-navitem" href="#range">日期范围</a>
+        <a class="cin-navitem" href="#limits">限制与排除</a>
+        <a class="cin-navitem" href="#time">时间输入</a>
+        <a class="cin-navitem" href="#form">表单内嵌</a>
+        <a class="cin-navitem" href="#events">事件与 API</a>
+      </aside>
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">日期与时间</h1>
+                  <p class="cin-caption">日历由脚本绘制，输入框始终可手输 YYYY-MM-DD，断 JS 也能提交</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="secondary" data-size="sm" id="toEvents">跳到「事件与 API」</button>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="single">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">单选日期</h2>
+                <span class="cin-caption">点日历按钮或按 Alt+↓ 打开；方向键走日、PageUp/PageDown 走月、Shift+Page 走年</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <div class="cin-datepicker" data-datepicker data-value="2026-11-01" id="dpBasic">
+                    <div class="cin-datepicker-fields">
+                      <span class="cin-datepicker-field"><input data-date-field type="text" aria-label="开票日期"></span>
+                      <button class="cin-datepicker-toggle" type="button" aria-label="打开日历"></button>
+                    </div>
+                  </div>
+                  <span class="cin-caption">默认值 2026-11-01，值写回 data-value</span>
+                </div>
+                <div class="cin-toolbar">
+                  <div class="cin-datepicker" data-datepicker data-size="sm">
+                    <div class="cin-datepicker-fields">
+                      <span class="cin-datepicker-field"><input data-date-field type="text" aria-label="小尺寸日期"></span>
+                      <button class="cin-datepicker-toggle" type="button" aria-label="打开日历"></button>
+                    </div>
+                  </div>
+                  <span class="cin-caption">data-size="sm"</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="range">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">日期范围</h2>
+                <span class="cin-caption">点第一天定起始，移动指针看预览带，点第二天收口；两框可互换顺序</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <div class="cin-datepicker" data-datepicker data-mode="range" data-value="2026-11-03" data-value2="2026-11-12" id="dpRange">
+                    <div class="cin-datepicker-fields">
+                      <span class="cin-datepicker-field"><input data-date-field type="text" aria-label="账期开始"></span>
+                      <span class="cin-datepicker-field"><input data-date-field type="text" aria-label="账期结束"></span>
+                      <button class="cin-datepicker-toggle" type="button" aria-label="打开日历"></button>
+                    </div>
+                  </div>
+                  <span class="cin-caption">data-mode="range"，第二值写 data-value2</span>
+                </div>
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="rangePreset">置为最近 7 天</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="rangeClear">清空</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="limits">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">限制与排除</h2>
+                <span class="cin-caption">2026 年内、只允许工作日、排除法定假日；越界日直接置灰并加删除线</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <div class="cin-datepicker" data-datepicker
+                       data-min="2026-01-01" data-max="2026-12-31"
+                       data-disable-weekdays="0,6"
+                       data-exclude="2026-01-01,2026-05-01,2026-10-01,2026-10-02"
+                       id="dpLimited">
+                    <div class="cin-datepicker-fields">
+                      <span class="cin-datepicker-field"><input data-date-field type="text" aria-label="预约日期"></span>
+                      <button class="cin-datepicker-toggle" type="button" aria-label="打开日历"></button>
+                    </div>
+                  </div>
+                  <span class="cin-caption">data-min / data-max / data-disable-weekdays / data-exclude</span>
+                </div>
+                <p class="cin-caption" id="limitNote">试着手输 2026-01-03（周六）或 2026-10-01，会被标红拒绝。</p>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="time">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">时间输入</h2>
+                <span class="cin-caption">原生 time 控件负责步进与读屏，只统一外观；step 决定粒度</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <span class="cin-field">
+                    <span class="cin-field-label">营业开始</span>
+                    <span class="cin-timeinput"><input type="time" value="09:00" step="900" aria-label="营业开始"></span>
+                  </span>
+                  <span class="cin-field">
+                    <span class="cin-field-label">打卡时刻</span>
+                    <span class="cin-timeinput"><input type="time" value="08:45:00" step="1" aria-label="打卡时刻"></span>
+                  </span>
+                  <span class="cin-field">
+                    <span class="cin-field-label">小尺寸</span>
+                    <span class="cin-timeinput" data-size="sm"><input type="time" value="18:30" aria-label="小尺寸时间"></span>
+                  </span>
+                </div>
+                <div class="cin-toolbar">
+                  <span class="cin-field">
+                    <span class="cin-field-label">禁用态</span>
+                    <span class="cin-timeinput" data-disabled><input type="time" value="12:00" aria-label="禁用时间" disabled></span>
+                  </span>
+                  <span class="cin-field">
+                    <span class="cin-field-label">校验未过</span>
+                    <span class="cin-timeinput" data-invalid><input type="time" aria-label="校验未过" aria-invalid="true"></span>
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="form">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">表单内嵌</h2>
+                <span class="cin-caption">标签、帮助文案、错误提示与日期控件对齐排布</span>
+              </div>
+              <form class="cin-stack" id="demoForm" novalidate>
+                <div class="cin-toolbar" style="align-items:flex-start; flex-wrap:wrap; gap:var(--cin-space-300)">
+                  <div class="cin-field">
+                    <label class="cin-field-label" for="fDate" data-required>到货日期</label>
+                    <div class="cin-datepicker" data-datepicker data-min="2026-11-01" data-max="2027-03-31">
+                      <div class="cin-datepicker-fields">
+                        <span class="cin-datepicker-field"><input data-date-field id="fDate" type="text" aria-label="到货日期" aria-describedby="fDateHelp fDateErr"></span>
+                        <button class="cin-datepicker-toggle" type="button" aria-label="打开日历"></button>
+                      </div>
+                    </div>
+                    <span class="cin-field-help" id="fDateHelp">可排产区间 2026-11-01 至 2027-03-31</span>
+                    <span class="cin-field-error" id="fDateErr" hidden>请选择区间内的日期</span>
+                  </div>
+                  <div class="cin-field">
+                    <label class="cin-field-label" for="fTime">截单时间</label>
+                    <span class="cin-timeinput"><input id="fTime" type="time" value="16:00" step="600" aria-label="截单时间"></span>
+                    <span class="cin-field-help">超过该时间顺延次日</span>
+                  </div>
+                  <div class="cin-field">
+                    <label class="cin-field-label">禁用示例</label>
+                    <div class="cin-datepicker" data-datepicker data-disabled>
+                      <div class="cin-datepicker-fields">
+                        <span class="cin-datepicker-field"><input data-date-field type="text" aria-label="禁用日期" disabled></span>
+                        <button class="cin-datepicker-toggle" type="button" aria-label="打开日历" disabled></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="cin-toolbar">
+                  <button class="cin-btn" type="submit" data-variant="primary">提交</button>
+                  <span class="cin-caption" id="formOut">尚未提交</span>
+                </div>
+              </form>
+            </section>
+
+            <section class="cin-panel" id="events">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">事件与 API</h2>
+                <span class="cin-caption">cin:datechange / dateopen / dateclose；脚本侧用 Cinder.setDatePicker(root, 值, 第二值)</span>
+              </div>
+              <div class="cin-stack">
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiSet">设为 2026-12-24</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="apiBad">传入非法值</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" id="apiRange">范围为 12-01 至 12-10</button>
+                </div>
+                <div class="cin-panel" style="background:var(--cin-color-bg-surface-sunken)">
+                  <ol class="cin-stack" id="log" style="font-family:var(--cin-family-mono); font-size:var(--cin-text-caption-size); margin:0; padding-inline-start:1.25rem"></ol>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/cinder.js"></script>
+  <script>
+    const log = document.getElementById("log");
+    const say = (text) => {
+      const li = document.createElement("li");
+      li.textContent = text;
+      log.prepend(li);
+      while (log.children.length > 10) log.lastElementChild.remove();
+    };
+    const dp = document.getElementById("dpBasic");
+    const dpr = document.getElementById("dpRange");
+    const dpl = document.getElementById("dpLimited");
+    [dp, dpr, dpl].forEach((root) => {
+      ["cin:datechange", "cin:dateopen", "cin:dateclose"].forEach((type) =>
+        root.addEventListener(type, (event) => {
+          const d = event.detail || {};
+          say(`${type} ${root.id} value=${d.value || "-"} value2=${d.value2 || "-"}${d.reason ? " reason=" + d.reason : ""}`);
+        }),
+      );
+    });
+
+    document.getElementById("apiSet").addEventListener("click", () => {
+      const out = Cinder.setDatePicker(dp, "2026-12-24");
+      say(`setDatePicker → ${out ? out.value : "null"}`);
+    });
+    document.getElementById("apiBad").addEventListener("click", () => {
+      const out = Cinder.setDatePicker(dp, "2026-02-31");
+      say(`setDatePicker 非法值 → ${out ? out.value : "null"}`);
+    });
+    document.getElementById("apiRange").addEventListener("click", () => {
+      const out = Cinder.setDatePicker(dpr, "2026-12-01", "2026-12-10");
+      say(`setDatePicker range → ${out ? out.value + " → " + out.value2 : "null"}`);
+    });
+    document.getElementById("rangePreset").addEventListener("click", () => {
+      const end = new Date(2026, 10, 12);
+      const start = new Date(2026, 10, 6);
+      const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      const out = Cinder.setDatePicker(dpr, fmt(start), fmt(end));
+      say(`最近 7 天 → ${out ? out.value + " → " + out.value2 : "null"}`);
+    });
+    document.getElementById("rangeClear").addEventListener("click", () => {
+      const fields = dpr.querySelectorAll("[data-date-field]");
+      fields.forEach((f) => {
+        f.value = "";
+        f.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      say("范围已清空");
+    });
+
+    document.getElementById("demoForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const value = document.querySelector("#fDate");
+      const err = document.getElementById("fDateErr");
+      const ok = !!value.value && !value.closest(".cin-datepicker-field").hasAttribute("data-invalid");
+      err.hidden = ok;
+      document.getElementById("formOut").textContent = ok ? `已提交 ${value.value}` : "校验未通过";
+      say(`submit ok=${ok}`);
+    });
+    document.getElementById("toEvents").addEventListener("click", () => {
+      document.getElementById("events").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  </script>
+</body>
+</html>

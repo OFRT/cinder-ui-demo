@@ -1,0 +1,76 @@
+{
+  "generated": "2026-11-04T07:50:30.978Z",
+  "policy": "R1 禁 all / R2 走令牌 / R3 无限动画须可关 / R4 关键帧只动合成属性 / R5 过渡禁布局属性 / R6 will-change 非常驻 / R7 动画须有 reduce / R8 JS 循环须可停",
+  "stats": {
+    "css": 80,
+    "js": 52,
+    "transitions": 105,
+    "animations": 60,
+    "infinite": 18
+  },
+  "issues": [],
+  "byRule": {},
+  "allowedInfinite": 18,
+  "layoutTransitionAllow": [
+    {
+      "file": "packages/base/src/components/morph-button.css",
+      "prop": "inline-size",
+      "why": "T42 形变按钮：胶囊↔圆形收窄即状态语义，无 transform 等价表达"
+    },
+    {
+      "file": "packages/base/src/components/progress.css",
+      "prop": "inline-size",
+      "why": "进度条长度即数据本身，仅此一处允许"
+    },
+    {
+      "file": "packages/base/src/components/heatmap.css",
+      "prop": "inline-size",
+      "why": "格宽随列数伸缩，一次性布局过渡"
+    },
+    {
+      "file": "packages/base/src/components/disclosure.css",
+      "prop": "block-size",
+      "why": "手风琴展开高度必须可算出内容高度，transform 会裁切内容"
+    },
+    {
+      "file": "packages/base/src/components/feedback.css",
+      "prop": "width",
+      "why": "条形进度以宽度承载数值，属数据可视化通道"
+    },
+    {
+      "file": "packages/base/src/components/carousel.css",
+      "prop": "inline-size",
+      "why": "滑轨按页宽伸缩，窄屏下 translate 会露出相邻页"
+    },
+    {
+      "file": "packages/base/src/components/fileinput.css",
+      "prop": "inline-size",
+      "why": "选取文件后文件名展宽，属一次性布局落位"
+    },
+    {
+      "file": "packages/base/src/components/task-rows.css",
+      "prop": "inline-size",
+      "why": "行内进度胶囊伸缩，与行高锁定"
+    },
+    {
+      "file": "packages/base/src/components/upload-queue.css",
+      "prop": "inline-size",
+      "why": "上传进度条长度即数据本身"
+    },
+    {
+      "file": "packages/base/src/components/pull-refresh.css",
+      "prop": "height",
+      "why": "下拉区域高度随手势展开，需与滚动位移 1:1 对应"
+    },
+    {
+      "file": "packages/base/src/components/overlay.css",
+      "prop": "inline-size",
+      "why": "引导气泡按目标元素尺寸挖孔，尺寸即挖孔形状"
+    },
+    {
+      "file": "packages/base/src/components/overlay.css",
+      "prop": "block-size",
+      "why": "引导气泡按目标元素尺寸挖孔，尺寸即挖孔形状"
+    }
+  ]
+}

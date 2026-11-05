@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 评论</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">comment</span>
+      <span class="cin-caption">头像 + 作者 + 正文 + 操作，嵌套回复靠缩进；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础列表（含嵌套回复与引用）</h2>
+          <ul class="cin-comment-list" id="c-nested">
+            <li class="cin-comment">
+              <span class="cin-avatar" data-tone="accent" aria-hidden="true"><span class="cin-avatar-text">林</span></span>
+              <div class="cin-comment-main">
+                <div class="cin-comment-head">
+                  <span class="cin-comment-author">林洋</span>
+                  <span class="cin-comment-role">楼主</span>
+                  <span class="cin-comment-meta"><time datetime="2026-11-01T09:24">今天 09:24</time></span>
+                </div>
+                <div class="cin-comment-content">
+                  <p>补货单已经提交，华东仓的 A 类物料预计周三到货，请仓库那边先留出收货位。</p>
+                </div>
+                <div class="cin-comment-actions">
+                  <button class="cin-btn" data-size="sm" type="button">回复</button>
+                  <button class="cin-btn" data-size="sm" type="button">点赞 3</button>
+                </div>
+
+                <ul class="cin-comment-replies">
+                  <li class="cin-comment">
+                    <span class="cin-avatar" data-size="sm" data-tone="success" aria-hidden="true"><span class="cin-avatar-text">周</span></span>
+                    <div class="cin-comment-main">
+                      <div class="cin-comment-head">
+                        <span class="cin-comment-author">周舟</span>
+                        <span class="cin-comment-meta"><time datetime="2026-11-01T09:41">今天 09:41</time></span>
+                      </div>
+                      <div class="cin-comment-content">
+                        <div class="cin-comment-quote">补货单已经提交，华东仓的 A 类物料预计周三到货</div>
+                        <p>收货位已预留 2 个，周三上午到货直接上架。</p>
+                      </div>
+                      <div class="cin-comment-actions">
+                        <button class="cin-btn" data-size="sm" type="button">回复</button>
+                      </div>
+
+                      <ul class="cin-comment-replies">
+                        <li class="cin-comment">
+                          <span class="cin-avatar" data-size="sm" data-tone="info" aria-hidden="true"><span class="cin-avatar-text">陈</span></span>
+                          <div class="cin-comment-main">
+                            <div class="cin-comment-head">
+                              <span class="cin-comment-author">陈默</span>
+                              <span class="cin-comment-meta"><time datetime="2026-11-01T10:02">今天 10:02</time></span>
+                            </div>
+                            <div class="cin-comment-content">
+                              <p>收到，质检那边我同步一下。</p>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li class="cin-comment">
+              <span class="cin-avatar" data-tone="warning" aria-hidden="true"><span class="cin-avatar-text">何</span></span>
+              <div class="cin-comment-main">
+                <div class="cin-comment-head">
+                  <span class="cin-comment-author">何一鸣</span>
+                  <span class="cin-comment-meta"><time datetime="2026-10-31T18:10">昨天 18:10</time></span>
+                </div>
+                <div class="cin-comment-content">
+                  <p>上次的到货延迟是因为承运商爆仓，这次建议换一家，附运单链接：https://example.com/waybill/HS2200417zh-CN-track-record-for-review</p>
+                </div>
+                <div class="cin-comment-actions">
+                  <button class="cin-btn" data-size="sm" type="button">回复</button>
+                  <button class="cin-btn" data-size="sm" type="button">举报</button>
+                </div>
+              </div>
+            </li>
+
+            <li class="cin-comment">
+              <span class="cin-avatar" aria-hidden="true"></span>
+              <div class="cin-comment-main">
+                <div class="cin-comment-head">
+                  <span class="cin-comment-author">匿名用户</span>
+                  <span class="cin-comment-meta"><time datetime="2026-10-30T15:33">2 天前</time></span>
+                </div>
+                <div class="cin-comment-content">
+                  <p>该评论已删除</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">分隔线列表（data-divided）</h2>
+          <ul class="cin-comment-list" id="c-divided" data-divided style="max-inline-size:var(--cin-container-reading-text)">
+            <li class="cin-comment">
+              <span class="cin-avatar" data-size="sm" data-tone="accent" aria-hidden="true"><span class="cin-avatar-text">王</span></span>
+              <div class="cin-comment-main">
+                <div class="cin-comment-head">
+                  <span class="cin-comment-author">王倩</span>
+                  <span class="cin-comment-meta">今天 08:05</span>
+                </div>
+                <div class="cin-comment-content"><p>对账单已核对，差异 2 笔在备注里标了。</p></div>
+              </div>
+            </li>
+            <li class="cin-comment">
+              <span class="cin-avatar" data-size="sm" data-tone="success" aria-hidden="true"><span class="cin-avatar-text">赵</span></span>
+              <div class="cin-comment-main">
+                <div class="cin-comment-head">
+                  <span class="cin-comment-author">赵云开</span>
+                  <span class="cin-comment-meta">今天 08:31</span>
+                </div>
+                <div class="cin-comment-content"><p>收到，差异已调整进本月凭证。</p></div>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">空态</h2>
+          <div class="cin-comment-empty" id="c-empty">还没有评论，来说两句</div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

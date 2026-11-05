@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 水印</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">watermark</span>
+      <span class="cin-caption">不拦指针的斜向平铺水印，密度/明暗/角标三档；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础平铺（详情页 / 报表页）</h2>
+          <div class="cin-watermark" id="wm-basic" style="max-inline-size:640px">
+            <div class="cin-watermark-layer" aria-hidden="true">
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+              <span class="cin-watermark-item">张明 工号 10237 · 2026-11-02</span>
+            </div>
+            <div class="cin-watermark-content">
+              <div class="cin-card">
+                <h3 class="cin-card-title">2026 年 10 月薪酬明细</h3>
+                <p class="cin-body-text">应发合计 18,640.00 元，其中基本工资 12,000.00 元、绩效 4,200.00 元、补贴 2,440.00 元。</p>
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" type="button" id="wm-btn-1">查看明细</button>
+                  <button class="cin-btn" data-size="sm" data-variant="ghost" type="button">导出</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">密集档（小卡片 / 表格区）</h2>
+          <div class="cin-watermark" id="wm-dense" data-density="dense" style="max-inline-size:420px">
+            <div class="cin-watermark-layer" aria-hidden="true">
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+              <span class="cin-watermark-item">内部资料 · 138****6611</span>
+            </div>
+            <div class="cin-watermark-content">
+              <div class="cin-card">
+                <h3 class="cin-card-title">库存预警</h3>
+                <p class="cin-body-text">SKU-88213 低于安全库存 12 件，请尽快补货。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">深色底（data-tone="inverse"）</h2>
+          <div class="cin-watermark" id="wm-inverse" data-tone="inverse" style="max-inline-size:520px">
+            <div class="cin-watermark-layer" aria-hidden="true">
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+              <span class="cin-watermark-item">财务共享中心 · 仅限内部传阅</span>
+            </div>
+            <div class="cin-watermark-content">
+              <div class="cin-card" style="background-color:var(--cin-color-bg-surface-sunken)">
+                <h3 class="cin-card-title">Q4 预算执行率</h3>
+                <p class="cin-body-text">截至 10 月 31 日，整体执行率 68.4%，其中市场费用超支 6.2%。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">角标档（data-mode="corner"）</h2>
+          <div class="cin-watermark" id="wm-corner" data-mode="corner" style="max-inline-size:480px">
+            <div class="cin-watermark-layer" aria-hidden="true">
+              <span class="cin-watermark-item">内部资料</span>
+            </div>
+            <div class="cin-watermark-content">
+              <div class="cin-card">
+                <h3 class="cin-card-title">组织架构调整方案（讨论稿）</h3>
+                <p class="cin-body-text">本页仅用于内部讨论，请勿外传。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">水印下正文仍可点击（指针穿透）</h2>
+          <div class="cin-watermark" id="wm-interactive" style="max-inline-size:480px">
+            <div class="cin-watermark-layer" aria-hidden="true">
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+              <span class="cin-watermark-item">点击测试 · 水印不拦截</span>
+            </div>
+            <div class="cin-watermark-content">
+              <div class="cin-card">
+                <h3 class="cin-card-title">审批流</h3>
+                <p class="cin-body-text">表单可正常填写与提交。</p>
+                <div class="cin-toolbar">
+                  <button class="cin-btn" data-size="sm" data-variant="primary" type="button" id="wm-btn-2">同意</button>
+                  <button class="cin-btn" data-size="sm" data-variant="secondary" type="button" id="wm-btn-3">驳回</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

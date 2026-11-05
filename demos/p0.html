@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / P0 行为件</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <style>
+    body { padding: 24px; background: var(--cin-color-bg-canvas); }
+    .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); max-width: 1180px; margin: 0 auto; }
+    .cell { padding: 16px; border: 1px solid var(--cin-color-border-subtle); border-radius: var(--cin-radius-md); background: var(--cin-color-bg-surface); }
+    .cell > h2 { margin: 0 0 12px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--cin-color-text-tertiary); }
+    .cin-ptr { max-height: 180px; }
+    .cin-ptr [data-ptr-scroll] { max-height: 180px; overflow: auto; padding: 8px; }
+  </style>
+</head>
+<body class="cin-body">
+  <div class="grid">
+
+    <section class="cell">
+      <h2>stream-text · 流式文本</h2>
+      <div class="cin-stream" id="stream" data-cin-stream="on" data-cin-status="busy">正在生成的回答，光标在尾部。</div>
+    </section>
+
+    <section class="cell">
+      <h2>undo-bar · 撤销条</h2>
+      <p style="margin:0 0 8px;color:var(--cin-color-text-secondary)">删除后 5 秒内可撤销，超时自动提交。</p>
+      <button type="button" class="cin-btn" data-size="sm" id="undo-trigger">删除 3 条记录</button>
+    </section>
+
+    <section class="cell">
+      <h2>combobox · 组合框</h2>
+      <div class="cin-combobox" id="combo">
+        <input class="cin-combobox-input" type="text" placeholder="选择城市" aria-label="城市">
+        <ul class="cin-combobox-list" hidden role="listbox">
+          <li class="cin-combobox-option" role="option" data-value="北京">北京</li>
+          <li class="cin-combobox-option" role="option" data-value="上海">上海</li>
+          <li class="cin-combobox-option" role="option" data-value="深圳">深圳</li>
+          <li class="cin-combobox-option" role="option" data-value="杭州">杭州</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>command-palette · 命令面板</h2>
+      <button type="button" class="cin-btn" data-size="sm" id="palette-open">打开命令面板</button>
+      <div class="cin-palette-wrap" id="palette" hidden>
+        <div class="cin-palette" role="dialog" aria-label="命令面板">
+          <input class="cin-palette-input" type="text" placeholder="输入命令…" aria-label="命令">
+          <ul class="cin-palette-list">
+            <li class="cin-palette-group">导航</li>
+            <li class="cin-palette-item" data-id="home" data-label="回到首页"><span class="cin-palette-label">回到首页</span><span class="cin-palette-kbd">G H</span></li>
+            <li class="cin-palette-item" data-id="inbox" data-label="打开收件箱"><span class="cin-palette-label">打开收件箱</span><span class="cin-palette-kbd">G I</span></li>
+            <li class="cin-palette-group">操作</li>
+            <li class="cin-palette-item" data-id="new" data-label="新建任务"><span class="cin-palette-label">新建任务</span><span class="cin-palette-kbd">N T</span></li>
+          </ul>
+          <div class="cin-palette-foot"><span>↑↓ 选择</span><span>↵ 执行</span><span>esc 关闭</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>tag-input · 标签输入</h2>
+      <div class="cin-tags" id="tags" data-max="8">
+        <span class="cin-tag" data-value="已有"><span class="cin-tag-label">已有</span><button type="button" class="cin-tag-remove" aria-label="移除">×</button></span>
+        <input class="cin-tags-field" type="text" placeholder="回车添加，逗号分隔" aria-label="标签">
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>currency-input · 金额输入</h2>
+      <div class="cin-currency" id="money" data-max="10000">
+        <span class="cin-currency-symbol">¥</span>
+        <input class="cin-currency-input" type="text" inputmode="decimal" value="1234.5" aria-label="金额">
+        <span class="cin-currency-unit">元</span>
+        <span class="cin-currency-error">金额格式不正确</span>
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>password-strength · 密码强度</h2>
+      <div class="cin-pwstrength" id="pw" data-score="0">
+        <input class="cin-pwstrength-input" type="password" placeholder="输入密码" aria-label="密码">
+        <div class="cin-pwstrength-meter" aria-hidden="true">
+          <span class="cin-pwstrength-seg"></span><span class="cin-pwstrength-seg"></span><span class="cin-pwstrength-seg"></span><span class="cin-pwstrength-seg"></span>
+        </div>
+        <p class="cin-pwstrength-note">至少 8 位</p>
+        <ul class="cin-pwstrength-rules"><li data-rule="length">8 位以上</li><li data-rule="mix">大小写混合</li><li data-rule="digit">含数字</li></ul>
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>inline-edit · 行内编辑</h2>
+      <div class="cin-inline-edit" id="inline" data-state="idle">
+        <span class="cin-inline-edit-value">季度目标</span>
+        <input class="cin-inline-edit-input" type="text" aria-label="标题">
+        <span class="cin-inline-edit-actions"><button type="button" class="cin-btn" data-size="sm" data-action="save">保存</button><button type="button" class="cin-btn" data-size="sm" data-variant="ghost" data-action="cancel">取消</button></span>
+        <span class="cin-inline-edit-error">保存失败</span>
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>pull-refresh · 下拉刷新</h2>
+      <div class="cin-ptr" id="ptr" data-cin-status="idle">
+        <div class="cin-ptr-indicator"><span class="cin-ptr-spinner"></span><span class="cin-ptr-text">下拉刷新</span></div>
+        <div data-ptr-scroll>
+          <p>下拉或点击下方按钮刷新。</p><p>第二行内容。</p><p>第三行内容。</p>
+        </div>
+        <button type="button" class="cin-ptr-fallback">刷新</button>
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>lightbox · 灯箱</h2>
+      <button type="button" class="cin-btn" data-size="sm" id="lb-open">打开大图</button>
+      <div class="cin-lightbox-wrap" id="lightbox" hidden>
+        <div class="cin-lightbox">
+          <div class="cin-lightbox-stage"><img class="cin-lightbox-img" alt=""></div>
+          <p class="cin-lightbox-caption"></p>
+          <span class="cin-lightbox-error">图片加载失败</span>
+        </div>
+        <button type="button" class="cin-lightbox-nav" data-dir="prev" aria-label="上一张">‹</button>
+        <button type="button" class="cin-lightbox-nav" data-dir="next" aria-label="下一张">›</button>
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>heatmap · 热力图</h2>
+      <div class="cin-heatmap" id="heat" data-max="8" data-rows="7">
+        <div class="cin-heatmap-grid">
+          <span class="cin-heatmap-cell" data-value="0" data-label="周一 · 0 次"></span>
+          <span class="cin-heatmap-cell" data-value="1" data-label="周二 · 1 次"></span>
+          <span class="cin-heatmap-cell" data-value="2" data-label="周三 · 2 次"></span>
+          <span class="cin-heatmap-cell" data-value="4" data-label="周四 · 4 次"></span>
+          <span class="cin-heatmap-cell" data-value="6" data-label="周五 · 6 次"></span>
+          <span class="cin-heatmap-cell" data-value="8" data-label="周六 · 8 次"></span>
+          <span class="cin-heatmap-cell" data-value="3" data-label="周日 · 3 次"></span>
+          <span class="cin-heatmap-cell" data-value="0" data-label="下周一 · 0 次"></span>
+          <span class="cin-heatmap-cell" data-value="5" data-label="下周二 · 5 次"></span>
+          <span class="cin-heatmap-cell" data-value="7" data-label="下周三 · 7 次"></span>
+          <span class="cin-heatmap-cell" data-value="2" data-label="下周四 · 2 次"></span>
+          <span class="cin-heatmap-cell" data-value="1" data-label="下周五 · 1 次"></span>
+          <span class="cin-heatmap-cell" data-value="0" data-label="下周六 · 0 次"></span>
+          <span class="cin-heatmap-cell" data-value="4" data-label="下周日 · 4 次"></span>
+        </div>
+        <div class="cin-heatmap-legend"><span>少</span><span class="cin-heatmap-scale"><span data-level="1"></span><span data-level="2"></span><span data-level="3"></span><span data-level="4"></span></span><span>多</span></div>
+      </div>
+    </section>
+
+    <section class="cell">
+      <h2>diff-view · 差异视图</h2>
+      <div class="cin-diff" id="diff" data-wrap="on">
+        <div class="cin-diff-line" data-kind="hunk"><span class="cin-diff-num">—</span><span class="cin-diff-num">—</span><span class="cin-diff-marker">@@</span><span class="cin-diff-text">-1,2 +1,3 @@</span></div>
+        <div class="cin-diff-line" data-kind="same"><span class="cin-diff-num">1</span><span class="cin-diff-num">1</span><span class="cin-diff-marker"> </span><span class="cin-diff-text">const a = 1;</span></div>
+        <div class="cin-diff-line" data-kind="del"><span class="cin-diff-num">2</span><span class="cin-diff-num">—</span><span class="cin-diff-marker">-</span><span class="cin-diff-text">const b = old(2);</span></div>
+        <div class="cin-diff-line" data-kind="add"><span class="cin-diff-num">—</span><span class="cin-diff-num">2</span><span class="cin-diff-marker">+</span><span class="cin-diff-text">const b = next(2);</span></div>
+        <button type="button" class="cin-btn" data-size="sm" data-action="toggle-wrap">换行关</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="../dist/cinder.js"></script>
+  <script>
+    // 演示页的胶水：把组件接到对应行为入口上
+    const C = window.Cinder;
+    window.__mock = { fail: false };
+
+    C.inlineEdit.init(document.getElementById("inline"), {
+      commit: (next) => window.__mock.fail ? Promise.reject(new Error("boom")) : Promise.resolve(next),
+    });
+
+    C.pullRefresh.init(document.getElementById("ptr"), {
+      threshold: 40,
+      onRefresh: (el) => new Promise((res, rej) => setTimeout(() => window.__mock.fail ? rej(new Error("net")) : res("ok"), 30)),
+    });
+
+    document.getElementById("undo-trigger").addEventListener("click", () => {
+      window.__undo = C.Primitives.undo.offer({
+        label: "已删除 3 条记录",
+        onUndo: () => { window.__undoState = "revoked"; },
+      });
+      window.__undo.el.addEventListener("cin:undo-committed", () => { window.__undoState = "committed"; });
+    });
+
+    const LB_IMG = (label, tone) => "data:image/svg+xml;utf8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400"><rect width="640" height="400" fill="' + tone + '"/><text x="320" y="210" font-size="48" fill="#fff" text-anchor="middle" font-family="sans-serif">' + label + "</text></svg>"
+    );
+    window.__lbItems = [LB_IMG("A", "#4a6cf7"), LB_IMG("B", "#12a594"), LB_IMG("C", "#d97a1a")];
+    document.getElementById("lb-open").addEventListener("click", () => {
+      C.lightbox.open(document.getElementById("lightbox"), { items: window.__lbItems, index: 0 });
+    });
+
+    document.getElementById("palette-open").addEventListener("click", () => {
+      C.palette.open(document.getElementById("palette"), {
+        items: ["home", "inbox", "new"],
+        onRun: (id) => { window.__lastRun = id; },
+      });
+    });
+  </script>
+</body>
+</html>

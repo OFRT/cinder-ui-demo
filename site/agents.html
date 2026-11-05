@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent 硬约定 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html" aria-current="page">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>Agent 硬约定</h1>
+        <p class="site-lead">给自动化协作者的定位与命名边界</p>
+      </header>
+<blockquote>
+<p>任何 AI Agent（或人）在这个仓库里动手前，先读完本文件。它只写<strong>必须遵守的硬约定</strong>，不复述业务背景。</p>
+</blockquote>
+<hr>
+<h2 id="s-0-定位硬约定-新增组件前先看这一条">0. 定位硬约定（新增组件前先看这一条）</h2>
+<table>
+<thead>
+<tr>
+<th>约定</th>
+<th>含义</th>
+<th>反例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cinder 是<strong>通用组件库</strong></td>
+<td>主体为 CSS + JS，面向任意项目接入，不绑定、不服务于某个具体产品</td>
+<td>文档里写&quot;某产品要用的才做&quot;</td>
+</tr>
+<tr>
+<td>分<strong>通用层 + 定向定制层</strong></td>
+<td><code>base</code> 只放与业务无关的组件；<code>erp</code> 是在 base 之上按 ERP 方向展开的定制层</td>
+<td>把金额、单据状态等业务语义写进 base</td>
+</tr>
+<tr>
+<td>定制层可继续增加</td>
+<td>erp 只是<strong>当前唯一</strong>的定制方向，未来会有其它方向；新增方向按 <code>packages/&lt;方向&gt;/</code> 平级新增，不改 base</td>
+<td>把新方向塞进 erp</td>
+</tr>
+<tr>
+<td>依赖单向</td>
+<td><code>定制层 → base</code> 永不可逆；定制层之间互不依赖</td>
+<td>base 引用 erp 令牌</td>
+</tr>
+<tr>
+<td>命名与文案</td>
+<td>通用层用中性词；业务词只出现在定制层与演示数据里</td>
+<td>base 类名带&quot;进销存/发票&quot;</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="s-1-三条必跑命令">1. 三条必跑命令</h2>
+<pre><code class="language-bash">bash scripts/selfcheck.sh          # 开工前：环境是否被沙箱重置（11 项）
+node build.mjs --check             # 每次改完：0 error 是底线，1 条 warning 是已知合订体积参考线
+npm run acceptance                 # 交付前：52 组验收一条命令跑全（含 p0），0 项 XFAIL
+</code></pre>
+<p>判定口径：</p>
+<ul>
+<li><code>build --check</code> 出 <strong>任何 error 即视为未完成</strong>，不得以&quot;先提交再修&quot;绕过。</li>
+<li><code>acceptance</code> 出现<strong>新的 FAIL</strong> 即回退改动，不得把断言改成 PASS 来消错（除非同时改 <code>docs/known-issues.md</code> 并说明理由）。</li>
+<li><code>XFAIL</code> 只能减少不能增加；新增 XFAIL 必须同时登记 KN 编号。</li>
+</ul>
+<hr>
+<h2 id="s-2-仓库地图">2. 仓库地图</h2>
+<pre><code>build.mjs                  构建 + 8 节校验（第 7 节 R5 契约闸门、第 8 节预算冻结阀）
+budget-baseline.json       87 个入口的 gzip 基线（≥7KB 逐字节冻结；另含 1 个独立 JS 入口 icon-morph.js）
+intent-allowlist.json      R5 白名单（只减不增，目前 0 条）
+packages/base/
+  src/components/          72 个组件的 CSS 源码（controls 按 BUD-01 拆为 controls + 7 个子入口，共 79 个 .css；子入口契约归 intents/controls.md，R5 豁免登记见 intent-allowlist.json）
+  src/intents/             73 份意图契约（intents/&lt;name&gt;.md，与组件同名；含 glass 材质层契约）
+  src/behaviors/           44 个需要 JS 的行为层（combobox / lightbox / pull-refresh …）
+  src/primitives/          13 个 JS 原语（focus / gesture / presence / stream / undo / i18n / skin …）
+  types/                   类型声明
+  tokens/                  设计令牌
+scripts/
+  selfcheck.sh             会话自检（新会话必跑）
+  gen-keyboard-matrix.mjs  从 73 份意图契约生成 docs/keyboard-matrix.md（--check 可挂 CI）
+  acceptance-*.mjs         分组件验收（playwright，无头 chromium）
+  acceptance-all.mjs       总入口，串行跑全部
+demos/                     演示页（不入发布包）
+docs/                      意图模板、已知缺陷、对标矩阵、a11y 声明、键盘矩阵、
+                           已编入计划总台账 ui-plan.md（G1–G4 液态玻璃 T1–T14、
+                           G5 图标变形 T15–T19、G6 AI 交互态 T20–T27（T20/T21/T22/T23 已完成）、
+                           G7 助手形象 T28–T32、G8 按钮动效与确认闸门 T33–T38、
+                           G9 动效度量与行为契约 T39–T44，
+                           其余待施工；
+                           详细方案见 liquid-glass-plan.md）
+CONTRIBUTING.md            面向人的贡献指南
+CHANGELOG.md               变更记录（自 1.3.0 起）
+</code></pre>
+<p><strong>发布面</strong>：<code>package.json</code> 的 <code>files</code> 只允许 <code>dist</code>、<code>types</code>、<code>tokens</code>、<code>README.md</code>。<code>demos/</code>、<code>docs/</code>、<code>scripts/</code>、<code>src/</code> 一律不进包。</p>
+<hr>
+<h2 id="s-3-新增任何东西前先过-quot-四族-五档-quot">3. 新增任何东西前先过&quot;四族 × 五档&quot;</h2>
+<p>四族：<strong>基础件</strong>（原子控件）/ <strong>组合件</strong>（多原子拼装）/ <strong>场景件</strong>（业务语义）/ <strong>容器件</strong>（布局与骨架）。
+五档：<strong>A</strong> 立即补 / <strong>B</strong> 排期补 / <strong>C</strong> 软线（有替代方案就不补）/ <strong>D</strong> 不做 / <strong>E</strong> 已有实现覆盖。</p>
+<p>判定顺序（<strong>不许跳步</strong>）：</p>
+<ol>
+<li><strong>先查存量</strong>：<code>ls packages/base/src</code> 与 <code>packages/base/src/intents</code>，能拼出来就不新增（多数需求是组合件问题，不是缺组件）。</li>
+<li><strong>再查覆盖</strong>：确有缺口，判断它属于哪一族哪一档；C/D 档必须先写出替代方案。</li>
+<li><strong>只有 A/B 档才动手</strong>，并一次性做完下面这份清单（少一项都算欠账）。</li>
+</ol>
+<h3 id="s-新增组件的完成清单-缺一不可">新增组件的完成清单（缺一不可）</h3>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>产出</th>
+<th>校验方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>packages/base/src/&lt;name&gt;.css</code></td>
+<td><code>build --check</code> 能算出该入口字节数</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>packages/base/src/intents/&lt;name&gt;.md</code>（四段：边界 / 状态机与失败态 / 可访问性 / AI 选型提示）</td>
+<td>缺文件 → R5 直接 error</td>
+</tr>
+<tr>
+<td>3</td>
+<td>若有交互：<code>src/behaviors/&lt;name&gt;.js</code>，挂 <code>window.Cinder</code>，用 <code>dataset.cinReady</code> 防重入；<strong>同时在 <code>build.mjs</code> 的 <code>JS_DOMAINS</code> 里登记所属域</strong></td>
+<td>重复初始化不叠加监听；漏登记 → <code>build --check</code> 直接 error</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>scripts/acceptance-&lt;name&gt;.mjs</code> 并被 <code>acceptance-all.mjs</code> 收录</td>
+<td><code>npm run acceptance</code> 计数 +1</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>demos/</code> 一页可跑示例</td>
+<td>手工打开无控制台报错</td>
+</tr>
+<tr>
+<td>6</td>
+<td>预算变化写清（涨了多少、是否触发冻结）</td>
+<td><code>budget-baseline.json</code> 只在不该冻结时才更新</td>
+</tr>
+</tbody>
+</table>
+<p><strong>intents 严禁&quot;占位式补齐&quot;</strong>：骨架必须把<strong>边界段</strong>写实（负责 / 明确不负责 + 承接方），否则等于没写。TODO 只允许出现在后三段。</p>
+<hr>
+<h2 id="s-4-预算纪律-第-8-节冻结阀">4. 预算纪律（第 8 节冻结阀）</h2>
+<ul>
+<li>入口 gzip <strong>≥7KB</strong>：逐字节冻结，涨 1B 即构建失败。要么优化回去，要么走下面的显式更新流程。</li>
+<li>入口 gzip <strong>&lt;7KB</strong>：按 5% 预警，超过即 warning（不阻断）。</li>
+<li>唯一合法的基线更新方式：</li>
+</ul>
+<pre><code class="language-bash">node build.mjs --update-baseline   # 会重写 budget-baseline.json
+git diff budget-baseline.json      # 必须逐行看过，确认每个 +N 都是有意为之
+</code></pre>
+<p><strong>禁止</strong>为了让构建通过而调大阈值函数、关闭冻结阀、或把入口改名绕过统计。已知 overlay 现为 7726B / 94.3%，是固定税 2398B 的主要承担者，任何&quot;顺手加点样式&quot;都应先算字节。</p>
+<hr>
+<h2 id="s-5-意图契约四段写法-摘要-全文见-docs-intent-template-md">5. 意图契约四段写法（摘要，全文见 <code>docs/intent-template.md</code>）</h2>
+<ol>
+<li><strong>边界</strong>：负责 / <strong>明确不负责（必须写承接方）</strong>。承接方写不出来的条目，说明是假边界。</li>
+<li><strong>状态机与失败态</strong>：状态 → 表达（<code>data-*</code>）→ 失败态落点，并写<strong>转移禁令</strong>（如&quot;保存中不得接受 Esc&quot;）。</li>
+<li><strong>可访问性</strong>：键盘键位表、焦点落点、非颜色编码、<code>prefers-reduced-motion</code> 降级。</li>
+<li><strong>AI 选型提示</strong>：什么时候选它 / 什么时候别选（给出替代组件）/ 最小正确用法（可复制 HTML）/ 常见误用。</li>
+</ol>
+<p>写作口径：<strong>只写承诺，不写实现</strong>。&quot;用了 flex 布局&quot;、&quot;内部有 3 层 div&quot;不属于契约内容。</p>
+<hr>
+<h2 id="s-6-改动纪律">6. 改动纪律</h2>
+<ul>
+<li><strong>一次只做一件事</strong>：不夹带无关的格式化、重命名、样式微调。审查看 diff 是否只有一个主题。</li>
+<li><strong>先断言后修</strong>：修 bug 先补一条会失败的断言，再改代码；断言转 PASS 才算修完。</li>
+<li><strong>不改历史断言来让结果变绿</strong>：确需调整的，在 commit message 里写明&quot;原断言错在哪&quot;。</li>
+<li><strong>不删 <code>docs/known-issues.md</code> 的历史行</strong>：修完移到&quot;已修复&quot;表并保留一行。</li>
+<li><strong>提交粒度</strong>：一个主题一个 commit；<code>dist/</code> 永不入库；提交前必跑三条命令。</li>
+</ul>
+<hr>
+<h2 id="s-7-已知风险-动手前必看">7. 已知风险（动手前必看）</h2>
+<table>
+<thead>
+<tr>
+<th>风险</th>
+<th>说明</th>
+<th>对应措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>沙箱重置</td>
+<td>一次性容器，工具链与依赖可能每会话丢失</td>
+<td>开工先 <code>selfcheck.sh</code>，git 走用户态 rpm（<code>/home/marvis/opt/gitrpms</code>）</td>
+</tr>
+<tr>
+<td>许可证未定</td>
+<td><code>license: UNLICENSED</code>，无 <code>LICENSE</code> 文件</td>
+<td>对外发布前必须先定许可证与版权署名（需老板确认）</td>
+</tr>
+<tr>
+<td>KN-001</td>
+<td><code>disclosure</code> 快速连点时单开互斥失效</td>
+<td>已修 2026-11-02，见 <code>docs/known-issues.md</code></td>
+</tr>
+<tr>
+<td>验收按组件聚合</td>
+<td>部分脚本一组覆盖多件（p0/utility/overlay），单件失败要看组内明细</td>
+<td>断言名必须带组件名；定位单件用 <code>node scripts/acceptance-all.mjs &lt;name&gt;</code></td>
+</tr>
+<tr>
+<td>合订体积</td>
+<td>cinder-all.css + cinder.js 合计 gzip 102KB</td>
+<td>按入口考核，不阻断；真实接入一律走 <code>entries/</code></td>
+</tr>
+</tbody>
+</table>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-0-定位硬约定-新增组件前先看这一条" data-level="2">0. 定位硬约定（新增组件前先看这一条）</a>
+      <a href="#s-1-三条必跑命令" data-level="2">1. 三条必跑命令</a>
+      <a href="#s-2-仓库地图" data-level="2">2. 仓库地图</a>
+      <a href="#s-3-新增任何东西前先过-quot-四族-五档-quot" data-level="2">3. 新增任何东西前先过&amp;quot;四族 × 五档&amp;quot;</a>
+      <a href="#s-新增组件的完成清单-缺一不可" data-level="3">新增组件的完成清单（缺一不可）</a>
+      <a href="#s-4-预算纪律-第-8-节冻结阀" data-level="2">4. 预算纪律（第 8 节冻结阀）</a>
+      <a href="#s-5-意图契约四段写法-摘要-全文见-docs-intent-template-md" data-level="2">5. 意图契约四段写法（摘要，全文见 docs/intent-template.md）</a>
+      <a href="#s-6-改动纪律" data-level="2">6. 改动纪律</a>
+      <a href="#s-7-已知风险-动手前必看" data-level="2">7. 已知风险（动手前必看）</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

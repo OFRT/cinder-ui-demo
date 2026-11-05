@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>button-guard · 装饰动效与确认闸门</title>
+<link rel="stylesheet" href="../dist/cinder-base.css">
+<style>
+  body { margin: 0; padding: 24px; font-family: system-ui, sans-serif; display: grid; gap: 28px; }
+  h2 { font-size: 15px; margin: 0 0 10px; color: #333; }
+  .row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; min-height: 56px; }
+  .note { font-size: 13px; color: #666; margin: 6px 0 0; }
+  .log { font-size: 13px; color: #444; min-height: 20px; }
+  .cell { display: grid; gap: 6px; font-size: 12px; color: #666; }
+</style>
+</head>
+<body>
+
+<section>
+  <h2>装饰动效四变体（默认不开，须显式 data-fx；本页仅 2 处同时可见）</h2>
+  <div class="row">
+    <button type="button" class="cin-btn" data-variant="primary" data-fx="shiny">发布（shiny）</button>
+    <button type="button" class="cin-btn" data-variant="primary" data-fx="chrome">同步（chrome）</button>
+  </div>
+</section>
+
+<section>
+  <h2>装饰动效·第二屏（同上，单屏 ≤2 处）</h2>
+  <div class="row">
+    <button type="button" class="cin-btn" data-variant="secondary" data-fx="dither">渲染（dither）</button>
+    <button type="button" class="cin-btn" data-variant="danger" data-fx="glitch">删除本地模型（glitch）</button>
+  </div>
+  <p class="note">glitch 仅限错误 / 破坏性语义；主操作默认不带 data-fx；单屏装饰动效 ≤2 处。</p>
+</section>
+
+<section>
+  <h2>确认闸门：按住（hold）</h2>
+  <div class="row">
+    <button type="button" class="cin-btn" data-variant="danger" data-guard="hold"
+            aria-describedby="guard-hold-desc" data-guard-msg="已取消·请按住直到完成">
+      清空对话
+    </button>
+    <button type="button" class="cin-btn" data-variant="danger" data-guard="hold"
+            aria-describedby="guard-hold-desc" data-guard-msg="已取消·请按住直到完成">
+      删除本地模型
+    </button>
+  </div>
+  <p class="note" id="guard-hold-desc">按住 0.9 秒完成确认；提前松手即取消（无 JS 时退化为普通点击按钮）。</p>
+  <div class="log" data-role="hold-log" aria-live="polite"></div>
+</section>
+
+<section>
+  <h2>确认闸门：滑动（slide）</h2>
+  <div class="row">
+    <button type="button" class="cin-btn" data-variant="danger" data-guard="slide"
+            aria-describedby="guard-slide-desc" data-guard-msg="未滑到底·已取消">
+      滑动以覆盖文件
+    </button>
+  </div>
+  <p class="note" id="guard-slide-desc">拖动到 92% 完成；键盘方向键 ← → 逐格推进。</p>
+  <div class="log" data-role="slide-log" aria-live="polite"></div>
+</section>
+
+<section>
+  <h2>确认闸门：冷却（cooldown）</h2>
+  <div class="row">
+    <button type="button" class="cin-btn" data-variant="secondary" data-guard="cooldown" data-guard-label="{n} 秒后可用">卸载扩展</button>
+  </div>
+  <p class="note">点击后进入 4 秒冷却，剩余秒数写入 aria-label，读屏可听到。</p>
+  <div class="log" data-role="cool-log" aria-live="polite"></div>
+</section>
+
+<section>
+  <h2>快捷键可视化（data-keys，不劫持按键）</h2>
+  <div class="row">
+    <button type="button" class="cin-btn" data-variant="secondary" data-keys="⌘K">搜索</button>
+    <button type="button" class="cin-btn" data-variant="ghost" data-keys="Ctrl+Enter">发送</button>
+  </div>
+  <p class="note">按下对应组合时按钮置 data-pressed；不调用 preventDefault，不抢占全局快捷键。</p>
+</section>
+
+<section>
+  <h2>敏感值揭示（reveal：按住或点按切换，失焦收回）</h2>
+  <div class="row">
+    <label class="cin-field" style="min-width:320px">
+      <span class="cin-field-label">本地模型 API Key</span>
+      <span class="cin-reveal" data-role="reveal">
+        <input class="cin-input" type="password" aria-label="API Key" autocomplete="off">
+        <button type="button" class="cin-btn cin-reveal-toggle" data-variant="ghost" aria-label="显示或隐藏密钥">显示</button>
+      </span>
+      <span class="cin-field-help">按住输入框可临时显示明文；离开或失焦自动收回，明文不写入任何属性。</span>
+    </label>
+  </div>
+</section>
+
+<section>
+  <h2>黑暗模式对照（确认与取消的点击步数必须相等）</h2>
+  <div class="row">
+    <span class="cell">D 档反例<button type="button" class="cin-btn" data-variant="danger" data-guard="hold">清空（按住 0.9s）</button></span>
+    <span class="cell">本库口径<button type="button" class="cin-btn" data-variant="secondary">取消（一步）</button></span>
+  </div>
+  <p class="note">三条件：不延迟已表达意图 / 不施压话术 / 取消不比确认更费劲。详见 docs/dark-patterns.md。</p>
+</section>
+
+<script src="../dist/cinder.js"></script>
+<script>
+  document.querySelector(".cin-reveal input").value = "sk-live-8f3c2b71";
+  for (const [sel, log] of [["[data-role='hold-log']", "[data-guard='hold']"], ["[data-role='slide-log']", "[data-guard='slide']"], ["[data-role='cool-log']", "[data-guard='cooldown']"]]) {
+    const out = document.querySelector(sel);
+    document.querySelectorAll(log).forEach((btn) =>
+      btn.addEventListener("cin:guard", (e) => { out.textContent = "cin:guard 触发：" + e.detail.guard; }));
+  }
+</script>
+</body>
+</html>

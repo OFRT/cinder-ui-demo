@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 描述列表</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">descriptions</span>
+      <span class="cin-caption">dl/dt/dd 语义，列数走 CSS 变量；无脚本，窄屏自动降列</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础（三列）</h2>
+          <dl class="cin-descriptions" data-cols="3">
+            <div class="cin-descriptions-item"><dt>单据编号</dt><dd data-mono>SO-2026-1101-001</dd></div>
+            <div class="cin-descriptions-item"><dt>客户</dt><dd>杭州云栖智造有限公司</dd></div>
+            <div class="cin-descriptions-item"><dt>下单时间</dt><dd>2026-11-01 09:24</dd></div>
+            <div class="cin-descriptions-item"><dt>交付方式</dt><dd>分两批出库</dd></div>
+            <div class="cin-descriptions-item"><dt>业务员</dt><dd>林洋</dd></div>
+            <div class="cin-descriptions-item"><dt>结算方式</dt><dd>月结 30 天</dd></div>
+            <div class="cin-descriptions-item" data-full><dt>备注</dt><dd>首批 60% 于 11 月 5 日前发出，余量待客户确认排产计划后另行通知；发票随第二批一并寄出。</dd></div>
+          </dl>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">横向排布（data-layout="inline"）</h2>
+          <dl class="cin-descriptions" data-cols="2" data-layout="inline" data-density="compact">
+            <div class="cin-descriptions-item"><dt>仓库</dt><dd>华东一仓（嘉兴）</dd></div>
+            <div class="cin-descriptions-item"><dt>库位</dt><dd data-mono>A-03-12</dd></div>
+            <div class="cin-descriptions-item"><dt>库存可用量</dt><dd>1,240 件</dd></div>
+            <div class="cin-descriptions-item"><dt>锁定量</dt><dd>180 件</dd></div>
+          </dl>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">带分隔线 + 跨列（data-bordered / data-span）</h2>
+          <dl class="cin-descriptions" data-cols="3" data-bordered>
+            <div class="cin-descriptions-item"><dt>合同号</dt><dd data-mono>HT-2026-0087</dd></div>
+            <div class="cin-descriptions-item"><dt>签署日期</dt><dd>2026-09-18</dd></div>
+            <div class="cin-descriptions-item"><dt>到期日期</dt><dd>2027-09-17</dd></div>
+            <div class="cin-descriptions-item" data-span="2"><dt>收货地址</dt><dd>浙江省嘉兴市南湖区亚太路 1188 号 3 号厂房东侧卸货区</dd></div>
+            <div class="cin-descriptions-item"><dt>联系人</dt><dd>周敏 / 138****6021</dd></div>
+          </dl>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">自适应列（data-fit）与空态</h2>
+          <dl class="cin-descriptions" data-fit>
+            <div class="cin-descriptions-item"><dt>审批节点</dt><dd>业务主管 → 财务复核</dd></div>
+            <div class="cin-descriptions-item"><dt>当前状态</dt><dd>财务复核中</dd></div>
+            <div class="cin-descriptions-item"><dt>已停留</dt><dd>2 天 4 小时</dd></div>
+          </dl>
+          <dl class="cin-descriptions" data-cols="2">
+            <div class="cin-descriptions-empty">暂无详情字段</div>
+          </dl>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/cinder.js" defer></script>
+</body>
+</html>

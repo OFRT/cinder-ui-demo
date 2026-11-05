@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>能力矩阵 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html" aria-current="page">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>能力矩阵</h1>
+        <p class="site-lead">对标 Web Awesome 的逐项对账</p>
+      </header>
+<blockquote>
+<p><strong>v2.9（2026-11-03）：文档站落地。</strong> 第 4 项「文档站」由 ◐ 升 ●：没有引 VitePress——库的定位是「零依赖、可单文件拷贝、无强制构建」，文档若必须先装一套 bundler 才能看，等于在最该自证的地方加最重的依赖。改为 <code>scripts/build-docs.mjs</code> 用 <code>markdown-it</code> 在构建期渲染，产出 <code>site/</code>：19 页、五组侧栏、页内 TOC、<code>Ctrl/⌘+K</code> 全站搜索（索引切自正文，纯前端过滤）、演示页 iframe 直指 <code>../demos/</code>（不复制，示例与实现永不失步）、组件清单与首页计数全读 <code>dist/cinder-manifest.json</code>（不写死数字）。产物 23 文件 / 814 KB，<code>file://</code> 直开，每页零外域请求；随系统深色与 <code>data-skin</code> 换肤自动生效。配 <code>scripts/acceptance-docs.mjs</code> 53 条断言（内链与锚点可达、逐页无脚本错误、窄屏无横向溢出、跟随深色、TOC 命中可视区），<code>docs:check</code> 幂等。20 项基础设施计分 <strong>● 15 / ◐ 2 / ○ 3</strong>，首次越过「≥15 ●」合格线，剩余 ○ 为 CDN、框架包装、Figma。</p>
+</blockquote>
+<blockquote>
+<p><strong>v2.8（2026-11-03）：在线 Playground 落地。</strong> 第 5 项「在线 Playground」由 ○ 升 ●：<code>demos/playground.html</code>（19 KB，纯静态、零后端、零外链）把通用层令牌做成实时调参台——品牌色（含 on-accent 亮度取反与 hover/pressed/soft/focus-ring 派生）、画布/表面色、圆角基准（xs/sm/md/lg 按比例派生）、阴影强度、正文字号（caption/label/display 联动）、字族、8 套皮肤与紧凑密度，改动即时落到 <code>:root</code>，右栏同步生成可直接覆盖的 CSS 片段，支持复制/下载 <code>cinder-theme.css</code>，状态全存 URL hash 可离线分享。配 <code>scripts/acceptance-playground.mjs</code> 32 条断言（含「页面引用的每个 <code>--cin-*</code> 必须在 base 中真实存在」的防幻觉闸门）。20 项基础设施计分 <strong>● 14 / ◐ 3 / ○ 3</strong>，剩余 ○ 为 CDN、框架包装、Figma。</p>
+</blockquote>
+<blockquote>
+<p><strong>v2.6（2026-11-03）：i18n 字典落地。</strong> 第 11 项「i18n 字典」由 ○ 升 ●：<code>packages/base/src/primitives/i18n.js</code> 内置 zh-CN / en 双字典各 71 key（实测复核，含未发布 sidenav 2 key），源码 70 个调用点 key 走 <code>tr()</code> / <code>tIn()</code>（25 个 JS 文件），配 8 条一致性闸门与 31 条验收断言；同时把 timepicker 的列定位从 <code>aria-label=&quot;分钟&quot;</code> 改为 <code>data-col=&quot;minute&quot;</code>（文案不再当选择器）。20 项基础设施计分 <strong>● 13 / ◐ 3 / ○ 4</strong>，剩余 ○ 为 CDN、Playground、框架包装、Figma。</p>
+</blockquote>
+<blockquote>
+<p><strong>v2.5（2026-11-02）：20 项基础设施按实测对账。</strong> 原清单多项目标已完成但未登记（TypeScript 类型、组件清单 manifest、按需加载均早已落地；RTL 实测逻辑属性覆盖 356 处、物理属性 0 处，本轮复核已清零），本轮补齐 RTL 收尾与 a11y 声明、贡献指南、CHANGELOG、键盘矩阵（由意图契约自动生成），并逐项按证据重判。计分由 <strong>● 2 / ◐ 3 / ○ 15</strong> 修正为 <strong>● 10 / ◐ 4 / ○ 6</strong>——不是&quot;这轮突然做完 8 项&quot;，而是&quot;账实不符被纠正&quot;。真实剩余缺口集中在 CDN、Playground、框架包装、图标库、i18n 字典、Figma 六项。</p>
+</blockquote>
+<blockquote>
+<p><strong>v2.4 更新（续）</strong>：Known Date / Details / Format Bytes / Format Date / Relative Time 五项补齐并升 ●，免费包覆盖率 83.6% → <strong>90.4%</strong>（已过 ≥90% 目标线），合计 80.2% → <strong>85.7%</strong>，免费包缺失项收敛到 7 项（视频类、图表类与 Observer 等长尾）。</p>
+<p><strong>v2.7（2026-11-02）：视觉回归基线落地。</strong> 视觉回归（第 18 项）由 ◐ 升 ●：49 个演示页在固定环境下全量快照，基线 5.7 MB 入 git，比对按 0.2% 像素差判失败，差异图与尺寸变化单独报错，关键 8 页纳入 <code>acceptance-all</code> 快速档。20 项基础设施计分 <strong>● 12 / ◐ 3 / ○ 5</strong>。</p>
+</blockquote>
+<blockquote>
+<p><strong>v2.6（2026-11-02）：图标库落地 + AI 会话三件套。</strong> 图标库基础设施（第 10 项）由 ○ 升 ●，免费包 Icon（第 66 项）由 ◐ 升 ●：Lucide 104 个图标（ISC）同步为 <code>packages/base/icons/</code> 真源，产出 sprite、单文件与 CSS 类三条路径，构建第 9 节做 viewBox/硬编码色/引用防幻觉三重闸门。同轮新增 <code>thinking</code>（思考步骤流）、<code>tool-chips</code>（工具调用标签）、<code>approval-card</code>（代理动作审批卡）三个 base 组件，均零脚本、四段意图契约齐备。20 项基础设施计分 <strong>● 11 / ◐ 4 / ○ 5</strong>。</p>
+</blockquote>
+<blockquote>
+<p><strong>v2.4 更新（本轮）</strong>：Copy Button / Split Panel / OTP Input / QR Code / Markdown 五项由 ○ 升 ●（<code>copytarget</code> <code>splitpanel</code> <code>otp</code> <code>qrcode</code> <code>markdown</code> 五套 css+js，含自研二维码编码器与 Markdown 解析器），免费包覆盖率 76.7% → <strong>83.6%</strong>，合计 74.7% → <strong>80.2%</strong>；工具类验收 86/86、二维码独立解码验收 69/69。另一并补齐 Format / Known Date / Relative Time 的纯函数与声明式渲染（长尾清单中，不在 91 项编号内）。</p>
+<p><strong>v2.3</strong>：Data Grid 由 ◐ 升 ●（<code>virtualgrid.css</code> + <code>virtualgrid.js</code>，一万行窗口渲染、选择/排序/列固定、验收 54/54），Pro 项质量档位补齐，P0 必备清单全部清零。
+Pro 覆盖数不变（仍 12/18），故总量覆盖率仍为 74.7%——本轮提升的是&quot;已覆盖项做得够不够&quot;，不是&quot;有没有&quot;。</p>
+</blockquote>
+<blockquote>
+<p><strong>v2.2</strong>：Carousel / Carousel Item 由 ○ 升 ●（<code>carousel.css</code> + <code>carousel.js</code>，验收 101/101），免费包覆盖率 74.0% → <strong>76.7%</strong>，合计 72.5% → <strong>74.7%</strong>，P0 必备清单已清零，仅剩 Data Grid 虚拟滚动未开始。</p>
+</blockquote>
+<p><strong>v2.1</strong>：Tree / Tree Item 由 ○ 升 ●（<code>tree.css</code> + <code>tree.js</code>，验收 110/110），免费包覆盖率 71.2% → 74.0%。</p>
+<blockquote>
+<p><strong>修订说明</strong>：v1 把 Cinder 定位成&quot;进销存业务 UI 基座&quot;，据此把大量通用组件缺失判为&quot;不必追&quot;。该前提与项目实际定位不符：Cinder 不绑定任何具体项目。本版按 <strong>Cinder = 通用 UI 组件库（base 层）+ 按方向展开的定制层（当前仅 erp）</strong> 重算：base 层直接对标 Web Awesome 全量 91 项，erp 层作为差异化加分项单独评估。</p>
+<p>对标对象：Cinder v1.0（commit <code>3df4ab5</code>） vs Web Awesome <strong>3.14.0</strong>（npm，2026-10-31）
+判定：● 等价 / ◐ 部分 / ○ 缺失</p>
+</blockquote>
+<hr>
+<h2 id="s-0-口径更正带来的三个结论">0. 口径更正带来的三个结论</h2>
+<ol>
+<li><strong>v1 的&quot;3.3 分&quot;高估了。</strong> 按通用库权重（组件广度、工程化、可访问性、国际化占主要权重），Cinder 通用层得分 <strong>2.6</strong>，Web Awesome <strong>4.6</strong>，差距 2.0 分，属于&quot;能用但还不是一个完整产品&quot;的区间。</li>
+<li><strong>差距不在设计，在基础设施。</strong> 设计令牌、皮肤、密度、体积这些反而领先或持平；真正落后的是<strong>组件覆盖、类型、按需加载、i18n、文档与生态</strong>——通用库的&quot;产品化&quot;部分。</li>
+<li><strong>ERP 定制不该作为豁免理由。</strong> 正确结构是：通用层补齐到&quot;合格通用库&quot;门槛（覆盖率 ≥85%、必备组件 0 缺失、20 项基础设施 ≥15 项达标），ERP 层继续做厚。两层分开考核，而不是用业务需求解释通用缺口。</li>
+</ol>
+<hr>
+<h2 id="s-1-对标口径与公平性">1. 对标口径与公平性</h2>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>免费 vs 免费</td>
+<td>Web Awesome 免费包 <strong>73 项</strong>，Cinder 对应覆盖 66 项（49 ● / 17 ◐ / 7 ○），覆盖率 <strong>90.4%</strong></td>
+</tr>
+<tr>
+<td>Pro vs 规划</td>
+<td>Web Awesome Pro <strong>18 项</strong>，Cinder 覆盖 12 项（6 ● / 6 ◐ / 6 ○），覆盖率 <strong>66.7%</strong></td>
+</tr>
+<tr>
+<td>总量</td>
+<td>91 项，Cinder 覆盖 78 项（55 ● / 23 ◐ / 13 ○），覆盖率 <strong>85.7%</strong></td>
+</tr>
+<tr>
+<td>不计入对比</td>
+<td>Web Awesome 的 SaaS 托管、AI 文档助手、Pro 订阅体系（非技术能力）</td>
+</tr>
+<tr>
+<td>单独计分</td>
+<td>Cinder 的 6 个 ERP 业务块、8 套皮肤、打印样式（Web Awesome 无对应物，记在&quot;差异化&quot;栏）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>说明：Pro 项按&quot;通用库应有能力&quot;计入缺口，但不要求短期全部自研；图表类可接引擎，视频/富文本可接成熟库。<strong>免费包的 73 项才是硬指标</strong>——那是任何通用库的及格线。</p>
+</blockquote>
+<hr>
+<h2 id="s-2-通用层记分卡-按通用库权重">2. 通用层记分卡（按通用库权重）</h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th style="text-align:right">权重</th>
+<th style="text-align:right">Cinder</th>
+<th style="text-align:right">Web Awesome</th>
+<th style="text-align:right">加权差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>组件广度</td>
+<td style="text-align:right">25%</td>
+<td style="text-align:right">2.0</td>
+<td style="text-align:right">5.0</td>
+<td style="text-align:right">-0.75</td>
+</tr>
+<tr>
+<td>工程化与类型</td>
+<td style="text-align:right">15%</td>
+<td style="text-align:right">1.5</td>
+<td style="text-align:right">5.0</td>
+<td style="text-align:right">-0.53</td>
+</tr>
+<tr>
+<td>可访问性</td>
+<td style="text-align:right">15%</td>
+<td style="text-align:right">3.5</td>
+<td style="text-align:right">4.5</td>
+<td style="text-align:right">-0.15</td>
+</tr>
+<tr>
+<td>国际化 / RTL</td>
+<td style="text-align:right">10%</td>
+<td style="text-align:right">1.0</td>
+<td style="text-align:right">5.0</td>
+<td style="text-align:right">-0.40</td>
+</tr>
+<tr>
+<td>设计系统与主题</td>
+<td style="text-align:right">15%</td>
+<td style="text-align:right">4.25</td>
+<td style="text-align:right">4.25</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>体积与性能</td>
+<td style="text-align:right">10%</td>
+<td style="text-align:right">4.5</td>
+<td style="text-align:right">3.0</td>
+<td style="text-align:right">+0.15</td>
+</tr>
+<tr>
+<td>文档与生态</td>
+<td style="text-align:right">10%</td>
+<td style="text-align:right">3.0</td>
+<td style="text-align:right">5.0</td>
+<td style="text-align:right">-0.20</td>
+</tr>
+<tr>
+<td><strong>加权总分</strong></td>
+<td style="text-align:right">100%</td>
+<td style="text-align:right"><strong>2.7</strong></td>
+<td style="text-align:right"><strong>4.6</strong></td>
+<td style="text-align:right"><strong>-1.9</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-2-1-分层看更清楚">2.1 分层看更清楚</h3>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th style="text-align:right">Cinder</th>
+<th style="text-align:right">Web Awesome</th>
+<th>判断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通用组件层（base）</td>
+<td style="text-align:right">2.7</td>
+<td style="text-align:right">4.6</td>
+<td>落后 1.9 分，需系统性补齐</td>
+</tr>
+<tr>
+<td>ERP 定制层（erp）</td>
+<td style="text-align:right">5.0</td>
+<td style="text-align:right">0.5</td>
+<td>Cinder 绝对领先，需继续加固</td>
+</tr>
+<tr>
+<td>工程交付层（npm/文档/类型/i18n）</td>
+<td style="text-align:right">2.0</td>
+<td style="text-align:right">5.0</td>
+<td>仍是最大短板（差在 npm 实发与 i18n 覆盖），但文档站+搜索已把&quot;能看懂&quot;这一步补上</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句话</strong>：Cinder 现在是一个&quot;设计得不错、业务贴合、但还不能独立对外发行&quot;的组件库。要把&quot;通用&quot;两个字坐实，补的是产品化，不是审美。</p>
+<hr>
+<h2 id="s-3-通用库必备基础设施清单-20-项">3. 通用库必备基础设施清单（20 项）</h2>
+<blockquote>
+<p><strong>2026-11-02 按实测重判</strong>。每项后面标注了判定证据，避免&quot;凭印象打分&quot;。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>基础设施</th>
+<th>Cinder</th>
+<th>判定</th>
+<th>证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>npm 包发布</td>
+<td>发布面已成型，未实际 publish</td>
+<td>◐</td>
+<td><code>package.json</code> 有 <code>exports</code>（18 条映射）/<code>files</code>/<code>types</code>/<code>main</code>/<code>module</code>/<code>sideEffects</code>，仍 <code>private: true</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>语义化版本 + CHANGELOG</td>
+<td>有</td>
+<td>●</td>
+<td><code>version: 1.6.0</code> + <code>CHANGELOG.md</code>（Keep a Changelog 写法）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CDN 分发</td>
+<td>无</td>
+<td>○</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4</td>
+<td>文档站</td>
+<td>有</td>
+<td>●</td>
+<td><code>site/</code>：19 页 · 零框架零运行时 · <code>file://</code> 直开；五组侧栏 + 页内 TOC + <code>Ctrl/⌘+K</code> 全站搜索 + 演示页内嵌（iframe 指 <code>../demos/</code>，不复制）；组件清单与首页计数读 <code>dist/cinder-manifest.json</code>；<code>scripts/acceptance-docs.mjs</code> 53 条断言、<code>npm run docs:check</code> 幂等</td>
+</tr>
+<tr>
+<td>5</td>
+<td>在线 Playground</td>
+<td>有</td>
+<td>●</td>
+<td><code>demos/playground.html</code>：令牌实时调参 + 8 套皮肤 + 导出 CSS + hash 分享，纯静态无后端无外链；<code>scripts/acceptance-playground.mjs</code> 32 条断言（含令牌防幻觉闸门）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>主题定制器</td>
+<td>8 套皮肤预设 + 令牌层，无可视化生成器</td>
+<td>◐</td>
+<td><code>demos/skins.html</code>、<code>dist/cinder-skins.css</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>TypeScript 类型</td>
+<td>有</td>
+<td>●</td>
+<td><code>types/cinder.d.ts</code>（23.5 KB）+ <code>exports[&quot;.&quot;].types</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>组件清单 manifest</td>
+<td>有</td>
+<td>●</td>
+<td>构建产出 <code>dist/cinder-manifest.json</code>，<code>exports[&quot;./manifest.json&quot;]</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>框架包装</td>
+<td>无</td>
+<td>○</td>
+<td>—</td>
+</tr>
+<tr>
+<td>10</td>
+<td>图标库</td>
+<td>有</td>
+<td>●</td>
+<td>Lucide 104 个（ISC）：<code>packages/base/icons/</code> 真源 + <code>dist/cinder-icons.svg</code> sprite + <code>dist/icons/*.svg</code> 单文件 + <code>dist/cinder-icons.css</code> 类名，构建第 9 节闸门</td>
+</tr>
+<tr>
+<td>11</td>
+<td>i18n 字典</td>
+<td>有</td>
+<td>●</td>
+<td><code>packages/base/src/primitives/i18n.js</code>（9.7 KB）内置 zh-CN/en 双字典各 71 key；25 个 JS 文件共 70 个调用点 key 走 <code>tr()</code> / <code>tIn()</code>；<code>npm run check:i18n</code> 8 条闸门 + <code>acceptance-i18n.mjs</code> 31 条断言；<code>demos/i18n.html</code>、<code>docs/I18N.md</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>RTL 支持</td>
+<td>有</td>
+<td>●</td>
+<td>逻辑属性 356 处（inline/block 系列实测）、物理属性 0 处；<code>.cin-select:dir(rtl)</code> 镜像箭头；<code>scripts/acceptance-rtl.mjs</code> 11 项守卫</td>
+</tr>
+<tr>
+<td>13</td>
+<td>按需加载 / tree-shaking</td>
+<td>有</td>
+<td>●</td>
+<td>71 个 <code>dist/entries/**</code> 入口 + <code>exports</code> 子路径映射</td>
+</tr>
+<tr>
+<td>14</td>
+<td>暗色模式</td>
+<td>有</td>
+<td>●</td>
+<td>系统跟随 + 皮肤切换 + 子树反转</td>
+</tr>
+<tr>
+<td>15</td>
+<td>无 JS 降级 / SSR 友好</td>
+<td>有</td>
+<td>●</td>
+<td>CSS 优先、JS 渐进增强、<code>data-cin-ready</code> 防重入</td>
+</tr>
+<tr>
+<td>16</td>
+<td>可访问性声明</td>
+<td>有</td>
+<td>●</td>
+<td><code>docs/ACCESSIBILITY.md</code>：承诺层级 + 实测数据 + 已知缺口</td>
+</tr>
+<tr>
+<td>17</td>
+<td>键盘操作全覆盖</td>
+<td>有</td>
+<td>●</td>
+<td><code>docs/keyboard-matrix.md</code>：64 组件三档（A 36 有键位契约 / B 4 有行为层 / C 20 纯样式），由 <code>scripts/gen-keyboard-matrix.mjs</code> 从意图契约生成，<code>--check</code> 可挂 CI</td>
+</tr>
+<tr>
+<td>18</td>
+<td>视觉回归基线</td>
+<td>有</td>
+<td>●</td>
+<td><code>tests/visual/baseline/</code> 51 页快照（1280×900 / dpr1 / reduced-motion），<code>scripts/visual-baseline.mjs</code> 像素比对阈值 0.2%，<code>acceptance-visual.mjs</code> 关键 8 页进验收批；更新纪律见 <code>docs/VISUAL-BASELINE.md</code></td>
+</tr>
+<tr>
+<td>19</td>
+<td>设计资源（Figma）</td>
+<td>无</td>
+<td>○</td>
+<td>—</td>
+</tr>
+<tr>
+<td>20</td>
+<td>贡献指南 / 编码规范</td>
+<td>有</td>
+<td>●</td>
+<td><code>CONTRIBUTING.md</code>（人）+ <code>AGENTS.md</code>（Agent 硬约定）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>20 项：<strong>● 15 / ◐ 2 / ○ 3</strong>。已越过&quot;≥15 项 ●&quot;的合格线；◐ 只剩 npm 实际发布、主题可视化生成器两项（各差最后一步）。
+剩余 ○ 三项均为决策项或外部依赖：CDN 需先有公开源（npm 实发或公开镜像）、框架包装与定位冲突需拍板、Figma 需设计资源投入。Playground 已把「主题可视化」打通一半——令牌可视化调参已落地，皮肤预设的生成式产出仍是 #6 的剩余。</p>
+</blockquote>
+<hr>
+<h2 id="s-4-工程能力逐项矩阵-修订版">4. 工程能力逐项矩阵（修订版）</h2>
+<h3 id="s-4-1-架构与交付">4.1 架构与交付</h3>
+<table>
+<thead>
+<tr>
+<th>能力项</th>
+<th>Cinder</th>
+<th>Web Awesome 3.14</th>
+<th>通用库视角判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>运行时依赖</td>
+<td>0（CSS + 原生 JS）</td>
+<td>Lit 3.2、floating-ui、localize 等 13 项</td>
+<td>Cinder 领先（接入成本低）</td>
+</tr>
+<tr>
+<td>组件模型</td>
+<td>CSS 类 + <code>data-*</code> + 渐进增强</td>
+<td>91 个 Shadow DOM 自定义元素</td>
+<td>WA 领先（封装边界清晰）</td>
+</tr>
+<tr>
+<td>样式隔离</td>
+<td><code>.cin-</code> 前缀 + <code>@layer</code> 四层</td>
+<td>Shadow DOM + <code>::part()</code> + custom states</td>
+<td>WA 领先（宿主样式冲突概率低）</td>
+</tr>
+<tr>
+<td>定制方式</td>
+<td>直接覆盖变量/类，零门槛</td>
+<td>变量 + parts + slots，边界清晰但更繁琐</td>
+<td>各有优势，需在文档写清契约</td>
+</tr>
+<tr>
+<td>按需加载</td>
+<td><code>dist/entries/</code> 21 个按需入口（base 15 + erp 6），单入口内联 tokens 与重置</td>
+<td>单组件按需；单按钮基线 34.3 KB gz</td>
+<td>已对齐思路，粒度仍粗（入口为组件组，非单组件）</td>
+</tr>
+<tr>
+<td>单组件成本</td>
+<td>入口级 5.0-7.6 KB gz，含约 4.2 KB 固定底座</td>
+<td>Button 34.3 KB gz，5 组件 60.8 KB gz</td>
+<td>Cinder 领先</td>
+</tr>
+<tr>
+<td>全量成本</td>
+<td>49.0 KB gz（CSS 23.4 + JS 25.6）</td>
+<td>约 37.1-43.9 KB gz / 页面</td>
+<td>Cinder 持平（按入口口径仍领先）</td>
+</tr>
+<tr>
+<td>SSR / 无 JS</td>
+<td>CSS 天然可用，JS 仅增强</td>
+<td>Lit SSR（<code>@lit-labs/ssr</code> + <code>with-*</code>）</td>
+<td>持平，路径不同</td>
+</tr>
+<tr>
+<td>渐进增强</td>
+<td>强：断 JS 仍可读可提交</td>
+<td>中：升级前需 <code>wa-cloak</code> 防 FOUC</td>
+<td>Cinder 领先</td>
+</tr>
+<tr>
+<td>分层架构</td>
+<td><code>tokens → base → components → erp</code></td>
+<td>主题 / 工具类 / 组件 / native 分层</td>
+<td>持平</td>
+</tr>
+<tr>
+<td>发布形态</td>
+<td>私有 git + zip</td>
+<td>npm + CDN + 版本化 dist</td>
+<td>WA 领先</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4-2-设计系统与主题">4.2 设计系统与主题</h3>
+<table>
+<thead>
+<tr>
+<th>能力项</th>
+<th>Cinder</th>
+<th>Web Awesome 3.14</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>令牌规模</td>
+<td>215 base + 26 erp，13 类令牌</td>
+<td><code>--wa-*</code> 语义令牌体系（surface/text/brand/fill/border/on-* + space/font/shadow/focus/transition）</td>
+<td>WA 语义色阶更完整</td>
+</tr>
+<tr>
+<td>主题 / 皮肤</td>
+<td>8 套 <code>data-skin</code>：paper、mist、porcelain、ink、graphite、ledger、sage、industrial</td>
+<td>3 套内置主题 + Pro 多套调色板（rudimentary、elegant、mild、natural、anodized、vogue）</td>
+<td>Cinder 领先（套数、业务贴合）</td>
+</tr>
+<tr>
+<td>暗色模式</td>
+<td><code>prefers-color-scheme</code> + 皮肤暗色</td>
+<td><code>.wa-dark</code> / <code>.wa-light</code> / <code>.wa-invert</code>，支持子树反转</td>
+<td>持平</td>
+</tr>
+<tr>
+<td>密度</td>
+<td>独立 <code>density</code> 令牌（表格/表单/工具栏）</td>
+<td>组件 <code>size</code>（s/m/l），无表格密度</td>
+<td>Cinder 领先</td>
+</tr>
+<tr>
+<td>断点</td>
+<td>5 档：360/600/900/1200/1600</td>
+<td>响应式工具类 + 容器查询</td>
+<td>持平</td>
+</tr>
+<tr>
+<td>对比度门禁</td>
+<td>脚本核算 <code>border-strong ≥ 3:1</code>，8 皮肤达标</td>
+<td>组件级 axe 检查</td>
+<td>各有侧重</td>
+</tr>
+<tr>
+<td>图标</td>
+<td>无图标库</td>
+<td>Font Awesome 默认 + resolver</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>设计资源</td>
+<td>无</td>
+<td>Figma Design Kit（Pro）</td>
+<td>WA 领先</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4-3-表单与校验">4.3 表单与校验</h3>
+<table>
+<thead>
+<tr>
+<th>能力项</th>
+<th>Cinder</th>
+<th>Web Awesome 3.14</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>表单控件数量</td>
+<td>10 类</td>
+<td>22 类（含日期、时间、文件、颜色、评分、滑块、OTP、Combobox）</td>
+<td>接近（差 OTP 与异步 Combobox）</td>
+</tr>
+<tr>
+<td>表单关联</td>
+<td>原生元素，天然随表单提交</td>
+<td>form-associated custom elements</td>
+<td>持平</td>
+</tr>
+<tr>
+<td>校验 API</td>
+<td><code>aria-invalid</code> + field-error/help</td>
+<td>Constraint Validation API + <code>setCustomValidity()</code></td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>校验态样式</td>
+<td>属性选择器</td>
+<td><code>:state(valid/invalid)</code> + <code>:user-invalid</code> 令牌</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>无 JS 提交</td>
+<td>支持</td>
+<td>需组件 JS 升级</td>
+<td>Cinder 领先</td>
+</tr>
+<tr>
+<td>表单布局</td>
+<td>field/label/help/error 闭环，高密度</td>
+<td>组件级 label/hint/error，布局交给工具类</td>
+<td>持平</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4-4-可访问性与国际化">4.4 可访问性与国际化</h3>
+<table>
+<thead>
+<tr>
+<th>能力项</th>
+<th>Cinder</th>
+<th>Web Awesome 3.14</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>组件内建 ARIA</td>
+<td>部分（tab/dialog/toast 有 role 与 aria-live）</td>
+<td>全组件按 WAI-ARIA 模式</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>焦点管理</td>
+<td>Dialog 有回收/Esc/滚动锁；Drawer/Popconfirm 无完整循环</td>
+<td>统一 focus trap + 焦点归还</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>动效偏好</td>
+<td><code>prefers-reduced-motion</code></td>
+<td>支持</td>
+<td>持平</td>
+</tr>
+<tr>
+<td>回归测试</td>
+<td>Playwright 69/69 浮层回归 + 对比度脚本</td>
+<td>单测 + a11y + 视觉测试</td>
+<td>WA 规模领先</td>
+</tr>
+<tr>
+<td>国际化</td>
+<td>中文硬编码</td>
+<td>31 种语言，<code>lang</code> 运行时切换</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>RTL</td>
+<td>无</td>
+<td><code>dir</code> + 翻译 <code>$dir</code> + 逻辑属性</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>日期/数字格式</td>
+<td>手写 <code>.cin-money</code> / <code>.cin-numeral</code></td>
+<td>Intl 封装 Format Date/Number/Bytes/Relative Time</td>
+<td>WA 领先</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4-5-工程化与生态">4.5 工程化与生态</h3>
+<table>
+<thead>
+<tr>
+<th>能力项</th>
+<th>Cinder</th>
+<th>Web Awesome 3.14</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类型定义</td>
+<td>无</td>
+<td>TS + custom-elements-manifest + React 19 类型</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>框架集成</td>
+<td>任意 HTML/CSS 环境</td>
+<td>React 19 / React 18 / Vue / Angular / Svelte</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>文档</td>
+<td>文档站 19 页 + 搜索 + 44 页示例内嵌（无迁移指南 / AI 文档助手）</td>
+<td>文档站 + 示例 + 迁移指南 + AI Skills</td>
+<td>差距收窄到&quot;指南类内容&quot;</td>
+</tr>
+<tr>
+<td>测试体系</td>
+<td>构建零错误 + 渲染/浮层/对比度回归</td>
+<td>单测 + 视觉 + a11y，CI 化</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>发布与版本</td>
+<td>私有，无 semver</td>
+<td>npm + CDN + changelog</td>
+<td>WA 领先</td>
+</tr>
+<tr>
+<td>许可</td>
+<td>私有</td>
+<td>免费版 MIT；Pro 订阅</td>
+<td>场景不同</td>
+</tr>
+<tr>
+<td>体积</td>
+<td>单入口 5.0-7.6 KB gz（21 个入口），全量合订 49.0 KB gz</td>
+<td>37-44 KB gz/页面，可裁剪</td>
+<td>Cinder 领先（按入口口径）</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="s-5-91-项组件逐项对照-修正版">5. 91 项组件逐项对照（修正版）</h2>
+<blockquote>
+<p>修正：v1 误将 Combobox 标为免费，实际为 <strong>Pro</strong>。本表按 npm 文件树校正，Pro 共 18 项。</p>
+</blockquote>
+<p><strong>状态与标签</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>版本</th>
+<th>Cinder 对应</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Badge</td>
+<td>免费</td>
+<td>.cin-badge</td>
+<td>●</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Tag</td>
+<td>免费</td>
+<td>.cin-tag / .cin-chip</td>
+<td>●</td>
+</tr>
+</tbody>
+</table>
+<p><strong>操作与导航</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>版本</th>
+<th>Cinder 对应</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>Button</td>
+<td>免费</td>
+<td>.cin-btn</td>
+<td>●</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Button Group</td>
+<td>免费</td>
+<td>.cin-segment（非任意组合）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Copy Button</td>
+<td>免费</td>
+<td><code>.cin-copy</code> + <code>copytarget.css</code>（<code>data-value</code>/<code>data-copy</code> 取值、clipboard→execCommand 兜底、1.6s 成功态、<code>cin:copy</code>、<code>Cinder.copyText</code>）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Dropdown</td>
+<td>免费</td>
+<td>.cin-select / .cin-popconfirm（无通用菜单容器）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Dropdown Item</td>
+<td>免费</td>
+<td>原生 option / popconfirm 按钮</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Split Panel</td>
+<td>免费</td>
+<td><code>.cin-split</code> + <code>splitpanel.css</code>（指针拖拽夹紧、方向键微调、双击复位、<code>data-persist</code> 持久化、收起展开、<code>cin:splitchange</code>/<code>cin:splitresize</code>、<code>Cinder.setSplitSize</code>/<code>toggleSplitPanel</code>）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Accordion</td>
+<td>免费</td>
+<td>.cin-accordion（data-single / data-variant=card）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Accordion Item</td>
+<td>免费</td>
+<td>.cin-accordion-item（原生 details，无 JS 可折叠）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Breadcrumb</td>
+<td>免费</td>
+<td>.cin-breadcrumb</td>
+<td>●</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Breadcrumb Item</td>
+<td>免费</td>
+<td>.cin-breadcrumb 内 a/span</td>
+<td>●</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Drawer</td>
+<td>免费</td>
+<td>.cin-drawer</td>
+<td>●</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Pagination</td>
+<td>免费</td>
+<td>.cin-pagination</td>
+<td>●</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Tab</td>
+<td>免费</td>
+<td>.cin-tabs / .cin-tabbar</td>
+<td>●</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Tab Group</td>
+<td>免费</td>
+<td>.cin-tabs</td>
+<td>●</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Tab Panel</td>
+<td>免费</td>
+<td><code>.cin-tabpanel</code> + <code>Cinder.setTab</code>（aria 关联/roving tabindex/方向键/手动激活/无 JS 全展开）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Tree</td>
+<td>免费</td>
+<td><code>data-tree</code> + <code>tree.js</code>（级联多选/键盘漫游/懒加载/过滤高亮）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Tree Item</td>
+<td>免费</td>
+<td><code>.cin-tree-item</code> 行/分组/连接线</td>
+<td>●</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Step</td>
+<td>免费</td>
+<td>.cin-step</td>
+<td>●</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Stepper</td>
+<td>免费</td>
+<td>.cin-stepper / .cin-steps</td>
+<td>●</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表单</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>版本</th>
+<th>Cinder 对应</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22</td>
+<td>Checkbox</td>
+<td>免费</td>
+<td>.cin-check</td>
+<td>●</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Checkbox Group</td>
+<td>免费</td>
+<td>field + check 组合</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Color Picker</td>
+<td>免费</td>
+<td><code>.cin-colorpicker</code> + <code>Cinder.initColorPickers</code>（HSV 面板、hex/rgb/hsl 三格式、透明度、预设、原生 color 兜底）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Combobox</td>
+<td><strong>Pro</strong></td>
+<td>.cin-select + .cin-search（无异步联想）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Data Grid</td>
+<td><strong>Pro</strong></td>
+<td><code>.cin-dg[data-virtual]</code> + <code>Cinder.initVirtualGrids</code> / <code>Cinder.virtualGrid</code>：窗口渲染（只渲视口内 + overscan，上下占位行撑高）、行节点复用、rAF 合帧、<code>data-row-height</code> / <code>data-height</code> / <code>data-overscan</code>、排序/全选/半选/批量条/行详情/首列 sticky 横向固定、<code>scrollToIndex</code> 三档对齐、<code>setRows</code> / <code>appendRows</code> / <code>updateRow</code> / <code>refresh</code> / <code>destroy</code>；<code>cin:virtualrange</code> / <code>rowclick</code> / <code>selection</code> / <code>sort</code> 事件；一万行 DOM ≤ 60、滚到底与居中定位精确；仍缺列拖拽/列宽调整、筛选器、导出、服务端分页钩子</td>
+<td>●</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Date Input</td>
+<td><strong>Pro</strong></td>
+<td><code>.cin-datepicker</code> + <code>Cinder.initDatePickers</code>（原生 text 手输 YYYY-MM-DD、非法值标红、min/max 与禁用日校验、<code>Cinder.setDatePicker</code>）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Date Picker</td>
+<td><strong>Pro</strong></td>
+<td><code>.cin-datepicker[data-mode]</code>（42 格月历、单选/范围、月年下拉、今天/清除、键盘漫游、面板 fixed 夹紧、无 JS 可手输）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>29</td>
+<td>File Input</td>
+<td><strong>Pro</strong></td>
+<td>.cin-dropzone + Cinder.initFileInputs（拖拽/类型体积数量校验/图片预览/进度条）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Input</td>
+<td>免费</td>
+<td>.cin-input</td>
+<td>●</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Known Date</td>
+<td>免费</td>
+<td><code>knowndate.css</code> + <code>format.js</code>（<code>&lt;time datetime&gt;</code> / <code>[data-knowndate]</code> 声明式，<code>data-format</code> 三态 relative/absolute/both 配 <code>data-abs-format</code> 五档预设，60 秒全局 ticker，节点移除自动退订）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Number Input</td>
+<td>免费</td>
+<td>.cin-input + .cin-unit（无步进器）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>33</td>
+<td>OTP Input</td>
+<td>免费</td>
+<td><code>.cin-otp</code> + <code>otp.css</code>（逐格前进、退格两段、粘贴整串分配、<code>data-charset</code> 过滤、<code>cin:otpchange</code>/<code>cin:otpcomplete</code>、<code>Cinder.setOTP</code>/<code>getOTP</code>）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Radio</td>
+<td>免费</td>
+<td>.cin-check 支持 radio</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>35</td>
+<td>Radio Group</td>
+<td>免费</td>
+<td>field + check 组合</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Rating</td>
+<td>免费</td>
+<td><code>.cin-rating</code> + <code>Cinder.setRating</code>（原生 radio 组、<code>:checked + label</code> 与 <code>:has(~ :checked)</code> 点亮、悬停预览、只读渲染、<code>cin:rate</code>）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>37</td>
+<td>Select</td>
+<td>免费</td>
+<td>.cin-select</td>
+<td>●</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Option</td>
+<td>免费</td>
+<td>原生 option</td>
+<td>●</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Slider</td>
+<td>免费</td>
+<td><code>.cin-slider</code> + <code>Cinder.setSlider</code>（原生 range 接管外观、<code>--_p</code> 轨道填充、<code>data-format</code> 读数、拖动气泡、<code>cin:slideinput</code>/<code>cin:slidechange</code>）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Switch</td>
+<td>免费</td>
+<td>.cin-switch</td>
+<td>●</td>
+</tr>
+<tr>
+<td>41</td>
+<td>Tag Input</td>
+<td>免费</td>
+<td>.cin-filterbar + .cin-chip（展示型）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>42</td>
+<td>Textarea</td>
+<td>免费</td>
+<td>.cin-textarea</td>
+<td>●</td>
+</tr>
+<tr>
+<td>43</td>
+<td>Time Input</td>
+<td>免费</td>
+<td><code>.cin-timeinput</code> 包原生 <code>input[type=time]</code>（step 粒度、三种尺寸、禁用与校验态）</td>
+<td>◐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>容器与布局</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>版本</th>
+<th>Cinder 对应</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>44</td>
+<td>Card</td>
+<td>免费</td>
+<td>.cin-panel</td>
+<td>●</td>
+</tr>
+<tr>
+<td>45</td>
+<td>Carousel</td>
+<td>免费</td>
+<td>.cin-carousel</td>
+<td>●</td>
+</tr>
+<tr>
+<td>46</td>
+<td>Carousel Item</td>
+<td>免费</td>
+<td>.cin-carousel-slide</td>
+<td>●</td>
+</tr>
+<tr>
+<td>47</td>
+<td>Comparison</td>
+<td>免费</td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>48</td>
+<td>Details</td>
+<td>免费</td>
+<td><code>details.css</code>（原生 details/summary，<code>data-variant</code> 三态 card 与 plain，箭头 mask 翻转，零 JS 可开合，打印强制展开）· 验收 17 条</td>
+<td>●</td>
+</tr>
+<tr>
+<td>49</td>
+<td>Divider</td>
+<td>免费</td>
+<td>.cin-divider</td>
+<td>●</td>
+</tr>
+<tr>
+<td>50</td>
+<td>Page</td>
+<td>免费</td>
+<td>.cin-shell / .cin-page / sidebar / topbar</td>
+<td>●</td>
+</tr>
+<tr>
+<td>51</td>
+<td>Scroller</td>
+<td>免费</td>
+<td>.cin-main-scroll / .cin-dg-scroll</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>52</td>
+<td>Skeleton</td>
+<td>免费</td>
+<td>.cin-skeleton</td>
+<td>●</td>
+</tr>
+<tr>
+<td>53</td>
+<td>Zoomable Frame</td>
+<td>免费</td>
+<td>无</td>
+<td>○</td>
+</tr>
+</tbody>
+</table>
+<p><strong>反馈与浮层</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>版本</th>
+<th>Cinder 对应</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>54</td>
+<td>Callout</td>
+<td>免费</td>
+<td>.cin-alert / .cin-inline-alert</td>
+<td>●</td>
+</tr>
+<tr>
+<td>55</td>
+<td>Dialog</td>
+<td>免费</td>
+<td>.cin-dialog（焦点回收/Esc/滚动锁）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>56</td>
+<td>Popover</td>
+<td>免费</td>
+<td>.cin-hovercard</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>57</td>
+<td>Popup</td>
+<td>免费</td>
+<td>tooltip/popconfirm 内部定位</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>58</td>
+<td>Progress Bar</td>
+<td>免费</td>
+<td>.cin-progress</td>
+<td>●</td>
+</tr>
+<tr>
+<td>59</td>
+<td>Progress Ring</td>
+<td>免费</td>
+<td>.cin-spinner（不确定进度）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>60</td>
+<td>Spinner</td>
+<td>免费</td>
+<td>.cin-spinner</td>
+<td>●</td>
+</tr>
+<tr>
+<td>61</td>
+<td>Toast</td>
+<td>免费</td>
+<td>.cin-toast / .cin-toast-region</td>
+<td>●</td>
+</tr>
+<tr>
+<td>62</td>
+<td>Toast Item</td>
+<td>免费</td>
+<td>.cin-toast</td>
+<td>●</td>
+</tr>
+<tr>
+<td>63</td>
+<td>Tooltip</td>
+<td>免费</td>
+<td>.cin-tooltip</td>
+<td>●</td>
+</tr>
+</tbody>
+</table>
+<p><strong>媒体与代码</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>版本</th>
+<th>Cinder 对应</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>Animated Image</td>
+<td>免费</td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>65</td>
+<td>Avatar</td>
+<td>免费</td>
+<td>.cin-hovercard-avatar（仅局部）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>66</td>
+<td>Icon</td>
+<td>免费</td>
+<td><code>.cin-icon</code> 容器 + Lucide 104 个图标（sprite/单文件/CSS 类三路径，<code>Cinder.Primitives.icons</code>）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>67</td>
+<td>QR Code</td>
+<td>免费</td>
+<td><code>.cin-qr</code> + <code>qrcode.css</code>（自研编码器 v1-10、L/M/Q/H、掩码评分、内联 SVG 走 <code>currentColor</code>、<code>Cinder.encodeQR</code>/<code>renderQRCode</code>，独立解码器验收 69/69）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>68</td>
+<td>Video</td>
+<td><strong>Pro</strong></td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>69</td>
+<td>Video Playlist</td>
+<td><strong>Pro</strong></td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>70</td>
+<td>Markdown</td>
+<td>免费</td>
+<td><code>.cin-markdown</code> + <code>markdown.css</code>（先整体转义后解析、标题/列表/引用/表格/围栏代码/图片、链接只放行 http(s)·mailto·tel·相对地址、<code>Cinder.renderMarkdown</code>；不支持 HTML 直出与脚注）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>71</td>
+<td>Code Highlighter</td>
+<td><strong>Pro</strong></td>
+<td>.cin-code（仅样式，无高亮）</td>
+<td>◐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>数据可视化</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>版本</th>
+<th>Cinder 对应</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>72</td>
+<td>Chart</td>
+<td><strong>Pro</strong></td>
+<td>.cin-chart 容器（无引擎）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>73</td>
+<td>Bar Chart</td>
+<td><strong>Pro</strong></td>
+<td>.cin-bars</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>74</td>
+<td>Line Chart</td>
+<td><strong>Pro</strong></td>
+<td>.cin-spark（趋势线）</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>75</td>
+<td>Pie Chart</td>
+<td><strong>Pro</strong></td>
+<td>.cin-donut</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>76</td>
+<td>Doughnut Chart</td>
+<td><strong>Pro</strong></td>
+<td>.cin-donut</td>
+<td>●</td>
+</tr>
+<tr>
+<td>77</td>
+<td>Bubble Chart</td>
+<td><strong>Pro</strong></td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>78</td>
+<td>Polar Area Chart</td>
+<td><strong>Pro</strong></td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>79</td>
+<td>Radar Chart</td>
+<td><strong>Pro</strong></td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>80</td>
+<td>Scatter Chart</td>
+<td><strong>Pro</strong></td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>81</td>
+<td>Sparkline</td>
+<td><strong>Pro</strong></td>
+<td>.cin-spark</td>
+<td>●</td>
+</tr>
+</tbody>
+</table>
+<p><strong>工具组件</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>版本</th>
+<th>Cinder 对应</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>82</td>
+<td>Animation</td>
+<td>免费</td>
+<td>motion token + CSS 过渡，无 WAAPI 引擎</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>83</td>
+<td>Format Bytes</td>
+<td>免费</td>
+<td><code>Cinder.formatBytes</code>（SI 1000，<code>binary:true</code> 走 1024，自动单位与小数位，负数带符号，非有限值返「—」）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>84</td>
+<td>Format Date</td>
+<td>免费</td>
+<td><code>Cinder.formatDate</code>（iso / date / datetime / time / month 五预设，<code>Intl</code> 跟随 lang，非法值返「—」）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>85</td>
+<td>Format Number</td>
+<td>免费</td>
+<td>.cin-money / .cin-numeral</td>
+<td>◐</td>
+</tr>
+<tr>
+<td>86</td>
+<td>Include</td>
+<td>免费</td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>87</td>
+<td>Intersection Observer</td>
+<td>免费</td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>88</td>
+<td>Mutation Observer</td>
+<td>免费</td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>89</td>
+<td>Random Content</td>
+<td>免费</td>
+<td>无</td>
+<td>○</td>
+</tr>
+<tr>
+<td>90</td>
+<td>Relative Time</td>
+<td>免费</td>
+<td><code>Cinder.relativeTime</code>（刚刚 / 分钟 / 小时 / 天 / 月 / 年，<code>Intl.RelativeTimeFormat</code> numeric:auto，<code>base</code> 可注入基准时间）</td>
+<td>●</td>
+</tr>
+<tr>
+<td>91</td>
+<td>Resize Observer</td>
+<td>免费</td>
+<td>Tour 内部使用</td>
+<td>◐</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-5-1-覆盖率统计">5.1 覆盖率统计</h3>
+<table>
+<thead>
+<tr>
+<th>范围</th>
+<th style="text-align:right">总数</th>
+<th style="text-align:right">●</th>
+<th style="text-align:right">◐</th>
+<th style="text-align:right">○</th>
+<th style="text-align:right">覆盖率（●+◐）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>免费包</td>
+<td style="text-align:right">73</td>
+<td style="text-align:right">48</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right"><strong>90.4%</strong></td>
+</tr>
+<tr>
+<td>Pro 包</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">66.7%</td>
+</tr>
+<tr>
+<td>合计</td>
+<td style="text-align:right">91</td>
+<td style="text-align:right">54</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right"><strong>85.7%</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>通用库的及格线应设在<strong>免费包覆盖 ≥90%、必备组件 0 缺失</strong>。按此标准，Cinder 还差 20 项左右。</p>
+</blockquote>
+<hr>
+<h2 id="s-6-36-项缺口分级-按通用库必备度-不按-erp-价值">6. 36 项缺口分级（按通用库必备度，不按 ERP 价值）</h2>
+<h3 id="s-6-1-必备-14-项-缺了就不像通用库">6.1 必备（14 项）：缺了就不像通用库</h3>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>通用场景</th>
+<th>工作量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accordion / Accordion Item</td>
+<td>FAQ、设置分组、折叠面板</td>
+<td>1 天（可用原生 details 起步）</td>
+</tr>
+<tr>
+<td>Details</td>
+<td>同上，更轻</td>
+<td>含在上项</td>
+</tr>
+<tr>
+<td>Date Input / Date Picker</td>
+<td>所有表单与查询</td>
+<td><s>4-5 天</s> 已完成</td>
+</tr>
+<tr>
+<td>Time Input</td>
+<td>排程、预约、班次</td>
+<td><s>1 天</s> 已完成</td>
+</tr>
+<tr>
+<td>File Input</td>
+<td>上传、导入</td>
+<td>1 天</td>
+</tr>
+<tr>
+<td>Slider</td>
+<td>筛选、阈值</td>
+<td>1 天</td>
+</tr>
+<tr>
+<td>Rating</td>
+<td>评价类</td>
+<td>0.5 天</td>
+</tr>
+<tr>
+<td>Color Picker</td>
+<td>主题/标签色</td>
+<td><s>1.5 天</s> 已完成</td>
+</tr>
+<tr>
+<td>Tree / Tree Item</td>
+<td>目录、组织、分类</td>
+<td><s>3 天</s> 已完成</td>
+</tr>
+<tr>
+<td>Carousel / Carousel Item</td>
+<td>门户、图片区</td>
+<td>2 天</td>
+</tr>
+</tbody>
+</table>
+<p>小计：<strong>11-13 人日</strong>（含 Tree 3 天已完成）</p>
+<h3 id="s-6-2-常见-7-项-影响完整度-可排后">6.2 常见（7 项）：影响完整度，可排后</h3>
+<p>Copy Button、Split Panel、OTP Input、Comparison、QR Code、Video、Video Playlist</p>
+<p>小计：<strong>6-7 人日</strong>（Video/Video Playlist 建议包装 hls.js 或原生 video，不自研播放器）</p>
+<h3 id="s-6-3-长尾-15-项-接成熟库或暂缓">6.3 长尾（15 项）：接成熟库或暂缓</h3>
+<p>Known Date、Zoomable Frame、Animated Image、Markdown、Bubble/Polar/Radar/Scatter Chart、Format Bytes/Date、Include、Intersection/Mutation Observer、Random Content、Relative Time</p>
+<p>小计：<strong>5-7 人日</strong>（工具类自己写；图表接 ECharts；Markdown 接 marked）</p>
+<hr>
+<h2 id="s-7-补齐路线-12-周达到-quot-合格通用库-quot">7. 补齐路线：12 周达到&quot;合格通用库&quot;</h2>
+<h3 id="p0-第-1-5-周-约-24-人日-坐实-quot-通用-quot-二字">P0（第 1-5 周，约 24 人日）：坐实&quot;通用&quot;二字</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th style="text-align:right">人日</th>
+<th>验收</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TypeScript 类型 + 组件清单 manifest</td>
+<td style="text-align:right">2</td>
+<td>public API 100% 有类型，IDE 可补全</td>
+</tr>
+<tr>
+<td>按组件拆分 CSS + <code>@layer</code> 顺序保证</td>
+<td style="text-align:right">2</td>
+<td>单组件引入 ≤8 KB gz</td>
+</tr>
+<tr>
+<td>Accordion/Details</td>
+<td style="text-align:right">1</td>
+<td>键盘可操作，aria-expanded 正确</td>
+</tr>
+<tr>
+<td>DateInput/DatePicker/TimeInput</td>
+<td style="text-align:right"><s>5</s> 已完成</td>
+<td>单选/范围/禁用日期/键盘输入</td>
+</tr>
+<tr>
+<td>FileInput</td>
+<td style="text-align:right">1</td>
+<td>拖拽 + 预览 + 错误态</td>
+</tr>
+<tr>
+<td>Slider/Rating/ColorPicker</td>
+<td style="text-align:right">3</td>
+<td>键盘步进，aria-valuenow</td>
+</tr>
+<tr>
+<td>Tree</td>
+<td style="text-align:right">3</td>
+<td>复选、懒加载、键盘导航</td>
+</tr>
+<tr>
+<td>Carousel</td>
+<td style="text-align:right">2</td>
+<td>触摸滑动、分页点、reduced-motion</td>
+</tr>
+<tr>
+<td>Tab Panel 联动 + 浮层焦点循环</td>
+<td style="text-align:right">1.5</td>
+<td>aria-selected/tabindex，焦点归还</td>
+</tr>
+<tr>
+<td>Data Grid 虚拟滚动</td>
+<td style="text-align:right"><s>3.5</s> 已完成</td>
+<td>1 万行 DOM ≤ 60，滚到底/居中精确，列固定</td>
+</tr>
+</tbody>
+</table>
+<h4>P0 进度（2026-10-31）</h4>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>状态</th>
+<th>实测证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TypeScript 类型 + 组件清单 manifest</td>
+<td>已完成</td>
+<td><code>types/cinder.d.ts</code> 覆盖 <code>Cinder</code> 18 个 API（浮层/折叠/文件/标签/滑块/评分/取色/日期/树/轮播/虚拟表格等）、<code>CinderERP.initDataGrids</code>、28 个 <code>cin:*</code> 事件；<code>tsc --strict</code> 0 报错且 2 条负例（非法 tone、缺 steps）被拦截。<code>dist/cinder-manifest.json</code> 列出 21 个入口的类名、依赖变量、字节与 gzip</td>
+</tr>
+<tr>
+<td>按组件拆分 CSS</td>
+<td>已完成</td>
+<td><code>dist/entries/</code>：base 15 入口 4.2–7.6 KB gz（相对 tokens+重置底座增量 0.6–3.4 KB），erp 6 入口 4.6–5.0 KB gz，全部 ≤8 KB 验收线；单入口冒烟 11/11 通过，示例页回归 10/10 无报错</td>
+</tr>
+<tr>
+<td>Accordion/Details</td>
+<td>已完成</td>
+<td><code>components/disclosure.css</code> + <code>behaviors/disclosure.js</code>：原生 details 骨架（无 JS 可折叠），JS 补高度过渡、<code>data-single</code> 互斥、<code>aria-expanded</code>/<code>aria-controls</code>/<code>role=region</code> 同步、方向键漫游、<code>cin:accordiontoggle</code> 事件与 <code>Cinder.setAccordion</code> API；新增入口 <code>entries/base/disclosure.css</code>，示例页 <code>demos/accordion.html</code>；行为验收 22/22 通过（含无 JS、reduced-motion、禁用项、事件 source）</td>
+</tr>
+<tr>
+<td>FileInput</td>
+<td>已完成</td>
+<td><code>components/fileinput.css</code> + <code>behaviors/fileinput.js</code>：拖拽区 + 文件列表，支持 <code>data-accept</code> / <code>data-max-size</code> / <code>data-max-files</code> 校验、图片 blob 预览、逐行错误态、<code>Cinder.setFileProgress</code> 进度与 <code>cin:files</code> / <code>cin:fileremove</code> 事件；无 JS 时 label 内 input 仍可点选；新增入口 <code>entries/base/fileinput.css</code>，示例页 <code>demos/fileinput.html</code>；行为验收 22/22 通过（含真实 drop、超限拒绝、移除、进度、reduced-motion）</td>
+</tr>
+<tr>
+<td>Tab Panel 联动 + 浮层焦点循环</td>
+<td>已完成</td>
+<td><code>components/tabs.css</code> + <code>behaviors/tabs.js</code>：<code>data-tabs</code> 容器配 <code>aria-controls</code> 双向关联、roving tabindex、方向键/Home/End 漫游（禁用项跳过、首尾回绕）、<code>data-single-activation=false</code> 手动激活、纵横与 pill/fill 变体、<code>cin:tabchange</code> 事件与 <code>Cinder.setTab</code> API；无 JS 时面板全部展开保内容；<code>overlay.js</code> 补 <code>focusin</code> 兜底焦点圈（外部抢焦自动拉回）与关闭后解除；新增入口 <code>entries/base/tabs.css</code>，示例页 <code>demos/tabs.html</code>；验收 37/37 通过（含浮层焦点回归 4 项）</td>
+</tr>
+<tr>
+<td>Slider</td>
+<td>已完成</td>
+<td><code>components/slider.css</code> + <code>behaviors/slider.js</code>：原生 <code>input[type=range]</code> 接管外观、步进、Home/End 与读屏读数，行为层只写 <code>--_p</code> 填充比例、<code>data-format</code> 格式化读数（<code>.cin-slider-value</code> / <code>body[data-value]</code> / <code>aria-valuetext</code>）与拖动气泡；<code>data-inline</code> / <code>data-bubble</code> / <code>data-size</code> 变体，禁用态降级；<code>cin:slideinput</code> / <code>cin:slidechange</code> 与 <code>Cinder.setSlider</code>；入口 gzip 5745 B</td>
+</tr>
+<tr>
+<td>Rating</td>
+<td>已完成</td>
+<td><code>components/rating.css</code> + <code>behaviors/rating.js</code>：原生 radio 组，点亮逻辑纯 CSS（<code>input:checked + label</code> + <code>label:has(~ input:checked)</code>，方向键按 DOM 正序无需反转）；悬停预览 <code>is-preview</code>、<code>data-readonly</code> 按 <code>data-value</code> 挂 <code>is-on</code> 并禁用 radio、<code>&lt;output&gt;</code> 读数；<code>cin:rate</code> 与 <code>Cinder.setRating</code>；入口 gzip 5230 B</td>
+</tr>
+<tr>
+<td>ColorPicker</td>
+<td>已完成</td>
+<td><code>components/colorpicker.css</code> + <code>behaviors/colorpicker.js</code>：原生 <code>input[type=color]</code> 打底（断 JS 仍可唤起系统取色盘），脚本接管后自绘 HSV 面板；色域/色相条/透明度条/hex·rgb·hsl 数值框/预设读写同一份状态，<code>data-format</code> 切 hex·rgb·hsl，<code>data-alpha</code> 出 8 位 hex 与棋盘格，非法输入标 <code>data-invalid</code> 不改状态；面板 fixed 定位 + 下方优先/上方回退/clamp 夹紧，点外部与 Esc 关闭并归还焦点；<code>cin:colorinput</code> / <code>cin:colorchange</code> / <code>cin:coloropen</code> / <code>cin:colorclose</code> 与 <code>Cinder.setColorPicker</code>（返回格式化值，非法返回 null）；入口 <code>entries/base/colorpicker.css</code> gzip 6.5 KB，示例页 <code>demos/colorpicker.html</code>；验收 60/60 通过（含拖动、色相映射、透明度、三格式、预设、禁用、暗色对比度、reduced-motion、360 宽、无 JS 降级）</td>
+</tr>
+<tr>
+<td>DatePicker / TimeInput</td>
+<td>已完成</td>
+<td><code>components/datepicker.css</code> + <code>behaviors/datepicker.js</code>：<code>.cin-dateinput</code> / <code>.cin-timeinput</code> 包原生 date·time 控件，`.cin-datepicker[data-mode=single</td>
+</tr>
+<tr>
+<td>Tree</td>
+<td>已完成</td>
+<td><code>components/tree.css</code> + <code>behaviors/tree.js</code>：<code>.cin-tree</code> 容器自动补 <code>role=tree</code>、<code>aria-level</code> / <code>aria-setsize</code> / <code>aria-posinset</code> / <code>aria-labelledby</code> / <code>aria-expanded</code> / <code>aria-selected</code> / <code>aria-checked</code>与 roving tabindex；点击箭头或双击行展开收起，<code>data-collapsed</code> 指定初始收起、<code>data-collapse=all</code> 全收起；单选/<code>data-select=multiple</code> 多选，<code>data-cascade</code> 级联勾选并回算父级 <code>indeterminate</code>；键盘 <code>↑↓</code> 漫游（跳过禁用/隐藏）、<code>→</code> 进子级、<code>←</code> 回父级或收枝、<code>Home</code>/<code>End</code>、<code>*</code> 展开同级、首字/多字 typeahead、<code>Enter</code> 选中；<code>data-lazy</code> 懒加载首次展开抛 <code>cin:treeload</code> 由业务 <code>done(nodes)</code> 回填；<code>Cinder.filterTree()</code> 关键词过滤（命中与祖先可见 + <code>&lt;mark&gt;</code> 高亮 + 自动展开 + 空态节点）；<code>cin:treeexpand</code> / <code>treecollapse</code> / <code>treeselect</code> / <code>treecheck</code> / <code>treeload</code> 与 <code>Cinder.tree</code> 控制器（<code>expand</code> / <code>collapse</code> / <code>toggle</code> / <code>select</code> / <code>checked</code> / <code>setChecked</code> / <code>decorate</code>）；箭头视觉 16px、热区 24px，行高 44px，无 JS 时全部节点可见可读；入口 <code>entries/base/tree.css</code> gzip 5.4 KB，示例页 <code>demos/tree.html</code>；验收 110/110 通过（含无 JS、ARIA、键盘、级联、懒加载、过滤、API、360 宽、暗色对比、reduced-motion）</td>
+</tr>
+<tr>
+<td>Carousel</td>
+<td>已完成</td>
+<td><code>components/carousel.css</code> + <code>behaviors/carousel.js</code>：<code>.cin-carousel</code> 按<strong>页</strong>分页（<code>pages = 张数 - 每页张数 + 1</code>），滚动交给原生 <code>overflow-x</code> + <code>scroll-snap</code>，脚本只补按钮/指示点/键盘/自动播放；<code>data-per-view</code> 并排多张、窄于 <code>--cin-bp-md</code> 自动回落单张；<code>data-loop</code> 用索引取模绕回，不克隆节点；<code>data-autoplay</code> 在悬停/聚焦/拖动/页面隐藏时挂起，reduced-motion 下不启动且滚动改即时；滚动停稳（<code>scrollend</code> 或 140 ms 兜底）后校正页码，resize 重测页数与指示点、索引夹取；键盘 <code>←↑→↓</code> / <code>Home</code> / <code>End</code>；<code>cin:carouselslide</code>（<code>{ index, pages, count, reason }</code>）与 <code>Cinder.carousel</code> 控制器（<code>next</code> / <code>prev</code> / <code>goTo</code> / <code>play</code> / <code>pause</code> / <code>resume</code> / <code>stop</code> / <code>refresh</code> / <code>destroy</code>），<code>Cinder.initCarousels</code> 返回本轮绑定数；无 JS 时轨道仍可拖动、内容全可读；入口 <code>entries/base/carousel.css</code> gzip 5.6 KB，示例页 <code>demos/carousel.html</code>；验收 101/101 通过（含页模型、循环、自动播放挂起、事件、窄屏重排、暗色对比、reduced-motion、无 JS、无控制台错误）</td>
+</tr>
+<tr>
+<td>Data Grid 虚拟滚动</td>
+<td>已完成</td>
+<td><code>components/virtualgrid.css</code> + <code>behaviors/virtualgrid.js</code>：<code>[data-virtual]</code> 下单表转固定窗口，tbody 只保留视口行 + 上下 overscan，占位行按 <code>start × rowH</code> 撑出真实高度，滚动时复用已有 <code>&lt;tr&gt;</code> 只改单元格；行高由 <code>data-row-height</code> 或探针量 <code>--cin-dg-row-h</code>，虚拟模式下把 <code>.cin-check</code> 的 44px 触控热区压回 0，避免行高漂移累计；滚动高度口径统一为「表头高 + 总行数 × 行高」，窗口起点按 <code>scrollTop - 表头高</code> 反算，<code>scrollToIndex</code> 落点同口径；<code>datagrid.js</code> 遇 <code>data-virtual</code> 只做列优先级挤压、不再绑选择与排序，消除同一 th 被两套逻辑连翻两次方向的冲突；入口 <code>entries/base/virtualgrid.css</code> gzip 5.8 KB，示例页 <code>demos/virtualgrid.html</code>（一万行 + 少数据 + API 面板）；验收 54/54 通过（DOM ≤60、滚到底、居中、切 32px 行高、追加 1000 行、选择与半选、排序首发升序、sticky、无 JS 降级、暗色对比 16.1、无控制台错误）</td>
+</tr>
+</tbody>
+</table>
+<p>执行中确定的约束（已写入 README 2.1）：</p>
+<ol>
+<li>每个单入口内联 tokens + 重置（约 4.2 KB gz 固定成本），因此 1–2 个入口用按需、3 个以上改用 <code>cinder-base.css</code>；入口间不合并去重。</li>
+<li><code>package.json</code> 增补 <code>exports</code> 映射（<code>cinder/base.css</code>、<code>cinder/entries/base/controls.css</code>、<code>cinder/manifest.json</code>、<code>cinder/types</code>），为后续 npm 发布预留路径形状。</li>
+<li>构建期新增 14 入口产出与 manifest，不改变原有 5 项结构校验，<code>--check</code> 仍 0 错误 0 告警。</li>
+</ol>
+<h3 id="p1-第-6-9-周-约-20-人日-可被外部使用">P1（第 6-9 周，约 20 人日）：可被外部使用</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th style="text-align:right">人日</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>常见 7 项组件</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>i18n 字典（zh/en）+ Intl 日期数字</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>RTL 逻辑属性审计与改造</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>文档站 + Playground（VitePress）</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>a11y 键盘全覆盖 + axe CI</td>
+<td style="text-align:right">4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="p2-第-10-12-周-约-14-人日-生态补齐">P2（第 10-12 周，约 14 人日）：生态补齐</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th style="text-align:right">人日</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>长尾工具类（Format/Relative Time/Observers）</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>图表接 ECharts 封装 4 类</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>Markdown + 代码高亮</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>图标库（内置 60 个常用 SVG 或接 Lucide）</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>npm 发布 + CDN + semver + CHANGELOG</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>Figma 令牌同步（Style Dictionary）</td>
+<td style="text-align:right">3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-12-周后目标分">12 周后目标分</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th style="text-align:right">现状</th>
+<th style="text-align:right">目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>免费包覆盖率</td>
+<td style="text-align:right">90.4%（66/73）</td>
+<td style="text-align:right">≥90%</td>
+</tr>
+<tr>
+<td>必备组件缺失</td>
+<td style="text-align:right">0（Accordion/Details/FileInput/Slider/Rating/ColorPicker/Date-Time/Tree/Carousel 全部补齐）</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>20 项基础设施</td>
+<td style="text-align:right">14 ● / 3 ◐ / 3 ○</td>
+<td style="text-align:right">≥15 ●</td>
+</tr>
+<tr>
+<td>单入口体积</td>
+<td style="text-align:right">最重 7.6 KB gz（<code>base/overlay</code>）</td>
+<td style="text-align:right"><strong>≤8 KB gz（构建阻断）</strong></td>
+</tr>
+<tr>
+<td>全量合订体积</td>
+<td style="text-align:right">58.0 KB gz</td>
+<td style="text-align:right">仅观察，不设阻断线</td>
+</tr>
+<tr>
+<td>通用层加权分</td>
+<td style="text-align:right">2.6</td>
+<td style="text-align:right"><strong>3.9-4.0</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>3.9 分意味着&quot;合格且有自己的特色&quot;，与 WA 的 4.6 分仍差在生态广度与 31 语言这类长期积累，不必强求追平。</p>
+</blockquote>
+<hr>
+<h2 id="s-8-三个架构决策需要重新评估-通用库视角">8. 三个架构决策需要重新评估（通用库视角）</h2>
+<p>v1 把这三项当作&quot;不必追&quot;，在通用库定位下必须重新权衡。</p>
+<table>
+<thead>
+<tr>
+<th>决策</th>
+<th>现状</th>
+<th>通用库视角的代价</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不采用 Shadow DOM</td>
+<td>light DOM + 前缀 + <code>@layer</code></td>
+<td>宿主页面样式可能穿透；没有 <code>::part()</code> 契约；主题边界靠约定</td>
+<td>保留 light DOM（对 ERP 内嵌有利），但在文档明确&quot;light DOM by design&quot;，并补一条 lint 规则禁止无前缀选择器；若未来做 SaaS 多租户嵌入再评估</td>
+</tr>
+<tr>
+<td>单文件全量 CSS</td>
+<td>23.2 KB 一次加载</td>
+<td>只用 3 个组件的页面也要付全量；无法按需</td>
+<td><strong>必须改</strong>：按组件拆分，保留 <code>cinder.css</code> 全量入口；<code>@layer</code> 保证拆分后顺序不塌</td>
+</tr>
+<tr>
+<td>零依赖</td>
+<td>无 Lit / 无 floating-ui</td>
+<td>缺 form-associated、缺碰撞检测、缺跨框架类型</td>
+<td>保留零依赖作为卖点；定位逻辑自研已够（Tour 已验证），表单用原生元素 + d.ts 补类型，不引入 Lit</td>
+</tr>
+</tbody>
+</table>
+<p>补充一条 v1 的判断修正：<strong>&quot;组件数量竞赛不该学&quot;这句话不成立</strong>。对通用库，广度就是产品力；正确说法是&quot;长尾不自研，用适配层 + 明确 roadmap&quot;，而不是&quot;不做&quot;。</p>
+<hr>
+<h2 id="s-9-最终定位建议-修订">9. 最终定位建议（修订）</h2>
+<ol>
+<li><strong>Cinder = 通用 UI 组件库 + ERP 增强层</strong>。base 层按通用库标准考核，erp 层按业务价值考核，两套指标分开看。</li>
+<li><strong>短期优先级</strong>：类型、按需加载、必备 14 组件、i18n/RTL、文档站。这五项决定&quot;别人能不能用&quot;，比再加 3 套皮肤重要。</li>
+<li><strong>中期差异化</strong>：把 6 个业务块 + 8 套皮肤 + 密度体系做成&quot;开箱即用的 ERP 主题包&quot;，这是 Web Awesome 永远不会有、而 Cinder 可以免费给的东西。</li>
+<li><strong>对外话术</strong>：不要自称&quot;ERP 组件库&quot;（会被当成业务框架），应称&quot;面向后台与 ERP 场景的通用 UI 组件库&quot;——先过通用库的及格线，再谈 ERP 加成。</li>
+</ol>
+<hr>
+<h2 id="s-附录-实测数据">附录：实测数据</h2>
+<h3 id="a-web-awesome-3-14-0">A. Web Awesome 3.14.0</h3>
+<ul>
+<li>组件：91 项；免费包 <code>dist/components/</code> 73 个目录；Pro 18 项：Combobox、Data Grid、Date Input、Date Picker、File Input、Video、Video Playlist、Code Highlighter、Chart、Bar/Line/Pie/Doughnut/Bubble/Polar Area/Radar/Scatter Chart、Sparkline。</li>
+<li>主题：default、awesome、shoelace；Pro 调色板 6 套。</li>
+<li>翻译：31 个 <code>.js</code> 语言文件。</li>
+<li>依赖：13 项（lit、@lit/react、@lit/context、@lit-labs/ssr、@lit-labs/ssr-client、@floating-ui/dom、@shoelace-style/localize、@shoelace-style/animations、@ctrl/tinycolor、@konnorr/qr-creator、composed-offset-position、marked、nanoid）。</li>
+<li>许可：MIT（免费包）。</li>
+</ul>
+<h3 id="b-体积实测-esbuild-0-28-2-gzip--9">B. 体积实测（esbuild 0.28.2 + gzip -9）</h3>
+<table>
+<thead>
+<tr>
+<th>产物</th>
+<th style="text-align:right">原始</th>
+<th style="text-align:right">gzip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WA 单 Button（含 Lit）</td>
+<td style="text-align:right">136,584 B</td>
+<td style="text-align:right">34,321 B</td>
+</tr>
+<tr>
+<td>WA Button+Input+Select+Dialog+Drawer</td>
+<td style="text-align:right">246,369 B</td>
+<td style="text-align:right">60,843 B</td>
+</tr>
+<tr>
+<td>WA default.css</td>
+<td style="text-align:right">16,773 B</td>
+<td style="text-align:right">2,610 B</td>
+</tr>
+<tr>
+<td>WA utilities.css</td>
+<td style="text-align:right">583 B</td>
+<td style="text-align:right">189 B</td>
+</tr>
+<tr>
+<td>WA native.css</td>
+<td style="text-align:right">37,010 B</td>
+<td style="text-align:right">6,773 B</td>
+</tr>
+<tr>
+<td>Cinder cinder-all.css</td>
+<td style="text-align:right">149,309 B</td>
+<td style="text-align:right">24,900 B</td>
+</tr>
+<tr>
+<td>Cinder cinder.js</td>
+<td style="text-align:right">121,232 B</td>
+<td style="text-align:right">30,342 B</td>
+</tr>
+<tr>
+<td>Cinder 全量</td>
+<td style="text-align:right">270,541 B</td>
+<td style="text-align:right"><strong>55,365 B（54.1 KiB）</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>WA 单页实际起算：34.3 + 2.6 + 0.2 ≈ 37.1 KB gz；启用 native 样式约 43.9 KB gz。Cinder 54.1 KB 为全量合订（含滑块/评分/取色/日期/树等新增组件，本轮 Tree 让 CSS +0.6 KB、JS +9.6 KB gz，JS 增量主要来自键盘漫游、级联回算与懒加载调度），实际接入只引一到两个入口，单入口仍在 5.0-7.6 KB gz。</p>
+</blockquote>
+<h3 id="c-cinder-侧证据">C. Cinder 侧证据</h3>
+<ul>
+<li><code>dist/report.json</code>：base 217 tokens / 15 CSS / 10 behaviors；erp 26 tokens / 6 blocks；5 档断点；errors 0、warnings 1（全量 bundle 超参考线，按入口考核不阻断）。</li>
+<li><code>tokens/skins.tokens.json</code>：8 套皮肤。</li>
+<li>Playwright 验收：浮层回归 69/69、Tree 110/110（含无 JS、ARIA、键盘、级联、懒加载、过滤、API、360 宽、暗色对比、reduced-motion）；8 套皮肤对比度全达标。</li>
+<li>仓库 45 个跟踪文件，commit <code>3df4ab5</code>，main 分支。</li>
+</ul>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-0-口径更正带来的三个结论" data-level="2">0. 口径更正带来的三个结论</a>
+      <a href="#s-1-对标口径与公平性" data-level="2">1. 对标口径与公平性</a>
+      <a href="#s-2-通用层记分卡-按通用库权重" data-level="2">2. 通用层记分卡（按通用库权重）</a>
+      <a href="#s-2-1-分层看更清楚" data-level="3">2.1 分层看更清楚</a>
+      <a href="#s-3-通用库必备基础设施清单-20-项" data-level="2">3. 通用库必备基础设施清单（20 项）</a>
+      <a href="#s-4-工程能力逐项矩阵-修订版" data-level="2">4. 工程能力逐项矩阵（修订版）</a>
+      <a href="#s-4-1-架构与交付" data-level="3">4.1 架构与交付</a>
+      <a href="#s-4-2-设计系统与主题" data-level="3">4.2 设计系统与主题</a>
+      <a href="#s-4-3-表单与校验" data-level="3">4.3 表单与校验</a>
+      <a href="#s-4-4-可访问性与国际化" data-level="3">4.4 可访问性与国际化</a>
+      <a href="#s-4-5-工程化与生态" data-level="3">4.5 工程化与生态</a>
+      <a href="#s-5-91-项组件逐项对照-修正版" data-level="2">5. 91 项组件逐项对照（修正版）</a>
+      <a href="#s-5-1-覆盖率统计" data-level="3">5.1 覆盖率统计</a>
+      <a href="#s-6-36-项缺口分级-按通用库必备度-不按-erp-价值" data-level="2">6. 36 项缺口分级（按通用库必备度，不按 ERP 价值）</a>
+      <a href="#s-6-1-必备-14-项-缺了就不像通用库" data-level="3">6.1 必备（14 项）：缺了就不像通用库</a>
+      <a href="#s-6-2-常见-7-项-影响完整度-可排后" data-level="3">6.2 常见（7 项）：影响完整度，可排后</a>
+      <a href="#s-6-3-长尾-15-项-接成熟库或暂缓" data-level="3">6.3 长尾（15 项）：接成熟库或暂缓</a>
+      <a href="#s-7-补齐路线-12-周达到-quot-合格通用库-quot" data-level="2">7. 补齐路线：12 周达到&amp;quot;合格通用库&amp;quot;</a>
+      <a href="#p0-第-1-5-周-约-24-人日-坐实-quot-通用-quot-二字" data-level="3">P0（第 1-5 周，约 24 人日）：坐实&amp;quot;通用&amp;quot;二字</a>
+      <a href="#p1-第-6-9-周-约-20-人日-可被外部使用" data-level="3">P1（第 6-9 周，约 20 人日）：可被外部使用</a>
+      <a href="#p2-第-10-12-周-约-14-人日-生态补齐" data-level="3">P2（第 10-12 周，约 14 人日）：生态补齐</a>
+      <a href="#s-12-周后目标分" data-level="3">12 周后目标分</a>
+      <a href="#s-8-三个架构决策需要重新评估-通用库视角" data-level="2">8. 三个架构决策需要重新评估（通用库视角）</a>
+      <a href="#s-9-最终定位建议-修订" data-level="2">9. 最终定位建议（修订）</a>
+      <a href="#s-附录-实测数据" data-level="2">附录：实测数据</a>
+      <a href="#a-web-awesome-3-14-0" data-level="3">A. Web Awesome 3.14.0</a>
+      <a href="#b-体积实测-esbuild-0-28-2-gzip--9" data-level="3">B. 体积实测（esbuild 0.28.2 + gzip -9）</a>
+      <a href="#c-cinder-侧证据" data-level="3">C. Cinder 侧证据</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

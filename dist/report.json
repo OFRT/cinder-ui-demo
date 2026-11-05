@@ -1,0 +1,832 @@
+{
+  "layer": {
+    "base": {
+      "tokens": 217,
+      "components": 79,
+      "primitives": 13,
+      "behaviors": 44
+    },
+    "erp": {
+      "tokens": 26,
+      "blocks": 6
+    }
+  },
+  "breakpoints": [
+    360,
+    600,
+    900,
+    1200,
+    1600
+  ],
+  "entries": [
+    {
+      "name": "base",
+      "layer": "base",
+      "bytes": 19017,
+      "gzip": 4373,
+      "classes": 28
+    },
+    {
+      "name": "approval-card",
+      "layer": "base",
+      "bytes": 27220,
+      "gzip": 6475,
+      "classes": 12
+    },
+    {
+      "name": "avatar",
+      "layer": "base",
+      "bytes": 23289,
+      "gzip": 5364,
+      "classes": 5
+    },
+    {
+      "name": "btn-group",
+      "layer": "base",
+      "bytes": 22244,
+      "gzip": 5262,
+      "classes": 2
+    },
+    {
+      "name": "calendar",
+      "layer": "base",
+      "bytes": 25305,
+      "gzip": 5437,
+      "classes": 15
+    },
+    {
+      "name": "card",
+      "layer": "base",
+      "bytes": 25167,
+      "gzip": 5831,
+      "classes": 12
+    },
+    {
+      "name": "carousel",
+      "layer": "base",
+      "bytes": 25022,
+      "gzip": 5693,
+      "classes": 12
+    },
+    {
+      "name": "cascader",
+      "layer": "base",
+      "bytes": 23469,
+      "gzip": 5246,
+      "classes": 8
+    },
+    {
+      "name": "chat",
+      "layer": "base",
+      "bytes": 26247,
+      "gzip": 5709,
+      "classes": 19
+    },
+    {
+      "name": "colorpicker",
+      "layer": "base",
+      "bytes": 28754,
+      "gzip": 6612,
+      "classes": 15
+    },
+    {
+      "name": "combobox",
+      "layer": "base",
+      "bytes": 21128,
+      "gzip": 4763,
+      "classes": 7
+    },
+    {
+      "name": "command-palette",
+      "layer": "base",
+      "bytes": 21398,
+      "gzip": 4800,
+      "classes": 9
+    },
+    {
+      "name": "comment",
+      "layer": "base",
+      "bytes": 23352,
+      "gzip": 5224,
+      "classes": 13
+    },
+    {
+      "name": "context-card",
+      "layer": "base",
+      "bytes": 23631,
+      "gzip": 5816,
+      "classes": 8
+    },
+    {
+      "name": "controls-check",
+      "layer": "base",
+      "bytes": 20695,
+      "gzip": 4871,
+      "classes": 1
+    },
+    {
+      "name": "controls-reveal",
+      "layer": "base",
+      "bytes": 19537,
+      "gzip": 4576,
+      "classes": 3
+    },
+    {
+      "name": "controls-search",
+      "layer": "base",
+      "bytes": 19548,
+      "gzip": 4586,
+      "classes": 3
+    },
+    {
+      "name": "controls-segment",
+      "layer": "base",
+      "bytes": 20114,
+      "gzip": 4654,
+      "classes": 1
+    },
+    {
+      "name": "controls-select",
+      "layer": "base",
+      "bytes": 20604,
+      "gzip": 4786,
+      "classes": 1
+    },
+    {
+      "name": "controls-stepper",
+      "layer": "base",
+      "bytes": 20163,
+      "gzip": 4669,
+      "classes": 1
+    },
+    {
+      "name": "controls-switch",
+      "layer": "base",
+      "bytes": 20037,
+      "gzip": 4646,
+      "classes": 1
+    },
+    {
+      "name": "controls",
+      "layer": "base",
+      "bytes": 31844,
+      "gzip": 7102,
+      "classes": 10
+    },
+    {
+      "name": "copytarget",
+      "layer": "base",
+      "bytes": 22732,
+      "gzip": 5391,
+      "classes": 4
+    },
+    {
+      "name": "currency-input",
+      "layer": "base",
+      "bytes": 20570,
+      "gzip": 4646,
+      "classes": 5
+    },
+    {
+      "name": "datepicker",
+      "layer": "base",
+      "bytes": 29957,
+      "gzip": 5788,
+      "classes": 17
+    },
+    {
+      "name": "descriptions",
+      "layer": "base",
+      "bytes": 22579,
+      "gzip": 4948,
+      "classes": 3
+    },
+    {
+      "name": "details",
+      "layer": "base",
+      "bytes": 22563,
+      "gzip": 5332,
+      "classes": 4
+    },
+    {
+      "name": "diff-view",
+      "layer": "base",
+      "bytes": 22317,
+      "gzip": 5091,
+      "classes": 6
+    },
+    {
+      "name": "disclosure",
+      "layer": "base",
+      "bytes": 23395,
+      "gzip": 5450,
+      "classes": 7
+    },
+    {
+      "name": "entity",
+      "layer": "base",
+      "bytes": 23212,
+      "gzip": 5367,
+      "classes": 8
+    },
+    {
+      "name": "feedback",
+      "layer": "base",
+      "bytes": 30073,
+      "gzip": 6496,
+      "classes": 16
+    },
+    {
+      "name": "fileinput",
+      "layer": "base",
+      "bytes": 24749,
+      "gzip": 5429,
+      "classes": 14
+    },
+    {
+      "name": "heatmap",
+      "layer": "base",
+      "bytes": 21529,
+      "gzip": 4721,
+      "classes": 7
+    },
+    {
+      "name": "icons",
+      "layer": "base",
+      "bytes": 23051,
+      "gzip": 5841,
+      "classes": 4
+    },
+    {
+      "name": "inline-edit",
+      "layer": "base",
+      "bytes": 20986,
+      "gzip": 4661,
+      "classes": 5
+    },
+    {
+      "name": "input-number",
+      "layer": "base",
+      "bytes": 23453,
+      "gzip": 5173,
+      "classes": 3
+    },
+    {
+      "name": "knowndate",
+      "layer": "base",
+      "bytes": 20559,
+      "gzip": 5065,
+      "classes": 3
+    },
+    {
+      "name": "lightbox",
+      "layer": "base",
+      "bytes": 21048,
+      "gzip": 4774,
+      "classes": 7
+    },
+    {
+      "name": "list",
+      "layer": "base",
+      "bytes": 23245,
+      "gzip": 5378,
+      "classes": 10
+    },
+    {
+      "name": "markdown",
+      "layer": "base",
+      "bytes": 25756,
+      "gzip": 5938,
+      "classes": 2
+    },
+    {
+      "name": "mascot",
+      "layer": "base",
+      "bytes": 30383,
+      "gzip": 6671,
+      "classes": 7
+    },
+    {
+      "name": "media",
+      "layer": "base",
+      "bytes": 23383,
+      "gzip": 5525,
+      "classes": 7
+    },
+    {
+      "name": "morph-button",
+      "layer": "base",
+      "bytes": 23902,
+      "gzip": 5725,
+      "classes": 4
+    },
+    {
+      "name": "notice-bar",
+      "layer": "base",
+      "bytes": 23175,
+      "gzip": 5126,
+      "classes": 5
+    },
+    {
+      "name": "option-group",
+      "layer": "base",
+      "bytes": 24171,
+      "gzip": 5618,
+      "classes": 5
+    },
+    {
+      "name": "otp",
+      "layer": "base",
+      "bytes": 22213,
+      "gzip": 5348,
+      "classes": 5
+    },
+    {
+      "name": "overlay",
+      "layer": "base",
+      "bytes": 37816,
+      "gzip": 7749,
+      "classes": 54
+    },
+    {
+      "name": "password-strength",
+      "layer": "base",
+      "bytes": 20892,
+      "gzip": 4698,
+      "classes": 6
+    },
+    {
+      "name": "popover",
+      "layer": "base",
+      "bytes": 24126,
+      "gzip": 5728,
+      "classes": 6
+    },
+    {
+      "name": "prompt-bar",
+      "layer": "base",
+      "bytes": 28863,
+      "gzip": 6622,
+      "classes": 21
+    },
+    {
+      "name": "pull-refresh",
+      "layer": "base",
+      "bytes": 20900,
+      "gzip": 4767,
+      "classes": 4
+    },
+    {
+      "name": "qrcode",
+      "layer": "base",
+      "bytes": 21158,
+      "gzip": 5093,
+      "classes": 2
+    },
+    {
+      "name": "range-slider",
+      "layer": "base",
+      "bytes": 25638,
+      "gzip": 6074,
+      "classes": 10
+    },
+    {
+      "name": "rating",
+      "layer": "base",
+      "bytes": 22009,
+      "gzip": 5284,
+      "classes": 6
+    },
+    {
+      "name": "result",
+      "layer": "base",
+      "bytes": 23122,
+      "gzip": 5238,
+      "classes": 6
+    },
+    {
+      "name": "ring",
+      "layer": "base",
+      "bytes": 21998,
+      "gzip": 5351,
+      "classes": 2
+    },
+    {
+      "name": "scroll-area",
+      "layer": "base",
+      "bytes": 21853,
+      "gzip": 5282,
+      "classes": 2
+    },
+    {
+      "name": "segmented",
+      "layer": "base",
+      "bytes": 22154,
+      "gzip": 4967,
+      "classes": 3
+    },
+    {
+      "name": "selection-actions",
+      "layer": "base",
+      "bytes": 25043,
+      "gzip": 5940,
+      "classes": 9
+    },
+    {
+      "name": "shell",
+      "layer": "base",
+      "bytes": 24224,
+      "gzip": 5258,
+      "classes": 20
+    },
+    {
+      "name": "sidenav",
+      "layer": "base",
+      "bytes": 27431,
+      "gzip": 6406,
+      "classes": 12
+    },
+    {
+      "name": "slider",
+      "layer": "base",
+      "bytes": 24260,
+      "gzip": 5798,
+      "classes": 7
+    },
+    {
+      "name": "splitpanel",
+      "layer": "base",
+      "bytes": 22622,
+      "gzip": 5448,
+      "classes": 4
+    },
+    {
+      "name": "stream-text",
+      "layer": "base",
+      "bytes": 23633,
+      "gzip": 5513,
+      "classes": 7
+    },
+    {
+      "name": "suggestion-card",
+      "layer": "base",
+      "bytes": 26032,
+      "gzip": 6415,
+      "classes": 10
+    },
+    {
+      "name": "table",
+      "layer": "base",
+      "bytes": 27101,
+      "gzip": 5793,
+      "classes": 12
+    },
+    {
+      "name": "tabs",
+      "layer": "base",
+      "bytes": 25165,
+      "gzip": 5603,
+      "classes": 5
+    },
+    {
+      "name": "tag-input",
+      "layer": "base",
+      "bytes": 21003,
+      "gzip": 4731,
+      "classes": 6
+    },
+    {
+      "name": "task-rows",
+      "layer": "base",
+      "bytes": 26770,
+      "gzip": 6287,
+      "classes": 12
+    },
+    {
+      "name": "thinking",
+      "layer": "base",
+      "bytes": 27530,
+      "gzip": 6430,
+      "classes": 9
+    },
+    {
+      "name": "timepicker",
+      "layer": "base",
+      "bytes": 23307,
+      "gzip": 5160,
+      "classes": 9
+    },
+    {
+      "name": "tool-chips",
+      "layer": "base",
+      "bytes": 23624,
+      "gzip": 5802,
+      "classes": 5
+    },
+    {
+      "name": "toolbar",
+      "layer": "base",
+      "bytes": 22840,
+      "gzip": 5008,
+      "classes": 11
+    },
+    {
+      "name": "transfer",
+      "layer": "base",
+      "bytes": 22959,
+      "gzip": 5083,
+      "classes": 10
+    },
+    {
+      "name": "tree",
+      "layer": "base",
+      "bytes": 24031,
+      "gzip": 5633,
+      "classes": 12
+    },
+    {
+      "name": "undo-bar",
+      "layer": "base",
+      "bytes": 20446,
+      "gzip": 4689,
+      "classes": 4
+    },
+    {
+      "name": "upload-queue",
+      "layer": "base",
+      "bytes": 25013,
+      "gzip": 5900,
+      "classes": 11
+    },
+    {
+      "name": "virtualgrid",
+      "layer": "base",
+      "bytes": 25600,
+      "gzip": 6043,
+      "classes": 10
+    },
+    {
+      "name": "viz",
+      "layer": "base",
+      "bytes": 28502,
+      "gzip": 5720,
+      "classes": 42
+    },
+    {
+      "name": "watermark",
+      "layer": "base",
+      "bytes": 21156,
+      "gzip": 5172,
+      "classes": 4
+    },
+    {
+      "name": "glass",
+      "layer": "base",
+      "bytes": 25993,
+      "gzip": 6258,
+      "classes": 14
+    },
+    {
+      "name": "approve",
+      "layer": "erp",
+      "bytes": 21378,
+      "gzip": 4851,
+      "classes": 8
+    },
+    {
+      "name": "document",
+      "layer": "erp",
+      "bytes": 23133,
+      "gzip": 5135,
+      "classes": 13
+    },
+    {
+      "name": "line-items",
+      "layer": "erp",
+      "bytes": 23050,
+      "gzip": 5211,
+      "classes": 8
+    },
+    {
+      "name": "pda",
+      "layer": "erp",
+      "bytes": 23572,
+      "gzip": 5290,
+      "classes": 14
+    },
+    {
+      "name": "picker",
+      "layer": "erp",
+      "bytes": 21952,
+      "gzip": 5045,
+      "classes": 6
+    },
+    {
+      "name": "print",
+      "layer": "erp",
+      "bytes": 20570,
+      "gzip": 4806,
+      "classes": 14
+    }
+  ],
+  "budget": {
+    "rule": "按需入口逐个考核，单入口 gzip ≤ 8KB；全量合订版仅报告不阻断",
+    "entryLimit": 8192,
+    "heaviestEntry": {
+      "name": "base/overlay",
+      "gzip": 7749
+    },
+    "bundle": {
+      "gzip": 173724,
+      "hint": 30720,
+      "overHint": true
+    }
+  },
+  "jsDomains": {
+    "rule": "硬闸门：单域 gzip ≤ 单体；六域合计 > 单体 105% 告警、> 110% 报错",
+    "monoGz": 99354,
+    "totalGz": 104242,
+    "overheadPct": 4.92,
+    "files": [
+      {
+        "name": "core",
+        "bytes": 38090,
+        "gzip": 12191,
+        "behaviors": 0
+      },
+      {
+        "name": "overlay",
+        "bytes": 50623,
+        "gzip": 13619,
+        "behaviors": 7
+      },
+      {
+        "name": "form",
+        "bytes": 122085,
+        "gzip": 29513,
+        "behaviors": 16
+      },
+      {
+        "name": "data",
+        "bytes": 80579,
+        "gzip": 21368,
+        "behaviors": 9
+      },
+      {
+        "name": "media",
+        "bytes": 52473,
+        "gzip": 16095,
+        "behaviors": 6
+      },
+      {
+        "name": "ai",
+        "bytes": 38731,
+        "gzip": 11456,
+        "behaviors": 6
+      }
+    ]
+  },
+  "icons": {
+    "source": "lucide-static@1.66.0",
+    "license": "ISC",
+    "grid": 24,
+    "stroke": 2,
+    "idPrefix": "cin-i-",
+    "rule": "一个真源三产出：dist/cinder-icons.svg（<use href=\"#cin-i-<name>\">）/ dist/icons/<name>.svg（<img> 或 css url）/ dist/cinder-icons.css（.cin-i + .cin-i-<name> 类）",
+    "count": 104,
+    "sprite": {
+      "file": "dist/cinder-icons.svg",
+      "bytes": 21219,
+      "gzip": 5063
+    },
+    "css": {
+      "file": "dist/cinder-icons.css",
+      "bytes": 5858,
+      "gzip": 1169
+    },
+    "categories": {
+      "action": [
+        "bookmark",
+        "copy",
+        "download",
+        "external-link",
+        "eye-off",
+        "eye",
+        "filter",
+        "heart",
+        "key",
+        "link-2-off",
+        "link",
+        "lock",
+        "log-in",
+        "log-out",
+        "minus",
+        "pencil",
+        "pin",
+        "plus",
+        "redo-2",
+        "refresh-cw",
+        "save",
+        "search",
+        "settings",
+        "share-2",
+        "star",
+        "trash-2",
+        "undo-2",
+        "unlock",
+        "upload",
+        "x",
+        "zoom-in",
+        "zoom-out"
+      ],
+      "nav": [
+        "arrow-down",
+        "arrow-left-right",
+        "arrow-left",
+        "arrow-right",
+        "arrow-up-down",
+        "arrow-up",
+        "chevron-down",
+        "chevron-left",
+        "chevron-right",
+        "chevron-up",
+        "menu",
+        "panel-left"
+      ],
+      "object": [
+        "archive",
+        "banknote",
+        "barcode",
+        "boxes",
+        "building-2",
+        "calendar",
+        "chart-bar",
+        "chart-line",
+        "clock",
+        "columns-3",
+        "cpu",
+        "credit-card",
+        "database",
+        "file-text",
+        "fingerprint",
+        "folder-open",
+        "folder",
+        "house",
+        "image",
+        "inbox",
+        "layout-grid",
+        "mail",
+        "map-pin",
+        "package",
+        "paperclip",
+        "phone",
+        "printer",
+        "qr-code",
+        "receipt",
+        "rows-3",
+        "scan-line",
+        "server",
+        "sliders-horizontal",
+        "table",
+        "tag",
+        "trending-down",
+        "trending-up",
+        "truck",
+        "user",
+        "users",
+        "warehouse",
+        "wifi"
+      ],
+      "status": [
+        "activity",
+        "bell",
+        "check",
+        "circle-alert",
+        "circle-check",
+        "circle-dot",
+        "circle-help",
+        "circle-pause",
+        "circle-play",
+        "circle-stop",
+        "circle-x",
+        "gauge",
+        "hourglass",
+        "info",
+        "loader-circle",
+        "shield-check",
+        "sparkles",
+        "triangle-alert"
+      ]
+    }
+  },
+  "jsEntries": {
+    "base/icon-morph.js": {
+      "bytes": 5552,
+      "gzip": 2569
+    }
+  },
+  "errors": [],
+  "warnings": [
+    "bundle: 全量 cinder-all.css + cinder.js 合计 gzip 173724B，超参考线 30720B（按入口考核，不阻断；实际接入走 entries/）"
+  ]
+}

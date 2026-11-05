@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 存量小补六项（T26）</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-shell-head">
+      <div>
+        <h1>Cinder Base</h1>
+        <p>存量小补六项 · T26</p>
+      </div>
+      <div class="cin-shell-actions">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" type="button"
+          onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'">切换主题</button>
+      </div>
+    </header>
+    <main class="cin-main">
+
+      <!-- 01 加载：像素网格 + 已耗时 -->
+      <section class="cin-section">
+        <h2>01 加载：像素网格 + 已耗时</h2>
+        <p class="demo-note">上为既有加载块（对照，外观未改）；下方是新增的像素网格与耗时标签，不加 class 不会出现。</p>
+        <div class="cin-loading-block">
+          <span class="cin-spinner" aria-hidden="true"></span>
+          <span>正在生成…</span>
+        </div>
+        <div class="cin-loading-block">
+          <span class="cin-loading-grid" role="status" aria-label="正在计算">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </span>
+          <span>正在比对 12 份条款</span>
+          <span class="cin-loading-duration">已用时 3.2s</span>
+        </div>
+        <div class="cin-loading-block">
+          <span class="cin-loading-grid" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </span>
+          <span>仍在解析第 7 份文件</span>
+          <span class="cin-loading-duration" data-overtime>已用时 42s</span>
+        </div>
+      </section>
+
+      <!-- 02 思考轨迹：data-kind 四类 -->
+      <section class="cin-section">
+        <h2>02 思考轨迹：四类 data-kind</h2>
+        <p class="demo-note">形状说「在干什么」，颜色说「成没成」；类型徽标给出文字，不用凭图标猜。</p>
+
+        <details class="cin-thinking" data-kind="steps" data-state="running" open>
+          <summary class="cin-thinking-head">
+            <span class="cin-thinking-icon" aria-hidden="true"></span>
+            <span class="cin-thinking-kind">步骤</span>
+            <span class="cin-thinking-title">拆解任务</span>
+            <span class="cin-thinking-meta">第 2 步 · 3.1s</span>
+          </summary>
+          <ol class="cin-thinking-steps">
+            <li class="cin-thinking-step" data-state="done">确认对比范围<span class="cin-thinking-note">0.8s</span></li>
+            <li class="cin-thinking-step" data-state="running">逐条比对付款条款</li>
+            <li class="cin-thinking-step" data-state="pending">汇总差异</li>
+          </ol>
+        </details>
+
+        <details class="cin-thinking" data-kind="reasoning" data-state="done" open>
+          <summary class="cin-thinking-head">
+            <span class="cin-thinking-icon" aria-hidden="true"></span>
+            <span class="cin-thinking-kind">推理</span>
+            <span class="cin-thinking-title">权衡两种口径</span>
+            <span class="cin-thinking-meta">6.4s</span>
+          </summary>
+          <ol class="cin-thinking-steps">
+            <li class="cin-thinking-step" data-state="done">按含税口径汇总，与上季对齐</li>
+            <li class="cin-thinking-step" data-state="done">标注差异原因</li>
+          </ol>
+        </details>
+
+        <details class="cin-thinking" data-kind="search" data-state="running" open>
+          <summary class="cin-thinking-head">
+            <span class="cin-thinking-icon" aria-hidden="true"></span>
+            <span class="cin-thinking-kind">检索</span>
+            <span class="cin-thinking-title">检索「合同模板」</span>
+            <span class="cin-thinking-meta">命中 3 份</span>
+          </summary>
+          <ol class="cin-thinking-steps">
+            <li class="cin-thinking-step" data-state="done">站内文档 2 份</li>
+            <li class="cin-thinking-step" data-state="running">共享盘 1 份</li>
+          </ol>
+        </details>
+
+        <details class="cin-thinking" data-kind="coding" data-state="failed" open>
+          <summary class="cin-thinking-head">
+            <span class="cin-thinking-icon" aria-hidden="true"></span>
+            <span class="cin-thinking-kind">改代码</span>
+            <span class="cin-thinking-title">补丁未通过类型检查</span>
+            <span class="cin-thinking-meta">失败 · 1.2s</span>
+          </summary>
+          <ol class="cin-thinking-steps">
+            <li class="cin-thinking-step" data-state="failed">第 18 行参数类型不匹配</li>
+          </ol>
+        </details>
+      </section>
+
+      <!-- 03 流式正文：来源角标 + 追问条 -->
+      <section class="cin-section">
+        <h2>03 流式正文：来源角标 + 追问条</h2>
+        <p class="demo-note">进行中的那一段不给追问，避免抢答复的位置。</p>
+
+        <div class="cin-stream-turn">
+          <p class="cin-stream" data-state="done">三份合同的付款条款一致，差异集中在违约金比例上：A 为日万分之五<sup><a class="cin-stream-cite" href="#src-1">1</a></sup>，B 为日万分之三<sup><a class="cin-stream-cite" href="#src-2">2</a></sup>。建议以 A 为基准谈。</p>
+          <ol class="cin-stream-sources">
+            <li class="cin-stream-source" id="src-1"><a href="#">合同 A · 第 4 条 · 第 2 页</a></li>
+            <li class="cin-stream-source" id="src-2"><a href="#">合同 B · 第 6 条</a></li>
+          </ol>
+          <div class="cin-stream-followups">
+            <button class="cin-stream-followup" type="button">把差异整理成表</button>
+            <button class="cin-stream-followup" type="button">按 A 的口径起草回函</button>
+          </div>
+        </div>
+
+        <div class="cin-stream-turn">
+          <p class="cin-stream" data-state="streaming">再看第三份合同的结算周期，它与前两份并不一致</p>
+          <div class="cin-stream-followups">
+            <button class="cin-stream-followup" type="button">这一条不应出现</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 多步审批 -->
+      <section class="cin-section">
+        <h2>04 审批：多问分页</h2>
+        <p class="demo-note">连问三遍时摊成「第几问 / 共几问」；单步审批不带 data-steps，外观不变。</p>
+        <div class="cin-approval" data-risk="medium" data-steps="3" data-step="2">
+          <div class="cin-approval-steps">
+            <ol>
+              <li data-done></li>
+              <li aria-current="true"></li>
+              <li></li>
+            </ol>
+            <span class="cin-approval-stepcount">第 2 问 / 共 3 问</span>
+          </div>
+          <div class="cin-approval-head">
+            <span class="cin-approval-risk">中风险</span>
+            <h3 class="cin-approval-title">覆盖 3 个同名文件？</h3>
+          </div>
+          <p class="cin-approval-desc">这一问之后还有一问：覆盖前是否先备份。</p>
+          <ul class="cin-approval-facts">
+            <li class="cin-approval-fact"><span>影响</span><strong>3 个文件 · 覆盖不可撤回</strong></li>
+            <li class="cin-approval-fact"><span>范围</span><strong>/合同/2026/</strong></li>
+          </ul>
+          <div class="cin-approval-actions">
+            <button class="cin-approval-skip" type="button">跳过这一问</button>
+            <button class="cin-btn" data-variant="ghost" type="button">上一问</button>
+            <button class="cin-btn" type="button">继续</button>
+          </div>
+        </div>
+
+        <div class="cin-approval" data-risk="low">
+          <div class="cin-approval-head">
+            <span class="cin-approval-risk">低风险</span>
+            <h3 class="cin-approval-title">单步审批（对照，无步骤条）</h3>
+          </div>
+          <div class="cin-approval-actions">
+            <button class="cin-btn" data-variant="ghost" type="button">取消</button>
+            <button class="cin-btn" type="button">批准</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11 表格内联 diff -->
+      <section class="cin-section">
+        <h2>11 表格内联 diff</h2>
+        <p class="demo-note">改动落在一两格里，逐行对照太重；inline 变体去掉行号槽，压成「旧 → 新」。</p>
+        <div class="cin-dg">
+          <div class="cin-dg-scroll">
+            <table>
+              <thead>
+                <tr><th>客户</th><th>金额</th><th>状态</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="客户" data-primary><span class="cin-cell-primary"><strong>启明科技</strong><span>CUS-0182</span></span></td>
+                  <td data-label="金额" data-align="end"><span class="cin-diff" data-layout="inline"><span class="cin-diff-line" data-kind="del"><span class="cin-diff-num">12</span><span class="cin-diff-marker">−</span><span class="cin-diff-text">¥1,200</span></span><span class="cin-diff-line" data-kind="add"><span class="cin-diff-num">12</span><span class="cin-diff-marker">+</span><span class="cin-diff-text">¥1,500</span></span></span></td>
+                  <td data-label="状态">已确认</td>
+                </tr>
+                <tr data-tone="danger">
+                  <td data-label="客户" data-primary><span class="cin-cell-primary"><strong>海隅物流</strong><span>CUS-0217</span></span></td>
+                  <td data-label="金额" data-align="end">¥860</td>
+                  <td data-label="状态">逾期</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 18 代码行号 -->
+      <section class="cin-section">
+        <h2>18 代码块行号</h2>
+        <p class="demo-note">pre 加 data-line-number、每行一个 span 才出行号；普通代码块不出。</p>
+        <div class="cin-markdown">
+          <pre data-line-number><code><span class="cin-code-line">export function clamp(v, min, max) {</span><span class="cin-code-line">  return Math.min(Math.max(v, min), max);</span><span class="cin-code-line">}</span></code></pre>
+          <pre><code>const plain = true; // 对照：无行号</code></pre>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</body>
+</html>

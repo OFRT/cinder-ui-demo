@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 标签页</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.3</span>
+      <span class="cin-caption">无 JS 时全部面板可见，脚本只做显隐与键盘漫游</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">标签页</div>
+        <a class="cin-navitem" href="#basic">基础标签页</a>
+        <a class="cin-navitem" href="#manual">手动激活</a>
+        <a class="cin-navitem" href="#vertical">垂直方向</a>
+        <a class="cin-navitem" href="#segmented">分段切换</a>
+        <a class="cin-navitem" href="#disabled">禁用与计数</a>
+        <a class="cin-navitem" href="#events">事件与 API</a>
+      </aside>
+
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">标签页</h1>
+                  <p class="cin-caption">role=tablist 与 roving tabindex 双轨：方向键切换焦点，Enter 与点击切换面板</p>
+                </div>
+              </div>
+              <div class="cin-page-header-actions">
+                <button class="cin-btn" data-variant="secondary" data-size="sm" id="toReport">跳到「经营报表」</button>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="basic">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">基础标签页</h2>
+                <span class="cin-caption">商品档案详情，默认选中第一项</span>
+              </div>
+              <div class="cin-tabs" data-tabs id="tabBasic">
+                <div class="cin-tablist" role="tablist" aria-label="商品档案">
+                  <button class="cin-tab" role="tab" aria-selected="true">基本信息</button>
+                  <button class="cin-tab" role="tab">规格与单位</button>
+                  <button class="cin-tab" role="tab">库存分布</button>
+                </div>
+                <div class="cin-tabpanel">
+                  <dl class="cin-dl">
+                    <div><dt>商品编码</dt><dd>SKU-2024-0871</dd></div>
+                    <div><dt>品名</dt><dd>不锈钢法兰 DN50</dd></div>
+                    <div><dt>分类</dt><dd>管件 / 法兰</dd></div>
+                    <div><dt>状态</dt><dd>在售</dd></div>
+                  </dl>
+                </div>
+                <div class="cin-tabpanel">
+                  <table class="cin-table">
+                    <thead><tr><th>单位</th><th>换算</th><th>条码</th></tr></thead>
+                    <tbody>
+                      <tr><td>件</td><td>1</td><td>6901234567890</td></tr>
+                      <tr><td>箱</td><td>24</td><td>6901234567891</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="cin-tabpanel">
+                  <ul class="cin-list">
+                    <li>华东仓，可售 320 件</li>
+                    <li>华南仓，可售 148 件</li>
+                    <li>西部仓，在途 96 件</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="manual">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">手动激活</h2>
+                <span class="cin-caption">data-activation="manual"：方向键只移动焦点，Enter 或空格才切面板</span>
+              </div>
+              <div class="cin-tabs" data-tabs data-activation="manual" id="tabManual">
+                <div class="cin-tablist" role="tablist" aria-label="单据状态">
+                  <button class="cin-tab" role="tab" aria-selected="true">待审核</button>
+                  <button class="cin-tab" role="tab">已审核</button>
+                  <button class="cin-tab" role="tab">已出库</button>
+                </div>
+                <div class="cin-tabpanel"><p class="cin-body-text">待审核单据 12 张，最早一张已等待 3 天。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">已审核单据 47 张，可直接生成出库单。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">已出库单据 128 张，本月累计出库 1,842 件。</p></div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="vertical">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">垂直方向</h2>
+                <span class="cin-caption">data-orientation="vertical"：上下方向键漫游，窄屏自动回落到横向</span>
+              </div>
+              <div class="cin-tabs" data-tabs data-orientation="vertical" id="tabVertical">
+                <div class="cin-tablist" role="tablist" aria-label="设置分类">
+                  <button class="cin-tab" role="tab" aria-selected="true">账号</button>
+                  <button class="cin-tab" role="tab">仓库</button>
+                  <button class="cin-tab" role="tab">打印</button>
+                  <button class="cin-tab" role="tab">通知</button>
+                </div>
+                <div class="cin-tabpanel">
+                  <div class="cin-field"><label for="vUser">登录名</label><input class="cin-input" id="vUser" value="warehouse.admin"></div>
+                </div>
+                <div class="cin-tabpanel">
+                  <div class="cin-field"><label for="vWh">默认仓库</label><select class="cin-select" id="vWh"><option>华东仓</option><option>华南仓</option></select></div>
+                </div>
+                <div class="cin-tabpanel">
+                  <div class="cin-field"><label for="vPaper">打印纸型</label><select class="cin-select" id="vPaper"><option>A5 横向</option><option>A4 纵向</option></select></div>
+                </div>
+                <div class="cin-tabpanel">
+                  <p class="cin-body-text">库存预警通过短信与站内消息推送，每日 09:00 汇总一次。</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="segmented">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">分段切换</h2>
+                <span class="cin-caption">data-variant="pill" 用于设置面板；加 data-fill 铺满轨道，适合移动端</span>
+              </div>
+              <div class="cin-tabs" data-tabs data-variant="pill" id="tabSeg">
+                <div class="cin-tablist" role="tablist" aria-label="视图">
+                  <button class="cin-tab" role="tab" aria-selected="true">日</button>
+                  <button class="cin-tab" role="tab">周</button>
+                  <button class="cin-tab" role="tab">月</button>
+                </div>
+                <div class="cin-tabpanel"><p class="cin-body-text">今日出库 128 件，入库 64 件，毛利 8,420 元。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">本周出库 742 件，入库 388 件，毛利 51,260 元。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">本月出库 3,186 件，入库 1,904 件，毛利 226,410 元。</p></div>
+              </div>
+              <div class="cin-tabs" data-tabs data-variant="pill" data-fill style="margin-block-start:var(--cin-space-300)" id="tabFill">
+                <div class="cin-tablist" role="tablist" aria-label="移动端分段">
+                  <button class="cin-tab" role="tab" aria-selected="true">全部</button>
+                  <button class="cin-tab" role="tab">待处理</button>
+                  <button class="cin-tab" role="tab">已完成</button>
+                </div>
+                <div class="cin-tabpanel"><p class="cin-body-text">全部工单 306 张。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">待处理 18 张。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">已完成 288 张。</p></div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="disabled">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">禁用与计数</h2>
+                <span class="cin-caption">禁用项跳过键盘漫游，Home 与 End 落在最近的可选项</span>
+              </div>
+              <div class="cin-tabs" data-tabs id="tabDisabled">
+                <div class="cin-tablist" role="tablist" aria-label="报表">
+                  <button class="cin-tab" role="tab" aria-selected="true">报表 <span class="cin-tab-badge">12</span></button>
+                  <button class="cin-tab" role="tab" disabled>成本核算</button>
+                  <button class="cin-tab" role="tab">经营报表 <span class="cin-tab-badge">3</span></button>
+                  <button class="cin-tab" role="tab" aria-disabled="true">审计日志</button>
+                </div>
+                <div class="cin-tabpanel"><p class="cin-body-text">报表共 12 个口径，含趋势与结构分析。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">成本核算模块按许可证开通。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">经营报表 3 个：毛利构成、客户贡献、区域对比。</p></div>
+                <div class="cin-tabpanel"><p class="cin-body-text">审计日志保留 180 天。</p></div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="events">
+              <div class="cin-panel-head">
+                <h2 class="cin-panel-title">事件与 API</h2>
+                <span class="cin-caption">cin:tabchange 冒泡到 .cin-tabs；Cinder.setTab 可编程切换</span>
+              </div>
+              <div class="cin-cluster">
+                <button class="cin-btn" data-size="sm" data-variant="secondary" id="apiFirst">切到「基本信息」</button>
+                <button class="cin-btn" data-size="sm" data-variant="ghost" id="apiLast">切到「库存分布」</button>
+              </div>
+              <p class="cin-caption" id="log" aria-live="polite">等待交互</p>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../dist/cinder.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.setAttribute("data-tabs-ready", String(Cinder.initTabs()));
+      const log = document.getElementById("log");
+      document.addEventListener("cin:tabchange", (e) => {
+        const tab = document.getElementById(e.detail.to);
+        log.textContent = `${tab ? tab.textContent.trim() : e.detail.to} → 第 ${e.detail.index + 1} 项（${e.detail.source}）`;
+      });
+      document.getElementById("apiFirst").addEventListener("click", () => {
+        Cinder.setTab(document.getElementById("tabBasic"), "基本信息");
+      });
+      document.getElementById("apiLast").addEventListener("click", () => {
+        Cinder.setTab(document.getElementById("tabBasic"), 2);
+      });
+      document.getElementById("toReport").addEventListener("click", () => {
+        Cinder.setTab(document.getElementById("tabDisabled"), "经营报表");
+        document.getElementById("disabled").scrollIntoView({ block: "start" });
+      });
+    });
+  </script>
+</body>
+</html>

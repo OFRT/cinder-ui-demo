@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 滚动容器</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">scroll-area</span>
+      <span class="cin-caption">细滚动条 + 边缘渐隐 + 吸附；滚动行为交给浏览器，无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">纵向（data-size="sm"，10rem 后开始滚）</h2>
+          <div class="cin-scroll-area" id="sa-y" data-size="sm" tabindex="0" role="region" aria-label="待审批单据" style="border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md); padding:var(--cin-space-100)">
+            <div class="cin-entity" data-compact><div class="cin-entity-main"><div class="cin-entity-name"><span>CG-20261102-001</span></div><div class="cin-entity-sub">采购申请 · 金额 18,400</div></div></div>
+            <div class="cin-entity" data-compact><div class="cin-entity-main"><div class="cin-entity-name"><span>CG-20261102-002</span></div><div class="cin-entity-sub">采购申请 · 金额 6,200</div></div></div>
+            <div class="cin-entity" data-compact><div class="cin-entity-main"><div class="cin-entity-name"><span>CG-20261102-003</span></div><div class="cin-entity-sub">采购申请 · 金额 92,000</div></div></div>
+            <div class="cin-entity" data-compact><div class="cin-entity-main"><div class="cin-entity-name"><span>CG-20261102-004</span></div><div class="cin-entity-sub">采购申请 · 金额 3,150</div></div></div>
+            <div class="cin-entity" data-compact><div class="cin-entity-main"><div class="cin-entity-name"><span>CG-20261102-005</span></div><div class="cin-entity-sub">采购申请 · 金额 27,800</div></div></div>
+            <div class="cin-entity" data-compact><div class="cin-entity-main"><div class="cin-entity-name"><span>CG-20261102-006</span></div><div class="cin-entity-sub">采购申请 · 金额 1,050</div></div></div>
+            <div class="cin-entity" data-compact><div class="cin-entity-main"><div class="cin-entity-name"><span>CG-20261102-007</span></div><div class="cin-entity-sub">采购申请 · 金额 44,600</div></div></div>
+            <div class="cin-entity" data-compact><div class="cin-entity-main"><div class="cin-entity-name"><span>CG-20261102-008</span></div><div class="cin-entity-sub">采购申请 · 金额 7,900</div></div></div>
+          </div>
+          <p class="cin-caption">tabindex="0" + role="region" + aria-label，键盘用户才能用方向键滚这一块。</p>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">横滚（data-axis="x"，只横不竖）</h2>
+          <div class="cin-scroll-area" id="sa-x" data-axis="x" tabindex="0" role="region" aria-label="最近使用的看板" style="display:flex; gap:var(--cin-space-200); padding-block:var(--cin-space-100)">
+            <div style="flex:0 0 220px; padding:var(--cin-space-200); border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md)">采购看板<small class="cin-caption" style="display:block">12 张待审</small></div>
+            <div style="flex:0 0 220px; padding:var(--cin-space-200); border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md)">库存看板<small class="cin-caption" style="display:block">3 个预警</small></div>
+            <div style="flex:0 0 220px; padding:var(--cin-space-200); border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md)">费用看板<small class="cin-caption" style="display:block">本月超支 4%</small></div>
+            <div style="flex:0 0 220px; padding:var(--cin-space-200); border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md)">应收看板<small class="cin-caption" style="display:block">逾期 7 笔</small></div>
+            <div style="flex:0 0 220px; padding:var(--cin-space-200); border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md)">应付看板<small class="cin-caption" style="display:block">待付 21 笔</small></div>
+            <div style="flex:0 0 220px; padding:var(--cin-space-200); border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md)">税务看板<small class="cin-caption" style="display:block">申报期 2 天</small></div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">边缘渐隐（data-fade）</h2>
+          <div class="cin-scroll-area" id="sa-fade" data-fade data-size="sm" tabindex="0" role="region" aria-label="操作日志" style="border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md); padding-inline:var(--cin-space-200)">
+            <p class="cin-caption" style="margin:0; padding-block:var(--cin-space-100)">09:24 张启明 审批通过 CG-20261102-001</p>
+            <p class="cin-caption" style="margin:0; padding-block:var(--cin-space-100)">09:26 系统 自动归档 3 张超过 30 天的草稿</p>
+            <p class="cin-caption" style="margin:0; padding-block:var(--cin-space-100)">09:31 李慕白 驳回 CG-20261101-044（发票抬头不符）</p>
+            <p class="cin-caption" style="margin:0; padding-block:var(--cin-space-100)">09:40 王雪 导出 10 月费用明细</p>
+            <p class="cin-caption" style="margin:0; padding-block:var(--cin-space-100)">09:52 陈昊 新增供应商 鸿远科技</p>
+            <p class="cin-caption" style="margin:0; padding-block:var(--cin-space-100)">10:03 系统 提示 2 张单据将于今日超期</p>
+            <p class="cin-caption" style="margin:0; padding-block:var(--cin-space-100)">10:15 赵一鸣 撤回 CG-20261102-006</p>
+          </div>
+          <p class="cin-caption">渐隐只用于列表/图片流；正文阅读区别开，否则两端文字读不清。</p>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">吸附（data-snap="x"，一屏一张）</h2>
+          <div class="cin-scroll-area" id="sa-snap" data-axis="x" data-snap="x" tabindex="0" role="region" aria-label="图集" style="display:flex; gap:var(--cin-space-200); padding-block:var(--cin-space-100)">
+            <div style="flex:0 0 100%; block-size:120px; display:grid; place-items:center; background:var(--cin-color-bg-surface-sunken); border-radius:var(--cin-radius-md)">图 1</div>
+            <div style="flex:0 0 100%; block-size:120px; display:grid; place-items:center; background:var(--cin-color-bg-surface-sunken); border-radius:var(--cin-radius-md)">图 2</div>
+            <div style="flex:0 0 100%; block-size:120px; display:grid; place-items:center; background:var(--cin-color-bg-surface-sunken); border-radius:var(--cin-radius-md)">图 3</div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">粘顶（.cin-scroll-area-sticky）</h2>
+          <div class="cin-scroll-area" id="sa-sticky" data-size="md" tabindex="0" role="region" aria-label="分批明细" style="border:1px solid var(--cin-color-border-subtle); border-radius:var(--cin-radius-md); padding-inline:var(--cin-space-200)">
+            <div class="cin-scroll-area-sticky" style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100); font-weight:600">
+              <span>单据号</span><span>金额</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-001</span><span>18,400</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-002</span><span>6,200</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-003</span><span>92,000</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-004</span><span>3,150</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-005</span><span>27,800</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-006</span><span>1,050</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-007</span><span>44,600</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-008</span><span>7,900</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-009</span><span>15,300</span></div>
+            <div style="display:flex; justify-content:space-between; padding-block:var(--cin-space-100)"><span>CG-20261102-010</span><span>2,480</span></div>
+          </div>
+          <p class="cin-caption">粘顶与渐隐不要叠在同一个容器上：渐隐会把粘顶栏也淡掉。</p>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

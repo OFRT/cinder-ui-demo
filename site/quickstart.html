@@ -1,0 +1,3692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>快速开始 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html" aria-current="page">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>快速开始</h1>
+        <p class="site-lead">定位、安装、最小用法与目录约定</p>
+      </header>
+<p>零依赖、零框架的<strong>通用组件库</strong>，主体是 CSS + JS，不绑定任何具体项目。结构上分「通用层 + 定向定制层」：通用层（base）承载与业务无关的组件，定向定制层（erp 等）是在通用层之上按某个方向展开的定制，未来还会继续增加其它方向的定制层。
+一份 <code>tokens</code> 真源、两层 <code>@layer</code> 隔离，两库可同时引入且互不串样式。</p>
+<h2 id="s-1-分层模型">1. 分层模型</h2>
+<pre><code>tokens/base.tokens.json      ← 通用真源（颜色/字体/间距/圆角/阴影/尺寸/动效/栅格/密度/容器/数据表）
+        │
+        ▼
+packages/base  （通用基础库） 545 个类 · 217 变量 · 72 组样式 + 13 原语 + 44 行为
+        │        ├ base.css        排版、栅格、页面骨架原语
+        │        ├ shell.css       外壳：顶栏 / 侧栏 / 底部页签 / 面包屑 / 页头
+        │        ├ controls.css    按钮 / 输入框 / 文本域 / 字段三件套 / 单位 / 图标（核心）
+        │        │   └ controls-{stepper,select,segment,switch,check,reveal,search}.css  按需拆分子入口（BUD-01）
+        │        ├ feedback.css    徽标 / 标签 / 提示 / 空态 / 加载 / 骨架 / 进度
+        │        ├ toolbar.css     工具栏 / 筛选条 / 批量条 / 页签 / 分页
+        │        ├ table.css       数据表（容器查询：卡片 → 列表 → 表格）
+        │        ├ viz.css         指标卡 / 面板 / 柱条 / 环形 / 迷你图 / 时间线 / 步骤条
+        │        ├ overlay.css     弹窗 / 抽屉 / 气泡 / Toast / Tour
+        │        ├ disclosure.css  折叠面板（原生 details 打底）
+        │        ├ fileinput.css   拖拽上传区 / 文件列表 / 进度
+        │        ├ tabs.css        标签页 / 面板联动
+        │        ├ slider.css      滑块；rating.css 评分
+        │        ├ colorpicker.css 取色器；datepicker.css 日期与时间
+        │        ├ tree.css        树形目录（级联多选 / 懒加载 / 过滤）
+        │        ├ carousel.css    轮播（原生滚动 / 并排多张 / 自动播放）
+        ├ icons 三路径     sprite + 单文件 + CSS 类（104 个图标真源）
+        ├ thinking.css    AI 思考步骤流（步骤时间轴 / 三态）
+        ├ tool-chips.css  AI 工具调用标签（胶囊 / 三态 / 紧凑）
+        ├ approval-card.css AI 审批卡（风险分级 / 影响清单 / 四态）
+        │        └ behaviors/      44 个可选行为（分六域按需引入，见 §2.2 域表）
+        │
+        ▼  extends base
+tokens/erp.tokens.json       ← 只在 base 之上追加业务结构性尺寸
+        │
+        ▼
+packages/erp   （定向定制层·erp 方向） 44 个业务类 · 26 变量 · 6 个业务块
+                 ├ blocks/document.css    单据骨架（头 / 明细 / 尾 / 合计）
+                 ├ blocks/line-items.css  明细行、合计行、折扣行
+                 ├ blocks/picker.css      物料 / 客户选择器
+                 ├ blocks/pda.css         PDA 模式、扫码、键盘、动效
+                 ├ blocks/approve.css     审批卡
+                 └ blocks/print.css       打印 / 对账单
+</code></pre>
+<p>依赖方向单向：<code>erp → base</code>，永不可逆。base 里出现任何业务语义都会被构建直接判错。</p>
+<p><strong>字体链</strong>（<code>tokens/base.tokens.json</code> → <code>font.family.sans/mono</code>，随每个入口的 tokens 底座内置，无需另行引入）：</p>
+<ul>
+<li>中文无衬线：<code>-apple-system, &quot;SF Pro Text&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, system-ui, sans-serif</code>——macOS 苹方 → Windows 微软雅黑 → Linux/Android Noto Sans SC → 系统兜底，全链均为系统自带、零 webfont 依赖。</li>
+<li>等宽：<code>&quot;JetBrains Mono&quot;, ui-monospace, SFMono-Regular, Menlo, monospace</code>——JetBrains Mono 未装时回退系统等宽。</li>
+<li>不内置任何 CJK webfont：免费商用合规，跨平台字形差异由系统字体承担。</li>
+</ul>
+<h2 id="s-2-三种引用方式">2. 三种引用方式</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>引入</th>
+<th>体积</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通用后台、官网、工具页</td>
+<td><code>dist/cinder-base.css</code></td>
+<td>84 KB（含 token 10 KB）</td>
+</tr>
+<tr>
+<td>接入 erp 定向定制层</td>
+<td><code>dist/cinder-base.css</code> + <code>dist/cinder-erp.css</code><br>或单文件 <code>dist/cinder-all.css</code></td>
+<td>84 + 14 KB / 98 KB</td>
+</tr>
+<tr>
+<td>需要表格行为</td>
+<td>加 <code>&lt;script src=&quot;dist/cinder.js&quot; defer&gt;&lt;/script&gt;</code></td>
+<td>26 KB（表格 + 浮层行为）</td>
+</tr>
+<tr>
+<td>需要多套配色</td>
+<td>追加 <code>dist/cinder-skins.css</code>，<code>&lt;html data-skin=&quot;porcelain&quot;&gt;</code></td>
+<td>11 KB（8 套皮肤）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;!-- 通用页 --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/cinder-base.css&quot;&gt;
+
+&lt;!-- 接入 erp 定制层：两层叠加，顺序不可反 --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/cinder-base.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/cinder-erp.css&quot;&gt;
+
+&lt;!-- 需要换肤：皮肤文件必须最后引入 --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/cinder-skins.css&quot;&gt;
+</code></pre>
+<p><code>cinder-all.css</code> 是同一份内容的合订版，两者选其一即可，不要同时引。<code>cinder-skins.css</code> 不包 <code>@layer</code>，靠引入顺序覆盖基础语义色；未设 <code>data-skin</code> 时它不产生任何影响。</p>
+<h3 id="s-2-1-按需入口-单组件引入">2.1 按需入口（单组件引入）</h3>
+<p><code>dist/entries/</code> 下每个组件/业务块一个自包含 CSS：已内联 tokens 与 base 重置，可单独 <code>&lt;link&gt;</code>，不必先引全量包。</p>
+<table>
+<thead>
+<tr>
+<th>入口</th>
+<th>内容</th>
+<th>gzip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entries/base/base.css</code></td>
+<td>仅重置 + 排版 + tokens</td>
+<td>4.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/approval-card.css</code></td>
+<td>审批卡（风险分级 + 影响清单 + 待确认/已批准/已拒绝/已超时）</td>
+<td>6.3 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/avatar.css</code></td>
+<td>头像（图片/文字/占位 + 状态点 + 叠加组）</td>
+<td>5.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/btn-group.css</code></td>
+<td>按钮组（共享边 + 纵向/撑满/折行）</td>
+<td>5.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/calendar.css</code></td>
+<td>月历（7 列等宽 + 今天/选中/区间/事件点）</td>
+<td>5.3 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/card.css</code></td>
+<td>卡片（媒体比例 + 横纵排布 + 可点选中）</td>
+<td>5.7 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/carousel.css</code></td>
+<td>轮播（原生滚动/并排多张/自动播放）</td>
+<td>5.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/cascader.css</code></td>
+<td>级联选择（逐列下钻 + 斜杠路径）</td>
+<td>5.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/chat.css</code></td>
+<td>对话气泡（左右镜像 + 连续发言 + 引用/附件/失败态）</td>
+<td>5.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/colorpicker.css</code></td>
+<td>取色器（原生 color + 自绘面板）</td>
+<td>6.4 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/combobox.css</code></td>
+<td>组合框（ARIA 1.2 输入框 + listbox 弹层）</td>
+<td>4.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/command-palette.css</code></td>
+<td>命令面板（检索弹层 + 分组/条目/快捷键提示）</td>
+<td>4.7 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/comment.css</code></td>
+<td>评论（两栏 + 嵌套回复缩进 + 引用块）</td>
+<td>5.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/context-card.css</code></td>
+<td>检索上下文卡（来源可点 + 位置可定位 + 超长展开）</td>
+<td>5.7 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls.css</code></td>
+<td>按钮 / 输入框 / 文本域 / 字段三件套 / 单位 / 图标（高频核心；其余表单件见 controls-* 子入口）</td>
+<td>6.9 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-check.css</code></td>
+<td>勾选框 / 单选（勾形取自 icons/check.svg）</td>
+<td>4.7 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-reveal.css</code></td>
+<td>敏感值揭示（密码可见切换，内层输入需配 controls.css）</td>
+<td>4.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-search.css</code></td>
+<td>搜索框（图标位 + 输入框内缩，内层需配 controls.css）</td>
+<td>4.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-segment.css</code></td>
+<td>分段选择（radio 组视图切换）</td>
+<td>4.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-select.css</code></td>
+<td>原生 select 外观接管（箭头方向 + RTL 镜像）</td>
+<td>4.7 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-stepper.css</code></td>
+<td>数字步进器（热区 ≥44）</td>
+<td>4.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/controls-switch.css</code></td>
+<td>开关</td>
+<td>4.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/copytarget.css</code></td>
+<td>复制按钮与复制目标</td>
+<td>5.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/currency-input.css</code></td>
+<td>金额输入（货币符号位 + 单位/精度提示）</td>
+<td>4.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/datepicker.css</code></td>
+<td>日期选择器与时间输入</td>
+<td>5.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/descriptions.css</code></td>
+<td>描述列表（键值网格自适应多列）</td>
+<td>4.8 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/details.css</code></td>
+<td>详情块（单条 details，比折叠面板更轻，无 JS 可开合）</td>
+<td>5.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/diff-view.css</code></td>
+<td>差异视图（逐行增删呈现 + 行号/标记）</td>
+<td>4.9 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/disclosure.css</code></td>
+<td>折叠面板（原生 details 骨架）</td>
+<td>5.3 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/entity.css</code></td>
+<td>身份行（头像 + 四态状态点 + 紧凑/反白/换行）</td>
+<td>5.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/feedback.css</code></td>
+<td>提示条/空态/加载/进度</td>
+<td>6.3 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/fileinput.css</code></td>
+<td>拖拽上传区与文件列表</td>
+<td>5.3 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/glass.css</code></td>
+<td>液态玻璃材质（data-surface=glass，材质属性非组件）</td>
+<td>6.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/heatmap.css</code></td>
+<td>热力图（周×日密度网格 + 等级色/图例）</td>
+<td>4.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/icons.css</code></td>
+<td>图标库（sprite/mask/声明式三路径 + 变形）</td>
+<td>5.7 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/inline-edit.css</code></td>
+<td>行内编辑（展示/编辑态原地切换 + 尺寸稳定）</td>
+<td>4.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/input-number.css</code></td>
+<td>数字输入（步进/夹取/长按连加）</td>
+<td>5.0 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/knowndate.css</code></td>
+<td>相对时间（<code>&lt;time&gt;</code> 声明式渲染 + 60 秒 ticker）</td>
+<td>4.9 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/lightbox.css</code></td>
+<td>灯箱（单/多图大图浏览 + 前后导航 + 失败位）</td>
+<td>4.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/list.css</code></td>
+<td>通用列表（三栏行 + 分隔线/悬停/密度）</td>
+<td>5.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/markdown.css</code></td>
+<td>Markdown 渲染排版</td>
+<td>5.8 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/mascot.css</code></td>
+<td>助手形象（身形/表情/状态三轴 + 零脚本静态可读）</td>
+<td>6.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/media.css</code></td>
+<td>图文媒体对象（尺寸三档 + 反向/竖排/截断）</td>
+<td>5.4 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/morph-button.css</code></td>
+<td>形变按钮（提交→进行→中断→撤销，动效件）</td>
+<td>5.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/notice-bar.css</code></td>
+<td>通告条（四类语义 + 关闭/跑马灯）</td>
+<td>5.0 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/option-group.css</code></td>
+<td>选项组（勾选/单选/卡片三排布）</td>
+<td>5.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/otp.css</code></td>
+<td>验证码分格输入</td>
+<td>5.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/overlay.css</code></td>
+<td>弹窗/抽屉/气泡/Toast/Tour</td>
+<td>7.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/password-strength.css</code></td>
+<td>口令强度（分段可视化 + 规则清单勾选）</td>
+<td>4.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/popover.css</code></td>
+<td>浮层气泡（四向翻边 + 焦点驱动 + 窄屏贴边）</td>
+<td>5.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/prompt-bar.css</code></td>
+<td>输入器（@来源 / /命令 / 模型槽 / 听写）</td>
+<td>6.4 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/pull-refresh.css</code></td>
+<td>下拉刷新（手势指示 + 阈值/刷新中/回弹）</td>
+<td>4.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/qrcode.css</code></td>
+<td>二维码（内联 SVG）</td>
+<td>4.9 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/range-slider.css</code></td>
+<td>区间滑块（双原生 range + 变量画选中段）</td>
+<td>5.9 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/rating.css</code></td>
+<td>评分（radiogroup + 星形）</td>
+<td>5.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/result.css</code></td>
+<td>结果页（五档语义 + 操作区 + 明细块）</td>
+<td>5.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/ring.css</code></td>
+<td>进度环（conic 填充 + 尺寸/语义色）</td>
+<td>5.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/scroll-area.css</code></td>
+<td>滚动容器（尺寸三档 + 横滚/渐隐/吸附/粘顶）</td>
+<td>5.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/segmented.css</code></td>
+<td>分段控件（原生 radio + 方向键）</td>
+<td>4.8 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/selection-actions.css</code></td>
+<td>划词操作条（选区浮出动作条，无 JS 不出现）</td>
+<td>5.8 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/shell.css</code></td>
+<td>页面骨架/导航/侧栏</td>
+<td>5.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/sidenav.css</code></td>
+<td>侧栏导航（分组/子级/折叠栏/窄屏抽屉）</td>
+<td>6.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/slider.css</code></td>
+<td>滑块（原生 range 接管行为）</td>
+<td>5.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/splitpanel.css</code></td>
+<td>分栏（拖拽/键盘/持久化/收起）</td>
+<td>5.3 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/stream-text.css</code></td>
+<td>流式文本（增量逐段 + 稳定行高 + 末尾光标）</td>
+<td>5.4 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/suggestion-card.css</code></td>
+<td>建议卡（结论+置信度+备选，采纳/忽略两终态）</td>
+<td>6.2 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/table.css</code></td>
+<td>表格与分页骨架</td>
+<td>5.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/tabs.css</code></td>
+<td>标签页与面板</td>
+<td>5.4 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/tag-input.css</code></td>
+<td>标签输入（多值输入 + 单标签移除 + 去重反馈）</td>
+<td>4.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/task-rows.css</code></td>
+<td>任务行（一行一件事 + 状态/进度/失败原因/明细折叠）</td>
+<td>6.1 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/thinking.css</code></td>
+<td>思考过程（可折叠步骤序列 + 状态/耗时）</td>
+<td>6.3 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/timepicker.css</code></td>
+<td>时间选择器（时分面板 + 分钟粒度/越界夹取）</td>
+<td>5.0 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/tool-chips.css</code></td>
+<td>工具调用标签（胶囊化调用 + 三态结果）</td>
+<td>5.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/toolbar.css</code></td>
+<td>工具栏/过滤条</td>
+<td>4.9 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/transfer.css</code></td>
+<td>穿梭框（两列搬运 + 计数/空态）</td>
+<td>4.9 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/tree.css</code></td>
+<td>树形目录（展开/多选级联/懒加载/过滤）</td>
+<td>5.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/undo-bar.css</code></td>
+<td>撤销条（破坏性操作后浮条 + 倒计时）</td>
+<td>4.5 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/upload-queue.css</code></td>
+<td>上传队列（排队/传输中/完成/失败/暂停 + 单变量进度）</td>
+<td>5.7 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/virtualgrid.css</code></td>
+<td>虚拟滚动表格（窗口化渲染 + 占位行撑高）</td>
+<td>5.9 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/viz.css</code></td>
+<td>图表/统计卡/步骤条</td>
+<td>5.6 KB</td>
+</tr>
+<tr>
+<td><code>entries/base/watermark.css</code></td>
+<td>水印（斜向平铺覆盖层 + 密度/明暗/角标档）</td>
+<td>5.0 KB</td>
+</tr>
+<tr>
+<td><code>entries/erp/&lt;block&gt;.css</code></td>
+<td>6 个业务块（approve/document/line-items/pda/picker/print）</td>
+<td>4.6–5.0 KB</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;!-- 只要表单件：一个文件搞定 --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/entries/base/controls.css&quot;&gt;
+</code></pre>
+<p>约束与取舍：</p>
+<ol>
+<li>单入口已含全部 tokens + 重置（约 4.2 KB gzip 的固定底座），因此<strong>只引 1–2 个入口</strong>才划算；引 3 个以上直接上 <code>cinder-base.css</code>。</li>
+<li>入口之间不合并去重，多入口同时引入会重复 tokens；生产环境要么单入口、要么全量包。</li>
+<li><code>dist/cinder-manifest.json</code> 给出每个入口的 <code>classes</code>（可用的 <code>.cin-*</code> 类名）、<code>tokens</code>（依赖的变量）、<code>bytes/gzip</code>，可直接做构建期裁剪与文档生成。</li>
+</ol>
+<h3 id="s-2-2-按需-js-域-双轨">2.2 按需 JS 域（双轨）</h3>
+<p><code>dist/cinder.js</code> 是单体：44 个组件的全部行为装在一个文件里，gzip 96.4 KB，适合&quot;这些行为反正都要用&quot;的后台页。只想为某一域付 JS 体积时，改用 <code>dist/js/</code> 下的六个域：</p>
+<table>
+<thead>
+<tr>
+<th>域</th>
+<th>内容</th>
+<th>behaviors</th>
+<th>gzip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>js/core.js</code></td>
+<td>13 个原语（focus / gesture / tempo / status / undo / optimism / presence / stream / gate / durable / icons / i18n / skin）</td>
+<td>0</td>
+<td>11.7 KB</td>
+</tr>
+<tr>
+<td><code>js/overlay.js</code></td>
+<td>overlay / splitpanel / disclosure / palette / notice-bar / morph-button / glass-dock</td>
+<td>7</td>
+<td>13.2 KB</td>
+</tr>
+<tr>
+<td><code>js/form.js</code></td>
+<td>combobox / tags / currency / pwstrength / otp / datepicker / timepicker / cascader / transfer / colorpicker / slider / rating / input-number / guard / keys / reveal</td>
+<td>16</td>
+<td>28.7 KB</td>
+</tr>
+<tr>
+<td><code>js/data.js</code></td>
+<td>datagrid / virtualgrid / tree / heatmap / diffview / format / tabs / segmented / sidenav</td>
+<td>9</td>
+<td>20.7 KB</td>
+</tr>
+<tr>
+<td><code>js/media.js</code></td>
+<td>lightbox / qrcode / fileinput / copy / carousel / icon-morph</td>
+<td>6</td>
+<td>15.5 KB</td>
+</tr>
+<tr>
+<td><code>js/ai.js</code></td>
+<td>markdown / inlineedit / pullrefresh / prompt-bar / selection-actions / mascot</td>
+<td>6</td>
+<td>11.0 KB</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;!-- 只要表格行为：一个域文件，不必背整包 --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/entries/base/table.css&quot;&gt;
+&lt;script src=&quot;dist/js/core.js&quot; defer&gt;&lt;/script&gt;
+&lt;script src=&quot;dist/js/data.js&quot; defer&gt;&lt;/script&gt;
+</code></pre>
+<p>三条硬约定：</p>
+<ol>
+<li><strong>只挂一个全局</strong>：域文件全部挂在 <code>window.Cinder</code> 下，不产生第二个全局变量；<code>core</code> 装原语，其余五域只装 behaviors，域内顺序与单体完全一致（拼接顺序 = <code>behaviors/</code> 目录序）。</li>
+<li><strong><code>core</code> 是可选底座</strong>：behaviors 对原语是软依赖（形如 <code>P().tempo ? 防抖 : 直调</code>），不引 <code>core</code> 也能跑，只退化为无防抖、无状态色、无撤销栈等增强。</li>
+<li><strong>考核单位是&quot;单页加载量&quot;</strong>：任一单域 gzip 不得大于单体；把六个域全下载会比单体多约 5.7%（跨域重复的 IIFE / 选择器常量），那不是接入方式，只用于对照。</li>
+</ol>
+<p><code>dist/cinder-manifest.json</code> 的 <code>js.domains.files</code> 给出每个域的文件路径、字节数、gzip 与所辖 behaviors 清单。</p>
+<h2 id="s-3-冲突是怎么被消掉的">3. 冲突是怎么被消掉的</h2>
+<p>之前两份库各带一份 <code>cinder.css</code>，21 个同名类（<code>.cin-btn</code> / <code>.cin-input</code> / <code>.cin-page</code> …）实现不同，同时引入就会串样式。现在按「归属」拆干净：</p>
+<table>
+<thead>
+<tr>
+<th>旧状态</th>
+<th>现在</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-btn</code> 在 ui 用 <code>--btn-bg</code> 槽位，在 erp 用 <code>--_h</code> / <code>--_px</code></td>
+<td>只保留 base 一份实现，erp 不再定义</td>
+</tr>
+<tr>
+<td><code>.cin-page</code> / <code>.cin-panel</code> / <code>.cin-toolbar</code> 两边各写一遍</td>
+<td>归 base，erp 仅在业务父级下做微调（<code>.cin-doc .cin-toolbar</code>）</td>
+</tr>
+<tr>
+<td>137 个变量的取值在两边不一致</td>
+<td>单一定义，erp 只追加 26 个新变量</td>
+</tr>
+<tr>
+<td>断点 3 档 vs 5 档混用</td>
+<td>统一取 base 的 360 / 600 / 900 / 1200 / 1600</td>
+</tr>
+</tbody>
+</table>
+<p>构建期硬校验保证这四条不会退化：</p>
+<ol>
+<li>base 不得出现业务类（<code>.cin-doc</code> / <code>.cin-pda</code> / <code>.cin-lines</code> / <code>.cin-print-*</code> / <code>.cin-beep</code> …）与业务变量（<code>--cin-erp-*</code>、<code>--cin-size-pda-*</code> …）；</li>
+<li>erp 不得在顶层裸重定义 base 已有的类（媒体查询内做适配例外，如打印）；</li>
+<li>base 不得引用 erp 层变量（依赖方向反向即报错）；</li>
+<li>所有 <code>var(--cin-*)</code> 必须有出处；断点只能来自 tokens；发现裸色值告警；花括号必须配平。</li>
+</ol>
+<p><code>node build.mjs --check</code> 可单独跑，CI 用。</p>
+<h2 id="s-4-构建">4. 构建</h2>
+<pre><code class="language-bash">node build.mjs           # 生成 dist
+node build.mjs --check   # 只校验，0 错误才放行
+</code></pre>
+<p>产物：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dist/cinder-base.tokens.css</code></td>
+<td>基础层变量（215 个）</td>
+</tr>
+<tr>
+<td><code>dist/cinder-base.css</code></td>
+<td>基础层完整包（含 token）</td>
+</tr>
+<tr>
+<td><code>dist/cinder-erp.css</code></td>
+<td>业务层增量（26 个变量 + 6 个业务块，需先引 base）</td>
+</tr>
+<tr>
+<td><code>dist/cinder-all.css</code></td>
+<td>两层合订版</td>
+</tr>
+<tr>
+<td><code>dist/cinder.tokens.css</code></td>
+<td>全量变量表（240 个，供查阅）</td>
+</tr>
+<tr>
+<td><code>dist/cinder.js</code></td>
+<td>单体：36 个组件的全部行为（双轨的一端，见 §2.2）</td>
+</tr>
+<tr>
+<td><code>dist/js/&lt;域&gt;.js</code></td>
+<td>六个按需 JS 域：core / overlay / form / data / media / ai</td>
+</tr>
+<tr>
+<td><code>dist/entries/</code></td>
+<td>71 个按需入口（65 个 base 入口 + 6 erp 业务块）</td>
+</tr>
+<tr>
+<td><code>dist/cinder-manifest.json</code></td>
+<td>组件清单：类名、依赖变量、入口字节数/gzip</td>
+</tr>
+<tr>
+<td><code>dist/report.json</code></td>
+<td>本次构建统计与校验结果</td>
+</tr>
+</tbody>
+</table>
+<p><code>types/cinder.d.ts</code> 声明 <code>window.Cinder</code>（openDialog / closeDialog / initOverlay / initAccordions / setAccordion / initFileInputs / setFileProgress / initTabs / setTab / initSliders / setSlider / initRatings / setRating / initColorPickers / setColorPicker / initDatePickers / setDatePicker / initTrees / tree / filterTree / toast / tour）、<code>window.CinderERP.initDataGrids</code> 与全部 28 个 <code>cin:*</code> 事件，<code>tsconfig</code> 里 <code>include</code> 该文件即可获得补全。</p>
+<p>打包只拼接、不压缩、不改写，dist 与 src 可逐行对照。</p>
+<h3 id="s-体积预算">体积预算</h3>
+<p>按需入口是唯一考核对象：<strong>单个入口 gzip 后不超过 8KB</strong>，超出即构建报错（<code>node build.mjs --check</code> 退出码非 0）。理由是全量合订版只用于一次性预览，真实接入一律引 <code>dist/entries/</code> 下的单个文件，一个页面通常只引一到两个入口。</p>
+<p>全量合订版不设阻断线，只在 <code>report.json</code> 的 <code>budget.bundle</code> 与构建日志里报数，超过 30KB 给一条 warning 供观察。当前基线：71 个入口中最重的是 <code>base/overlay</code> 7.5KB（7,628B / 8KB 的 93.1%），<code>cinder-all.css</code> 56.0KB 加 <code>cinder.js</code> 81.6KB，合计 140,880B（约 137.6KB）gzip。JS 分域同理按单域考核：任一域 gzip 不得大于单体，六域全下载比单体多约 5.4% 仅作观察。</p>
+<p>再往后加组件，只要单入口守得住 8KB，就不必为了全量体积砍功能。</p>
+<h3 id="s-视觉回归基线">视觉回归基线</h3>
+<p>51 个演示页在 Playwright 里按固定条件快照，像素比对判回归。断言守&quot;该有的都有&quot;，基线守&quot;看起来没走形&quot;——改一条 <code>gap</code>、把断点挪 40px，类名断言全绿，基线会立刻失败。</p>
+<pre><code class="language-bash">npm run visual              # 生成 / 更新全部基线
+npm run visual:check        # 全量比对（发版前、CI）
+</code></pre>
+<p>固定条件：1280×900、<code>deviceScaleFactor: 1</code>、<code>reducedMotion: reduce</code>、截图期禁用动画、等 <code>fonts.ready</code>、<code>--allow-file-access-from-files</code>（图标走 <code>mask</code> 引用 <code>icons/*.svg</code>，否则被 CORS 拦成空块）。阈值 0.2% 像素差，尺寸变化单独报错。</p>
+<p>基线在 <code>tests/visual/baseline/</code>（5.7 MB，均值 119 KB/页），差异图写 <code>tests/visual/diff/</code>（不入库）。<code>acceptance-all</code> 只跑 8 个关键页，全量留给发版前。更新纪律与已知边界见 <code>docs/VISUAL-BASELINE.md</code>。</p>
+<h3 id="s-文档站">文档站</h3>
+<p>文档站不引 VitePress。库的定位是「零依赖、可单文件拷贝、无强制构建」，若文档本身要装一套 bundler 才能看，等于把最该自证的地方交给最重的依赖。这里只借 <code>markdown-it</code> 在构建期渲染，产物是纯静态 HTML，<code>file://</code> 双击即可打开。</p>
+<pre><code class="language-bash">npm run docs          # 生成 site/（23 个文件，约 815 KB）
+npm run docs:check    # 只校验产物是否最新，供提交前拦截
+</code></pre>
+<p><code>scripts/build-docs.mjs</code> 的 <code>PAGES</code> 数组就是侧栏与路由的唯一真源：加一页只加一行。三条自动派生，不手写：</p>
+<ul>
+<li><strong>组件清单页</strong>读 <code>dist/cinder-manifest.json</code>，入口数、类名数、gzip 全跟随构建产物，产物变了页面就变。</li>
+<li><strong>首页数据</strong>（组件 / 原语 / 行为 / 令牌 / 图标 / 入口计数、最重入口 gzip）同样取自 manifest，不写死数字。</li>
+<li><strong>搜索索引</strong> <code>site/assets/search-index.js</code> 由各页正文切出，<code>Ctrl/⌘ + K</code> 唤起，纯前端过滤，无网络请求。</li>
+</ul>
+<p>演示页 <code>site/demos.html</code> 用 iframe 直接指 <code>../demos/index.html</code>，<strong>不复制</strong> demos 目录——改一个组件的 CSS，文档站里立刻看到，不存在&quot;示例与实现不同步&quot;。代价是 <code>site/</code> 与 <code>demos/</code> 必须保持同级；单独搬走时请走页面上的新窗口链接。</p>
+<p>站点样式只消费 Cinder 自身的令牌（<code>--cin-*</code>），不新增颜色常量，因此跟随系统深色自动生效，加 <code>data-skin</code> 换肤也照样生效。验收：<code>node scripts/acceptance-docs.mjs</code>（53 条，含&quot;每页零外域请求&quot;&quot;全站内链与锚点可达&quot;&quot;窄屏无横向溢出&quot;&quot;跟随系统深色&quot;）。</p>
+<h2 id="s-5-浮层与弹窗">5. 浮层与弹窗</h2>
+<p>8 类浮层全在 base 层，视觉走语义 token，行为在 <code>dist/cinder.js</code>，不改业务 DOM。</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>用法</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>轻提示 Toast</td>
+<td><code>Cinder.toast({ message, tone, duration })</code>，容器 <code>.cin-toast-region</code></td>
+<td>保存成功等轻量反馈，自动消失、不挡操作区</td>
+</tr>
+<tr>
+<td>气泡提示 Tooltip</td>
+<td><code>.cin-tip-wrap</code> 包触发器 + <code>.cin-tooltip[data-side]</code></td>
+<td>解释陌生图标、表单字段含义</td>
+</tr>
+<tr>
+<td>悬停卡片 Hover Card</td>
+<td><code>.cin-hovercard-wrap &gt; a</code> + <code>.cin-hovercard</code></td>
+<td>用户信息预览，延迟关闭以留出操作空间</td>
+</tr>
+<tr>
+<td>气泡确认 Popconfirm</td>
+<td><code>.cin-popconfirm-wrap</code> + <code>[data-popconfirm=&quot;#id&quot;]</code></td>
+<td>删除等操作前二次确认</td>
+</tr>
+<tr>
+<td>抽屉 Drawer</td>
+<td><code>&lt;dialog class=&quot;cin-dialog cin-drawer&quot; data-side=&quot;end&quot;&gt;</code></td>
+<td>详情查看、编辑资料，保留原页面</td>
+</tr>
+<tr>
+<td>模态 Modal</td>
+<td><code>&lt;dialog class=&quot;cin-dialog&quot;&gt;&lt;div class=&quot;cin-dialog-panel&quot;&gt;</code></td>
+<td>登录、注册、简单表单填写</td>
+</tr>
+<tr>
+<td>警告框 Alert Dialog</td>
+<td>同模态，加 <code>data-tone=&quot;danger&quot;</code>，默认不响应 Esc</td>
+<td>高风险、不可逆操作强制确认</td>
+</tr>
+<tr>
+<td>漫游引导 Tour</td>
+<td><code>Cinder.tour({ steps: [{ target, title, text }] })</code></td>
+<td>新用户引导，逐步高亮关键功能</td>
+</tr>
+</tbody>
+</table>
+<p>行为层负责：焦点捕获与归还、Esc 关闭、<code>::backdrop</code> 点击关闭、<code>body</code> 滚动锁定、气泡按视口夹紧并在上方空间不足时下翻、窗口 resize 重新定位。弹窗内表单直接复用 <code>.cin-field</code> / <code>.cin-input</code> / <code>.cin-select</code>。</p>
+<p>无障碍按 WCAG 1.4.13（悬停或聚焦内容须可关闭 / 可悬停 / 持久）与 WAI-ARIA APG 的 dialog / alertdialog / tooltip 模式实现：悬停类内容按 Esc 可关闭且不移开指针也生效，离开后自动复位；气泡确认打开即聚焦安全动作，Esc 关闭后焦点回到触发按钮；Toast 用 <code>role=&quot;status&quot;</code> + <code>aria-live</code> 播报，悬停或聚焦时暂停计时。</p>
+<h3 id="s-5-1-折叠面板-accordion">5.1 折叠面板 Accordion</h3>
+<p><code>disclosure.css</code> 提供折叠面板，行为在 <code>disclosure.js</code>。骨架是原生 <code>details</code> / <code>summary</code>，<strong>不引 JS 也能展开收起</strong>；JS 只做增强。</p>
+<table>
+<thead>
+<tr>
+<th>结构</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-accordion</code></td>
+<td>分组容器；<code>data-single</code> 同组互斥，<code>data-variant=&quot;card&quot;</code> 卡片式</td>
+</tr>
+<tr>
+<td><code>&lt;details class=&quot;cin-accordion-item&quot;&gt;</code></td>
+<td>单项；<code>open</code> 默认展开，<code>data-disabled</code> 只读</td>
+</tr>
+<tr>
+<td><code>&lt;summary class=&quot;cin-accordion-trigger&quot;&gt;</code></td>
+<td>触发器，内含 <code>.cin-accordion-title</code> 与可选的 <code>.cin-accordion-meta</code></td>
+</tr>
+<tr>
+<td><code>.cin-accordion-panel &gt; .cin-accordion-body</code></td>
+<td>内容区；面板负责高度过渡，正文只放业务内容</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-accordion&quot; data-single&gt;
+  &lt;details class=&quot;cin-accordion-item&quot; open&gt;
+    &lt;summary class=&quot;cin-accordion-trigger&quot;&gt;
+      &lt;span class=&quot;cin-accordion-title&quot;&gt;单据审核规则&lt;/span&gt;
+      &lt;span class=&quot;cin-accordion-meta&quot;&gt;3 条&lt;/span&gt;
+    &lt;/summary&gt;
+    &lt;div class=&quot;cin-accordion-panel&quot;&gt;
+      &lt;div class=&quot;cin-accordion-body&quot;&gt;金额超过 5 万需二级审核。&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/details&gt;
+&lt;/div&gt;
+</code></pre>
+<p>行为层补的东西：高度过渡（复用 <code>--cin-motion-base-*</code>，<code>prefers-reduced-motion</code> 下直接跳变）、<code>data-single</code> 互斥、<code>aria-expanded</code> / <code>aria-controls</code> / <code>role=&quot;region&quot;</code> 同步、<code>ArrowUp</code> / <code>ArrowDown</code> / <code>Home</code> / <code>End</code> 组内漫游、<code>cin:accordiontoggle</code>（<code>{ open, source }</code>，<code>source</code> 为 <code>user</code> / <code>api</code> / <code>single</code>）外抛。编程控制用 <code>Cinder.setAccordion(item, open)</code>；动态插入的节点调 <code>Cinder.initAccordions(root)</code> 补绑定。</p>
+<h3 id="s-5-2-文件选择-fileinput">5.2 文件选择 FileInput</h3>
+<p><code>fileinput.css</code> 给结构，<code>fileinput.js</code> 给拖拽、校验与本地预览。<code>label</code> 包住隐藏 input，<strong>无 JS 也能点选</strong>；上传请求由业务层发起，库里只管“选中之后”的呈现。</p>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-dropzone</code></td>
+<td>拖拽区（<code>label</code>）；<code>data-compact</code> 行内紧凑，<code>data-disabled</code> 禁用</td>
+</tr>
+<tr>
+<td><code>data-accept</code> / <code>input[accept]</code></td>
+<td>类型白名单，支持 <code>.pdf</code>、<code>image/*</code>、<code>application/pdf</code></td>
+</tr>
+<tr>
+<td><code>data-max-size</code></td>
+<td>单个文件上限，单位 MB</td>
+</tr>
+<tr>
+<td><code>data-max-files</code></td>
+<td>数量上限，超出逐个标红</td>
+</tr>
+<tr>
+<td><code>data-filelist=&quot;#id&quot;</code></td>
+<td>渲染目标 <code>&lt;ul&gt;</code>，省略则自动插到拖拽区后面</td>
+</tr>
+<tr>
+<td><code>data-auto-done=&quot;false&quot;</code></td>
+<td>选中后停在 <code>uploading</code> 态，等 <code>Cinder.setFileProgress</code> 推进</td>
+</tr>
+<tr>
+<td><code>.cin-fileitem[data-status]</code></td>
+<td><code>uploading</code> / <code>done</code> / <code>error</code>，错误行显示拒绝原因</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;label class=&quot;cin-dropzone&quot; data-max-size=&quot;5&quot; data-max-files=&quot;1&quot; data-filelist=&quot;#files&quot;&gt;
+  &lt;input class=&quot;cin-sr-only&quot; type=&quot;file&quot; accept=&quot;image/*&quot;&gt;
+  &lt;span class=&quot;cin-dropzone-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;span class=&quot;cin-dropzone-title&quot;&gt;拖入图片，或点击选择&lt;/span&gt;
+  &lt;span class=&quot;cin-dropzone-hint&quot;&gt;JPG / PNG，不超过 5 MB&lt;/span&gt;
+&lt;/label&gt;
+&lt;ul class=&quot;cin-filelist&quot; id=&quot;files&quot;&gt;&lt;/ul&gt;
+</code></pre>
+<p>行为层做的事：<code>dragenter / dragover / dragleave / drop</code>（含 <code>data-dragover</code> 高亮、按 relatedTarget 防抖）、逐文件校验并给出中文原因、图片用 <code>URL.createObjectURL</code> 出缩略图（移除时 revoke）、错误提示 <code>role=&quot;alert&quot;</code>、移除按钮委托在列表上。事件：<code>cin:files</code>（<code>{ files, accepted, rejected, source }</code>，<code>source</code> 为 <code>picker</code> / <code>drop</code>）与 <code>cin:fileremove</code>（<code>{ file, name }</code>）。动态插入的节点调 <code>Cinder.initFileInputs(root)</code>。</p>
+<p>服务端已存在的文件行可直接用 <code>.cin-fileitem</code> 静态渲染，不需要行为层。</p>
+<h3 id="s-5-3-标签页-tabs">5.3 标签页 Tabs</h3>
+<p><code>tabs.css</code> 给结构，<code>tabs.js</code> 给键盘与显隐。<strong>无 JS 时所有面板顺序展开</strong>，内容全部可读，只是失去切换；这是刻意的降级取舍，比默认只显示第一个面板更不丢信息。</p>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-tabs[data-tabs]</code></td>
+<td>容器；<code>data-orientation=&quot;vertical&quot;</code> 纵向，<code>data-variant=&quot;pill&quot;</code> 药丸，<code>data-fill</code> 每项等宽铺满</td>
+</tr>
+<tr>
+<td><code>.cin-tablist[role=&quot;tablist&quot;]</code></td>
+<td>标签轨道；<code>aria-label</code> 说明这组 tab 管什么</td>
+</tr>
+<tr>
+<td><code>.cin-tab</code></td>
+<td>标签项；<code>aria-selected</code> 标记当前项，<code>disabled</code> 或 <code>data-disabled</code> 跳过</td>
+</tr>
+<tr>
+<td><code>.cin-tabpanel</code></td>
+<td>面板；未选中由行为层置 <code>hidden</code>，<code>tabs.css</code> 用 <code>[hidden]</code> 兜底</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-tabs&quot; data-tabs data-single-activation=&quot;false&quot;&gt;
+  &lt;div class=&quot;cin-tablist&quot; role=&quot;tablist&quot; aria-label=&quot;商品档案&quot;&gt;
+    &lt;button class=&quot;cin-tab&quot; type=&quot;button&quot; aria-selected=&quot;true&quot;&gt;基本信息&lt;/button&gt;
+    &lt;button class=&quot;cin-tab&quot; type=&quot;button&quot;&gt;库存分布&lt;/button&gt;
+    &lt;button class=&quot;cin-tab&quot; type=&quot;button&quot;&gt;价格记录&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-tabpanel&quot;&gt;SKU-2024-0871，华东仓在售。&lt;/div&gt;
+  &lt;div class=&quot;cin-tabpanel&quot;&gt;华东仓 320 件，华南仓 148 件。&lt;/div&gt;
+  &lt;div class=&quot;cin-tabpanel&quot;&gt;最近调价 2026-10-18，下调 4%。&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>行为层做的事：按 <code>aria-controls</code> 配对 tab 与面板（缺省时按顺序配，重复 <code>id</code> 会被跳过不绑）、自动补 <code>role=&quot;tabpanel&quot;</code> / <code>aria-labelledby</code> / <code>tabindex=&quot;0&quot;</code>；roving tabindex 只让当前项进 Tab 序列；<code>ArrowLeft</code> / <code>ArrowRight</code>（纵向为 <code>ArrowUp</code> / <code>ArrowDown</code>）漫游并首尾回绕，<code>Home</code> / <code>End</code> 跳两端，禁用项直接跳过；默认跟随焦点自动激活，加 <code>data-single-activation=&quot;false&quot;</code> 改成「方向键只移焦点，<code>Enter</code> / <code>Space</code> 才切」。事件 <code>cin:tabchange</code>（<code>{ from, to, index, previous, source }</code>，<code>source</code> 为 <code>user</code> / <code>keyboard</code> / <code>api</code>），绑定时抛 <code>cin:tabsready</code>（<code>{ count, active }</code>）。编程控制用 <code>Cinder.setTab(root, 索引 | id | data-tab | 文本 | 元素, { focus, source })</code>；动态插入的节点调 <code>Cinder.initTabs(root)</code>，返回本次绑定的容器数。</p>
+<p>纵向模式下面板与标签同高，<code>data-fill</code> 只在横向生效。深色与 <code>prefers-reduced-motion</code> 均按 token 走，不改结构。</p>
+<h3 id="s-5-4-滑块-slider">5.4 滑块 Slider</h3>
+<p><code>slider.css</code> 只接管外观，取值、键盘步进、<code>Home</code> / <code>End</code> 跳两端、屏幕阅读器读数全部留给原生 <code>input[type=&quot;range&quot;]</code>。脚本没跑时仍是一个可拖动的滑块，只是轨道用浏览器默认画法（<code>accent-color</code> 已跟主题）。</p>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-slider[data-slider]</code></td>
+<td>容器；<code>data-inline</code> 改成标签在左、控件在右，<code>data-bubble</code> 打开拖动数值气泡</td>
+</tr>
+<tr>
+<td><code>.cin-slider-head</code></td>
+<td>标题行；放 <code>.cin-slider-label</code> 与 <code>.cin-slider-value</code></td>
+</tr>
+<tr>
+<td><code>.cin-slider-body</code></td>
+<td>控件的定位上下文；气泡靠它的 <code>data-value</code> 显示，坐标为容器上的 <code>--_p</code></td>
+</tr>
+<tr>
+<td><code>.cin-slider-input</code></td>
+<td>原生 range；<code>min</code> / <code>max</code> / <code>step</code> / <code>disabled</code> 按 HTML 原义生效，<code>data-format</code> 里的 <code>{v}</code> 会被替换成当前值</td>
+</tr>
+<tr>
+<td><code>.cin-slider-marks</code></td>
+<td>轨道下方刻度，首尾两端对齐，中间均分</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-slider&quot; data-slider data-bubble&gt;
+  &lt;div class=&quot;cin-slider-head&quot;&gt;
+    &lt;label class=&quot;cin-slider-label&quot; for=&quot;approveLimit&quot;&gt;单笔审批额度&lt;/label&gt;
+    &lt;span class=&quot;cin-slider-value&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-slider-body&quot;&gt;
+    &lt;input class=&quot;cin-slider-input&quot; id=&quot;approveLimit&quot; type=&quot;range&quot;
+           min=&quot;0&quot; max=&quot;20000&quot; step=&quot;500&quot; value=&quot;4000&quot; data-format=&quot;¥{v}&quot;&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-slider-marks&quot;&gt;&lt;span&gt;0&lt;/span&gt;&lt;span&gt;5000&lt;/span&gt;&lt;span&gt;10000&lt;/span&gt;&lt;span&gt;15000&lt;/span&gt;&lt;span&gt;20000&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>行为层的活只有三件：把 <code>(value - min) / (max - min)</code> 写成 <code>--_p</code>，静默态轨道渐变与气泡位移都读它；把格式化后的读数同步到 <code>.cin-slider-value</code>、<code>body[data-value]</code> 与 <code>aria-valuetext</code>；抛事件。<code>cin:slideinput</code> 在拖动过程中连续触发，<code>cin:slidechange</code> 只在落定时触发一次，两者载荷都是 <code>{ value }</code>。编程赋值用 <code>Cinder.setSlider(root, 值)</code>，会刷新比例并按一次「落定」外抛；动态插入调 <code>Cinder.initSliders(root)</code>。</p>
+<h3 id="s-5-5-评分-rating">5.5 评分 Rating</h3>
+<p><code>rating.css</code> 的点亮逻辑写在 CSS 里，靠 <code>input:checked + label</code> 命中当前颗、<code>label:has(~ input:checked)</code> 命中它前面所有颗，两段加起来就是「选中项及其左侧全亮」。这样做的好处是键盘方向键可以按 DOM 正序走，视觉顺序与之完全一致，不需要 <code>flex-direction: row-reverse</code> 那种会反转方向键的写法。</p>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-rating[data-rating]</code></td>
+<td>容器（<code>fieldset</code>，<code>legend</code> 写 <code>.cin-sr-only</code>）；<code>data-size=&quot;sm&quot;</code> / <code>&quot;lg&quot;</code> 调字号，<code>data-readonly</code> 转纯展示</td>
+</tr>
+<tr>
+<td><code>.cin-rating-input</code></td>
+<td>原生 radio，视觉上压到 1px 但仍可聚焦；一组共用同一个 <code>name</code></td>
+</tr>
+<tr>
+<td><code>.cin-rating-star</code></td>
+<td>星形由 <code>::before</code> 加 <code>clip-path</code> 画，颜色跟 <code>currentColor</code>，未点亮取 <code>--cin-color-border-strong</code></td>
+</tr>
+<tr>
+<td><code>.cin-rating-output</code></td>
+<td>当前分值读数，落定后写一位小数</td>
+</tr>
+<tr>
+<td><code>.cin-rating-count</code></td>
+<td>可选，跟在后面的说明（评价条数、日期等）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;fieldset class=&quot;cin-rating&quot; data-rating&gt;
+  &lt;legend class=&quot;cin-sr-only&quot;&gt;供应商交付评分&lt;/legend&gt;
+  &lt;div class=&quot;cin-rating-stars&quot;&gt;
+    &lt;input class=&quot;cin-rating-input&quot; type=&quot;radio&quot; name=&quot;rateSupplier&quot; id=&quot;r-1&quot; value=&quot;1&quot;&gt;&lt;label class=&quot;cin-rating-star&quot; for=&quot;r-1&quot;&gt;&lt;span class=&quot;cin-sr-only&quot;&gt;1 星&lt;/span&gt;&lt;/label&gt;
+    &lt;input class=&quot;cin-rating-input&quot; type=&quot;radio&quot; name=&quot;rateSupplier&quot; id=&quot;r-2&quot; value=&quot;2&quot;&gt;&lt;label class=&quot;cin-rating-star&quot; for=&quot;r-2&quot;&gt;&lt;span class=&quot;cin-sr-only&quot;&gt;2 星&lt;/span&gt;&lt;/label&gt;
+    &lt;input class=&quot;cin-rating-input&quot; type=&quot;radio&quot; name=&quot;rateSupplier&quot; id=&quot;r-3&quot; value=&quot;3&quot; checked&gt;&lt;label class=&quot;cin-rating-star&quot; for=&quot;r-3&quot;&gt;&lt;span class=&quot;cin-sr-only&quot;&gt;3 星&lt;/span&gt;&lt;/label&gt;
+    &lt;input class=&quot;cin-rating-input&quot; type=&quot;radio&quot; name=&quot;rateSupplier&quot; id=&quot;r-4&quot; value=&quot;4&quot;&gt;&lt;label class=&quot;cin-rating-star&quot; for=&quot;r-4&quot;&gt;&lt;span class=&quot;cin-sr-only&quot;&gt;4 星&lt;/span&gt;&lt;/label&gt;
+    &lt;input class=&quot;cin-rating-input&quot; type=&quot;radio&quot; name=&quot;rateSupplier&quot; id=&quot;r-5&quot; value=&quot;5&quot;&gt;&lt;label class=&quot;cin-rating-star&quot; for=&quot;r-5&quot;&gt;&lt;span class=&quot;cin-sr-only&quot;&gt;5 星&lt;/span&gt;&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;output class=&quot;cin-rating-output&quot;&gt;&lt;/output&gt;
+&lt;/fieldset&gt;
+</code></pre>
+<p>脚本补的是 CSS 做不到的部分：悬停预览给前 n 颗挂 <code>is-preview</code>（<code>@media (hover: hover)</code> 下才有缩放），移出容器即清空；<code>data-readonly</code> 时禁用 radio、按 <code>data-value</code> 给前 n 颗挂 <code>is-on</code>，点不动也仍能被读屏朗读；落定写 <code>&lt;output&gt;</code> 并抛 <code>cin:rate</code>（<code>{ value, max }</code>）。编程选中用 <code>Cinder.setRating(root, 分值)</code>，传 <code>0</code> 清空；动态插入调 <code>Cinder.initRatings(root)</code>。</p>
+<p>半星与自定义图标暂不支持：<code>clip-path</code> 星形跟着 <code>1em</code> 缩放，需要换图案时改 <code>.cin-rating-star::before</code> 的 <code>clip-path</code> 或换成 <code>mask-image</code>，点亮逻辑不受影响。</p>
+<h3 id="s-5-6-取色器-colorpicker">5.6 取色器 ColorPicker</h3>
+<p><code>colorpicker.css</code> 的底子仍然是原生控件：触发器里铺一个 <code>input[type=&quot;color&quot;]</code>，没有脚本时点开的是系统取色盘，脚本跑起来才换成自绘面板。这样既不需要为一个取色器引入 canvas 拾色，也不会在弱环境里变成点不动的死按钮。</p>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-colorpicker[data-colorpicker]</code></td>
+<td>容器；<code>data-value</code> 写初值（hex / <code>rgb()</code> / <code>hsl()</code> 都认），<code>data-format=&quot;hex&quot;</code> / <code>&quot;rgb&quot;</code> / <code>&quot;hsl&quot;</code> 决定输出，<code>data-alpha</code> 开启透明度，<code>data-disabled</code> 整块禁用</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-trigger</code></td>
+<td>触发器外壳，<code>focus-within</code> 出焦点环</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-native</code></td>
+<td>原生 <code>input[type=color]</code>，绝对定位铺满触发器；无脚本时点哪都能唤起。脚本接管后 <code>pointer-events: none</code>，但仍保留焦点与 <code>aria-expanded</code></td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-chip</code></td>
+<td>当前色块，背景读 <code>--_c</code>；<code>data-alpha</code> 时底下是棋盘格，透明色能看出来</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-value</code></td>
+<td>文本读数，与 <code>data-value</code> 同源</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-pop</code></td>
+<td>面板，<code>position: fixed</code>，由脚本夹进视口；<code>--_h</code> / <code>--_s</code> / <code>--_v</code> 三个局部变量驱动色域底色与拇指位置</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-area</code></td>
+<td>饱和度（横）与明度（纵）二维区，<code>touch-action: none</code> 允许指针拖动</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-area-thumb</code></td>
+<td>十字准星，位置由 <code>--_s</code> / <code>--_v</code> 算</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-hue</code></td>
+<td>色相条，原生 <code>range</code> 0-360</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-alpha</code></td>
+<td>透明度条，原生 <code>range</code> 0-100，仅 <code>data-alpha</code> 时出现</td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-field</code></td>
+<td>数值框组：<code>data-hex</code>、<code>data-r</code> / <code>data-g</code> / <code>data-b</code>、<code>data-a</code></td>
+</tr>
+<tr>
+<td><code>.cin-colorpicker-preset</code></td>
+<td>预设色，色值写在 <code>data-color</code>，名字写 <code>data-name</code>（没有可见文本时当 <code>aria-label</code>）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-colorpicker&quot; data-colorpicker data-value=&quot;#C04229&quot;&gt;
+  &lt;div class=&quot;cin-colorpicker-trigger&quot;&gt;
+    &lt;input class=&quot;cin-colorpicker-native&quot; type=&quot;color&quot; aria-label=&quot;选择主题色&quot;&gt;
+    &lt;span class=&quot;cin-colorpicker-chip&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;cin-colorpicker-value&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-colorpicker-pop&quot; role=&quot;dialog&quot; aria-label=&quot;取色面板&quot;&gt;
+    &lt;div class=&quot;cin-colorpicker-area&quot;&gt;&lt;span class=&quot;cin-colorpicker-area-thumb&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;input class=&quot;cin-colorpicker-range cin-colorpicker-hue&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;360&quot; step=&quot;1&quot; aria-label=&quot;色相&quot;&gt;
+    &lt;div class=&quot;cin-colorpicker-fields&quot;&gt;
+      &lt;label class=&quot;cin-colorpicker-field&quot; data-span&gt;HEX&lt;input data-hex spellcheck=&quot;false&quot;&gt;&lt;/label&gt;
+      &lt;label class=&quot;cin-colorpicker-field&quot;&gt;R&lt;input data-r type=&quot;number&quot; min=&quot;0&quot; max=&quot;255&quot;&gt;&lt;/label&gt;
+      &lt;label class=&quot;cin-colorpicker-field&quot;&gt;G&lt;input data-g type=&quot;number&quot; min=&quot;0&quot; max=&quot;255&quot;&gt;&lt;/label&gt;
+      &lt;label class=&quot;cin-colorpicker-field&quot;&gt;B&lt;input data-b type=&quot;number&quot; min=&quot;0&quot; max=&quot;255&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;cin-colorpicker-presets&quot;&gt;
+      &lt;button class=&quot;cin-colorpicker-preset&quot; type=&quot;button&quot; data-color=&quot;#3A714E&quot; data-name=&quot;鼠尾草绿&quot;&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>脚本只维护一份 HSV 状态，色域、色相条、透明度条、数值框、预设全读写它，因此不存在两个控件各记一份值的情况。拖动时写状态并抛 <code>cin:colorinput</code>，松手（或数值框回车、点预设、脚本赋值）才抛一次 <code>cin:colorchange</code>；<code>cin:coloropen</code> / <code>cin:colorclose</code> 跟面板开合同步。载荷统一为 <code>{ value, hex, rgb, hsl, alpha }</code>，<code>value</code> 就是按 <code>data-format</code> 格式化后的字符串，也是写回容器的 <code>data-value</code>。</p>
+<p>几个约定：输出的十六进制统一小写，带 <code>data-alpha</code> 时给 8 位（<code>#rrggbbaa</code>），否则 6 位；<code>hsl()</code> 用现代空格写法 <code>hsl(h s% l% / a)</code>；非法输入（比如 <code>#12</code> 或不认识的字符串）在对应框上标 <code>data-invalid</code>，状态不动。弹层先试触发器下方，放不下翻到上方，再不行就 <code>clamp</code> 进视口；点外部、按 <code>Esc</code>、滚动与改窗口尺寸都会重排或关闭，<code>Esc</code> 之后焦点回到原生输入。编程赋值用 <code>Cinder.setColorPicker(root, &quot;#3E5A73&quot;)</code>（也接受 <code>rgb()</code> / <code>hsl()</code> 字符串），返回格式化后的新值，非法值返回 <code>null</code> 且不改状态；动态插入调 <code>Cinder.initColorPickers(root)</code>。</p>
+<p>面板没有做 canvas 取色与吸管（EyeDropper），也不做渐变与多色停靠点：取色器的职责是选一个颜色，需要渐变停靠点的场景应当在画布层面另做控件。</p>
+<h3 id="s-5-7-日期与时间-datepicker-timeinput">5.7 日期与时间 DatePicker / TimeInput</h3>
+<p>日期框的底座同样是原生输入：文本框保留 <code>input[type=&quot;text&quot;]</code> 手输 <code>YYYY-MM-DD</code>，日历面板由脚本注入。没有脚本时用户照样能把日期填进去并提交，只是拿不到日历；时间输入干脆不做自绘，直接用 <code>input[type=&quot;time&quot;]</code>，CSS 只统一外观与焦点环。</p>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-datepicker[data-datepicker]</code></td>
+<td>容器；<code>data-mode=&quot;single&quot;</code> / <code>&quot;range&quot;</code> 决定单选或区间，<code>data-value</code> / <code>data-value2</code> 写初值，<code>data-size=&quot;sm&quot;</code> 收尺寸</td>
+</tr>
+<tr>
+<td><code>data-min</code> / <code>data-max</code></td>
+<td>可选区间，越界日置灰并加删除线，手输同样会被拒</td>
+</tr>
+<tr>
+<td><code>data-disable-weekdays</code></td>
+<td>禁用星期，<code>0</code> 是周日，如 <code>&quot;0,6&quot;</code> 只留工作日</td>
+</tr>
+<tr>
+<td><code>data-exclude</code></td>
+<td>排除的日期列表，逗号分隔，用来跳过法定假日</td>
+</tr>
+<tr>
+<td><code>data-locale</code> / <code>data-week-start</code></td>
+<td>文案语言与每周起始日，默认跟随 <code>&lt;html lang&gt;</code>、周一开头</td>
+</tr>
+<tr>
+<td><code>data-label-*</code></td>
+<td>覆盖 <code>dialog</code> / <code>prev</code> / <code>next</code> / <code>month</code> / <code>year</code> / <code>today</code> / <code>clear</code> 的文案</td>
+</tr>
+<tr>
+<td><code>.cin-datepicker-fields</code></td>
+<td>输入框组；范围模式下两框之间由脚本插入 <code>→</code></td>
+</tr>
+<tr>
+<td><code>.cin-datepicker-field</code></td>
+<td>单框外壳，<code>focus-within</code> 出焦点环；校验失败挂 <code>data-invalid</code>，框内文字转危险色</td>
+</tr>
+<tr>
+<td><code>.cin-datepicker-toggle</code></td>
+<td>日历按钮，三角/方块是用 <code>::before</code> 画的，不引图标</td>
+</tr>
+<tr>
+<td><code>.cin-datepicker-pop</code></td>
+<td>面板，<code>position: fixed</code>，由脚本夹进视口；打开时容器挂 <code>data-open</code></td>
+</tr>
+<tr>
+<td><code>.cin-datepicker-day</code></td>
+<td>日格：<code>data-outside</code>（邻月）、<code>data-today</code>、<code>data-in-range</code>、<code>data-range-start</code> / <code>data-range-end</code>，<code>disabled</code> 表示不可选</td>
+</tr>
+<tr>
+<td><code>.cin-dateinput</code> / <code>.cin-timeinput</code></td>
+<td>原生 <code>date</code> / <code>time</code> 控件的外观壳，<code>data-size</code>、<code>data-disabled</code>、<code>data-invalid</code> 三种态</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-datepicker&quot; data-datepicker data-mode=&quot;range&quot;
+     data-value=&quot;2026-11-03&quot; data-value2=&quot;2026-11-12&quot;
+     data-min=&quot;2026-01-01&quot; data-max=&quot;2026-12-31&quot; data-disable-weekdays=&quot;0,6&quot;&gt;
+  &lt;div class=&quot;cin-datepicker-fields&quot;&gt;
+    &lt;span class=&quot;cin-datepicker-field&quot;&gt;&lt;input data-date-field type=&quot;text&quot; aria-label=&quot;账期开始&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;cin-datepicker-field&quot;&gt;&lt;input data-date-field type=&quot;text&quot; aria-label=&quot;账期结束&quot;&gt;&lt;/span&gt;
+    &lt;button class=&quot;cin-datepicker-toggle&quot; type=&quot;button&quot; aria-label=&quot;打开日历&quot;&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>面板骨架（月/年下拉、42 格、今天/清除）由脚本按 <code>data-label-*</code> 生成，示例页不必抄三十行日历 DOM。范围模式下第一下定起始、移动指针出预览带、第二下收口，两框顺序颠倒会自动换位；<code>Esc</code> 与点外部都关面板，<code>Esc</code> 之后焦点回到第一个输入框。</p>
+<p>键盘按原生日历的约定走：<code>←/→</code> 走一天，<code>↑/↓</code> 走一周，<code>Home</code> / <code>End</code> 到本周首尾，<code>PageUp</code> / <code>PageDown</code> 翻月、加 <code>Shift</code> 翻年，<code>Enter</code> 落定，<code>Alt+↓</code> 直接在输入框上唤起面板。日格是 <code>role=&quot;gridcell&quot;</code> 的按钮，只有当前焦点格带 <code>tabindex=&quot;0&quot;</code>，其余 <code>-1</code>，读屏靠 <code>aria-label</code> 读完整日期。</p>
+<p>两个坑值得记一笔。一是悬浮预览<strong>不能重建日格</strong>：<code>pointerover</code> 里如果 <code>innerHTML</code> 重绘，<code>mousedown</code> 与 <code>mouseup</code> 会落在不同节点上，点击被浏览器判为无效，表现为「点日期没反应」；现在预览只切 <code>data-in-range</code> 属性。二是翻月、翻年后要显式把焦点送回焦点格，否则 <code>render</code> 换掉节点后焦点掉回 <code>body</code>，键盘漫游就断了。</p>
+<p>事件统一为 <code>cin:datechange</code>（<code>{ value, value2, reason }</code>，<code>reason</code> 取 <code>pick</code> / <code>type</code> / <code>clear</code> / <code>api</code>），开合另抛 <code>cin:dateopen</code> / <code>cin:dateclose</code>，都监听在 <code>.cin-datepicker</code> 根节点。编程赋值用 <code>Cinder.setDatePicker(root, &quot;2026-12-24&quot;)</code>，范围模式再传第三参数；越界、被禁用或格式不合法的值返回 <code>null</code> 且不改状态。动态插入调 <code>Cinder.initDatePickers(root)</code>。</p>
+<p>没做的部分：不做双月并排大日历、不做相对日期快捷项（「近 7 天」这类由业务层调 <code>setDatePicker</code> 实现），时区一律按本地时间处理，不做跨时区换算。</p>
+<h2 id="s-5-8-树形目录-tree">5.8 树形目录 Tree</h2>
+<p>嵌套的 <code>ul/li</code> 直接写，脚本只补语义与交互，不改结构：</p>
+<pre><code class="language-html">&lt;div class=&quot;cin-tree&quot; data-tree data-select=&quot;multiple&quot; data-cascade&gt;
+  &lt;ul class=&quot;cin-tree-groups&quot; aria-label=&quot;物料分类&quot;&gt;
+    &lt;li class=&quot;cin-tree-item&quot;&gt;
+      &lt;button class=&quot;cin-tree-row&quot; type=&quot;button&quot;&gt;
+        &lt;span class=&quot;cin-tree-toggle&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+        &lt;input class=&quot;cin-tree-check&quot; type=&quot;checkbox&quot; aria-label=&quot;原材料&quot;&gt;
+        &lt;span class=&quot;cin-tree-label&quot;&gt;原材料&lt;/span&gt;
+        &lt;span class=&quot;cin-tree-meta&quot;&gt;128&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;ul class=&quot;cin-tree-group&quot;&gt;
+        &lt;li class=&quot;cin-tree-item&quot; data-collapsed&gt;
+          &lt;button class=&quot;cin-tree-row&quot; type=&quot;button&quot;&gt;
+            &lt;span class=&quot;cin-tree-toggle&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+            &lt;span class=&quot;cin-tree-label&quot;&gt;钢材&lt;/span&gt;
+          &lt;/button&gt;
+          &lt;ul class=&quot;cin-tree-group&quot;&gt;
+            &lt;li class=&quot;cin-tree-item&quot; data-lazy&gt;
+              &lt;button class=&quot;cin-tree-row&quot; type=&quot;button&quot;&gt;
+                &lt;span class=&quot;cin-tree-toggle&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+                &lt;span class=&quot;cin-tree-label&quot;&gt;型材&lt;/span&gt;
+              &lt;/button&gt;
+              &lt;ul class=&quot;cin-tree-group&quot;&gt;&lt;/ul&gt;
+            &lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-tree[data-tree]</code></td>
+<td>根容器，脚本初始化后挂 <code>data-tree-ready</code>；<code>data-select=&quot;multiple&quot;</code> 切多选，默认单选</td>
+</tr>
+<tr>
+<td><code>data-cascade</code></td>
+<td>多选时级联：勾父带全子，子级部分勾选让父级 <code>indeterminate</code>，全勾/清空反推父级</td>
+</tr>
+<tr>
+<td><code>data-collapse=&quot;all&quot;</code></td>
+<td>初始化时收起所有分支（只留顶层可见）；不带则默认展开</td>
+</tr>
+<tr>
+<td><code>data-lazy</code></td>
+<td>懒加载节点：首次展开抛 <code>cin:treeload</code>，业务在 <code>detail.done(nodes)</code> 里回填，回填后不再请求</td>
+</tr>
+<tr>
+<td><code>data-collapsed</code></td>
+<td>单个节点初始收起；<code>data-disabled</code> 或行内 <code>disabled</code> 标禁用，键盘漫游与点击都跳过</td>
+</tr>
+<tr>
+<td><code>.cin-tree-row</code></td>
+<td>行本体（原生 <code>button</code>），脚本补 <code>role</code>、<code>tabindex</code>、<code>aria-expanded</code> / <code>aria-selected</code> / <code>aria-checked</code> / <code>aria-level</code> / <code>aria-setsize</code> / <code>aria-posinset</code></td>
+</tr>
+<tr>
+<td><code>.cin-tree-toggle</code></td>
+<td>折角箭头，视觉 16px、热区 24px；点它展开/收起，点行本体选中，双击行也能开合</td>
+</tr>
+<tr>
+<td><code>.cin-tree-check</code></td>
+<td>多选复选框，<code>aria-label</code> 缺省时自动用行文本补齐；单选树里自动 <code>tabindex=&quot;-1&quot;</code></td>
+</tr>
+<tr>
+<td><code>.cin-tree-label</code> / <code>.cin-tree-meta</code></td>
+<td>主文本与右侧计数/标签</td>
+</tr>
+<tr>
+<td><code>.cin-tree-empty</code></td>
+<td>过滤无命中时脚本插入的空态节点，<code>data-empty</code> 可改文案</td>
+</tr>
+</tbody>
+</table>
+<p>键盘：<code>↑↓</code> 在可见行间漫游（跳过禁用与折叠隐藏项），<code>→</code> 进子级或展开，<code>←</code> 回父级或收起当前枝，<code>Home</code> / <code>End</code> 到首末行，<code>*</code> 展开同级全部分支，直接敲字符按首字/多字定位，<code>Enter</code> 选中当前行。roving tabindex 保证整棵树在 Tab 序列里只占一格。</p>
+<p>事件都监听在 <code>.cin-tree</code> 根节点：<code>cin:treeexpand</code> / <code>cin:treecollapse</code>（<code>{ item, row, lazy? }</code>）、<code>cin:treeselect</code>（<code>{ item, row, label }</code>）、<code>cin:treecheck</code>（<code>{ item, row, checked, indeterminate, cascade }</code>）、<code>cin:treeload</code>（<code>{ item, row, done }</code>）。编程接口是 <code>Cinder.tree</code> 控制器：<code>expand</code> / <code>collapse</code> / <code>toggle</code> / <code>select</code> / <code>checked</code> / <code>setChecked</code> / <code>decorate</code>，入参可以是行、项或容器内任意子节点；筛选走 <code>Cinder.filterTree(root, &quot;单&quot;)</code>，命中项与祖先保持可见并包 <code>&lt;mark class=&quot;cin-tree-mark&quot;&gt;</code>，传空串复位并返回命中数。动态插入调 <code>Cinder.initTrees(root)</code>。</p>
+<p>没做的部分：不做虚拟滚动（超长列表等 Data Grid 虚拟滚动落地后共用方案）、不做拖拽排序、不做多列树表，节点数量级按千级以内设计。</p>
+<h2 id="s-5-9-轮播-carousel">5.9 轮播 Carousel</h2>
+<p>滚动、吸附、惯性全部交给原生 <code>overflow-x</code> + <code>scroll-snap</code>，脚本只补按钮、指示点、键盘与自动播放：</p>
+<pre><code class="language-html">&lt;div class=&quot;cin-carousel&quot; data-carousel data-per-view=&quot;2&quot; data-loop data-autoplay=&quot;4000&quot; aria-label=&quot;产品图集&quot;&gt;
+  &lt;div class=&quot;cin-carousel-stage&quot;&gt;
+    &lt;div class=&quot;cin-carousel-viewport&quot;&gt;
+      &lt;ul class=&quot;cin-carousel-track&quot;&gt;
+        &lt;li class=&quot;cin-carousel-slide&quot;&gt;&lt;img src=&quot;a.jpg&quot; alt=&quot;工位全景&quot;&gt;&lt;/li&gt;
+        &lt;li class=&quot;cin-carousel-slide&quot;&gt;&lt;img src=&quot;b.jpg&quot; alt=&quot;会议室&quot;&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;button class=&quot;cin-carousel-nav&quot; data-carousel-prev aria-label=&quot;上一张&quot;&gt;&lt;/button&gt;
+    &lt;button class=&quot;cin-carousel-nav&quot; data-carousel-next aria-label=&quot;下一张&quot;&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-carousel-footer&quot;&gt;
+    &lt;div class=&quot;cin-carousel-dots&quot;&gt;&lt;/div&gt;
+    &lt;span class=&quot;cin-carousel-counter&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-carousel[data-carousel]</code></td>
+<td>根容器，初始化后挂 <code>data-carousel-ready</code>；补 <code>role=&quot;region&quot;</code>、<code>aria-roledescription=&quot;轮播&quot;</code>，<code>aria-label</code> 缺省为「图片轮播」</td>
+</tr>
+<tr>
+<td><code>.cin-carousel-viewport</code></td>
+<td>滚动视口，<code>overflow-x:auto</code> + <code>scroll-snap-type:x mandatory</code>，自动补 <code>tabindex=&quot;0&quot;</code>；不产生横向滚动的容器无法初始化</td>
+</tr>
+<tr>
+<td><code>.cin-carousel-track</code></td>
+<td>轨道，<code>display:flex</code>，间距跟随 <code>--cin-space-*</code>；无 JS 时直接拖动即可滑</td>
+</tr>
+<tr>
+<td><code>.cin-carousel-slide</code></td>
+<td>单张，<code>flex:0 0 100%</code> + <code>scroll-snap-align:start</code>；脚本补 <code>role=&quot;group&quot;</code> 与「2 / 4」序号标签</td>
+</tr>
+<tr>
+<td><code>data-per-view=&quot;2&quot;</code></td>
+<td>一屏并排张数，等宽多列；窄于 <code>--cin-bp-md</code> 自动回落单张，不用另写媒体查询</td>
+</tr>
+<tr>
+<td><code>data-loop</code></td>
+<td>循环：末页「下一张」绕回首张，两端按钮常亮不置灰</td>
+</tr>
+<tr>
+<td><code>data-autoplay=&quot;4000&quot;</code></td>
+<td>自动播放间隔（毫秒）。悬停、聚焦、按住拖动、页面切后台时挂起，移出或失焦后恢复；<code>prefers-reduced-motion: reduce</code> 下不启动，滚动改即时</td>
+</tr>
+<tr>
+<td><code>.cin-carousel-nav</code></td>
+<td>左右按钮（<code>data-carousel-prev</code> / <code>data-carousel-next</code>），非循环态到端点自动 <code>disabled</code>，窄屏隐藏改手势滑动</td>
+</tr>
+<tr>
+<td><code>.cin-carousel-dots</code></td>
+<td>指示点容器，脚本生成 <code>button.cin-carousel-dot</code>，当前页 <code>aria-current=&quot;true&quot;</code>；预置手工 dot 则沿用不重建</td>
+</tr>
+<tr>
+<td><code>.cin-carousel-counter</code></td>
+<td>页码「2 / 3」</td>
+</tr>
+<tr>
+<td><code>.cin-carousel-slide-body</code> / <code>.cin-carousel-caption</code></td>
+<td>卡片式内容与单张说明文字</td>
+</tr>
+</tbody>
+</table>
+<p><strong>按页而不是按张</strong>：并排多张时能停住的位置只有「张数 - 每页张数 + 1」个，指示点与计数器都按页走，否则最后一张的圆点永远点不亮。容器宽度变化后自动重测页数并按需重建指示点，索引越界会被夹取。</p>
+<p>键盘：视口聚焦后 <code>←</code> / <code>↑</code> 上一页，<code>→</code> / <code>↓</code> 下一页，<code>Home</code> 回首张，<code>End</code> 到末页，拦截在视口内不带动页面滚动。</p>
+<p>事件监听在 <code>.cin-carousel</code> 根节点：<code>cin:carouselslide</code>，<code>detail</code> 为 <code>{ index, pages, count, reason }</code>，<code>reason</code> 取 <code>button</code> / <code>dot</code> / <code>keyboard</code> / <code>autoplay</code> / <code>scroll</code> / <code>resize</code> / <code>init</code> / <code>api</code>。编程接口是 <code>Cinder.carousel(el)</code> 返回的控制器：<code>index</code> / <code>pages</code> / <code>count</code> / <code>perView</code> / <code>loop</code> / <code>paused</code> 只读，<code>next()</code> / <code>prev()</code> / <code>goTo(i)</code> 翻页并返回落定页号，<code>play()</code> / <code>pause()</code> / <code>resume()</code> / <code>stop()</code> 控自动播放，<code>refresh()</code> 重测布局，<code>destroy()</code> 解绑；入参可以是容器或容器内任意节点，动态插入调 <code>Cinder.initCarousels(root)</code>。</p>
+<p>没做的部分：不做无限克隆实现循环（靠页索引取模绕回）、不做缩略图条、不做多指缩放、不做纵向轮播；视频的播放与暂停交给业务层。</p>
+<h2 id="s-5-10-虚拟滚动数据表-virtualgrid">5.10 虚拟滚动数据表 VirtualGrid</h2>
+<p>万行级别的数据表不能整表入 DOM。<code>data-virtual</code> 把 tbody 变成固定窗口：只渲染视口内（加上下 overscan）的行，上下各放一个占位行把滚动高度撑到真实值，滚动时复用已有 <code>&lt;tr&gt;</code> 只改单元格内容。</p>
+<pre><code class="language-html">&lt;div class=&quot;cin-dg&quot; data-virtual data-height=&quot;520&quot; data-row-height=&quot;44&quot; data-overscan=&quot;8&quot;&gt;
+  &lt;div class=&quot;cin-dg-scroll&quot;&gt;
+    &lt;table&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th class=&quot;cin-dg-check&quot;&gt;&lt;input type=&quot;checkbox&quot; data-check-all aria-label=&quot;全选&quot;&gt;&lt;/th&gt;
+          &lt;th data-key=&quot;code&quot; data-sort=&quot;code&quot; data-sticky&gt;单号&lt;/th&gt;
+          &lt;th data-key=&quot;item&quot; data-sort=&quot;item&quot;&gt;物料&lt;/th&gt;
+          &lt;th data-key=&quot;qty&quot; data-align=&quot;end&quot; data-sort=&quot;qty&quot;&gt;数量&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;&lt;!-- 可留静态行作无 JS 兜底，初始化时被读成初始数据 --&gt;&lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>结构 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-dg[data-virtual]</code></td>
+<td>根容器，初始化后挂 <code>data-virtual-ready</code>；必须同时具备 <code>table</code> 与 <code>tbody</code>，否则跳过</td>
+</tr>
+<tr>
+<td><code>.cin-dg-scroll</code></td>
+<td>滚动容器，纵向 <code>overflow:auto</code>，高度由 <code>data-height</code> 或 <code>--cin-dg-vheight</code> 给，缺省 480px</td>
+</tr>
+<tr>
+<td><code>data-row-height</code></td>
+<td>行长（px）。不给则用探针量 <code>--cin-dg-row-h</code>；量到的值会写回 <code>--cin-dg-row-h</code>，业务不必再算</td>
+</tr>
+<tr>
+<td><code>data-height</code></td>
+<td>滚动视口高度（px），写入 <code>--cin-dg-vheight</code></td>
+</tr>
+<tr>
+<td><code>data-overscan=&quot;8&quot;</code></td>
+<td>视口上下各多渲染的行数，快速滚动时的白色缓冲带；缺省 8</td>
+</tr>
+<tr>
+<td><code>th[data-sort]</code></td>
+<td>可排序列，首点 <code>ascending</code>、再点 <code>descending</code>；<code>data-key</code> 缺省取列序号</td>
+</tr>
+<tr>
+<td><code>th[data-sticky]</code> / <code>td[data-sticky]</code></td>
+<td>首列固定，横向滚动时贴在左侧</td>
+</tr>
+<tr>
+<td><code>.cin-dg-check</code> + <code>data-check</code> / <code>data-check-all</code></td>
+<td>行选择与全选，表头自动半选态；全选作用于全部数据而非窗口内的几十行</td>
+</tr>
+</tbody>
+</table>
+<p><strong>滚动高度的口径</strong>：表头（sticky thead）仍在文档流里占位，所以 <code>scrollHeight = 表头高 + 总行数 × 行高</code>。窗口起点按 <code>scrollTop - 表头高</code> 反算，<code>scrollToIndex</code> 的落点同样加表头高——三者口径必须一致，否则滚到底会差半个屏。</p>
+<p><strong>行高必须严格等于声明值</strong>：占位行按 <code>start × rowH</code> 计算，只要真实行比声明值高几像素，滚到底就会差出几百像素。虚拟模式下因此把 <code>.cin-check</code> 的 44px 触控热区压回 <code>min-height: 0</code>，行内控件统一 <code>vertical-align: middle</code> 并限高 <code>--_vrow-h - 8px</code>。业务自定义单元格如果放了更高的控件（多行文本、头像、按钮组），要么改 <code>data-row-height</code>，要么在虚拟模式下裁掉。</p>
+<p><strong>与 datagrid 的分工</strong>：同一个 <code>.cin-dg</code> 上，<code>datagrid.js</code> 只负责列优先级挤压（窄屏隐藏低优先级列），一旦带 <code>data-virtual</code> 就跳过选择与排序绑定，避免同一个 <code>th</code> 被两套逻辑各处理一次——否则一次点击会连翻两次方向，首点直接变降序。</p>
+<p>事件都从根节点冒泡：<code>cin:virtualrange</code>（<code>{ start, end, total }</code>）、<code>cin:rowclick</code>（行数据 + <code>index</code>）、<code>cin:selection</code>（<code>{ count, indexes, values }</code>）、<code>cin:sort</code>（<code>{ key, dir, column }</code>）。</p>
+<p>编程接口是 <code>Cinder.virtualGrid(el)</code> 返回的控制器：<code>total</code> / <code>rowHeight</code> / <code>range</code> / <code>scroller</code> 只读，<code>setRows(list)</code> 整表替换并回顶，<code>appendRows(list)</code> 追加且不跳位，<code>updateRow(i, row)</code> 就地改单行，<code>scrollToIndex(i, { align })</code> 定位（<code>start</code> / <code>center</code> / <code>end</code>），<code>select(indexes)</code> / <code>selected()</code> / <code>clearSelection()</code> 管选择，<code>refresh()</code> 在行高或列结构变化后重测，<code>destroy()</code> 解绑。动态插入调 <code>Cinder.initVirtualGrids(root)</code>，重复调用安全。</p>
+<p><strong>无 JS 兜底</strong>：脚本没跑时 <code>data-virtual</code> 不产生任何视觉变化，静态行照常可读，也不会多出占位行——验收里专门盯这条，避免&quot;脚本挂了整张表空白&quot;。</p>
+<p>没做的部分：不支持不定高行（多行文本需自己定高）、不做横向虚拟化（列数在几十以内）、不做分组折叠行、不做单元格编辑；十万行以上建议配 <code>scrollToIndex</code> 加分页，窗口渲染解决的是 DOM 数量，不是内存。</p>
+<h2 id="s-5-11-复制-分栏-验证码">5.11 复制 / 分栏 / 验证码</h2>
+<p>三个都不需要额外的初始化调用：脚本加载后自动绑定，动态插入的节点再调一次 <code>initXxx(root)</code> 即可，重复调用安全。</p>
+<p><strong>复制 Copy</strong>。按钮自带文案，脚本不写死中文：</p>
+<pre><code class="language-html">&lt;button class=&quot;cin-copy&quot; type=&quot;button&quot; data-copy=&quot;#orderNo&quot; data-label=&quot;复制单号&quot; data-copied-label=&quot;已复制&quot;&gt;
+  &lt;span data-copy-label&gt;复制单号&lt;/span&gt;
+&lt;/button&gt;
+&lt;span id=&quot;orderNo&quot;&gt;SO-20261101-0042&lt;/span&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-value</code></td>
+<td>字面量文本，优先级最高</td>
+</tr>
+<tr>
+<td><code>data-copy</code></td>
+<td>CSS 选择器，命中后取 <code>value</code>（表单控件）或 <code>textContent</code></td>
+</tr>
+<tr>
+<td><code>data-label</code> / <code>data-copied-label</code> / <code>data-error-label</code></td>
+<td>常态 / 成功 / 失败文案，缺省&quot;已复制&quot;&quot;复制失败&quot;</td>
+</tr>
+<tr>
+<td><code>data-state</code></td>
+<td>脚本写入：<code>copied</code> / <code>failed</code>，同时挂 <code>data-copied</code>，1.6 秒后回落</td>
+</tr>
+</tbody>
+</table>
+<p>写剪贴板优先 <code>navigator.clipboard</code>，非安全上下文（<code>file://</code>）自动退回隐藏 textarea + <code>execCommand</code>——所以示例页直接双击打开也能复制。事件 <code>cin:copy</code> 从按钮冒泡，detail 是 <code>{ text, ok }</code>。编程侧 <code>Cinder.copyText(text)</code> 返回 Promise<boolean>。</p>
+<p><strong>分栏 Split</strong>。尺寸只用一个变量 <code>--_a</code>，拖动、键盘、复位改的都是它：</p>
+<pre><code class="language-html">&lt;div class=&quot;cin-split&quot; data-split data-min=&quot;15&quot; data-max=&quot;85&quot; data-persist=&quot;inv-list&quot;&gt;
+  &lt;div class=&quot;cin-split-pane&quot;&gt;左&lt;/div&gt;
+  &lt;div class=&quot;cin-split-bar&quot;&gt;&lt;span class=&quot;cin-split-grip&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;cin-split-pane&quot;&gt;右&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-min</code> / <code>data-max</code></td>
+<td>左栏百分比上下限，缺省 12 / 88，脚本夹紧到 0-50 与 50-100 之间</td>
+</tr>
+<tr>
+<td><code>data-orientation=&quot;vertical&quot;</code></td>
+<td>上下分栏，改的是高度</td>
+</tr>
+<tr>
+<td><code>data-persist</code></td>
+<td>localStorage 键名，刷新后恢复用户拖过的比例</td>
+</tr>
+<tr>
+<td><code>data-step</code></td>
+<td>方向键微调步长（百分比），缺省 2，按住 Shift 变 5</td>
+</tr>
+<tr>
+<td><code>data-label</code></td>
+<td>分隔条 aria-label，缺省&quot;调整分栏宽度&quot;</td>
+</tr>
+</tbody>
+</table>
+<p>交互：拖拽（含越界夹紧）、方向键微调、双击分隔条复位到 50%、<code>aria-valuenow</code> 同步。事件 <code>cin:splitchange</code>（<code>{ percent, size?, collapsed? }</code>，落定时一次；<code>size</code> 仅 <code>setSplitSize</code> 带，<code>collapsed</code> 仅收起展开带）与 <code>cin:splitresize</code>（拖动中高频）。收起用 <code>Cinder.toggleSplitPanel(el, &quot;a&quot; | &quot;b&quot;)</code>，返回操作后的收起状态；<code>Cinder.setSplitSize(el, percent)</code> 返回实际像素宽度。</p>
+<p><strong>验证码 OTP</strong>。<code>data-charset</code> 决定过滤字符集，粘贴整串自动分配：</p>
+<pre><code class="language-html">&lt;div class=&quot;cin-otp&quot; data-otp data-length=&quot;6&quot; data-charset=&quot;numeric&quot;&gt;
+  &lt;input class=&quot;cin-otp-input&quot; inputmode=&quot;numeric&quot; maxlength=&quot;1&quot; aria-label=&quot;验证码第 1 位&quot;&gt;
+  &lt;!-- 其余 5 格 --&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-charset</code></td>
+<td><code>numeric</code>（缺省）或 <code>alnum</code>，非该集合的输入被丢弃</td>
+</tr>
+<tr>
+<td><code>data-length</code></td>
+<td>期望格数，缺省取 <code>.cin-otp-input</code> 的数量</td>
+</tr>
+</tbody>
+</table>
+<p>逐格输入自动前进；退格分两步——当前格有值先删当前格且焦点不动，当前格已空才清上一格并把焦点移回。填满时派发 <code>cin:otpcomplete</code>，每次从残缺变填满只派一次；每格变化派 <code>cin:otpchange</code>，detail 是 <code>{ value }</code>（当前整串）。编程侧 <code>Cinder.setOTP(el, &quot;246810&quot;)</code> 按字符集过滤后逐格写入，<code>Cinder.getOTP(el)</code> 读整串（空格跳过）。</p>
+<p><strong>无 JS 兜底</strong>：三个组件在脚本缺席时都退化为普通控件——复制按钮点了没反应但文案还在，分栏按 CSS 里给的默认比例静态呈现且可滚动，验证码就是 6 个普通输入框可以手输。</p>
+<h2 id="s-5-12-格式化-markdown-二维码">5.12 格式化 / Markdown / 二维码</h2>
+<p><strong>格式化 Format</strong> 是四个纯函数加一个声明式渲染：</p>
+<pre><code class="language-js">Cinder.formatNumber(1284930.5);                                 // &quot;1,284,930.5&quot;
+Cinder.formatNumber(1284930.5, { locale: &quot;zh-CN&quot;, digits: 2 }); // &quot;1,284,930.50&quot;
+Cinder.formatNumber(1284930.5, { style: &quot;currency&quot;, currency: &quot;CNY&quot; }); // &quot;¥1,284,930.5&quot;
+Cinder.formatBytes(1536, { binary: true });                     // &quot;1.5 KB&quot;
+Cinder.formatDate(&quot;2026-11-01&quot;, { format: &quot;iso&quot; });             // &quot;2026-11-01&quot;
+Cinder.relativeTime(Date.now() - 90_000, { locale: &quot;zh-CN&quot; });  // &quot;1分钟前&quot;
+</code></pre>
+<p>非有限数字一律返回 <code>&quot;—&quot;</code>，不抛错、不返回 <code>NaN</code>——表格里用它最省事。<code>formatBytes</code> 默认 1000 进制，<code>binary: true</code> 按 1024 计算，单位标签统一写 KB / MB / GB；<code>relativeTime</code> 可用 <code>base</code> 指定参照时刻，便于测试和&quot;截至某日&quot;的展示。</p>
+<p>声明式渲染认 <code>&lt;time class=&quot;cin-time&quot; datetime=&quot;…&quot;&gt;</code> 或 <code>[data-knowndate]</code>：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>datetime</code> / <code>data-time</code></td>
+<td>时间源，ISO 字符串或时间戳</td>
+</tr>
+<tr>
+<td><code>data-format</code></td>
+<td><code>relative</code>（缺省）/ <code>absolute</code> / <code>both</code></td>
+</tr>
+<tr>
+<td><code>data-locale</code></td>
+<td>语言，缺省跟页面</td>
+</tr>
+<tr>
+<td><code>data-abs-format</code></td>
+<td><code>both</code> 模式下绝对时间那半边的格式，缺省 <code>datetime</code></td>
+</tr>
+</tbody>
+</table>
+<p>渲染后写 <code>textContent</code> 与 <code>title</code>，注册进一个全局 ticker，每 60 秒重刷一次相对时间——不是每个节点各起一个定时器。</p>
+<p><strong>Markdown</strong>。源文本放进容器即可，脚本整体转义后再解析，链接只放行 <code>http(s)</code> / <code>mailto</code> / <code>tel</code> / 相对地址：</p>
+<pre><code class="language-html">&lt;div class=&quot;cin-markdown&quot; data-markdown&gt;
+  ## 标题
+  - 支持列表、**强调**、`代码`、表格
+&lt;/div&gt;
+</code></pre>
+<p>也可以写 <code>&lt;script type=&quot;text/markdown&quot;&gt;</code> 避开 HTML 转义。渲染完成的容器挂 <code>data-markdown-ready</code>，需要替换指定节点时给内部元素加 <code>data-markdown-target</code>。<code>Cinder.renderMarkdown(src)</code> 直接返回 HTML 字符串，<code>.cin-markdown</code> 样式负责排版。</p>
+<p><strong>二维码 QR</strong>。内联 SVG，模块色走 <code>currentColor</code>，跟随文字颜色（含暗色模式），不需要图片资源：</p>
+<pre><code class="language-html">&lt;div class=&quot;cin-qr&quot; data-qr data-value=&quot;https://example.com&quot; data-ecc=&quot;M&quot; data-version=&quot;0&quot; data-quiet=&quot;4&quot; data-label=&quot;扫码打开&quot;&gt;&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-value</code></td>
+<td>内容，缺省取元素文本</td>
+</tr>
+<tr>
+<td><code>data-ecc</code></td>
+<td>纠错级 <code>L</code> / <code>M</code>（缺省）/ <code>Q</code> / <code>H</code></td>
+</tr>
+<tr>
+<td><code>data-version</code></td>
+<td>1-10，<code>0</code> 或不写按内容自动选最小可用版本</td>
+</tr>
+<tr>
+<td><code>data-quiet</code></td>
+<td>静区模块数，缺省 4</td>
+</tr>
+<tr>
+<td><code>data-label</code></td>
+<td>SVG 的 <code>aria-label</code>，缺省用内容</td>
+</tr>
+<tr>
+<td><code>data-error-text</code></td>
+<td>内容超出容量时的兜底文案，缺省&quot;内容过长，无法生成&quot;</td>
+</tr>
+</tbody>
+</table>
+<p><code>Cinder.encodeQR(text, options)</code> 返回 <code>{ version, size, modules, ecc }</code>，<code>Cinder.renderQRCode(text, options)</code> 直接给 SVG 字符串。版本上限 10，容量按 UTF-8 字节算（v10-L 约 271 字节，中文约 90 字），超出返回 <code>null</code> 或渲染兜底文案，不会画出错位的图。</p>
+<h2 id="s-5-13-时间选择器-timepicker">5.13 时间选择器 TimePicker</h2>
+<p>一天之内挑一个时刻，手输与面板两条路都通；无脚本时 input 仍可手敲 <code>HH:mm</code> 提交。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-timepicker</code></td>
+<td>容器，挂 <code>data-open</code> 表示面板展开，<code>data-invalid</code> 表示手输非法或越界</td>
+</tr>
+<tr>
+<td><code>.cin-timepicker-fields</code></td>
+<td>输入框组外壳，<code>focus-within</code> 出焦点环</td>
+</tr>
+<tr>
+<td><code>.cin-timepicker-field</code></td>
+<td>单框外壳，内含原生 <code>&lt;input data-time-field&gt;</code></td>
+</tr>
+<tr>
+<td><code>.cin-timepicker-toggle</code></td>
+<td>时钟按钮，三角用 <code>::before</code> 画，不引图标</td>
+</tr>
+<tr>
+<td><code>.cin-timepicker-pop</code></td>
+<td>面板，<code>position: fixed</code>，由脚本夹进视口；分两列 <code>role=&quot;listbox&quot;</code></td>
+</tr>
+<tr>
+<td><code>.cin-timepicker-opt</code></td>
+<td>时 / 分选项，维护 <code>aria-selected</code>，越界项 <code>disabled</code></td>
+</tr>
+<tr>
+<td><code>.cin-timepicker-foot</code></td>
+<td>底部「现在 / 清除」，文案可用 <code>data-label-*</code> 覆盖</td>
+</tr>
+<tr>
+<td><code>data-minute-step</code></td>
+<td>分钟粒度，默认 5，上限 30</td>
+</tr>
+<tr>
+<td><code>data-min</code> / <code>data-max</code></td>
+<td>一天内的上下界（<code>HH:mm</code>），越界不可选、API 返回 <code>null</code></td>
+</tr>
+<tr>
+<td><code>data-size</code></td>
+<td><code>sm</code> 收紧高度与字号</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-timepicker&quot; data-timepicker data-min=&quot;08:00&quot; data-max=&quot;18:00&quot;
+     data-minute-step=&quot;15&quot; data-value=&quot;10:15&quot;&gt;
+  &lt;div class=&quot;cin-timepicker-fields&quot;&gt;
+    &lt;span class=&quot;cin-timepicker-field&quot;&gt;&lt;input data-time-field aria-label=&quot;营业开始&quot;&gt;&lt;/span&gt;
+    &lt;button class=&quot;cin-timepicker-toggle&quot; type=&quot;button&quot; aria-label=&quot;打开时间面板&quot;&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>脚本侧：<code>Cinder.initTimePickers(scope)</code> 自动初始化，<code>Cinder.setTimePicker(el, &quot;14:45&quot;)</code> 写值并返回实际值（越界返回 <code>null</code>），<code>Cinder.timePicker(el)</code> 取 <code>{ open, close, value, set }</code>。事件：<code>cin:timechange{value, reason}</code>、<code>cin:timeopen</code>、<code>cin:timeclose{reason}</code>。</p>
+<hr>
+<h2 id="s-5-14-级联选择-cascader">5.14 级联选择 Cascader</h2>
+<p>一行输入框 + 逐列下钻面板，叶子落定后写成斜杠路径（<code>zj/hz/xh</code>）。手输「浙江 / 杭州 / 西湖」同样能落定，脚本没跑也不丢值。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-cascader</code></td>
+<td>容器，挂 <code>data-open</code> 表示面板展开，<code>data-invalid</code> 表示手输不可解析</td>
+</tr>
+<tr>
+<td><code>.cin-cascader-fields</code></td>
+<td>输入框 + 箭头按钮组外壳，<code>focus-within</code> 出焦点环</td>
+</tr>
+<tr>
+<td><code>.cin-cascader-field</code></td>
+<td>单框外壳，内含原生 <code>&lt;input data-cascader-field&gt;</code></td>
+</tr>
+<tr>
+<td><code>.cin-cascader-toggle</code></td>
+<td>下钻箭头，<code>::before</code> 画角，不引图标</td>
+</tr>
+<tr>
+<td><code>.cin-cascader-pop</code></td>
+<td>面板，<code>position: fixed</code> 由脚本夹进视口；每级一列 <code>role=&quot;listbox&quot;</code></td>
+</tr>
+<tr>
+<td><code>.cin-cascader-col</code></td>
+<td>单级列，带 <code>data-depth</code></td>
+</tr>
+<tr>
+<td><code>.cin-cascader-opt</code></td>
+<td>选项，维护 <code>aria-selected</code>，可下钻项带 <code>aria-expanded</code>，禁用项 <code>disabled</code></td>
+</tr>
+<tr>
+<td><code>.cin-cascader-empty</code></td>
+<td>该级空态「无可选项」</td>
+</tr>
+<tr>
+<td><code>data-options</code></td>
+<td>层级树 JSON：<code>[{&quot;value&quot;,&quot;label&quot;,&quot;children&quot;:[…],&quot;disabled&quot;}]</code></td>
+</tr>
+<tr>
+<td><code>data-label</code></td>
+<td>面板无障碍名称</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-cascader&quot; data-cascader data-value=&quot;zj/hz/xh&quot; data-label=&quot;所在地&quot;
+     data-options='[{&quot;value&quot;:&quot;zj&quot;,&quot;label&quot;:&quot;浙江&quot;,&quot;children&quot;:[{&quot;value&quot;:&quot;hz&quot;,&quot;label&quot;:&quot;杭州&quot;,&quot;children&quot;:[{&quot;value&quot;:&quot;xh&quot;,&quot;label&quot;:&quot;西湖区&quot;}]}]}]'&gt;
+  &lt;div class=&quot;cin-cascader-fields&quot;&gt;
+    &lt;span class=&quot;cin-cascader-field&quot;&gt;&lt;input data-cascader-field aria-label=&quot;所在地&quot;&gt;&lt;/span&gt;
+    &lt;button class=&quot;cin-cascader-toggle&quot; type=&quot;button&quot; aria-label=&quot;打开层级面板&quot;&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>脚本侧：<code>Cinder.initCascaders(scope)</code> 自动初始化，<code>Cinder.setCascader(el, &quot;js/nj/gl&quot;)</code> 写值并返回斜杠串，<code>Cinder.setCascaderOptions(el, tree)</code> 换树，<code>Cinder.cascader(el)</code> 取 <code>{ open, close, value, labels, set, setOptions }</code>。事件：<code>cin:cascaderchange{value, labels, reason}</code>、<code>cin:cascaderopen</code>、<code>cin:cascaderclose{reason}</code>、<code>cin:cascaderselect{value, labels}</code>。</p>
+<hr>
+<h2 id="s-5-15-穿梭框-transfer">5.15 穿梭框 Transfer</h2>
+<p>两列候选池之间搬节点，值取右列（逗号串）。搬运保留原 DOM 节点，不重建；无脚本时两列复选框照常随表单提交。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-transfer</code></td>
+<td>容器，<code>data-value</code> 为已选值，<code>data-disabled</code> 整体禁用</td>
+</tr>
+<tr>
+<td><code>.cin-transfer-panel</code></td>
+<td>单列外壳，头 + 列表</td>
+</tr>
+<tr>
+<td><code>.cin-transfer-head</code> / <code>-title</code> / <code>-count</code></td>
+<td>列头、标题、<code>已勾/总数</code> 计数</td>
+</tr>
+<tr>
+<td><code>.cin-transfer-list</code></td>
+<td>列表区，`data-side=&quot;source&quot;</td>
+</tr>
+<tr>
+<td><code>.cin-transfer-item</code></td>
+<td>条目，内含原生 <code>&lt;input type=&quot;checkbox&quot;&gt;</code>，勾选态加 <code>data-checked</code></td>
+</tr>
+<tr>
+<td><code>.cin-transfer-actions</code> / <code>-move</code></td>
+<td>中间按钮列，`data-transfer-to=&quot;target&quot;</td>
+</tr>
+<tr>
+<td><code>.cin-transfer-empty</code></td>
+<td>空态占位「全部已移入 / 尚未选择」</td>
+</tr>
+<tr>
+<td><code>data-size</code></td>
+<td><code>sm</code> 收紧高度与字号</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-transfer&quot; data-transfer data-value=&quot;order,stock&quot;&gt;
+  &lt;div class=&quot;cin-transfer-panel&quot;&gt;
+    &lt;header class=&quot;cin-transfer-head&quot;&gt;&lt;span class=&quot;cin-transfer-title&quot;&gt;待选&lt;/span&gt;&lt;span class=&quot;cin-transfer-count&quot;&gt;&lt;/span&gt;&lt;/header&gt;
+    &lt;div class=&quot;cin-transfer-list&quot; data-side=&quot;source&quot; role=&quot;group&quot; aria-label=&quot;待选模块&quot;&gt;
+      &lt;label class=&quot;cin-transfer-item&quot; data-value=&quot;order&quot;&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;span&gt;订单管理&lt;/span&gt;&lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-transfer-actions&quot;&gt;
+    &lt;button class=&quot;cin-transfer-move&quot; type=&quot;button&quot; data-transfer-to=&quot;target&quot; aria-label=&quot;移入已选&quot;&gt;→&lt;/button&gt;
+    &lt;button class=&quot;cin-transfer-move&quot; type=&quot;button&quot; data-transfer-to=&quot;source&quot; aria-label=&quot;移回待选&quot;&gt;←&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-transfer-panel&quot;&gt;
+    &lt;header class=&quot;cin-transfer-head&quot;&gt;&lt;span class=&quot;cin-transfer-title&quot;&gt;已选&lt;/span&gt;&lt;span class=&quot;cin-transfer-count&quot;&gt;&lt;/span&gt;&lt;/header&gt;
+    &lt;div class=&quot;cin-transfer-list&quot; data-side=&quot;target&quot; role=&quot;group&quot; aria-label=&quot;已选模块&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>脚本侧：<code>Cinder.initTransfers(scope)</code> 自动初始化，<code>Cinder.setTransfer(el, [&quot;finance&quot;,&quot;member&quot;])</code> 整批重排并返回最终值，<code>Cinder.transfer(el)</code> 取 <code>{ value, source, target, set, move }</code>。事件：<code>cin:transferchange{value, direction}</code>。</p>
+<hr>
+<h2 id="s-5-16-通告条-noticebar">5.16 通告条 NoticeBar</h2>
+<p>一整行讲一件事，四类语义色，可关闭、可带一个动作入口。长文本默认单行省略，<code>data-marquee</code> 转跑马灯（hover/focus 暂停，<code>reduce</code> 下不启动）。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-notice-bar</code></td>
+<td>容器，默认 <code>role=&quot;status&quot;</code>；<code>data-type</code> 取 <code>info/success/warning/danger</code></td>
+</tr>
+<tr>
+<td><code>.cin-notice-bar-icon</code></td>
+<td>语义图标位，颜色随 <code>data-type</code> 走，<code>aria-hidden</code></td>
+</tr>
+<tr>
+<td><code>.cin-notice-bar-content</code></td>
+<td>文案区，单行省略；<code>[data-notice-content]</code> 供脚本替换</td>
+</tr>
+<tr>
+<td><code>.cin-notice-bar-action</code></td>
+<td>动作入口「查看 / 去处理」，用强调色，不抢语义色</td>
+</tr>
+<tr>
+<td><code>.cin-notice-bar-close</code></td>
+<td>关闭按钮，必须自带 <code>aria-label</code></td>
+</tr>
+<tr>
+<td><code>data-closable</code></td>
+<td>显示关闭入口；<code>data-closable=&quot;remove&quot;</code> 用 <code>data-hidden</code> 隐藏而非 <code>hidden</code></td>
+</tr>
+<tr>
+<td><code>data-marquee</code></td>
+<td>跑马灯模式</td>
+</tr>
+<tr>
+<td><code>data-size</code></td>
+<td><code>sm</code> 收紧内边距与字号</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-notice-bar&quot; data-notice-bar data-type=&quot;warning&quot; data-closable role=&quot;status&quot;&gt;
+  &lt;span class=&quot;cin-notice-bar-icon&quot; aria-hidden=&quot;true&quot;&gt;!&lt;/span&gt;
+  &lt;div class=&quot;cin-notice-bar-content&quot; data-notice-content&gt;有 3 个 SKU 库存低于安全线，建议今日补货。&lt;/div&gt;
+  &lt;button class=&quot;cin-notice-bar-action&quot; type=&quot;button&quot;&gt;去补货&lt;/button&gt;
+  &lt;button class=&quot;cin-notice-bar-close&quot; type=&quot;button&quot; aria-label=&quot;关闭&quot;&gt;&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+<p>脚本侧：<code>Cinder.initNoticeBars(scope)</code> 自动初始化，<code>Cinder.setNoticeBarText(el, text)</code> 换文案，<code>Cinder.noticeBar(el)</code> 取 <code>{ show, hide, setText, closed }</code>。事件：<code>cin:noticeclose{reason}</code>、<code>cin:noticeopen</code>。</p>
+<hr>
+<h2 id="s-5-17-数字输入-inputnumber">5.17 数字输入 InputNumber</h2>
+<p>步进器：按钮步进、长按连加、到边界自动禁用、手输夹取。值一律走 <code>data-value</code>，输入框只是视图。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-input-number</code></td>
+<td>容器，<code>data-value</code> 是唯一值来源，<code>data-min</code> / <code>data-max</code> / <code>data-step</code> 定边界与步长</td>
+</tr>
+<tr>
+<td><code>.cin-input-number-step</code></td>
+<td>步进按钮，<code>data-step-dir=&quot;1&quot;</code> / <code>&quot;-1&quot;</code>，到边界自动 <code>disabled</code></td>
+</tr>
+<tr>
+<td><code>.cin-input-number-field</code></td>
+<td>输入框，带 <code>aria-label</code>；有脚本时用原生 <code>type=&quot;number&quot;</code>，无脚本可直接手输</td>
+</tr>
+<tr>
+<td><code>data-invalid</code> + <code>aria-invalid=&quot;true&quot;</code></td>
+<td>空值或非数字时的非法态，边框与文字双表达</td>
+</tr>
+<tr>
+<td><code>data-disabled</code></td>
+<td>整组禁用，降透明且不可点</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-input-number&quot; data-input-number data-value=&quot;3&quot; data-min=&quot;0&quot; data-max=&quot;10&quot; data-step=&quot;1&quot;&gt;
+  &lt;button class=&quot;cin-input-number-step&quot; type=&quot;button&quot; data-step-dir=&quot;-1&quot; aria-label=&quot;减少&quot;&gt;−&lt;/button&gt;
+  &lt;input class=&quot;cin-input-number-field&quot; type=&quot;number&quot; aria-label=&quot;数量&quot;&gt;
+  &lt;button class=&quot;cin-input-number-step&quot; type=&quot;button&quot; data-step-dir=&quot;1&quot; aria-label=&quot;增加&quot;&gt;+&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+<p>脚本侧：<code>Cinder.initInputNumbers(scope)</code> 自动初始化，<code>Cinder.setInputNumber(el, 12)</code> 赋值并夹取，<code>Cinder.inputNumber(el)</code> 取 <code>{ value, min, max, step, stepBy(dir), set }</code>。事件：<code>cin:numberchange{value, previous, reason}</code>，<code>reason</code> 取 <code>step/input/api</code>。按住按钮 500ms 后每 80ms 步进一次；<code>step=0.1</code> 连加不产生浮点漂移；值未变不抛事件。</p>
+<hr>
+<h2 id="s-5-18-分段控件-segmented">5.18 分段控件 Segmented</h2>
+<p>2–5 个互斥选项的段内切换。骨架是原生 radio，选中态纯 CSS，脚本只补 <code>data-value</code>、方向键与事件。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-segmented</code></td>
+<td>容器，<code>role=&quot;radiogroup&quot;</code>（缺则脚本补），<code>data-value</code> 同步当前值</td>
+</tr>
+<tr>
+<td><code>.cin-segmented-item</code></td>
+<td>一项，内包 <code>&lt;input type=&quot;radio&quot; name=&quot;...&quot;&gt;</code> 与 <code>.cin-segmented-label</code></td>
+</tr>
+<tr>
+<td><code>.cin-segmented-label</code></td>
+<td>可见标签，选中态与焦点环都画在它身上</td>
+</tr>
+<tr>
+<td><code>data-block</code></td>
+<td>撑满一行且各项等宽</td>
+</tr>
+<tr>
+<td><code>data-size</code></td>
+<td><code>sm</code> / <code>lg</code> 切换高度；<code>pointer: coarse</code> 下自动升到触摸最小尺寸</td>
+</tr>
+<tr>
+<td><code>data-disabled</code></td>
+<td>整组禁用；单项禁用用 <code>input[disabled]</code>，键盘循环会跳过</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-segmented&quot; data-segmented data-value=&quot;week&quot; role=&quot;radiogroup&quot; aria-label=&quot;统计粒度&quot;&gt;
+  &lt;label class=&quot;cin-segmented-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;granularity&quot; value=&quot;day&quot;&gt;&lt;span class=&quot;cin-segmented-label&quot;&gt;日&lt;/span&gt;&lt;/label&gt;
+  &lt;label class=&quot;cin-segmented-item&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;granularity&quot; value=&quot;week&quot; checked&gt;&lt;span class=&quot;cin-segmented-label&quot;&gt;周&lt;/span&gt;&lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+<p>脚本侧：<code>Cinder.initSegmenteds(scope)</code> 自动初始化，<code>Cinder.setSegmented(el, &quot;month&quot;)</code> 选项并返回最终值，<code>Cinder.segmented(el)</code> 取 <code>{ value, set }</code>。事件：<code>cin:segmentchange{value, previous, reason}</code>，<code>reason</code> 取 <code>click/keyboard/api</code>。<code>data-value</code> 指向不存在的选项时保持原选中，不凭空造值。</p>
+<hr>
+<h2 id="s-5-19-描述列表-descriptions">5.19 描述列表 Descriptions</h2>
+<p>详情页的「键 — 值」网格。纯 CSS 自适应列数，零脚本，无 JS 也是完整的 <code>&lt;dl&gt;</code>。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-descriptions</code></td>
+<td>容器，<code>&lt;dl&gt;</code>；`data-cols=&quot;1</td>
+</tr>
+<tr>
+<td><code>.cin-descriptions-item</code></td>
+<td>一组 <code>&lt;dt&gt;</code> + <code>&lt;dd&gt;</code>，作为 <code>&lt;dl&gt;</code> 的 div 分组容器</td>
+</tr>
+<tr>
+<td><code>data-fit</code></td>
+<td>按可用宽度 <code>auto-fit + minmax</code> 自动排，不写死列数</td>
+</tr>
+<tr>
+<td><code>data-layout=&quot;inline&quot;</code></td>
+<td>标签与值同行（冒号式），每项独占一行</td>
+</tr>
+<tr>
+<td>`data-span=&quot;2</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>data-full</code></td>
+<td>整行独占（长文本、备注）</td>
+</tr>
+<tr>
+<td><code>data-mono</code></td>
+<td>该值用等宽字体（单号、编码、金额）</td>
+</tr>
+<tr>
+<td><code>data-bordered</code> / <code>data-density=&quot;compact&quot;</code></td>
+<td>带分隔线的表格化外观 / 收紧行高</td>
+</tr>
+<tr>
+<td><code>.cin-descriptions-empty</code></td>
+<td>空态占满整行，用 <code>&lt;div&gt;</code>（<code>dl</code> 只允许 dt/dd/div）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;dl class=&quot;cin-descriptions&quot; data-cols=&quot;3&quot;&gt;
+  &lt;div class=&quot;cin-descriptions-item&quot;&gt;&lt;dt&gt;单号&lt;/dt&gt;&lt;dd data-mono&gt;SO-20261101-001&lt;/dd&gt;&lt;/div&gt;
+  &lt;div class=&quot;cin-descriptions-item&quot;&gt;&lt;dt&gt;客户&lt;/dt&gt;&lt;dd&gt;云栖智造&lt;/dd&gt;&lt;/div&gt;
+  &lt;div class=&quot;cin-descriptions-item&quot;&gt;&lt;dt&gt;下单时间&lt;/dt&gt;&lt;dd&gt;2026-11-01 09:24&lt;/dd&gt;&lt;/div&gt;
+  &lt;div class=&quot;cin-descriptions-item&quot; data-full&gt;&lt;dt&gt;备注&lt;/dt&gt;&lt;dd&gt;分两批发货，第二批等质检。&lt;/dd&gt;&lt;/div&gt;
+&lt;/dl&gt;
+</code></pre>
+<p>≤900px 降为 2 列、≤600px 降为 1 列，跨列声明同步收敛；长值 <code>overflow-wrap: anywhere</code>，不撑破栅格。</p>
+<hr>
+<h2 id="s-5-20-头像-avatar">5.20 头像 Avatar</h2>
+<p>图片、文字、占位三态的统一头像单元。零脚本，状态点与叠加组全靠 CSS。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-avatar</code></td>
+<td>容器，尺寸由 <code>--cin-avatar-size</code> 驱动，默认 <code>md</code></td>
+</tr>
+<tr>
+<td>`data-size=&quot;xs</td>
+<td>sm</td>
+</tr>
+<tr>
+<td><code>data-shape=&quot;square&quot;</code></td>
+<td>小圆角方形（应用图标、设备图标），缺省全圆</td>
+</tr>
+<tr>
+<td><code>.cin-avatar-img</code></td>
+<td>图片层，<code>object-fit: cover</code>，不变形</td>
+</tr>
+<tr>
+<td><code>.cin-avatar-text</code></td>
+<td>文字层，首字/缩写，字号随尺寸比例缩放</td>
+</tr>
+<tr>
+<td>`data-tone=&quot;accent</td>
+<td>success</td>
+</tr>
+<tr>
+<td><code>.cin-avatar-status</code> + <code>data-status</code></td>
+<td>右下角状态点，<code>online</code> / <code>busy</code> / <code>away</code> / <code>offline</code></td>
+</tr>
+<tr>
+<td><code>.cin-avatar-group</code></td>
+<td>叠加组，负向重叠 + 描边，非粗指针悬停时展开</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;span class=&quot;cin-avatar&quot; data-tone=&quot;accent&quot; aria-label=&quot;林洋，在线&quot;&gt;
+  &lt;span class=&quot;cin-avatar-text&quot; aria-hidden=&quot;true&quot;&gt;林&lt;/span&gt;
+  &lt;span class=&quot;cin-avatar-status&quot; data-status=&quot;online&quot; aria-label=&quot;在线&quot;&gt;&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;div class=&quot;cin-avatar-group&quot; role=&quot;list&quot; aria-label=&quot;项目成员 4 人&quot;&gt;
+  &lt;span class=&quot;cin-avatar&quot; role=&quot;listitem&quot; aria-label=&quot;林洋&quot;&gt;&lt;span class=&quot;cin-avatar-text&quot;&gt;林&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;cin-avatar&quot; role=&quot;listitem&quot; aria-label=&quot;周舟&quot;&gt;&lt;span class=&quot;cin-avatar-text&quot;&gt;周&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;cin-avatar&quot; role=&quot;listitem&quot; aria-label=&quot;还有 2 人&quot;&gt;+2&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<p>空容器不塌陷（<code>:empty::before</code> 画占位圆点）；状态点仅靠颜色不可读，必须带 <code>aria-label</code>。</p>
+<hr>
+<h2 id="s-5-21-结果页-result">5.21 结果页 Result</h2>
+<p>操作完成后的一屏反馈。五档语义状态，结构固定五段，纯 CSS。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-result</code></td>
+<td>容器，居中纵排；建议 <code>role=&quot;status&quot;</code>（成功/信息）或 <code>role=&quot;alert&quot;</code>（失败）</td>
+</tr>
+<tr>
+<td>`data-status=&quot;success</td>
+<td>warning</td>
+</tr>
+<tr>
+<td><code>.cin-result-icon</code></td>
+<td>图标圆块；<code>processing</code> 画环形缺口并旋转，<code>reduce</code> 环境静止</td>
+</tr>
+<tr>
+<td><code>.cin-result-title</code></td>
+<td>标题，用真实 <code>h2</code> / <code>h3</code>，限宽 <code>--cin-container-reading-text</code></td>
+</tr>
+<tr>
+<td><code>.cin-result-desc</code></td>
+<td>说明文案，二级色，长句不拉满整行</td>
+</tr>
+<tr>
+<td><code>.cin-result-extra</code></td>
+<td>操作区，放主次按钮</td>
+</tr>
+<tr>
+<td><code>.cin-result-detail</code></td>
+<td>明细块（回执字段、失败原因），左对齐，限宽 <code>--cin-container-form-column</code></td>
+</tr>
+<tr>
+<td><code>data-size=&quot;sm&quot;</code></td>
+<td>紧凑密度，用于抽屉、弹窗内部</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-result&quot; data-status=&quot;danger&quot; role=&quot;alert&quot;&gt;
+  &lt;span class=&quot;cin-result-icon&quot; aria-hidden=&quot;true&quot;&gt;×&lt;/span&gt;
+  &lt;h3 class=&quot;cin-result-title&quot;&gt;导入失败&lt;/h3&gt;
+  &lt;p class=&quot;cin-result-desc&quot;&gt;12 条明细中有 3 条校验未通过，其余数据未写入。&lt;/p&gt;
+  &lt;div class=&quot;cin-result-extra&quot;&gt;
+    &lt;button class=&quot;cin-btn&quot; data-variant=&quot;primary&quot;&gt;重新导入&lt;/button&gt;
+    &lt;button class=&quot;cin-btn&quot;&gt;下载错误明细&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-result-detail&quot;&gt;第 4 行：数量必须为正整数（当前 &quot;0&quot;）&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>失败态必须给可行动作；长原因放进 <code>.cin-result-detail</code>，不要塞进居中的说明行。</p>
+<hr>
+<h2 id="s-5-22-通用列表-list">5.22 通用列表 List</h2>
+<p>媒体 + 主文 + 附加信息三栏的行式列表，分隔线、悬停、密度全走属性。零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-list</code> / <code>.cin-list-item</code></td>
+<td><code>ul</code> / <code>li</code> 语义容器与行</td>
+</tr>
+<tr>
+<td><code>.cin-list-item-media</code></td>
+<td>首栏，放 <code>avatar</code> 或图标</td>
+</tr>
+<tr>
+<td><code>.cin-list-main</code></td>
+<td>主文区，<code>flex: 1</code>，内含标题行、描述、元信息</td>
+</tr>
+<tr>
+<td><code>.cin-list-title</code> / <code>.cin-list-title-row</code></td>
+<td>标题与标题行（可同排徽标）</td>
+</tr>
+<tr>
+<td><code>.cin-list-desc</code></td>
+<td>描述，默认两行截断；<code>data-clamp=&quot;none&quot;</code> 放开</td>
+</tr>
+<tr>
+<td><code>.cin-list-meta</code></td>
+<td>元信息，三级色 + caption 字号</td>
+</tr>
+<tr>
+<td><code>.cin-list-extra</code></td>
+<td>尾栏，时间、金额、操作按钮，窄屏自动换行</td>
+</tr>
+<tr>
+<td><code>data-divided</code></td>
+<td>相邻项之间画分隔线，首尾不画</td>
+</tr>
+<tr>
+<td><code>data-hoverable</code></td>
+<td>可点行悬停底色 + 键盘焦点环；粗指针设备改按压态</td>
+</tr>
+<tr>
+<td>`data-size=&quot;sm</td>
+<td>lg&quot;`</td>
+</tr>
+<tr>
+<td><code>.cin-list-empty</code></td>
+<td>空态占位，铺满一行</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;ul class=&quot;cin-list&quot; data-divided data-hoverable aria-label=&quot;待办事项&quot;&gt;
+  &lt;li class=&quot;cin-list-item&quot;&gt;
+    &lt;span class=&quot;cin-avatar&quot; data-tone=&quot;accent&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;cin-avatar-text&quot;&gt;林&lt;/span&gt;&lt;/span&gt;
+    &lt;div class=&quot;cin-list-main&quot;&gt;
+      &lt;div class=&quot;cin-list-title-row&quot;&gt;&lt;span class=&quot;cin-list-title&quot;&gt;采购申请待审批&lt;/span&gt;&lt;/div&gt;
+      &lt;p class=&quot;cin-list-desc&quot;&gt;PR-2026-1101-0042，金额 12,480.00 元。&lt;/p&gt;
+      &lt;div class=&quot;cin-list-meta&quot;&gt;&lt;span&gt;采购部&lt;/span&gt;&lt;span&gt;今天 09:24&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;cin-list-extra&quot;&gt;&lt;button class=&quot;cin-btn&quot; data-size=&quot;sm&quot;&gt;查看&lt;/button&gt;&lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>超过几百行改用 <code>virtualgrid</code>；需要列对齐比较改用 <code>table</code>。</p>
+<hr>
+<h2 id="s-5-23-浮层气泡-popover">5.23 浮层气泡 Popover</h2>
+<p>贴着触发器的轻量浮层，四向翻边、焦点驱动、无脚本。复杂交互仍走 <code>overlay</code> 的 dropdown / dialog。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-popover-wrap</code></td>
+<td>锚点容器，<code>position: relative</code>，把触发器与面板绑在一起</td>
+</tr>
+<tr>
+<td><code>.cin-popover-trigger</code></td>
+<td>触发器样式钩子（也可直接用 <code>.cin-btn</code>），需带 <code>aria-expanded</code> / <code>aria-controls</code></td>
+</tr>
+<tr>
+<td><code>.cin-popover</code></td>
+<td>面板，默认在触发器下方，宽度取 <code>--cin-container-form-column</code></td>
+</tr>
+<tr>
+<td><code>.cin-popover-title</code> / <code>.cin-popover-body</code> / <code>.cin-popover-foot</code></td>
+<td>标题、正文、底部动作区</td>
+</tr>
+<tr>
+<td><code>data-side=&quot;top｜end｜start&quot;</code></td>
+<td>向上 / 向右 / 向左翻边，箭头自动跟随</td>
+</tr>
+<tr>
+<td><code>data-width=&quot;auto&quot;</code></td>
+<td>面板按内容收缩，不再锁列宽</td>
+</tr>
+<tr>
+<td><code>data-open</code></td>
+<td>展开态；未加 <code>hidden</code> 时也保持关闭，需脚本或 <code>:focus-within</code> 切换</td>
+</tr>
+<tr>
+<td><code>data-no-arrow</code></td>
+<td>去掉箭头</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-popover-wrap&quot;&gt;
+  &lt;button class=&quot;cin-btn cin-popover-trigger&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;pop-filter&quot;&gt;筛选&lt;/button&gt;
+  &lt;div class=&quot;cin-popover&quot; id=&quot;pop-filter&quot; hidden&gt;
+    &lt;div class=&quot;cin-popover-title&quot;&gt;筛选条件&lt;/div&gt;
+    &lt;div class=&quot;cin-popover-body&quot;&gt;按状态、仓库、到货时间组合过滤。&lt;/div&gt;
+    &lt;div class=&quot;cin-popover-foot&quot;&gt;&lt;button class=&quot;cin-btn&quot; data-size=&quot;sm&quot;&gt;重置&lt;/button&gt;&lt;button class=&quot;cin-btn&quot; data-variant=&quot;primary&quot; data-size=&quot;sm&quot;&gt;应用&lt;/button&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>只靠 CSS 时用 <code>:focus-within</code> 展开，适合&quot;点开看说明&quot;的一次性提示；需要点外部关闭、多级跳转的走 <code>overlay</code>。≤600px 自动降级为贴视口两侧的浮动面板并隐藏箭头。</p>
+<hr>
+<h2 id="s-5-24-卡片-card">5.24 卡片 Card</h2>
+<p>媒体 + 标题 + 描述 + 动作的容器，比例、横纵排布、可点态全走属性。零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-card</code></td>
+<td>容器，纵向排列，内边距按 <code>--cin-card-pad</code></td>
+</tr>
+<tr>
+<td><code>.cin-card-media</code></td>
+<td>媒体区，<code>object-fit: cover</code>，默认 16:9</td>
+</tr>
+<tr>
+<td><code>.cin-card-head</code> / <code>.cin-card-heading</code></td>
+<td>头部与标题组（标题 + 副标题）</td>
+</tr>
+<tr>
+<td><code>.cin-card-title</code> / <code>.cin-card-subtitle</code> / <code>.cin-card-desc</code></td>
+<td>标题、副标题、描述</td>
+</tr>
+<tr>
+<td><code>.cin-card-body</code> / <code>.cin-card-foot</code> / <code>.cin-card-extra</code></td>
+<td>正文、底部区、尾部动作</td>
+</tr>
+<tr>
+<td><code>.cin-card-placeholder</code></td>
+<td>无图时的占位块，斜纹底 + 居中图标位</td>
+</tr>
+<tr>
+<td><code>data-ratio=&quot;4:3｜1:1｜3:2&quot;</code></td>
+<td>媒体比例，默认 <code>16:9</code></td>
+</tr>
+<tr>
+<td><code>data-orientation=&quot;horizontal&quot;</code></td>
+<td>媒体在左、占四成宽；≤600px 自动转纵向</td>
+</tr>
+<tr>
+<td><code>data-interactive</code></td>
+<td>整卡可点：悬停底色 + 键盘焦点环，粗指针改按压态</td>
+</tr>
+<tr>
+<td><code>data-selected</code> / <code>data-disabled</code></td>
+<td>选中态与禁用态</td>
+</tr>
+<tr>
+<td><code>data-flush</code></td>
+<td>去掉头 / 体 / 尾内边距，内容贴边</td>
+</tr>
+<tr>
+<td><code>data-clamp=&quot;2&quot;</code></td>
+<td>描述截断行数，默认 2 行</td>
+</tr>
+<tr>
+<td><code>data-size=&quot;sm&quot;</code></td>
+<td>紧凑内边距，用于列表内嵌卡片</td>
+</tr>
+<tr>
+<td><code>data-divided</code></td>
+<td>卡片之间画分隔线（配合列表式排布）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;article class=&quot;cin-card&quot; data-interactive aria-labelledby=&quot;card-t&quot;&gt;
+  &lt;div class=&quot;cin-card-media&quot;&gt;&lt;img src=&quot;cover.jpg&quot; alt=&quot;华东仓补货批次&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;cin-card-head&quot;&gt;
+    &lt;div class=&quot;cin-card-heading&quot;&gt;
+      &lt;h3 class=&quot;cin-card-title&quot; id=&quot;card-t&quot;&gt;华东仓补货批次&lt;/h3&gt;
+      &lt;p class=&quot;cin-card-subtitle&quot;&gt;批次 HS-2200417&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-card-body&quot;&gt;&lt;p class=&quot;cin-card-desc&quot;&gt;A 类物料 12 项，预计周三到货。&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;cin-card-foot&quot;&gt;&lt;span class=&quot;cin-list-meta&quot;&gt;今天 09:24&lt;/span&gt;&lt;/div&gt;
+&lt;/article&gt;
+</code></pre>
+<p>整卡可点时用 <code>data-interactive</code> 并让内部只有一个主链接，避免嵌套多个可点元素；需要筛选、排序、分页的批量场景用 <code>list</code>。</p>
+<hr>
+<h2 id="s-5-25-评论-comment">5.25 评论 Comment</h2>
+<p>头像 + 主文的两栏评论列表，嵌套回复用缩进与竖线表达，三层封顶。零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-comment-list</code> / <code>.cin-comment</code></td>
+<td><code>ul</code> / <code>li</code> 语义容器与单条</td>
+</tr>
+<tr>
+<td><code>.cin-comment-main</code></td>
+<td>主文栏，<code>minmax(0, 1fr)</code>，长串不撑破网格</td>
+</tr>
+<tr>
+<td><code>.cin-comment-head</code> / <code>.cin-comment-author</code> / <code>.cin-comment-role</code></td>
+<td>头部、作者名、身份标签（楼主/管理员）</td>
+</tr>
+<tr>
+<td><code>.cin-comment-meta</code></td>
+<td>时间等元信息，三级色</td>
+</tr>
+<tr>
+<td><code>.cin-comment-content</code></td>
+<td>正文，<code>overflow-wrap: anywhere</code></td>
+</tr>
+<tr>
+<td><code>.cin-comment-quote</code></td>
+<td>引用块，左侧竖线，引用原文</td>
+</tr>
+<tr>
+<td><code>.cin-comment-actions</code></td>
+<td>回复/点赞等次要动作，按钮自动降为最小高度</td>
+</tr>
+<tr>
+<td><code>.cin-comment-replies</code></td>
+<td>嵌套容器，向右缩进 + 竖线；三层起不再叠加竖线</td>
+</tr>
+<tr>
+<td><code>.cin-comment-empty</code></td>
+<td>空态虚线占位</td>
+</tr>
+<tr>
+<td><code>data-divided</code></td>
+<td>一级条目之间画分隔线，首条不画</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;ul class=&quot;cin-comment-list&quot; data-divided aria-label=&quot;讨论&quot;&gt;
+  &lt;li class=&quot;cin-comment&quot;&gt;
+    &lt;span class=&quot;cin-avatar&quot; data-tone=&quot;accent&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;cin-avatar-text&quot;&gt;林&lt;/span&gt;&lt;/span&gt;
+    &lt;div class=&quot;cin-comment-main&quot;&gt;
+      &lt;div class=&quot;cin-comment-head&quot;&gt;
+        &lt;span class=&quot;cin-comment-author&quot;&gt;林洋&lt;/span&gt;
+        &lt;span class=&quot;cin-comment-role&quot;&gt;楼主&lt;/span&gt;
+        &lt;span class=&quot;cin-comment-meta&quot;&gt;&lt;time datetime=&quot;2026-11-01T09:24&quot;&gt;今天 09:24&lt;/time&gt;&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;cin-comment-content&quot;&gt;&lt;p&gt;补货单已提交，华东仓预计周三到货。&lt;/p&gt;&lt;/div&gt;
+      &lt;div class=&quot;cin-comment-actions&quot;&gt;&lt;button class=&quot;cin-btn&quot; data-size=&quot;sm&quot;&gt;回复&lt;/button&gt;&lt;/div&gt;
+      &lt;ul class=&quot;cin-comment-replies&quot;&gt;
+        &lt;li class=&quot;cin-comment&quot;&gt;
+          &lt;span class=&quot;cin-avatar&quot; data-size=&quot;sm&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;cin-avatar-text&quot;&gt;周&lt;/span&gt;&lt;/span&gt;
+          &lt;div class=&quot;cin-comment-main&quot;&gt;
+            &lt;div class=&quot;cin-comment-head&quot;&gt;&lt;span class=&quot;cin-comment-author&quot;&gt;周舟&lt;/span&gt;&lt;/div&gt;
+            &lt;div class=&quot;cin-comment-content&quot;&gt;
+              &lt;div class=&quot;cin-comment-quote&quot;&gt;补货单已提交，华东仓预计周三到货&lt;/div&gt;
+              &lt;p&gt;收货位已预留 2 个。&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>嵌套超过三层改用&quot;查看全部 N 条回复&quot;跳到详情页，不要无限缩进；需要折叠、编辑、@ 提示的交互走脚本件。</p>
+<hr>
+<h2 id="s-5-26-按钮组-button-group">5.26 按钮组 Button Group</h2>
+<p>成串的次要动作（行内查看/编辑/作废、批量操作）用按钮组收成一颗视觉整体，零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-btn-group</code></td>
+<td>容器，<code>display: inline-flex</code>；配 <code>role=&quot;group&quot;</code> + <code>aria-label</code> 说明这串动作做什么</td>
+</tr>
+<tr>
+<td><code>.cin-btn-group &gt; .cin-btn</code></td>
+<td>组内按钮自动去掉自身圆角与相邻重复边</td>
+</tr>
+<tr>
+<td><code>data-orientation=&quot;vertical&quot;</code></td>
+<td>竖排，共享上下边，左右两侧保留外圆角</td>
+</tr>
+<tr>
+<td><code>data-full</code></td>
+<td>撑满父容器，组内按钮等分；窄屏另可用 <code>data-full-sm</code> 只在 ≤600px 生效</td>
+</tr>
+<tr>
+<td><code>data-divided</code></td>
+<td>按钮无边框时（文字按钮）改用发丝竖线分隔</td>
+</tr>
+<tr>
+<td><code>data-wrap</code></td>
+<td>允许折行，折行后自动停用叠边并恢复各自圆角</td>
+</tr>
+<tr>
+<td><code>data-disabled</code></td>
+<td>组级禁用：整组降透明度并 <code>pointer-events: none</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-btn-group&quot; role=&quot;group&quot; aria-label=&quot;规则行操作&quot;&gt;
+  &lt;button class=&quot;cin-btn&quot; data-variant=&quot;secondary&quot; type=&quot;button&quot;&gt;查看&lt;/button&gt;
+  &lt;button class=&quot;cin-btn&quot; data-variant=&quot;secondary&quot; type=&quot;button&quot;&gt;编辑&lt;/button&gt;
+  &lt;button class=&quot;cin-btn&quot; data-variant=&quot;secondary&quot; type=&quot;button&quot;&gt;作废&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+<p>叠边靠相邻 <code>-1px</code> 负边距实现，所以组宽恰好比三颗按钮少 2px；悬停与键盘焦点时被操作那颗 <code>z-index: 1</code> 提层，避免共享边被邻颗盖住。</p>
+<p>只有一颗按钮时直接用 <code>.cin-btn</code>；组内不要再写 <code>data-size</code> 混排，尺寸由外层统一控制。</p>
+<hr>
+<h2 id="s-5-27-选项组-option-group">5.27 选项组 Option Group</h2>
+<p>多选/单选成组出现的正式写法：保留原生 <code>input</code>，外观全部交给组件，键盘、读屏、表单提交免费拿到。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fieldset.cin-option-group</code></td>
+<td>组容器，已清掉浏览器默认边框与内边距；配 <code>legend</code> 作组标题</td>
+</tr>
+<tr>
+<td><code>.cin-option</code></td>
+<td>单条，<code>label</code> 承载，整块可点，最小高度 44</td>
+</tr>
+<tr>
+<td><code>.cin-option &gt; input</code></td>
+<td>原生勾选框/单选框，<code>appearance: none</code> 后自绘 20px 方框，单选走全圆角</td>
+</tr>
+<tr>
+<td><code>.cin-option-text</code> / <code>.cin-option-title</code> / <code>.cin-option-desc</code></td>
+<td>文字列、主标题、说明行</td>
+</tr>
+<tr>
+<td><code>data-layout=&quot;inline&quot;</code></td>
+<td>横排；≤600px 自动转纵向</td>
+</tr>
+<tr>
+<td><code>data-layout=&quot;grid&quot;</code></td>
+<td><code>auto-fit</code> 网格，适合卡片式多选</td>
+</tr>
+<tr>
+<td><code>data-variant=&quot;card&quot;</code></td>
+<td>卡片外观，带描边与内边距，选中时描边转强调色 + 内阴影 + 标题加粗</td>
+</tr>
+<tr>
+<td><code>data-invalid</code></td>
+<td>校验失败，未选中的框转危险色</td>
+</tr>
+<tr>
+<td><code>data-disabled</code></td>
+<td>组级禁用；单条禁用写 <code>input[disabled]</code> 即可自动降透明度</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;fieldset class=&quot;cin-option-group&quot; data-variant=&quot;card&quot; data-layout=&quot;grid&quot;&gt;
+  &lt;legend&gt;支付方式&lt;/legend&gt;
+  &lt;label class=&quot;cin-option&quot;&gt;
+    &lt;input type=&quot;radio&quot; name=&quot;pay&quot; checked&gt;
+    &lt;span class=&quot;cin-option-text&quot;&gt;&lt;span class=&quot;cin-option-title&quot;&gt;账户余额&lt;/span&gt;&lt;span class=&quot;cin-option-desc&quot;&gt;即时到账&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class=&quot;cin-option&quot;&gt;
+    &lt;input type=&quot;radio&quot; name=&quot;pay&quot;&gt;
+    &lt;span class=&quot;cin-option-text&quot;&gt;&lt;span class=&quot;cin-option-title&quot;&gt;对公转账&lt;/span&gt;&lt;span class=&quot;cin-option-desc&quot;&gt;1–2 个工作日&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/fieldset&gt;
+</code></pre>
+<p>选中状态不只靠颜色：卡片变体额外用了内阴影与标题字重，弱视与灰度屏也能分辨。<code>data-layout=&quot;inline&quot;</code> 只用于短标签，长文案请留纵向。</p>
+<hr>
+<h2 id="s-5-28-进度环-progress-ring">5.28 进度环 Progress Ring</h2>
+<p>上传、配额、完成度这类&quot;绕一圈的百分比&quot;用进度环，<code>conic-gradient</code> 画填充、<code>radial-gradient</code> 遮罩挖孔，零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-ring</code></td>
+<td>环本体，正方形 + 全圆角；默认直径取 <code>--cin-size-control-lg</code>（52）</td>
+</tr>
+<tr>
+<td><code>--cin-ring-value</code></td>
+<td>唯一的数值入口，写 0–100 的整数（行内 <code>style</code> 或受控变量）</td>
+</tr>
+<tr>
+<td><code>.cin-ring-label</code></td>
+<td>环心文字，等宽数字避免跳动；内部可放 <code>&lt;small&gt;</code> 承单位</td>
+</tr>
+<tr>
+<td><code>data-size=&quot;sm&quot;</code> / <code>&quot;lg&quot;</code></td>
+<td>33 / 84 两档，环宽同比缩放</td>
+</tr>
+<tr>
+<td><code>data-tone=&quot;success&quot;</code> / <code>&quot;warning&quot;</code> / <code>&quot;danger&quot;</code> / <code>&quot;info&quot;</code></td>
+<td>只换填充色，轨道与尺寸不变</td>
+</tr>
+<tr>
+<td><code>data-indeterminate</code></td>
+<td>不确定态：25% 弧旋转，环心数值自动隐藏</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-ring&quot; role=&quot;progressbar&quot; aria-valuenow=&quot;64&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;
+     style=&quot;--cin-ring-value:64&quot;&gt;
+  &lt;span class=&quot;cin-ring-label&quot;&gt;64&lt;small&gt;%&lt;/small&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<p>数值只认 <code>--cin-ring-value</code>，不要用 <code>data-value</code> 之外的私有属性，也不要直接写 <code>conic-gradient</code> 覆盖背景。<code>prefers-reduced-motion: reduce</code> 下不确定态自动停止旋转，改用静态弧示意。</p>
+<hr>
+<h2 id="s-5-29-对话气泡-chat">5.29 对话气泡 Chat</h2>
+<p>聊天、工单往来、AI 会话里「一条一条往下滚」的消息流，左右镜像区分己方/对方，气泡用收角朝向表达归属，零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-chat</code></td>
+<td>会话容器，纵向可滚；建议 <code>role=&quot;log&quot;</code> + <code>aria-live=&quot;polite&quot;</code></td>
+</tr>
+<tr>
+<td><code>.cin-msg</code></td>
+<td>单条消息，<code>头像 + .cin-msg-main</code> 两栏</td>
+</tr>
+<tr>
+<td><code>data-self</code></td>
+<td>本人消息：整条 <code>row-reverse</code> 镜像，气泡靠右</td>
+</tr>
+<tr>
+<td><code>data-continue</code></td>
+<td>连续发言：隐藏头像与姓名、上方间距收到 2px</td>
+</tr>
+<tr>
+<td><code>data-variant=&quot;system&quot;</code></td>
+<td>系统提示：整条居中、去边框、底色下沉，不用头像</td>
+</tr>
+<tr>
+<td><code>.cin-msg-bubble</code></td>
+<td>气泡本体，<code>max-inline-size: 78%</code>；对方左上 / 己方右上收到 <code>--cin-radius-xs</code>（4）</td>
+</tr>
+<tr>
+<td><code>.cin-msg-quote</code></td>
+<td>气泡内引用块，2px 左边线 + 弱化底色</td>
+</tr>
+<tr>
+<td><code>.cin-msg-file</code> / <code>.cin-msg-file-name</code> / <code>.cin-msg-file-meta</code></td>
+<td>附件行：名称单行省略号，字节数不收缩</td>
+</tr>
+<tr>
+<td><code>.cin-msg-status[data-state=&quot;failed&quot;]</code></td>
+<td>发送失败，转 <code>--cin-color-state-danger</code></td>
+</tr>
+<tr>
+<td><code>.cin-msg-actions</code></td>
+<td>悬停 / <code>:focus-within</code> 才显形，触屏始终可见</td>
+</tr>
+<tr>
+<td><code>.cin-chat-typing</code> + <code>.cin-chat-typing-dot</code></td>
+<td>输入中三点脉冲，<code>prefers-reduced-motion</code> 下静止</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-chat&quot; role=&quot;log&quot; aria-live=&quot;polite&quot; aria-label=&quot;会话&quot;&gt;
+  &lt;article class=&quot;cin-msg&quot;&gt;
+    &lt;span class=&quot;cin-avatar&quot; data-size=&quot;sm&quot; aria-hidden=&quot;true&quot;&gt;李&lt;/span&gt;
+    &lt;div class=&quot;cin-msg-main&quot;&gt;
+      &lt;div class=&quot;cin-msg-head&quot;&gt;&lt;span class=&quot;cin-msg-name&quot;&gt;李工&lt;/span&gt;&lt;time class=&quot;cin-msg-meta&quot;&gt;10:24&lt;/time&gt;&lt;/div&gt;
+      &lt;div class=&quot;cin-msg-bubble&quot;&gt;&lt;p class=&quot;cin-msg-content&quot;&gt;签名栏是空的，麻烦补一下。&lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/article&gt;
+  &lt;article class=&quot;cin-msg&quot; data-self data-continue&gt;
+    &lt;span class=&quot;cin-avatar&quot; data-size=&quot;sm&quot; aria-hidden=&quot;true&quot;&gt;我&lt;/span&gt;
+    &lt;div class=&quot;cin-msg-main&quot;&gt;
+      &lt;div class=&quot;cin-msg-bubble&quot;&gt;&lt;p class=&quot;cin-msg-content&quot;&gt;收到，重新导出一份。&lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+<p>气泡朝向只靠收角表达，<strong>不要</strong>给己方气泡再加三角箭头或额外描边；长链接与无空格串靠 <code>overflow-wrap: anywhere</code> 断行，窄屏（≤600px）主体宽度放宽到 86%。</p>
+<hr>
+<h2 id="s-5-30-月历-calendar">5.30 月历 Calendar</h2>
+<p>排期、打卡、账期的月份视图：7 列严格等宽的 42 格网格，六种状态用属性表达，翻页与选中由业务侧控制，零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-calendar</code></td>
+<td>容器，<code>--cin-calendar-cell</code> 控制格子高度</td>
+</tr>
+<tr>
+<td><code>.cin-calendar-head</code> / <code>-title</code> / <code>-subtitle</code> / <code>-nav</code></td>
+<td>标题行：月份 + 副标题 + 上/下月按钮</td>
+</tr>
+<tr>
+<td><code>.cin-calendar-weekdays</code> / <code>.cin-calendar-weekday</code></td>
+<td>星期头，与日期区共用 <code>repeat(7, minmax(0, 1fr))</code>，逐列对齐</td>
+</tr>
+<tr>
+<td><code>[data-weekend]</code></td>
+<td>周末列轻微弱化</td>
+</tr>
+<tr>
+<td><code>.cin-calendar-day</code></td>
+<td>单日格（建议 <code>&lt;button&gt;</code>），内含 <code>-day-num</code></td>
+</tr>
+<tr>
+<td><code>aria-current=&quot;date&quot;</code></td>
+<td>今天：强调色描边 + 强调色数字（不填底）</td>
+</tr>
+<tr>
+<td><code>aria-selected=&quot;true&quot;</code></td>
+<td>选中：强调色实底 + 反白数字</td>
+</tr>
+<tr>
+<td><code>data-in-range</code> / <code>data-range-start</code> / <code>data-range-end</code></td>
+<td>区间：中间去圆角连成一条，首尾只补外侧圆角</td>
+</tr>
+<tr>
+<td><code>data-outside</code></td>
+<td>非本月格：透明度 60%，日期仍在原位</td>
+</tr>
+<tr>
+<td><code>aria-disabled=&quot;true&quot;</code> + <code>disabled</code></td>
+<td>禁用：40% 且 <code>pointer-events: none</code></td>
+</tr>
+<tr>
+<td><code>.cin-calendar-events</code> / <code>.cin-calendar-event[data-tone]</code> / <code>.cin-calendar-more</code></td>
+<td>事件点（4px）与溢出计数，选中格自动反白</td>
+</tr>
+<tr>
+<td><code>data-density=&quot;compact&quot;</code></td>
+<td>紧凑档：格子高度降一档，供侧栏/表格内嵌</td>
+</tr>
+<tr>
+<td><code>.cin-calendar-foot</code> / <code>.cin-calendar-legend</code></td>
+<td>底部：图例 + 「今天」回位按钮</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-calendar&quot;&gt;
+  &lt;div class=&quot;cin-calendar-grid&quot; role=&quot;grid&quot; aria-label=&quot;2026 年 11 月&quot;&gt;
+    &lt;button class=&quot;cin-calendar-day&quot; aria-current=&quot;date&quot; aria-label=&quot;11月2日今天&quot;&gt;
+      &lt;span class=&quot;cin-calendar-day-num&quot;&gt;2&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;button class=&quot;cin-calendar-day&quot; aria-selected=&quot;true&quot; aria-label=&quot;11月5日，2 个事件&quot;&gt;
+      &lt;span class=&quot;cin-calendar-day-num&quot;&gt;5&lt;/span&gt;
+      &lt;span class=&quot;cin-calendar-events&quot;&gt;
+        &lt;span class=&quot;cin-calendar-event&quot;&gt;&lt;/span&gt;&lt;span class=&quot;cin-calendar-event&quot; data-tone=&quot;success&quot;&gt;&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>必须补齐 42 格（含前后月补位），否则 7 列网格会错位；今天与选中是两条正交通道，<strong>不要</strong>把「今天」也涂成实底，两态叠加时由 <code>aria-selected</code> 实底胜出。窄屏（≤600px）格子高度收到 <code>--cin-size-touch-min</code>（44）保证触屏热区。</p>
+<hr>
+<h2 id="s-5-31-水印-watermark">5.31 水印 Watermark</h2>
+<p>薪酬单、报表、内部文档的「防截屏/防外发」覆盖层：一层斜向平铺文字压在内容上，<strong>不拦任何指针事件</strong>，零脚本零图片。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-watermark</code></td>
+<td>定位容器；自带 <code>overflow: clip</code>，避免斜铺层放大后撑出页面滚动条</td>
+</tr>
+<tr>
+<td><code>.cin-watermark-layer</code></td>
+<td>覆盖层：<code>inset: 0</code>、<code>z-index: 1</code>、<code>pointer-events: none</code>、<code>rotate(-20deg) scale(1.35)</code>，网格 <code>minmax(10rem, 1fr)</code></td>
+</tr>
+<tr>
+<td><code>.cin-watermark-item</code></td>
+<td>单枚水印文字：<code>--cin-color-text-tertiary</code> + 14%，<code>nowrap</code>、不可选中</td>
+</tr>
+<tr>
+<td><code>.cin-watermark-content</code></td>
+<td>内容层：<code>z-index: 2</code>，正文与操作都在这一层</td>
+</tr>
+<tr>
+<td><code>data-density=&quot;dense&quot;</code> / <code>&quot;sparse&quot;</code></td>
+<td>密度档：8rem×5rem / 18rem×12rem</td>
+</tr>
+<tr>
+<td><code>data-tone=&quot;inverse&quot;</code></td>
+<td>深色底：反白字 + 18% 不透明度</td>
+</tr>
+<tr>
+<td><code>data-mode=&quot;corner&quot;</code></td>
+<td>角标档：关掉平铺，右上角单枚 50%</td>
+</tr>
+<tr>
+<td><code>data-print=&quot;off&quot;</code></td>
+<td>打印时隐藏水印（默认保留）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-watermark&quot;&gt;
+  &lt;div class=&quot;cin-watermark-layer&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;span class=&quot;cin-watermark-item&quot;&gt;张明 工号 10237 · 2026-11-02&lt;/span&gt;
+    &lt;span class=&quot;cin-watermark-item&quot;&gt;张明 工号 10237 · 2026-11-02&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-watermark-content&quot;&gt;
+    &lt;div class=&quot;cin-card&quot;&gt;&lt;h3 class=&quot;cin-card-title&quot;&gt;2026 年 10 月薪酬明细&lt;/h3&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>水印层必须 <code>aria-hidden=&quot;true&quot;</code>（重复文本会污染读屏）；重复枚数按容器面积铺，宁多勿少，视口变化时由网格自动回流。容器 <code>overflow: clip</code> 意味着内部弹层/下拉不要放在 <code>.cin-watermark</code> 内，需要浮层请移到容器外或用 <code>popover</code> 顶层渲染。</p>
+<hr>
+<h2 id="s-5-32-图文媒体对象-media">5.32 图文媒体对象 Media</h2>
+<p>列表里带缩略图的一行：左图右文，标题/正文/元信息/尾部动作四块各就各位，窄屏一键转竖排，零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-media</code></td>
+<td>容器：横排、<code>align-items: flex-start</code>、间距 <code>space-300</code></td>
+</tr>
+<tr>
+<td><code>.cin-media-figure</code></td>
+<td>图区：正方形 + <code>overflow: hidden</code>，图默认 <code>object-fit: cover</code>，默认档 40px 见方</td>
+</tr>
+<tr>
+<td><code>.cin-media-body</code></td>
+<td>主体：<code>min-inline-size: 0</code>，长内容不撑破整行</td>
+</tr>
+<tr>
+<td><code>.cin-media-title</code></td>
+<td>标题：<code>body-strong</code> 字号，默认单行省略</td>
+</tr>
+<tr>
+<td><code>.cin-media-text</code> / <code>.cin-media-meta</code> / <code>.cin-media-actions</code></td>
+<td>正文（次要色）/ 元信息（单行省略）/ 尾部动作（垂直居中）</td>
+</tr>
+<tr>
+<td><code>data-size=&quot;sm&quot;</code> / <code>&quot;lg&quot;</code> / <code>&quot;auto&quot;</code></td>
+<td>图区 32px / 56px / 不锁尺寸（配合 <code>data-size=&quot;auto&quot;</code> 用原始比例）</td>
+</tr>
+<tr>
+<td><code>data-reverse</code></td>
+<td>图在右、文在左</td>
+</tr>
+<tr>
+<td><code>data-stacked</code> / <code>data-stack-sm</code></td>
+<td>竖排（图在上并居中）/ 仅窄屏转竖排</td>
+</tr>
+<tr>
+<td><code>data-truncate</code> / <code>data-truncate=&quot;1&quot;</code></td>
+<td>标题 clamp 两行 / 单行</td>
+</tr>
+<tr>
+<td><code>data-align=&quot;center&quot;</code> / <code>&quot;end&quot;</code> / <code>&quot;stretch&quot;</code></td>
+<td>图与文字的垂直对齐</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-media&quot;&gt;
+  &lt;div class=&quot;cin-media-figure&quot;&gt;&lt;img class=&quot;cin-media-img&quot; src=&quot;cover.jpg&quot; alt=&quot;&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;cin-media-body&quot;&gt;
+    &lt;h3 class=&quot;cin-media-title&quot;&gt;2026 年 Q3 渠道复盘&lt;/h3&gt;
+    &lt;p class=&quot;cin-media-text&quot;&gt;华东区超额完成，华南区受物流影响延后两周。&lt;/p&gt;
+    &lt;div class=&quot;cin-media-meta&quot;&gt;张明 · 2026-10-30&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-media-actions&quot;&gt;&lt;button class=&quot;cin-btn&quot; type=&quot;button&quot;&gt;查看&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h2 id="s-5-33-身份行-entity">5.33 身份行 Entity</h2>
+<p>「头像 + 名称 + 副信息 + 标签 + 尾随动作」的通用一行，成员目录、指派人、审批人、客户联系人都用它；状态点直接贴在头像右下角，不用额外定位。零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-entity</code></td>
+<td>容器：横排、垂直居中、间距 <code>space-200</code></td>
+</tr>
+<tr>
+<td><code>.cin-entity-figure</code></td>
+<td>头像位：<code>position: relative</code>，里面放 <code>.cin-avatar</code></td>
+</tr>
+<tr>
+<td><code>.cin-entity-dot</code> + <code>data-state</code></td>
+<td>状态点：8px 圆形、<code>2px</code> 画布色描边把它与头像隔开；<code>online</code> / <code>busy</code> / <code>away</code> / <code>offline</code> 四态四色</td>
+</tr>
+<tr>
+<td><code>.cin-entity-main</code></td>
+<td>主体列：<code>min-inline-size: 0</code></td>
+</tr>
+<tr>
+<td><code>.cin-entity-name</code> / <code>.cin-entity-sub</code></td>
+<td>名称（<code>body-strong</code>）/ 副信息（次要色）；两者默认各占一行且单行省略</td>
+</tr>
+<tr>
+<td><code>.cin-entity-tags</code> / <code>.cin-entity-actions</code></td>
+<td>标签行（可放 <code>.cin-badge</code>）/ 尾随动作（<code>margin-inline-start: auto</code> 靠右）</td>
+</tr>
+<tr>
+<td><code>data-compact</code> / <code>data-compact-sm</code></td>
+<td>紧凑档：名字降为 <code>body</code> 字重、间距收紧；窄屏自动紧凑</td>
+</tr>
+<tr>
+<td><code>data-stacked</code></td>
+<td>竖排居中（头像在上）</td>
+</tr>
+<tr>
+<td><code>data-tone=&quot;inverse&quot;</code></td>
+<td>深底反白</td>
+</tr>
+<tr>
+<td><code>data-wrap</code></td>
+<td>名称与副信息改为换行展示（默认单行省略）</td>
+</tr>
+</tbody>
+</table>
+<p>可点行用 <code>&lt;a&gt;</code> 或 <code>&lt;button&gt;</code> 承载 <code>.cin-entity</code>：<code>hover</code> 给底色、<code>:focus-visible</code> 给焦点环，键盘可 Tab 直达。</p>
+<pre><code class="language-html">&lt;a class=&quot;cin-entity&quot; href=&quot;/members/10237&quot;&gt;
+  &lt;span class=&quot;cin-entity-figure&quot;&gt;
+    &lt;span class=&quot;cin-avatar&quot; data-size=&quot;md&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;cin-avatar-text&quot;&gt;张&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;cin-entity-dot&quot; data-state=&quot;online&quot; aria-label=&quot;在线&quot;&gt;&lt;/span&gt;
+  &lt;/span&gt;
+  &lt;span class=&quot;cin-entity-main&quot;&gt;
+    &lt;span class=&quot;cin-entity-name&quot;&gt;&lt;span&gt;张明&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;cin-entity-sub&quot;&gt;华东渠道 · 采购主管&lt;/span&gt;
+  &lt;/span&gt;
+  &lt;span class=&quot;cin-entity-actions&quot;&gt;&lt;span class=&quot;cin-badge&quot;&gt;主责&lt;/span&gt;&lt;/span&gt;
+&lt;/a&gt;
+</code></pre>
+<h2 id="s-5-34-滚动容器-scroll-area">5.34 滚动容器 Scroll Area</h2>
+<p>在页面里圈出一块「自己的滚动区」：滚到底不会带着整页一起动，滚动条收细并走 token 配色，需要时加渐隐、吸附或粘顶表头。零脚本。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-scroll-area</code></td>
+<td>容器：<code>overflow: auto</code>、<code>overscroll-behavior: contain</code>（滚动不传染页面）、<code>scrollbar-width: thin</code></td>
+</tr>
+<tr>
+<td><code>::-webkit-scrollbar</code> 系列</td>
+<td>滚动条自重绘：8px 槽 + <code>border-subtle</code> 滑块 + 透明轨道</td>
+</tr>
+<tr>
+<td><code>data-size=&quot;sm&quot;</code> / <code>&quot;md&quot;</code> / <code>&quot;lg&quot;</code></td>
+<td>最大高度 10rem / 18rem / 26rem</td>
+</tr>
+<tr>
+<td><code>data-axis=&quot;x&quot;</code></td>
+<td>只横滚：<code>overflow-x: auto</code>、<code>overflow-y: hidden</code></td>
+</tr>
+<tr>
+<td><code>data-fade</code></td>
+<td>渐隐遮罩：标准 <code>mask-image</code> 与 <code>-webkit-mask-image</code> 双写，避免老 Safari 失效</td>
+</tr>
+<tr>
+<td><code>data-snap</code> / <code>data-snap=&quot;x&quot;</code> / <code>&quot;y&quot;</code></td>
+<td>吸附：<code>scroll-snap-type: &lt;轴&gt; mandatory</code>，直接子元素 <code>scroll-snap-align: start</code></td>
+</tr>
+<tr>
+<td><code>.cin-scroll-area-sticky</code></td>
+<td>区内表头粘顶：<code>position: sticky</code>、<code>top: 0</code>、<code>z-index: 1</code>、不透明画布底色</td>
+</tr>
+</tbody>
+</table>
+<p>可访问性：容器自身给 <code>tabindex=&quot;0&quot;</code> + <code>role=&quot;region&quot;</code> + <code>aria-label</code>，键盘用户才能滚动；<code>scroll-behavior: smooth</code> 只在 <code>prefers-reduced-motion: no-preference</code> 下开启。</p>
+<pre><code class="language-html">&lt;div class=&quot;cin-scroll-area&quot; data-size=&quot;sm&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-label=&quot;待审批单据&quot;&gt;
+  &lt;div class=&quot;cin-scroll-area-sticky&quot;&gt;单号 / 金额 / 状态&lt;/div&gt;
+  &lt;div class=&quot;cin-list&quot;&gt;…&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h2 id="s-5-35-思考步骤流-thinking">5.35 思考步骤流 Thinking</h2>
+<p>AI 回答前「它到底想了什么」的可核对版：原生 <code>&lt;details&gt;</code> 打底，步骤列成时间轴，每步带状态与耗时，零脚本即可展开收起。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-thinking</code></td>
+<td>容器（<code>&lt;details&gt;</code>），<code>--cin-thinking-rail</code> 控缩进、<code>--cin-thinking-dot</code> 控标记直径</td>
+</tr>
+<tr>
+<td><code>.cin-thinking-head</code>（即 <code>&gt; summary</code>）</td>
+<td>汇总行：图标 + 标题 + 计量位，<code>list-style: none</code> 去掉原生三角，改用自绘箭头</td>
+</tr>
+<tr>
+<td><code>.cin-thinking-icon</code></td>
+<td>过程图标：思考用 sparkles，失败换 <code>circle-alert</code> 形状</td>
+</tr>
+<tr>
+<td><code>.cin-thinking-title</code> / <code>.cin-thinking-meta</code></td>
+<td>标题（唯一可读名称）/ 右对齐计量位（等宽数字）</td>
+</tr>
+<tr>
+<td><code>.cin-thinking-steps</code> / <code>.cin-thinking-step</code></td>
+<td>有序步骤列表，<code>::before</code> 圆点、<code>::after</code> 连成竖线时间轴</td>
+</tr>
+<tr>
+<td><code>.cin-thinking-note</code></td>
+<td>步骤附注（命中数、耗时），整行小字</td>
+</tr>
+<tr>
+<td><code>data-state=&quot;running&quot; / &quot;done&quot; / &quot;failed&quot;</code></td>
+<td>过程级三态：图标转圈 / 成功色 / 告警+危险色</td>
+</tr>
+<tr>
+<td>`.cin-thinking-step[data-state=&quot;pending</td>
+<td>running</td>
+</tr>
+<tr>
+<td><code>data-variant=&quot;plain&quot;</code></td>
+<td>无边框无底色，直接嵌进气泡或卡片正文</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;details class=&quot;cin-thinking&quot; data-state=&quot;running&quot; open&gt;
+  &lt;summary class=&quot;cin-thinking-head&quot;&gt;
+    &lt;span class=&quot;cin-thinking-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;cin-thinking-title&quot;&gt;正在思考&lt;/span&gt;
+    &lt;span class=&quot;cin-thinking-meta&quot;&gt;第 2 步 · 3.1s&lt;/span&gt;
+  &lt;/summary&gt;
+  &lt;ol class=&quot;cin-thinking-steps&quot;&gt;
+    &lt;li class=&quot;cin-thinking-step&quot; data-state=&quot;done&quot;&gt;检索「合同模板」&lt;span class=&quot;cin-thinking-note&quot;&gt;命中 3 份&lt;/span&gt;&lt;/li&gt;
+    &lt;li class=&quot;cin-thinking-step&quot; data-state=&quot;running&quot;&gt;比对条款差异&lt;/li&gt;
+    &lt;li class=&quot;cin-thinking-step&quot; data-state=&quot;pending&quot;&gt;给出结论&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/details&gt;
+</code></pre>
+<p>状态是承诺不是装饰：<code>done</code> 之后不得追加步骤（续写要新建一条），<code>running</code> 不允许直接消失，同一时刻只允许一个步骤 <code>running</code>。计时由宿主算好写进 meta，组件零 JS 不起定时器。</p>
+<hr>
+<h2 id="s-5-36-工具调用标签-tool-chips">5.36 工具调用标签 Tool Chips</h2>
+<p>Agent 的工具轨迹压成一行小胶囊：名称 + 参数摘要 + 三态结果，点开看明细（明细交给 <code>popover</code>）。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-tool-chips</code></td>
+<td>轨迹容器，建议 <code>role=&quot;group&quot;</code> + <code>aria-label</code>；横向换行不横向滚动</td>
+</tr>
+<tr>
+<td><code>.cin-tool-chip</code></td>
+<td>单颗胶囊：<code>button</code>（可点）/ <code>a</code>（可跳）/ <code>span</code>（只读）</td>
+</tr>
+<tr>
+<td><code>.cin-tool-chip-icon</code></td>
+<td>状态图标，mask 引用 <code>icons/</code> 真源，颜色跟随 <code>currentColor</code></td>
+</tr>
+<tr>
+<td><code>.cin-tool-chip-name</code> / <code>.cin-tool-chip-detail</code></td>
+<td>名称 / 参数摘要（等宽、单行省略）</td>
+</tr>
+<tr>
+<td><code>data-state=&quot;running&quot; / &quot;done&quot; / &quot;failed&quot;</code></td>
+<td>转圈 / 对勾 / 叉号，形状先于颜色</td>
+</tr>
+<tr>
+<td><code>data-compact</code></td>
+<td>只留图标与名称，用于空间紧张的一行轨迹</td>
+</tr>
+<tr>
+<td><code>data-variant=&quot;solid&quot;</code></td>
+<td>实心底，用于深色气泡或彩色区块</td>
+</tr>
+<tr>
+<td><code>data-static</code></td>
+<td>只读：无指针、无 hover 反馈，用 <code>span</code> 承载</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;div class=&quot;cin-tool-chips&quot; role=&quot;group&quot; aria-label=&quot;工具调用记录&quot;&gt;
+  &lt;button class=&quot;cin-tool-chip&quot; type=&quot;button&quot; data-state=&quot;done&quot; aria-label=&quot;搜索 已完成，12 条&quot;&gt;
+    &lt;span class=&quot;cin-tool-chip-icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;cin-tool-chip-name&quot;&gt;搜索&lt;/span&gt;
+    &lt;span class=&quot;cin-tool-chip-detail&quot;&gt;12 条&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+<p>一颗标签对应一次调用：<code>done</code> / <code>failed</code> 是终态不得回退，重试要新建一颗；连续失败要全部列出，<strong>不要</strong>合并成「3 个失败」——用户需要知道是哪三个。</p>
+<hr>
+<h2 id="s-5-37-审批卡-approval-card">5.37 审批卡 Approval Card</h2>
+<p>AI 要动关键东西之前先停下来的一道闸：风险分级 + 影响清单 + 一次明确答复。事前阻塞，反悔交给 <code>undo-bar</code>。</p>
+<table>
+<thead>
+<tr>
+<th>类名 / 属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cin-approval</code></td>
+<td>容器，<code>--cin-approval-tone</code> 由风险与状态共同决定（左侧色条 + 徽标底色）</td>
+</tr>
+<tr>
+<td><code>.cin-approval-head</code> / <code>.cin-approval-risk</code> / <code>.cin-approval-title</code></td>
+<td>头部：风险徽标（文字，不只颜色）+ 标题</td>
+</tr>
+<tr>
+<td><code>.cin-approval-desc</code></td>
+<td>一句话说明「做什么、影响什么」</td>
+</tr>
+<tr>
+<td><code>.cin-approval-facts</code> / <code>.cin-approval-fact</code></td>
+<td>影响清单：字段名 + 值成对，值走等宽字体便于逐条核对</td>
+</tr>
+<tr>
+<td><code>.cin-approval-actions</code></td>
+<td>决策区：拒绝在起始侧、批准在末尾；破坏性动作用 <code>data-variant=&quot;danger&quot;</code></td>
+</tr>
+<tr>
+<td><code>.cin-approval-verdict</code></td>
+<td>结论行，建议 <code>role=&quot;status&quot;</code>；终态时替换决策区</td>
+</tr>
+<tr>
+<td><code>data-risk=&quot;low&quot; / &quot;medium&quot; / &quot;high&quot;</code></td>
+<td>三档风险，高风险标题同步换危险色</td>
+</tr>
+<tr>
+<td>`data-state=&quot;pending</td>
+<td>approved</td>
+</tr>
+<tr>
+<td><code>data-busy</code></td>
+<td>已提交等回执：决策区降透明度，按钮由宿主 <code>disabled</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;section class=&quot;cin-approval&quot; data-state=&quot;pending&quot; data-risk=&quot;high&quot; role=&quot;group&quot; aria-labelledby=&quot;ap-1&quot;&gt;
+  &lt;div class=&quot;cin-approval-head&quot;&gt;
+    &lt;span class=&quot;cin-approval-risk&quot;&gt;高风险&lt;/span&gt;
+    &lt;h3 class=&quot;cin-approval-title&quot; id=&quot;ap-1&quot;&gt;删除 128 个构建产物&lt;/h3&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;cin-approval-desc&quot;&gt;将清空 dist/legacy/，该目录未纳入版本控制，删除后无法用 git 恢复。&lt;/p&gt;
+  &lt;ul class=&quot;cin-approval-facts&quot;&gt;
+    &lt;li class=&quot;cin-approval-fact&quot;&gt;&lt;span&gt;影响范围&lt;/span&gt;&lt;strong&gt;dist/legacy/ · 128 个文件&lt;/strong&gt;&lt;/li&gt;
+    &lt;li class=&quot;cin-approval-fact&quot;&gt;&lt;span&gt;可否撤销&lt;/span&gt;&lt;strong&gt;否&lt;/strong&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div class=&quot;cin-approval-actions&quot;&gt;
+    &lt;button class=&quot;cin-btn&quot; data-variant=&quot;ghost&quot; type=&quot;button&quot;&gt;拒绝&lt;/button&gt;
+    &lt;button class=&quot;cin-btn&quot; data-variant=&quot;danger&quot; type=&quot;button&quot;&gt;批准执行&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;cin-approval-verdict&quot; role=&quot;status&quot;&gt;已批准，正在执行&lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+<p>与 <code>erp</code> 的 <code>.cin-approve</code> 分工：那边是<strong>业务单据的审批节点</strong>（金额、事由、同意/驳回，属于业务单据流程）；这里的 <code>.cin-approval</code> 是<strong>代理动作的人工闸门</strong>（将执行什么、影响范围、可否撤销），进 base 因为它与业务无关。本卡不抢焦点、不锁滚动，<strong>不是</strong>模态框——必须打断时用 <code>overlay</code> 的 dialog + <code>Primitives.gate</code>。批准后必须收起决策区，否则会重复执行。</p>
+<h2 id="s-5-38-多语言-i18n">5.38 多语言 i18n</h2>
+<p>组件产生的用户可见文案（空态、按钮、<code>aria-label</code>、相对时间）全部走一张字典取词，字典随 <code>core</code> 域分发：零依赖、无构建期编译、<code>file://</code> 直开可用。原语在 <code>packages/base/src/primitives/i18n.js</code>，挂载点 <code>Cinder.Primitives.i18n</code>，内置 <code>zh-CN</code>（默认）与 <code>en</code>。</p>
+<pre><code class="language-html">&lt;script src=&quot;dist/js/core.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  const i18n = Cinder.Primitives.i18n;
+  i18n.t(&quot;otp.digit&quot;, null, { n: 3 });   // 第 3 位验证码
+  i18n.tIn(&quot;en&quot;, &quot;copy.done&quot;);           // Copied（不改当前语言）
+  i18n.setLocale(&quot;en&quot;);                  // → &quot;en&quot;，同时写 &lt;html lang=&quot;en&quot;&gt;
+  i18n.register(&quot;ja&quot;, { &quot;copy.done&quot;: &quot;コピー済み&quot; });
+&lt;/script&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>成员</th>
+<th>签名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t</code></td>
+<td><code>t(key, fallback?, vars?)</code></td>
+<td>按当前语言取词；缺字典用 <code>fallback</code>，再缺返回 <code>key</code></td>
+</tr>
+<tr>
+<td><code>tIn</code></td>
+<td><code>tIn(locale, key, fallback?, vars?)</code></td>
+<td>按显式语言取词</td>
+</tr>
+<tr>
+<td><code>setLocale</code></td>
+<td><code>setLocale(tag, opt?)</code></td>
+<td>归一化并切换，写 <code>&lt;html lang&gt;</code>，派发 <code>cin:localechange</code></td>
+</tr>
+<tr>
+<td><code>getLocale</code></td>
+<td><code>getLocale()</code></td>
+<td>当前生效语言</td>
+</tr>
+<tr>
+<td><code>register</code></td>
+<td><code>register(tag, dict)</code></td>
+<td>注册或合并字典，后注册覆盖同名 key</td>
+</tr>
+<tr>
+<td><code>apply</code></td>
+<td><code>apply(scope?)</code></td>
+<td>按 <code>data-i18n</code> / <code>data-i18n-aria</code> 刷新范围</td>
+</tr>
+<tr>
+<td><code>locales</code></td>
+<td><code>locales()</code></td>
+<td>已注册语言列表</td>
+</tr>
+<tr>
+<td><code>onLocaleChange</code></td>
+<td><code>onLocaleChange(fn)</code></td>
+<td>订阅切换，返回取消函数</td>
+</tr>
+</tbody>
+</table>
+<p>语言标签归一化：<code>zh</code> / <code>zh-Hans-CN</code> → <code>zh-CN</code>，<code>en-US</code> → <code>en</code>，未注册语言回落 <code>zh-CN</code>。</p>
+<p>不写 JS 也能吃多语言，元素内的原文即兜底：</p>
+<pre><code class="language-html">&lt;p data-i18n=&quot;tree.noMatch&quot;&gt;没有匹配的节点&lt;/p&gt;
+&lt;button data-i18n-aria=&quot;copy.done&quot; aria-label=&quot;已复制&quot;&gt;复制&lt;/button&gt;
+</code></pre>
+<p>降级：只引分域包（无 <code>core</code>）时 <code>tr()</code> 回落中文兜底并<strong>照常按 <code>{name}</code> 插值</strong>；缺 key 依次回落 <code>fallback</code> → <code>key</code> 本身；新语言只翻一半时缺的回落 <code>zh-CN</code>。</p>
+<p>两条纪律：新增任何用户可见文案，必须同时补 <code>tr()</code> 兜底与两套字典（<code>npm run check:i18n</code> 第 4、5、7、8 条会拦）；<code>setLocale</code> 只刷新静态标记与后续取词，已渲染的面板需重新 <code>init</code>，不回溯重渲染。</p>
+<p>校验：<code>npm run check:i18n</code>（8 条一致性闸门）、<code>node scripts/acceptance-i18n.mjs</code>（31 条断言）、示例页 <code>demos/i18n.html</code>。完整约定见 <a href="i18n.html">docs/I18N.md</a>。</p>
+<hr>
+<h2 id="s-5-39-液态玻璃材质-glass">5.39 液态玻璃材质 glass</h2>
+<p>玻璃是<strong>材质属性，不是组件</strong>：容器挂上 <code>data-surface=&quot;glass&quot;</code> 就获得&quot;背景被模糊、自身只淡淡着色&quot;的浮起感，取掉属性立刻回到原样。所以没有 <code>glass-card</code> / <code>glass-dialog</code> 这类重复组件，浮层语义仍由 <code>card</code>、<code>overlay</code>、<code>popover</code>、<code>toolbar</code>、<code>bulkbar</code>、<code>notice-bar</code>、<code>splitpanel</code> 承担。</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;dist/entries/base/glass.css&quot;&gt;
+&lt;div class=&quot;cin-card&quot; data-surface=&quot;glass&quot; data-tint=&quot;aurora&quot;&gt;
+  &lt;p&gt;面板内容&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>取值</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-surface</code></td>
+<td><code>glass</code></td>
+<td>开启材质；白名单容器：<code>.cin-dialog-panel</code> <code>.cin-drawer-panel</code> <code>.cin-popover</code> <code>.cin-toolbar</code> <code>.cin-bulkbar</code> <code>.cin-notice-bar</code> <code>.cin-card</code> <code>.cin-splitpanel</code></td>
+</tr>
+<tr>
+<td><code>data-tint</code></td>
+<td><code>tide</code>（缺省）<code>aurora</code> <code>ember</code></td>
+<td>三档色调，只换 <code>--cin-glass-tint</code> 与 <code>--cin-glass-rim</code> 两个量</td>
+</tr>
+<tr>
+<td><code>data-glass</code></td>
+<td><code>none</code></td>
+<td>局部反选：回到实底、去模糊、去颗粒（父层玻璃不会渗进来）</td>
+</tr>
+<tr>
+<td><code>data-glass-enter</code></td>
+<td>存在即生效</td>
+<td>进场过渡走 <code>--cin-motion-fast-*</code>；<code>reduce</code> 下归零</td>
+</tr>
+</tbody>
+</table>
+<p>六个基础量（<code>glass/glass.tokens.css</code>）：<code>--cin-glass-blur</code> / <code>-sat</code> / <code>-tint</code> / <code>-rim</code> / <code>-grain</code> / <code>-shadow</code>，全部 <code>--cin-glass-*</code> 前缀，不覆盖任何既有令牌。暗色走 <code>[data-theme=&quot;ink&quot;]</code> 与 <code>prefers-color-scheme</code>，高对比把 rim 换成正文色并把颗粒归零。</p>
+<p><strong>四级降级</strong>（逐级都能用，不出现&quot;全透明洞&quot;）：</p>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>条件</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 真玻璃</td>
+<td>支持 <code>backdrop-filter</code> + <code>color-mix</code></td>
+<td>模糊 16px（≤600px 降 10px）+ 饱和 1.4 + 双层 rim</td>
+</tr>
+<tr>
+<td>L2 伪玻璃</td>
+<td>不支持 <code>backdrop-filter</code></td>
+<td>半透明实色 + inset 高光，无模糊</td>
+</tr>
+<tr>
+<td>L3 无透明</td>
+<td><code>prefers-reduced-transparency: reduce</code> / <code>forced-colors: active</code></td>
+<td>退回不透明底色 + 1px 边框，颗粒关闭</td>
+</tr>
+<tr>
+<td>L4 无增强</td>
+<td>整份入口不加载</td>
+<td>容器就是普通卡片，页面不塌</td>
+</tr>
+</tbody>
+</table>
+<p>三条硬纪律：玻璃层内文字<strong>必须不透明</strong>（禁止 <code>opacity</code> 压字）；嵌套<strong>不超过 2 层</strong>；列表行 <code>.cin-list-item</code>、表格行 <code>.cin-table tr</code>、网格项 <code>.cin-grid-item</code>、表单控件<strong>永久不挂玻璃</strong>（滚动时逐行重算模糊会直接吃帧率）。</p>
+<p>吸附条 <code>.cin-glass-dock</code> 静态靠 <code>scroll-snap</code> 就能用，<code>Cinder.glassDock.initAll()</code> 只是可选增强（滚轮转横向、方向键切换并居中），不加载时静态完全可用；<code>prefers-reduced-motion</code> 下取消平滑滚动。</p>
+<p>校验：<code>node scripts/acceptance-glass.mjs</code>（36 条断言：令牌齐备、降级块存在、<code>backdrop-filter</code> 只在玻璃选择器上、反选无模糊残留、玻璃上文字不透明、强制色关闭模糊）、示例页 <code>demos/glass.html</code>（含容器矩阵、三档 tint、四级降级对照、玻璃套玻璃反例）。方案与取舍见 <a href="liquid-glass.html">docs/liquid-glass-plan.md</a>。</p>
+<hr>
+<h2 id="s-5-40-图标变形-icon-morph">5.40 图标变形 icon morph</h2>
+<p>一个图标位要表达两种形态（播放 ↔ 暂停、展开 ↔ 收起、方形 ↔ 三角），最常见做法是切 <code>class</code> 或换 <code>src</code>——结果是<strong>外框尺寸跳、布局抖、过渡要么没有要么很贵</strong>。层里给两档：</p>
+<table>
+<thead>
+<tr>
+<th>档</th>
+<th>依赖</th>
+<th>做法</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1 交叉淡化</td>
+<td>纯 CSS，零脚本</td>
+<td>两层图标同格叠放，切 <code>data-morph</code> 只改 <code>opacity</code> + 轻微 <code>scale/rotate</code></td>
+<td>0 KB JS；两形状不同时中间态是&quot;叠影&quot;而非&quot;变形&quot;</td>
+</tr>
+<tr>
+<td>M2 真插值</td>
+<td><code>dist/entries/base/icon-morph.js</code>（gzip 2.5 KB）</td>
+<td>取两条路径归一化采样点，逐帧插值 <code>d</code></td>
+<td>只对同为路径的图标对成立；点数不同直接退回硬切</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-html">&lt;span class=&quot;cin-icon-stack&quot; data-morph=&quot;on&quot; data-size=&quot;lg&quot;&gt;
+  &lt;svg data-state=&quot;on&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M8 5h8v14H8z&quot;/&gt;&lt;/svg&gt;
+  &lt;svg data-state=&quot;off&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M12 3l9 18H3z&quot;/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+</code></pre>
+<p>外框尺寸由 <code>.cin-icon-stack</code> 决定（<code>--cin-size-icon-md</code> 20px / <code>[data-size=&quot;lg&quot;]</code> 24px），两层绝对定位不参与撑高，所以<strong>切换前后元素盒子一模一样</strong>，不会推动同行按钮。</p>
+<p>M2 的四条实现纪律：① 全局只跑一个 <code>rAF</code> 循环，多个图标同帧推进；② 打断时从当前中间态续跑，不从起点重来（连点不闪回）；③ 采样点数不一致就跳过插值直接切层，不硬凑；④ 时长只读 <code>--cin-motion-base-duration</code>，不写裸 <code>ms</code>，<code>prefers-reduced-motion</code> 下根本不注册动画。</p>
+<p><strong>语义必须同步</strong>：形状变了，<code>aria-label</code> 与 <code>aria-pressed</code> 必须一起变——只切图形不改语义，屏读会继续念旧状态。这一条是硬规则，写进 <code>packages/base/src/intents/icons.md</code>。</p>
+<p>降级：无 JS 时 M1 静态照常（CSS 管两态）；<code>forced-colors</code> 下直接 <code>display: none</code> 切层，不做透明度动画；<code>prefers-reduced-motion: reduce</code> 下 <code>transition: none</code>。</p>
+<p>校验：<code>node scripts/acceptance-icons.mjs</code>（62 条断言，含真浏览器实测——24/32 两档切换尺寸不变、连点 20 次收敛且语义同步、暗色不变形、<code>reduce</code> 下不注册动画、禁用 JS 后首态可见且次态不占位）。示例页 <code>demos/icons.html</code>「变形」区。</p>
+<hr>
+<h2 id="s-5-41-侧栏导航-sidenav-未发布预览">5.41 侧栏导航 sidenav（未发布预览）</h2>
+<blockquote>
+<p>未发布特性：源码与演示页已在仓库（<code>components/sidenav.css</code> + <code>behaviors/sidenav.js</code> + <code>intents/sidenav.md</code> + <code>demos/sidenav.html</code>），尚未随 1.6.0 发布面开放，接入前先看本节与示例页确认形态。</p>
+</blockquote>
+<p>左侧导航的常见形态是&quot;导航项一串平铺&quot;，到分组、子级、当前项、折叠、窄屏五件事叠在一起时就开始各写各的。层里给一整套：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>实现</th>
+<th>无 JS 时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分组与子级</td>
+<td>分组标题 + 可展开子级（<code>aria-expanded</code> + <code>aria-controls</code> + <code>hidden</code>）</td>
+<td>子级全部展开可见，折叠按钮不出现</td>
+</tr>
+<tr>
+<td>当前项</td>
+<td>底色 + 2px 内侧竖条双通道</td>
+<td>同左</td>
+</tr>
+<tr>
+<td>折叠图标栏</td>
+<td><code>data-collapsed</code> 联动 shell 侧栏 64 / 232 宽度</td>
+<td>折叠按钮不出现</td>
+</tr>
+<tr>
+<td>窄屏抽屉</td>
+<td><code>data-drawer</code>：遮罩 / Esc / 焦点归还 / body 滚动锁 / 跨断点自动关闭（&lt;900px）</td>
+<td>导航照常可点</td>
+</tr>
+</tbody>
+</table>
+<p>键盘：↑↓ Home End 漫游（roving tabindex，展开时 ↓ 进子级、子级 ← 回父级且收起）、→ 展开、← 收起。</p>
+<p>降级与校验：无 JS 时全展开可点，读屏态由 <code>aria-expanded</code> / <code>aria-controls</code> 承担；验收见 <code>scripts/acceptance-*.mjs</code> 覆盖组与示例页 <code>demos/sidenav.html</code>。</p>
+<h2 id="s-5-42-在线-playground-预览特性">5.42 在线 Playground（预览特性）</h2>
+<blockquote>
+<p>预览特性：<code>demos/playground.html</code>（19 KB，纯静态、零后端、零外链）已在仓库，作为在线调参台随文档站开放，不在发布面承诺内。</p>
+</blockquote>
+<p>不想为了&quot;改个品牌色&quot;就翻令牌 JSON 重构建时，用 Playground 直接拖：把通用层令牌做成实时调参台——品牌色（含 on-accent 亮度取反与 hover / pressed / soft / focus-ring 派生）、画布与表面色、圆角基准（xs / sm / md / lg 按比例派生）、阴影强度、正文字号（caption / label / display 联动）、字族、8 套皮肤与紧凑密度。</p>
+<p>改动即时落到 <code>:root</code>，右栏同步生成可直接覆盖的 CSS 片段，支持复制 / 下载 <code>cinder-theme.css</code>；全部状态存 URL hash，可离线分享。</p>
+<p>校验：<code>node scripts/acceptance-playground.mjs</code>（32 条断言，含「页面引用的每个 <code>--cin-*</code> 必须在 base 中真实存在」的防幻觉闸门）。</p>
+<hr>
+<h2 id="s-6-新增一个定向库-例如-wms">6. 新增一个定向库（例如 WMS）</h2>
+<ol>
+<li>复制 <code>packages/erp</code> → <code>packages/wms</code>，<code>tokens/erp.tokens.json</code> → <code>tokens/wms.tokens.json</code>（<code>extends: &quot;base&quot;</code>，只写新增尺寸）；</li>
+<li>业务块一律包 <code>@layer wms { … }</code>，类名避让 base：用 <code>.cin-wms-*</code> 或语义化新名；</li>
+<li>在 <code>build.mjs</code> 的装配段加一组 <code>wmsParts</code> 与 <code>dist/cinder-wms.css</code>，并把 <code>wms</code> 追加到 <code>@layer</code> 声明末尾（层序即优先级，越靠后越优先）；</li>
+<li>跑 <code>node build.mjs --check</code>，第 1-5 条校验对新层同样生效。</li>
+</ol>
+<p>多个定向库可同时存在：<code>@layer tokens, base, components, erp, wms</code>。</p>
+<h2 id="s-7-示例页">7. 示例页</h2>
+<table>
+<thead>
+<tr>
+<th>页面</th>
+<th>只引</th>
+<th>验证点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>demos/base.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>基础层独立可用，无业务代码也能跑</td>
+</tr>
+<tr>
+<td><code>demos/p0.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>P0 行为件验收：流式文本、撤销、组合框、命令面板、标签、金额、口令强度、行内编辑、下拉刷新、灯箱、热力图、差异视图</td>
+</tr>
+<tr>
+<td><code>demos/overlay.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>8 类浮层交互，五档视口无横向溢出</td>
+</tr>
+<tr>
+<td><code>demos/accordion.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>折叠动画、互斥、键盘漫游、无 JS 降级</td>
+</tr>
+<tr>
+<td><code>demos/fileinput.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>拖拽、限制校验、图片预览、上传进度</td>
+</tr>
+<tr>
+<td><code>demos/tabs.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>点击/键盘切换、手动激活、纵向、分段样式、无 JS 降级</td>
+</tr>
+<tr>
+<td><code>demos/slider-rating.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>滑块填充与格式化、行内排布、评分悬停预览与只读、无 JS 降级</td>
+</tr>
+<tr>
+<td><code>demos/colorpicker.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>面板夹紧、色域/色相/透明度、三种输出格式、预设、无 JS 用原生取色盘</td>
+</tr>
+<tr>
+<td><code>demos/datepicker.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>单选/范围日历、min-max 与禁用日、键盘漫游、时间输入、无 JS 可手输</td>
+</tr>
+<tr>
+<td><code>demos/tree.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>导航树键盘漫游、多选级联、懒加载回填、关键词过滤与空态、无 JS 全展开</td>
+</tr>
+<tr>
+<td><code>demos/carousel.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>单张翻页、并排多张按页分页、循环与自动播放、事件与控制器、无 JS 可拖动</td>
+</tr>
+<tr>
+<td><code>demos/virtualgrid.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>一万行窗口渲染、滚到底与居中定位、切行高与追加、选择与排序、首列固定、无 JS 可读</td>
+</tr>
+<tr>
+<td><code>demos/utility.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>复制成功/失败态、分栏拖拽与键盘微调、验证码逐格输入与粘贴分配、数字字节日期格式化、Markdown 渲染、二维码生成</td>
+</tr>
+<tr>
+<td><code>demos/cascader.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>逐列下钻、路径回填、搜索过滤、异步加载、无 JS 用原生 select 串联</td>
+</tr>
+<tr>
+<td><code>demos/transfer.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>两列搬运、方向按钮、计数与空态、无 JS 可滚动查看</td>
+</tr>
+<tr>
+<td><code>demos/notice-bar.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>四类语义、关闭与再显示、跑马灯暂停、动作入口</td>
+</tr>
+<tr>
+<td><code>demos/input-number.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>步进与夹取、长按连加、浮点精度、非法态回填、无 JS 可手输</td>
+</tr>
+<tr>
+<td><code>demos/segmented.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>点击/方向键切换、禁用项跳过、撑满与尺寸、无 JS 用原生 radio</td>
+</tr>
+<tr>
+<td><code>demos/popover.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>四向翻边与箭头、宽度变体、焦点驱动、窄屏贴边，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/card.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>媒体比例、横向排布、可点/选中/禁用、描述截断、flush，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/comment.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>嵌套回复缩进与竖线、引用块、分隔线、空态，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/btn-group.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>共享边无双线、首尾圆角、纵向、撑满等分、折行、禁用，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/option-group.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>纵向/inline/grid 三排布、卡片整块可点、校验失败、禁用，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/ring.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>进度梯度、尺寸三档、语义色、不确定态、卡片内嵌，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/chat.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>左右镜像、连续发言、引用+附件+失败态、系统提示与输入中、窄栏，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/calendar.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>今天/选中/区间/非本月/禁用/事件点六态、紧凑档、窄屏热区，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/watermark.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>基础平铺、密集档、反白档、角标档、指针穿透、打印关闭</td>
+</tr>
+<tr>
+<td><code>demos/media.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>尺寸三档、原始比例、反向、竖排、截断两行/单行、窄屏转竖排，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/entity.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>四态状态点、紧凑档、可点行悬停与焦点环、反白、竖排、长文本换行，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/scroll-area.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>纵向/横滚/渐隐/吸附/粘顶、滚动不传染页面、reduced-motion 降级，零脚本</td>
+</tr>
+<tr>
+<td><code>demos/descriptions.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>固定列与 auto-fit、inline 布局、跨列与整行、空态、窄屏降列</td>
+</tr>
+<tr>
+<td><code>demos/avatar.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>三档尺寸、三态兜底、语义底色、四类状态点、叠加组悬停展开</td>
+</tr>
+<tr>
+<td><code>demos/result.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>成功/失败/处理中/警告/信息、失败明细块、紧凑尺寸</td>
+</tr>
+<tr>
+<td><code>demos/list.html</code></td>
+<td><code>cinder-base.css</code></td>
+<td>分隔线与悬停、两档密度、长标题换行、空态</td>
+</tr>
+<tr>
+<td><code>demos/i18n.html</code></td>
+<td><code>cinder-base.css</code> + <code>cinder.js</code></td>
+<td>zh-CN / en 双字典取词、运行时切换与 <code>&lt;html lang&gt;</code> 回写、<code>data-i18n</code> 静态标记刷新、<code>register</code> 扩展第三方语言、缺 <code>core</code> 时中文兜底</td>
+</tr>
+<tr>
+<td><code>demos/erp/index.html</code></td>
+<td><code>cinder-all.css</code></td>
+<td>组件总览</td>
+</tr>
+<tr>
+<td><code>demos/erp/dashboard.html</code></td>
+<td><code>cinder-all.css</code></td>
+<td>指标 + 图表 + 面板块</td>
+</tr>
+<tr>
+<td><code>demos/erp/inventory.html</code></td>
+<td><code>cinder-all.css</code></td>
+<td>数据表、筛选、批量条</td>
+</tr>
+<tr>
+<td><code>demos/erp/purchase-order.html</code></td>
+<td><code>cinder-all.css</code></td>
+<td>单据骨架 + 明细行</td>
+</tr>
+<tr>
+<td><code>demos/erp/sales-outbound.html</code></td>
+<td><code>cinder-all.css</code></td>
+<td>选择器 + 出库流程</td>
+</tr>
+<tr>
+<td><code>demos/erp/pda.html</code></td>
+<td><code>cinder-all.css</code></td>
+<td>PDA 模式</td>
+</tr>
+</tbody>
+</table>
+<p>全部为静态文件，<code>file://</code> 直接打开可看，无需服务器。</p>
+<h2 id="s-8-设计红线-成文规则">8. 设计红线（成文规则）</h2>
+<p>混用体系必须有成文规则，新增组件按本节取值，不再逐页临时决定。</p>
+<p><strong>形状分级</strong></p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>圆角</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>控件</td>
+<td><code>--cin-radius-sm</code>（8）</td>
+<td>按钮、输入、选择、分段、标签</td>
+</tr>
+<tr>
+<td>容器</td>
+<td><code>--cin-radius-md</code>（12）</td>
+<td>卡片、面板、弹窗</td>
+</tr>
+<tr>
+<td>大浮层</td>
+<td><code>--cin-radius-lg</code>（20）</td>
+<td>抽屉、全屏浮层、大区块容器</td>
+</tr>
+<tr>
+<td>胶囊 / 圆形</td>
+<td><code>--cin-radius-full</code></td>
+<td>头像、状态点、引导圆点</td>
+</tr>
+<tr>
+<td>无圆角</td>
+<td>硬编码 <code>0</code></td>
+<td>仅表头与页签底板，其余位置禁止</td>
+</tr>
+</tbody>
+</table>
+<p><strong>颜色</strong></p>
+<ul>
+<li>禁用纯黑纯白：卡片面用暖白（<code>#FEFDFB</code> / <code>#FFFDF8</code>），浅色主题反白字 <code>#FDFBF7</code>，暗色主题反白字 <code>#141210</code>。</li>
+<li>强调色每套皮肤只有一个，饱和度 ≤ 76%，明度保持品牌观感；<code>accent.default</code> 对画布 ≥ 4.5（现值 4.76），<code>text-on-accent</code> 对强调色 ≥ 4.5。</li>
+<li>状态色不改语义，只用色相区分：成功绿、警告琥珀、危险红、信息蓝。</li>
+</ul>
+<p><strong>边界与对比度</strong></p>
+<ul>
+<li><code>border-strong</code> 承担控件边界语义（输入框、选择器、次级按钮、步进器）：对 <code>bg-surface</code> 与 <code>bg-surface-sunken</code> 均 ≥ 3:1（WCAG 1.4.11），构建期硬校验。</li>
+<li><code>border-subtle</code> 仅装饰，不承担边界语义：只用于表格分行、区块分隔，禁止用于输入框或可点击控件的外框。</li>
+</ul>
+<p><strong>暗色与系统偏好</strong></p>
+<ul>
+<li>未设置 <code>data-theme</code> 时，<code>@media (prefers-color-scheme: dark)</code> 自动映射到 ink；显式 <code>data-theme</code> 优先级更高，<code>data-skin</code> 在其之上覆盖颜色。</li>
+<li>滚动与定位：组件不注册高频 <code>scroll</code> 处理；Tour 采用 rAF 合帧 + <code>ResizeObserver</code>，位移只写 <code>transform</code>，滚动监听仅作 passive 兜底。</li>
+<li>文案：禁用破折号字符，一行最多一个中圆点。</li>
+</ul>
+<h2 id="s-9-已知边界">9. 已知边界</h2>
+<ul>
+<li>只做样式与少量 DOM 行为，不含业务逻辑；表格排序、筛选由页面自己接。</li>
+<li>数据表自适应依赖容器查询，容器必须是 <code>.cin-dg-wrap</code>，且引用方浏览器需支持 <code>container-type</code>（Chrome 105+ / Safari 16+）。</li>
+<li><code>cinder-erp.css</code> 不能单独引，缺 base 会丢失全部基础语义与变量。</li>
+<li>弹窗依赖原生 <code>&lt;dialog&gt;</code> 与 <code>::backdrop</code>（Chrome 37+ / Safari 15.4+）；引导 Tour 需要目标元素可见，目标隐藏时自动跳过该步。</li>
+</ul>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-1-分层模型" data-level="2">1. 分层模型</a>
+      <a href="#s-2-三种引用方式" data-level="2">2. 三种引用方式</a>
+      <a href="#s-2-1-按需入口-单组件引入" data-level="3">2.1 按需入口（单组件引入）</a>
+      <a href="#s-2-2-按需-js-域-双轨" data-level="3">2.2 按需 JS 域（双轨）</a>
+      <a href="#s-3-冲突是怎么被消掉的" data-level="2">3. 冲突是怎么被消掉的</a>
+      <a href="#s-4-构建" data-level="2">4. 构建</a>
+      <a href="#s-体积预算" data-level="3">体积预算</a>
+      <a href="#s-视觉回归基线" data-level="3">视觉回归基线</a>
+      <a href="#s-文档站" data-level="3">文档站</a>
+      <a href="#s-5-浮层与弹窗" data-level="2">5. 浮层与弹窗</a>
+      <a href="#s-5-1-折叠面板-accordion" data-level="3">5.1 折叠面板 Accordion</a>
+      <a href="#s-5-2-文件选择-fileinput" data-level="3">5.2 文件选择 FileInput</a>
+      <a href="#s-5-3-标签页-tabs" data-level="3">5.3 标签页 Tabs</a>
+      <a href="#s-5-4-滑块-slider" data-level="3">5.4 滑块 Slider</a>
+      <a href="#s-5-5-评分-rating" data-level="3">5.5 评分 Rating</a>
+      <a href="#s-5-6-取色器-colorpicker" data-level="3">5.6 取色器 ColorPicker</a>
+      <a href="#s-5-7-日期与时间-datepicker-timeinput" data-level="3">5.7 日期与时间 DatePicker / TimeInput</a>
+      <a href="#s-5-8-树形目录-tree" data-level="2">5.8 树形目录 Tree</a>
+      <a href="#s-5-9-轮播-carousel" data-level="2">5.9 轮播 Carousel</a>
+      <a href="#s-5-10-虚拟滚动数据表-virtualgrid" data-level="2">5.10 虚拟滚动数据表 VirtualGrid</a>
+      <a href="#s-5-11-复制-分栏-验证码" data-level="2">5.11 复制 / 分栏 / 验证码</a>
+      <a href="#s-5-12-格式化-markdown-二维码" data-level="2">5.12 格式化 / Markdown / 二维码</a>
+      <a href="#s-5-13-时间选择器-timepicker" data-level="2">5.13 时间选择器 TimePicker</a>
+      <a href="#s-5-14-级联选择-cascader" data-level="2">5.14 级联选择 Cascader</a>
+      <a href="#s-5-15-穿梭框-transfer" data-level="2">5.15 穿梭框 Transfer</a>
+      <a href="#s-5-16-通告条-noticebar" data-level="2">5.16 通告条 NoticeBar</a>
+      <a href="#s-5-17-数字输入-inputnumber" data-level="2">5.17 数字输入 InputNumber</a>
+      <a href="#s-5-18-分段控件-segmented" data-level="2">5.18 分段控件 Segmented</a>
+      <a href="#s-5-19-描述列表-descriptions" data-level="2">5.19 描述列表 Descriptions</a>
+      <a href="#s-5-20-头像-avatar" data-level="2">5.20 头像 Avatar</a>
+      <a href="#s-5-21-结果页-result" data-level="2">5.21 结果页 Result</a>
+      <a href="#s-5-22-通用列表-list" data-level="2">5.22 通用列表 List</a>
+      <a href="#s-5-23-浮层气泡-popover" data-level="2">5.23 浮层气泡 Popover</a>
+      <a href="#s-5-24-卡片-card" data-level="2">5.24 卡片 Card</a>
+      <a href="#s-5-25-评论-comment" data-level="2">5.25 评论 Comment</a>
+      <a href="#s-5-26-按钮组-button-group" data-level="2">5.26 按钮组 Button Group</a>
+      <a href="#s-5-27-选项组-option-group" data-level="2">5.27 选项组 Option Group</a>
+      <a href="#s-5-28-进度环-progress-ring" data-level="2">5.28 进度环 Progress Ring</a>
+      <a href="#s-5-29-对话气泡-chat" data-level="2">5.29 对话气泡 Chat</a>
+      <a href="#s-5-30-月历-calendar" data-level="2">5.30 月历 Calendar</a>
+      <a href="#s-5-31-水印-watermark" data-level="2">5.31 水印 Watermark</a>
+      <a href="#s-5-32-图文媒体对象-media" data-level="2">5.32 图文媒体对象 Media</a>
+      <a href="#s-5-33-身份行-entity" data-level="2">5.33 身份行 Entity</a>
+      <a href="#s-5-34-滚动容器-scroll-area" data-level="2">5.34 滚动容器 Scroll Area</a>
+      <a href="#s-5-35-思考步骤流-thinking" data-level="2">5.35 思考步骤流 Thinking</a>
+      <a href="#s-5-36-工具调用标签-tool-chips" data-level="2">5.36 工具调用标签 Tool Chips</a>
+      <a href="#s-5-37-审批卡-approval-card" data-level="2">5.37 审批卡 Approval Card</a>
+      <a href="#s-5-38-多语言-i18n" data-level="2">5.38 多语言 i18n</a>
+      <a href="#s-5-39-液态玻璃材质-glass" data-level="2">5.39 液态玻璃材质 glass</a>
+      <a href="#s-5-40-图标变形-icon-morph" data-level="2">5.40 图标变形 icon morph</a>
+      <a href="#s-5-41-侧栏导航-sidenav-未发布预览" data-level="2">5.41 侧栏导航 sidenav（未发布预览）</a>
+      <a href="#s-5-42-在线-playground-预览特性" data-level="2">5.42 在线 Playground（预览特性）</a>
+      <a href="#s-6-新增一个定向库-例如-wms" data-level="2">6. 新增一个定向库（例如 WMS）</a>
+      <a href="#s-7-示例页" data-level="2">7. 示例页</a>
+      <a href="#s-8-设计红线-成文规则" data-level="2">8. 设计红线（成文规则）</a>
+      <a href="#s-9-已知边界" data-level="2">9. 已知边界</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>采购订单 · Cinder ERP</title>
+<link rel="stylesheet" href="../../dist/cinder-all.css">
+<link rel="stylesheet" href="../demo.css">
+<script defer src="../../dist/cinder.js"></script>
+</head>
+<body>
+<div class="demo-shell">
+  <aside class="demo-rail">
+    <div class="demo-brand"><b>Cinder ERP</b><small>零依赖组件库</small></div>
+    <nav>
+      <a href="index.html">组件总览 <small>0</small></a>
+      <a href="dashboard.html">工作台 <small>1</small></a>
+      <a href="purchase-order.html" aria-current="page">采购订单 <small>2</small></a>
+      <a href="sales-outbound.html">销售出库 <small>3</small></a>
+      <a href="inventory.html">库存查询 <small>4</small></a>
+      <a href="pda.html">PDA 拣货 <small>5</small></a>
+    </nav>
+    <div class="demo-rail-foot">单据页：容器 <code>cin-page</code><br>小于 600 明细转卡片</div>
+  </aside>
+
+  <main class="demo-main">
+    <header class="cin-topbar" data-tone="canvas">
+      <div class="cin-breadcrumb"><a href="index.html">首页</a> / <a href="dashboard.html">采购</a> / <span aria-current="page">采购订单</span></div>
+      <div class="cin-spacer"></div>
+      <span class="cin-tag" data-tone="warning">草稿</span>
+      <button class="cin-btn" data-variant="ghost" data-size="sm">帮助</button>
+    </header>
+
+    <div class="cin-page demo-doc">
+      <div class="cin-doc">
+        <div class="cin-doc-bar">
+          <button class="cin-btn" data-variant="ghost" data-size="sm" data-shape="square" aria-label="返回">←</button>
+          <div>
+            <div class="cin-title2">采购订单</div>
+            <div class="cin-caption">CG-20261031-011 创建于 15:48 · 制单人 王敏</div>
+          </div>
+          <div class="cin-spacer"></div>
+          <button class="cin-btn" data-variant="secondary" data-size="sm">存草稿</button>
+          <button class="cin-btn" data-variant="secondary" data-size="sm">打印</button>
+          <button class="cin-btn" data-variant="primary" data-size="sm">提交审批</button>
+        </div>
+
+        <div class="cin-doc-body">
+          <div class="cin-inline-alert" data-tone="warning">
+            <strong>预算提醒</strong>
+            <span>本单金额超出采购员月度预算 12%，提交后需二级审批。</span>
+            <div class="cin-spacer"></div>
+            <button class="cin-btn" data-variant="link" data-size="sm">查看预算</button>
+          </div>
+
+          <section class="cin-doc-section">
+            <div class="cin-doc-section-head">
+              <div class="cin-doc-section-title">基本信息</div>
+              <span class="cin-caption">带 * 为必填</span>
+            </div>
+            <div class="cin-doc-head">
+              <div class="cin-field">
+                <label class="cin-field-label" for="supplier">供应商 *</label>
+                <div class="cin-search" data-picker-trigger>
+                  <input id="supplier" class="cin-input" value="杭州立诚包装有限公司" readonly>
+                  <button class="cin-btn" data-variant="ghost" data-size="sm">切换</button>
+                </div>
+                <div class="cin-field-help">结算方式：月结 30 天 · 信用额度 ¥200,000</div>
+              </div>
+              <div class="cin-field">
+                <label class="cin-field-label" for="warehouse">收货仓库 *</label>
+                <select id="warehouse" class="cin-select">
+                  <option>华东仓（杭州）</option>
+                  <option>中心仓（宁波）</option>
+                  <option>华南仓（广州）</option>
+                </select>
+              </div>
+              <div class="cin-field">
+                <label class="cin-field-label" for="date">订单日期</label>
+                <input id="date" class="cin-input" type="date" value="2026-10-31">
+              </div>
+              <div class="cin-field">
+                <label class="cin-field-label" for="eta">预计到货</label>
+                <input id="eta" class="cin-input" type="date" value="2026-11-03">
+              </div>
+              <div class="cin-field cin-span-2">
+                <label class="cin-field-label" for="memo">备注</label>
+                <input id="memo" class="cin-input" placeholder="如：需随货附检验报告">
+              </div>
+            </div>
+          </section>
+
+          <section class="cin-doc-section">
+            <div class="cin-doc-section-head">
+              <div class="cin-doc-section-title">采购明细 <span class="cin-count">4 行</span></div>
+              <div style="display:flex; gap: var(--cin-space-100)">
+                <button class="cin-btn" data-variant="secondary" data-size="sm">导入 Excel</button>
+                <button class="cin-btn" data-variant="secondary" data-size="sm">+ 添加商品</button>
+              </div>
+            </div>
+
+            <div class="cin-lines">
+              <div class="cin-lines-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th data-line-primary>商品</th>
+                      <th>批次 / 效期</th>
+                      <th data-align="end">数量</th>
+                      <th data-align="end">单价</th>
+                      <th data-align="end">金额</th>
+                      <th data-align="end">税率</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-line-primary data-label="商品">
+                        <div class="cin-line-name"><strong>白桃乌龙茶 500ml×12</strong><small>SKU-1024 · 箱 / 瓶（1:12）</small></div>
+                      </td>
+                      <td data-label="批次 / 效期">
+                        <div class="cin-lines-batch"><span class="cin-tag" data-tone="muted">B2610</span><span class="cin-tag" data-tone="warning">效期 2027-04-30</span></div>
+                      </td>
+                      <td data-label="数量" data-align="end">
+                        <input class="cin-input cin-input-num" value="120" inputmode="decimal"><span class="cin-unit-suffix">箱</span>
+                      </td>
+                      <td data-label="单价" data-align="end"><input class="cin-input cin-input-num" value="96.00"></td>
+                      <td data-label="金额" data-align="end">¥11,520.00</td>
+                      <td data-label="税率" data-align="end">13%</td>
+                      <td><button class="cin-btn" data-variant="ghost" data-size="sm" data-shape="square" aria-label="删除">✕</button></td>
+                    </tr>
+                    <tr>
+                      <td data-line-primary data-label="商品">
+                        <div class="cin-line-name"><strong>冷链鲜奶 1L</strong><small>SKU-2077 箱 / 瓶（1:12） · 冷藏</small></div>
+                      </td>
+                      <td data-label="批次 / 效期">
+                        <div class="cin-lines-batch"><span class="cin-tag" data-tone="muted">B2611</span><span class="cin-tag" data-tone="danger">效期 2026-11-09</span></div>
+                      </td>
+                      <td data-label="数量" data-align="end"><input class="cin-input cin-input-num" value="60"><span class="cin-unit-suffix">箱</span></td>
+                      <td data-label="单价" data-align="end"><input class="cin-input cin-input-num" value="132.00"></td>
+                      <td data-label="金额" data-align="end">¥7,920.00</td>
+                      <td data-label="税率" data-align="end">9%</td>
+                      <td><button class="cin-btn" data-variant="ghost" data-size="sm" data-shape="square" aria-label="删除">✕</button></td>
+                    </tr>
+                    <tr>
+                      <td data-line-primary data-label="商品">
+                        <div class="cin-line-name"><strong>瓦楞纸箱 5 层 60×40×40</strong><small>SKU-8830 · 捆 / 个（1:20）</small></div>
+                      </td>
+                      <td data-label="批次 / 效期"><span class="cin-caption">无需批次</span></td>
+                      <td data-label="数量" data-align="end"><input class="cin-input cin-input-num" value="300"><span class="cin-unit-suffix">捆</span></td>
+                      <td data-label="单价" data-align="end"><input class="cin-input cin-input-num" value="28.50"></td>
+                      <td data-label="金额" data-align="end">¥8,550.00</td>
+                      <td data-label="税率" data-align="end">13%</td>
+                      <td><button class="cin-btn" data-variant="ghost" data-size="sm" data-shape="square" aria-label="删除">✕</button></td>
+                    </tr>
+                    <tr>
+                      <td data-line-primary data-label="商品">
+                        <div class="cin-line-name"><strong>封箱胶带 48mm×100m</strong><small>SKU-8901 · 箱 / 卷（1:36）</small></div>
+                      </td>
+                      <td data-label="批次 / 效期"><span class="cin-caption">无需批次</span></td>
+                      <td data-label="数量" data-align="end"><input class="cin-input cin-input-num" value="40"><span class="cin-unit-suffix">箱</span></td>
+                      <td data-label="单价" data-align="end"><input class="cin-input cin-input-num" value="115.00"></td>
+                      <td data-label="金额" data-align="end">¥4,600.00</td>
+                      <td data-label="税率" data-align="end">13%</td>
+                      <td><button class="cin-btn" data-variant="ghost" data-size="sm" data-shape="square" aria-label="删除">✕</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="cin-doc-sum">
+              <div><span>数量合计</span><b>520 箱 / 4 行</b></div>
+              <div><span>金额合计</span><b>¥32,590.00</b></div>
+              <div><span>税额</span><b>¥4,064.70</b></div>
+              <div><span>运费</span><b>¥0.00</b></div>
+              <div class="cin-doc-total"><span>应付合计</span><b>¥36,654.70</b></div>
+            </div>
+          </section>
+
+          <section class="cin-doc-section">
+            <div class="cin-doc-section-head"><div class="cin-doc-section-title">审批流</div></div>
+            <div class="cin-steps">
+              <div class="cin-step" data-state="done"><span class="cin-step-dot">1</span><div><strong>制单</strong><small>王敏 · 10-31 15:48</small></div></div>
+              <span class="cin-step-sep"></span>
+              <div class="cin-step" data-state="current"><span class="cin-step-dot">2</span><div><strong>采购主管审批</strong><small>李强 · 待处理</small></div></div>
+              <span class="cin-step-sep"></span>
+              <div class="cin-step"><span class="cin-step-dot">3</span><div><strong>财务复核</strong><small>-</small></div></div>
+              <span class="cin-step-sep"></span>
+              <div class="cin-step"><span class="cin-step-dot">4</span><div><strong>下达供应商</strong><small>-</small></div></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="cin-doc-foot">
+          <span class="cin-caption">自动保存于 17:41</span>
+          <div class="cin-spacer"></div>
+          <button class="cin-btn" data-variant="ghost">取消</button>
+          <button class="cin-btn" data-variant="secondary">存草稿</button>
+          <button class="cin-btn" data-variant="primary">提交审批</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

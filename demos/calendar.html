@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 月历</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">calendar</span>
+      <span class="cin-caption">7 列等宽月份网格：今天/选中/区间/非本月/禁用/事件点六态；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">基础月历（今天 / 选中 / 事件点）</h2>
+          <div class="cin-calendar" id="cal-basic" style="max-inline-size:420px">
+            <div class="cin-calendar-head">
+              <div>
+                <h3 class="cin-calendar-title">2026 年 11 月</h3>
+                <div class="cin-calendar-subtitle">第 45 周起</div>
+              </div>
+              <div class="cin-calendar-nav">
+                <button class="cin-btn" data-size="sm" data-variant="ghost" type="button" aria-label="上一月">&lsaquo;</button>
+                <button class="cin-btn" data-size="sm" data-variant="ghost" type="button" aria-label="下一月">&rsaquo;</button>
+              </div>
+            </div>
+            <div class="cin-calendar-weekdays" aria-hidden="true">
+              <span class="cin-calendar-weekday">一</span>
+              <span class="cin-calendar-weekday">二</span>
+              <span class="cin-calendar-weekday">三</span>
+              <span class="cin-calendar-weekday">四</span>
+              <span class="cin-calendar-weekday">五</span>
+              <span class="cin-calendar-weekday" data-weekend>六</span>
+              <span class="cin-calendar-weekday" data-weekend>日</span>
+            </div>
+            <div class="cin-calendar-grid" id="cal-grid" role="grid" aria-label="2026 年 11 月">
+            <button class="cin-calendar-day" data-outside aria-label="10月26日" type="button"><span class="cin-calendar-day-num">26</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月27日" type="button"><span class="cin-calendar-day-num">27</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月28日" type="button"><span class="cin-calendar-day-num">28</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月29日" type="button"><span class="cin-calendar-day-num">29</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月30日" type="button"><span class="cin-calendar-day-num">30</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月31日" type="button"><span class="cin-calendar-day-num">31</span></button>
+            <button class="cin-calendar-day" aria-label="11月1日" type="button"><span class="cin-calendar-day-num">1</span></button>
+            <button class="cin-calendar-day" aria-current="date" data-today aria-label="11月2日" type="button"><span class="cin-calendar-day-num">2</span></button>
+            <button class="cin-calendar-day" aria-label="11月3日" type="button"><span class="cin-calendar-day-num">3</span></button>
+            <button class="cin-calendar-day" aria-label="11月4日" type="button"><span class="cin-calendar-day-num">4</span></button>
+            <button class="cin-calendar-day" aria-selected="true" aria-label="11月5日，2 个事件" type="button"><span class="cin-calendar-day-num">5</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="success"></span></span></button>
+            <button class="cin-calendar-day" aria-label="11月6日" type="button"><span class="cin-calendar-day-num">6</span></button>
+            <button class="cin-calendar-day" aria-label="11月7日" type="button"><span class="cin-calendar-day-num">7</span></button>
+            <button class="cin-calendar-day" aria-label="11月8日" type="button"><span class="cin-calendar-day-num">8</span></button>
+            <button class="cin-calendar-day" aria-label="11月9日" type="button"><span class="cin-calendar-day-num">9</span></button>
+            <button class="cin-calendar-day" data-in-range data-range-start aria-label="11月10日" type="button"><span class="cin-calendar-day-num">10</span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月11日" type="button"><span class="cin-calendar-day-num">11</span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月12日，3 个事件" type="button"><span class="cin-calendar-day-num">12</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="warning"></span><span class="cin-calendar-event" data-tone="info"></span></span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月13日" type="button"><span class="cin-calendar-day-num">13</span></button>
+            <button class="cin-calendar-day" data-in-range data-range-end aria-label="11月14日" type="button"><span class="cin-calendar-day-num">14</span></button>
+            <button class="cin-calendar-day" aria-label="11月15日" type="button"><span class="cin-calendar-day-num">15</span></button>
+            <button class="cin-calendar-day" aria-label="11月16日" type="button"><span class="cin-calendar-day-num">16</span></button>
+            <button class="cin-calendar-day" aria-label="11月17日" type="button"><span class="cin-calendar-day-num">17</span></button>
+            <button class="cin-calendar-day" aria-label="11月18日，3 个事件" type="button"><span class="cin-calendar-day-num">18</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="danger"></span><span class="cin-calendar-event"></span><span class="cin-calendar-more">+1</span></span></button>
+            <button class="cin-calendar-day" aria-label="11月19日" type="button"><span class="cin-calendar-day-num">19</span></button>
+            <button class="cin-calendar-day" aria-disabled="true" disabled aria-label="11月20日" type="button"><span class="cin-calendar-day-num">20</span></button>
+            <button class="cin-calendar-day" aria-disabled="true" disabled aria-label="11月21日" type="button"><span class="cin-calendar-day-num">21</span></button>
+            <button class="cin-calendar-day" aria-label="11月22日" type="button"><span class="cin-calendar-day-num">22</span></button>
+            <button class="cin-calendar-day" aria-label="11月23日" type="button"><span class="cin-calendar-day-num">23</span></button>
+            <button class="cin-calendar-day" aria-label="11月24日" type="button"><span class="cin-calendar-day-num">24</span></button>
+            <button class="cin-calendar-day" aria-label="11月25日" type="button"><span class="cin-calendar-day-num">25</span></button>
+            <button class="cin-calendar-day" aria-label="11月26日" type="button"><span class="cin-calendar-day-num">26</span></button>
+            <button class="cin-calendar-day" aria-label="11月27日" type="button"><span class="cin-calendar-day-num">27</span></button>
+            <button class="cin-calendar-day" aria-label="11月28日" type="button"><span class="cin-calendar-day-num">28</span></button>
+            <button class="cin-calendar-day" aria-label="11月29日" type="button"><span class="cin-calendar-day-num">29</span></button>
+            <button class="cin-calendar-day" aria-label="11月30日" type="button"><span class="cin-calendar-day-num">30</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月1日" type="button"><span class="cin-calendar-day-num">1</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月2日" type="button"><span class="cin-calendar-day-num">2</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月3日" type="button"><span class="cin-calendar-day-num">3</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月4日" type="button"><span class="cin-calendar-day-num">4</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月5日" type="button"><span class="cin-calendar-day-num">5</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月6日" type="button"><span class="cin-calendar-day-num">6</span></button>
+            </div>
+            <div class="cin-calendar-foot">
+              <div class="cin-calendar-legend">
+                <span class="cin-calendar-legend-item"><span class="cin-calendar-event"></span>已排期</span>
+                <span class="cin-calendar-legend-item"><span class="cin-calendar-event" data-tone="success"></span>已完成</span>
+                <span class="cin-calendar-legend-item"><span class="cin-calendar-event" data-tone="warning"></span>待确认</span>
+              </div>
+              <button class="cin-btn" data-size="sm" data-variant="secondary" type="button">今天</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">区间选择（首尾圆角 + 中间连条）</h2>
+          <div class="cin-calendar" id="cal-range" style="max-inline-size:420px">
+            <div class="cin-calendar-head">
+              <h3 class="cin-calendar-title">2026 年 11 月 · 11/10 – 11/14</h3>
+            </div>
+            <div class="cin-calendar-weekdays" aria-hidden="true">
+              <span class="cin-calendar-weekday">一</span>
+              <span class="cin-calendar-weekday">二</span>
+              <span class="cin-calendar-weekday">三</span>
+              <span class="cin-calendar-weekday">四</span>
+              <span class="cin-calendar-weekday">五</span>
+              <span class="cin-calendar-weekday" data-weekend>六</span>
+              <span class="cin-calendar-weekday" data-weekend>日</span>
+            </div>
+            <div class="cin-calendar-grid" id="cal-grid-range" role="grid" aria-label="区间选择">
+            <button class="cin-calendar-day" data-outside aria-label="10月26日" type="button"><span class="cin-calendar-day-num">26</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月27日" type="button"><span class="cin-calendar-day-num">27</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月28日" type="button"><span class="cin-calendar-day-num">28</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月29日" type="button"><span class="cin-calendar-day-num">29</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月30日" type="button"><span class="cin-calendar-day-num">30</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月31日" type="button"><span class="cin-calendar-day-num">31</span></button>
+            <button class="cin-calendar-day" aria-label="11月1日" type="button"><span class="cin-calendar-day-num">1</span></button>
+            <button class="cin-calendar-day" aria-current="date" data-today aria-label="11月2日" type="button"><span class="cin-calendar-day-num">2</span></button>
+            <button class="cin-calendar-day" aria-label="11月3日" type="button"><span class="cin-calendar-day-num">3</span></button>
+            <button class="cin-calendar-day" aria-label="11月4日" type="button"><span class="cin-calendar-day-num">4</span></button>
+            <button class="cin-calendar-day" aria-selected="true" aria-label="11月5日，2 个事件" type="button"><span class="cin-calendar-day-num">5</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="success"></span></span></button>
+            <button class="cin-calendar-day" aria-label="11月6日" type="button"><span class="cin-calendar-day-num">6</span></button>
+            <button class="cin-calendar-day" aria-label="11月7日" type="button"><span class="cin-calendar-day-num">7</span></button>
+            <button class="cin-calendar-day" aria-label="11月8日" type="button"><span class="cin-calendar-day-num">8</span></button>
+            <button class="cin-calendar-day" aria-label="11月9日" type="button"><span class="cin-calendar-day-num">9</span></button>
+            <button class="cin-calendar-day" data-in-range data-range-start aria-label="11月10日" type="button"><span class="cin-calendar-day-num">10</span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月11日" type="button"><span class="cin-calendar-day-num">11</span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月12日，3 个事件" type="button"><span class="cin-calendar-day-num">12</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="warning"></span><span class="cin-calendar-event" data-tone="info"></span></span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月13日" type="button"><span class="cin-calendar-day-num">13</span></button>
+            <button class="cin-calendar-day" data-in-range data-range-end aria-label="11月14日" type="button"><span class="cin-calendar-day-num">14</span></button>
+            <button class="cin-calendar-day" aria-label="11月15日" type="button"><span class="cin-calendar-day-num">15</span></button>
+            <button class="cin-calendar-day" aria-label="11月16日" type="button"><span class="cin-calendar-day-num">16</span></button>
+            <button class="cin-calendar-day" aria-label="11月17日" type="button"><span class="cin-calendar-day-num">17</span></button>
+            <button class="cin-calendar-day" aria-label="11月18日，3 个事件" type="button"><span class="cin-calendar-day-num">18</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="danger"></span><span class="cin-calendar-event"></span><span class="cin-calendar-more">+1</span></span></button>
+            <button class="cin-calendar-day" aria-label="11月19日" type="button"><span class="cin-calendar-day-num">19</span></button>
+            <button class="cin-calendar-day" aria-disabled="true" disabled aria-label="11月20日" type="button"><span class="cin-calendar-day-num">20</span></button>
+            <button class="cin-calendar-day" aria-disabled="true" disabled aria-label="11月21日" type="button"><span class="cin-calendar-day-num">21</span></button>
+            <button class="cin-calendar-day" aria-label="11月22日" type="button"><span class="cin-calendar-day-num">22</span></button>
+            <button class="cin-calendar-day" aria-label="11月23日" type="button"><span class="cin-calendar-day-num">23</span></button>
+            <button class="cin-calendar-day" aria-label="11月24日" type="button"><span class="cin-calendar-day-num">24</span></button>
+            <button class="cin-calendar-day" aria-label="11月25日" type="button"><span class="cin-calendar-day-num">25</span></button>
+            <button class="cin-calendar-day" aria-label="11月26日" type="button"><span class="cin-calendar-day-num">26</span></button>
+            <button class="cin-calendar-day" aria-label="11月27日" type="button"><span class="cin-calendar-day-num">27</span></button>
+            <button class="cin-calendar-day" aria-label="11月28日" type="button"><span class="cin-calendar-day-num">28</span></button>
+            <button class="cin-calendar-day" aria-label="11月29日" type="button"><span class="cin-calendar-day-num">29</span></button>
+            <button class="cin-calendar-day" aria-label="11月30日" type="button"><span class="cin-calendar-day-num">30</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月1日" type="button"><span class="cin-calendar-day-num">1</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月2日" type="button"><span class="cin-calendar-day-num">2</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月3日" type="button"><span class="cin-calendar-day-num">3</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月4日" type="button"><span class="cin-calendar-day-num">4</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月5日" type="button"><span class="cin-calendar-day-num">5</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月6日" type="button"><span class="cin-calendar-day-num">6</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">紧凑档（表格 / 侧栏内嵌）</h2>
+          <div class="cin-calendar" id="cal-compact" data-density="compact" style="max-inline-size:300px">
+            <div class="cin-calendar-head">
+              <h3 class="cin-calendar-title">2026-11</h3>
+              <button class="cin-btn" data-size="sm" data-variant="ghost" type="button">展开</button>
+            </div>
+            <div class="cin-calendar-weekdays" aria-hidden="true">
+              <span class="cin-calendar-weekday">一</span>
+              <span class="cin-calendar-weekday">二</span>
+              <span class="cin-calendar-weekday">三</span>
+              <span class="cin-calendar-weekday">四</span>
+              <span class="cin-calendar-weekday">五</span>
+              <span class="cin-calendar-weekday" data-weekend>六</span>
+              <span class="cin-calendar-weekday" data-weekend>日</span>
+            </div>
+            <div class="cin-calendar-grid" id="cal-grid-compact" role="grid" aria-label="紧凑月历">
+            <button class="cin-calendar-day" data-outside aria-label="10月26日" type="button"><span class="cin-calendar-day-num">26</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月27日" type="button"><span class="cin-calendar-day-num">27</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月28日" type="button"><span class="cin-calendar-day-num">28</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月29日" type="button"><span class="cin-calendar-day-num">29</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月30日" type="button"><span class="cin-calendar-day-num">30</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="10月31日" type="button"><span class="cin-calendar-day-num">31</span></button>
+            <button class="cin-calendar-day" aria-label="11月1日" type="button"><span class="cin-calendar-day-num">1</span></button>
+            <button class="cin-calendar-day" aria-current="date" data-today aria-label="11月2日" type="button"><span class="cin-calendar-day-num">2</span></button>
+            <button class="cin-calendar-day" aria-label="11月3日" type="button"><span class="cin-calendar-day-num">3</span></button>
+            <button class="cin-calendar-day" aria-label="11月4日" type="button"><span class="cin-calendar-day-num">4</span></button>
+            <button class="cin-calendar-day" aria-selected="true" aria-label="11月5日，2 个事件" type="button"><span class="cin-calendar-day-num">5</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="success"></span></span></button>
+            <button class="cin-calendar-day" aria-label="11月6日" type="button"><span class="cin-calendar-day-num">6</span></button>
+            <button class="cin-calendar-day" aria-label="11月7日" type="button"><span class="cin-calendar-day-num">7</span></button>
+            <button class="cin-calendar-day" aria-label="11月8日" type="button"><span class="cin-calendar-day-num">8</span></button>
+            <button class="cin-calendar-day" aria-label="11月9日" type="button"><span class="cin-calendar-day-num">9</span></button>
+            <button class="cin-calendar-day" data-in-range data-range-start aria-label="11月10日" type="button"><span class="cin-calendar-day-num">10</span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月11日" type="button"><span class="cin-calendar-day-num">11</span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月12日，3 个事件" type="button"><span class="cin-calendar-day-num">12</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="warning"></span><span class="cin-calendar-event" data-tone="info"></span></span></button>
+            <button class="cin-calendar-day" data-in-range aria-label="11月13日" type="button"><span class="cin-calendar-day-num">13</span></button>
+            <button class="cin-calendar-day" data-in-range data-range-end aria-label="11月14日" type="button"><span class="cin-calendar-day-num">14</span></button>
+            <button class="cin-calendar-day" aria-label="11月15日" type="button"><span class="cin-calendar-day-num">15</span></button>
+            <button class="cin-calendar-day" aria-label="11月16日" type="button"><span class="cin-calendar-day-num">16</span></button>
+            <button class="cin-calendar-day" aria-label="11月17日" type="button"><span class="cin-calendar-day-num">17</span></button>
+            <button class="cin-calendar-day" aria-label="11月18日，3 个事件" type="button"><span class="cin-calendar-day-num">18</span><span class="cin-calendar-events"><span class="cin-calendar-event"></span><span class="cin-calendar-event" data-tone="danger"></span><span class="cin-calendar-event"></span><span class="cin-calendar-more">+1</span></span></button>
+            <button class="cin-calendar-day" aria-label="11月19日" type="button"><span class="cin-calendar-day-num">19</span></button>
+            <button class="cin-calendar-day" aria-disabled="true" disabled aria-label="11月20日" type="button"><span class="cin-calendar-day-num">20</span></button>
+            <button class="cin-calendar-day" aria-disabled="true" disabled aria-label="11月21日" type="button"><span class="cin-calendar-day-num">21</span></button>
+            <button class="cin-calendar-day" aria-label="11月22日" type="button"><span class="cin-calendar-day-num">22</span></button>
+            <button class="cin-calendar-day" aria-label="11月23日" type="button"><span class="cin-calendar-day-num">23</span></button>
+            <button class="cin-calendar-day" aria-label="11月24日" type="button"><span class="cin-calendar-day-num">24</span></button>
+            <button class="cin-calendar-day" aria-label="11月25日" type="button"><span class="cin-calendar-day-num">25</span></button>
+            <button class="cin-calendar-day" aria-label="11月26日" type="button"><span class="cin-calendar-day-num">26</span></button>
+            <button class="cin-calendar-day" aria-label="11月27日" type="button"><span class="cin-calendar-day-num">27</span></button>
+            <button class="cin-calendar-day" aria-label="11月28日" type="button"><span class="cin-calendar-day-num">28</span></button>
+            <button class="cin-calendar-day" aria-label="11月29日" type="button"><span class="cin-calendar-day-num">29</span></button>
+            <button class="cin-calendar-day" aria-label="11月30日" type="button"><span class="cin-calendar-day-num">30</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月1日" type="button"><span class="cin-calendar-day-num">1</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月2日" type="button"><span class="cin-calendar-day-num">2</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月3日" type="button"><span class="cin-calendar-day-num">3</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月4日" type="button"><span class="cin-calendar-day-num">4</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月5日" type="button"><span class="cin-calendar-day-num">5</span></button>
+            <button class="cin-calendar-day" data-outside aria-label="12月6日" type="button"><span class="cin-calendar-day-num">6</span></button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

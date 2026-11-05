@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>键盘矩阵 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html" aria-current="page">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>键盘矩阵</h1>
+        <p class="site-lead">每个组件的键位契约与实测档位</p>
+      </header>
+<blockquote>
+<p>汇总自 73 份意图契约（<code>packages/base/src/intents/*.md</code>）第三段&quot;可访问性&quot;，由 <code>scripts/gen-keyboard-matrix.mjs</code> 自动生成，与源码同源；<strong>禁止手改</strong>，改契约后重跑脚本。
+用途：基础设施 #17「键盘操作全覆盖」的文档面。</p>
+<p>三档说明：</p>
+<ul>
+<li><strong>A 有完整键位契约</strong>：组件自行接管键盘事件，键位在契约中逐项写明；行为实现在 <code>src/behaviors/&lt;name&gt;.js</code>。</li>
+<li><strong>B 有行为层但未单列键位</strong>：<code>src/behaviors/</code> 内无键盘接管（或仅有 Esc / 焦点管理），交互靠鼠标与原生事件；需要键盘操作时按原生元素规则走。</li>
+<li><strong>C 纯样式组件</strong>：只有 CSS，无 JS；语义与键盘能力完全由所用 HTML 元素决定（<code>button</code> / <code>input</code> / <code>a</code> 天然可达，<code>div</code> 不会因为套了 Cinder 类名就变可达）。</li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>档</th>
+<th>数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A 有完整键位契约</td>
+<td>41</td>
+</tr>
+<tr>
+<td>B 有行为层未单列键位</td>
+<td>5</td>
+</tr>
+<tr>
+<td>C 纯样式组件</td>
+<td>27</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>73</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="a-有完整键位契约-41">A · 有完整键位契约（41）</h2>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>键位（摘自意图契约）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>calendar</code></td>
+<td>键盘：整月 Tab 站点太多时，用 roving tabindex（一格 <code>tabindex=&quot;0&quot;</code>，其余 <code>-1</code>）由脚本管理；<code>calendar</code> 不做漫游逻辑。</td>
+</tr>
+<tr>
+<td><code>carousel</code></td>
+<td>键盘（视口聚焦后）：← / ↑ 上一页，→ / ↓ 下一页，Home 首张，End 末页，并阻止页面滚动。</td>
+</tr>
+<tr>
+<td><code>cascader</code></td>
+<td>键盘：<code>↑</code>/<code>↓</code> 列内移动，<code>←</code>/<code>→</code> 换列，<code>Enter</code> 落定当前项，<code>Esc</code> 关闭并把焦点还回输入框。</td>
+</tr>
+<tr>
+<td><code>colorpicker</code></td>
+<td>色相条与透明度条用 <code>role=&quot;slider&quot;</code> + <code>aria-valuenow/min/max</code> + <code>aria-label</code>（&quot;色相&quot;/&quot;不透明度&quot;），支持 ← / → 微调、Home / End 到端点。</td>
+</tr>
+<tr>
+<td><code>combobox</code></td>
+<td>键盘：<code>↓/↑</code> 移动高亮并循环、<code>Enter</code> 选中、<code>Esc</code> 收起并归还焦点到输入框、<code>Tab</code> 离开即收起。</td>
+</tr>
+<tr>
+<td><code>command-palette</code></td>
+<td>键盘：<code>↑/↓</code> 移动、<code>Enter</code> 执行、<code>Esc</code> 关闭并把焦点还给唤出前的元素。</td>
+</tr>
+<tr>
+<td><code>context-card</code></td>
+<td>来源用真实链接：<code>&lt;a href&gt;</code> 自带键盘可达与读屏语义；外链不要用 <code>target=&quot;_blank&quot;</code> 时缺 <code>rel=&quot;noopener&quot;</code>。</td>
+</tr>
+<tr>
+<td><code>controls</code></td>
+<td>键盘：所有控件走 Tab 序；<code>.cin-segment</code> 用 radio 组语义（组内方向键切换），<code>.cin-switch</code> 用 <code>role=&quot;switch&quot;</code> 或原生 checkbox。</td>
+</tr>
+<tr>
+<td><code>copytarget</code></td>
+<td>键盘：Enter / Space 触发，焦点环保持；成功后不移动焦点。</td>
+</tr>
+<tr>
+<td><code>currency-input</code></td>
+<td>使用 <code>inputmode=&quot;decimal&quot;</code>，移动端唤起数字键盘；<code>type</code> 保持 <code>text</code> 以免格式化字符被浏览器丢弃。</td>
+</tr>
+<tr>
+<td><code>datepicker</code></td>
+<td>键盘按原生日历约定：← / → 一天，↑ / ↓ 一周，Home / End 本周首尾，PageUp / PageDown 翻月（加 Shift 翻年），Enter 落定，Alt+↓ 唤起面板。</td>
+</tr>
+<tr>
+<td><code>diff-view</code></td>
+<td>横向滚动区必须可键盘聚焦（<code>tabindex=&quot;0&quot;</code>）并带 <code>aria-label</code>，否则键盘用户无法横向查看长行。</td>
+</tr>
+<tr>
+<td><code>disclosure</code></td>
+<td>键盘：Enter / Space 翻转当前项；↑ / ↓ 在组内项间移动焦点；Home / End 跳首末；<code>data-disabled</code> 项跳过。</td>
+</tr>
+<tr>
+<td><code>entity</code></td>
+<td>悬停才有 <code>.cin-entity-actions</code>（如出现「发消息」按钮）时，动作必须也能被键盘 Tab 到，不能只在 <code>:hover</code> 里 <code>display: none</code> 隐藏。</td>
+</tr>
+<tr>
+<td><code>fileinput</code></td>
+<td>触发器必须是 <code>&lt;label&gt;</code> 关联真实 <code>input[type=&quot;file&quot;]</code>（<code>cin-sr-only</code> 隐藏），键盘 Enter / Space 可唤起系统选择框。</td>
+</tr>
+<tr>
+<td><code>heatmap</code></td>
+<td>逐格 Tab 会制造上百个焦点停靠点，应使用单焦点 + 方向键在网格内移动（roving tabindex）。</td>
+</tr>
+<tr>
+<td><code>inline-edit</code></td>
+<td>键盘：<code>Enter</code> 进入编辑、编辑内 <code>Enter</code> 提交、<code>Esc</code> 取消、<code>Tab</code> 从输入框到确认/取消。</td>
+</tr>
+<tr>
+<td><code>input-number</code></td>
+<td>输入框是原生 <code>&lt;input type=&quot;number&quot;&gt;</code>，<code>inputmode</code> 按整数/小数分别给 <code>numeric</code> / <code>decimal</code>；上下方向键与原生行为一致。</td>
+</tr>
+<tr>
+<td><code>lightbox</code></td>
+<td>键盘：<code>←/→</code> 切换、<code>Esc</code> 关闭、<code>Tab</code> 在关闭/导航按钮间循环（焦点陷阱），关闭后焦点回到触发缩略图。</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td><code>data-hoverable</code> 的焦点反馈走 <code>:focus-within</code> / <code>:focus-visible</code>，键盘 Tab 能看见当前位置。</td>
+</tr>
+<tr>
+<td><code>morph-button</code></td>
+<td>根节点用原生 <code>&lt;button type=&quot;button&quot;&gt;</code>；<code>loading</code> 设 <code>aria-busy=&quot;true&quot;</code> 并保持可聚焦，键盘用户仍能感知状态变化。</td>
+</tr>
+<tr>
+<td><code>option-group</code></td>
+<td>键盘：原生 <code>checkbox</code> / <code>radio</code> 的方向键与空格行为保持可用，不要加 <code>tabindex=&quot;-1&quot;</code>。</td>
+</tr>
+<tr>
+<td><code>otp</code></td>
+<td><code>inputmode=&quot;numeric&quot;</code> + <code>autocomplete=&quot;one-time-code&quot;</code>（首格）以支持短信验证码自动填充与移动端数字键盘。</td>
+</tr>
+<tr>
+<td><code>overlay</code></td>
+<td>键盘：Esc 关闭（<code>data-static</code> 除外）、Tab 在面板内循环、关闭按钮是首个可聚焦项、关闭后焦点回原触发器。</td>
+</tr>
+<tr>
+<td><code>popover</code></td>
+<td>键盘：零脚本模式下 Tab 进入触发器即展开，Tab 可进入面板内部；面板内第一个可聚焦元素不要抢焦点（非模态，不锁焦点）。</td>
+</tr>
+<tr>
+<td><code>prompt-bar</code></td>
+<td>键盘：<code>Enter</code> 提交（菜单打开时选中当前项）、<code>Shift+Enter</code> 换行、<code>↑</code>/<code>↓</code> 移动选项、<code>Esc</code> 收起菜单、<code>Tab</code> 收起菜单并离开；<code>e.isComposing</code> 为真时一律不拦截，避免中文/日文输入法确认候选被误提交。</td>
+</tr>
+<tr>
+<td><code>rating</code></td>
+<td>键盘：← / → 在星间移动并即时选中（原生 radio 行为），Tab 只进整组一次；DOM 顺序与视觉顺序一致，不得用 <code>flex-direction: row-reverse</code> 反转（会反转方向键）。</td>
+</tr>
+<tr>
+<td><code>result</code></td>
+<td>操作区按钮使用 <code>controls</code> 的 <code>.cin-btn</code>，焦点环与键盘可达性由它保证。</td>
+</tr>
+<tr>
+<td><code>scroll-area</code></td>
+<td>滚动容器要被键盘操作，需 <code>tabindex=&quot;0&quot;</code>；同时给 <code>role=&quot;region&quot;</code> 与 <code>aria-label</code>（如「最近的报销单」），否则读屏用户不知道这块可滚。</td>
+</tr>
+<tr>
+<td><code>segmented</code></td>
+<td>键盘操作遵循单选组惯例（方向键移动即选中），不额外发明快捷键。</td>
+</tr>
+<tr>
+<td><code>selection-actions</code></td>
+<td>Tab 进入动作条 → ←/→ 在动作间移动 → Enter 或空格 触发当前动作 → Esc 关闭（不改选区、不移动焦点）。</td>
+</tr>
+<tr>
+<td><code>sidenav</code></td>
+<td>顶层 <code>↑</code> <code>↓</code> 首尾回绕，<code>Home</code> / <code>End</code> 跳两端，<code>→</code> 展开子级、<code>←</code> 收起；子级项 <code>↑</code> <code>↓</code> 在可见项间顺排，<code>←</code> 回父级并收起；<code>Esc</code> 关闭抽屉；抽屉打开时 <code>Tab</code> 不越出抽屉。</td>
+</tr>
+<tr>
+<td><code>slider</code></td>
+<td>← / → 单步，PageUp / PageDown 大跳，Home / End 到两端，<code>data-format</code> 后的读数通过 <code>aria-valuetext</code> 播报（如&quot;¥4,000&quot;），不要只让读屏念数字。</td>
+</tr>
+<tr>
+<td><code>splitpanel</code></td>
+<td>键盘：← / → 微调（纵向用 ↑ / ↓），步长 <code>data-step</code>，Shift ×5；Home / End 到上下限；双击复位只服务鼠标，键盘用 Home 回中间或宿主提供按钮。</td>
+</tr>
+<tr>
+<td><code>table</code></td>
+<td>表头加 <code>aria-sort=&quot;ascending／descending／none&quot;</code> 与可点击按钮；排序列的 <code>th</code> 内不要直接绑 <code>onclick</code> 到文字上（键盘进不去）。</td>
+</tr>
+<tr>
+<td><code>tabs</code></td>
+<td>横向 ← / →，纵向 ↑ / ↓，均首尾回绕；Home / End 跳两端；Enter / Space 在手动激活模式下提交；Tab 从当前 tab 直接进入面板内容。</td>
+</tr>
+<tr>
+<td><code>tag-input</code></td>
+<td>键盘：输入框内 <code>Enter</code> 提交当前输入、<code>Backspace</code> 在空输入时删除最后一个标签、<code>←/→</code> 可在标签间移动焦点。</td>
+</tr>
+<tr>
+<td><code>timepicker</code></td>
+<td>键盘：<code>↑</code>/<code>↓</code> 列内移动，<code>←</code>/<code>→</code> 换列，<code>Enter</code> 落定，<code>Esc</code> 关闭并把焦点还回输入框。</td>
+</tr>
+<tr>
+<td><code>tree</code></td>
+<td>键盘：↑ / ↓ 在可见项间移动、→ 展开或进入首子项、← 收起或上到父项、Home / End 跳首末、Enter 选中；<code>data-select=&quot;multiple&quot;</code> 时 Space 勾选。</td>
+</tr>
+<tr>
+<td><code>undo-bar</code></td>
+<td>撤销必须同时可由键盘触发（按钮为原生 <code>button</code>），<code>Esc</code> 关闭视为放弃撤销。</td>
+</tr>
+<tr>
+<td><code>virtualgrid</code></td>
+<td>键盘滚动：视口需 <code>tabindex=&quot;0&quot;</code> 以便用方向键/PageDown 滚动；不要依赖鼠标滚轮作为唯一路径。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="b-有行为层但未单列键位-5">B · 有行为层但未单列键位（5）</h2>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>现状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>markdown</code></td>
+<td>有 <code>behaviors/markdown.js</code>，无自定义键盘接管；键位按所用原生元素默认行为</td>
+</tr>
+<tr>
+<td><code>mascot</code></td>
+<td>有 <code>behaviors/mascot.js</code>，无自定义键盘接管；键位按所用原生元素默认行为</td>
+</tr>
+<tr>
+<td><code>notice-bar</code></td>
+<td>有 <code>behaviors/notice-bar.js</code>，无自定义键盘接管；键位按所用原生元素默认行为</td>
+</tr>
+<tr>
+<td><code>qrcode</code></td>
+<td>有 <code>behaviors/qrcode.js</code>，无自定义键盘接管；键位按所用原生元素默认行为</td>
+</tr>
+<tr>
+<td><code>transfer</code></td>
+<td>有 <code>behaviors/transfer.js</code>，无自定义键盘接管；键位按所用原生元素默认行为</td>
+</tr>
+</tbody>
+</table>
+<h2 id="c-纯样式组件-27">C · 纯样式组件（27）</h2>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>approval-card</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>avatar</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>btn-group</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>card</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>chat</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>comment</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>descriptions</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>details</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>feedback</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>glass</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>icons</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>knowndate</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>media</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>password-strength</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>pull-refresh</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>range-slider</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>ring</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>stream-text</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>suggestion-card</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>task-rows</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>thinking</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>tool-chips</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>toolbar</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>upload-queue</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>viz</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+<tr>
+<td><code>watermark</code></td>
+<td>无 JS；可访问性取决于宿主使用的 HTML 元素</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="s-通用键位约定-所有组件共有">通用键位约定（所有组件共有）</h2>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>约定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Tab</code> / <code>Shift+Tab</code></td>
+<td>焦点顺序跟随 DOM；复合控件内部用 roving tabindex 或 <code>aria-activedescendant</code>，整体只占一个 Tab 位</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>关闭当前浮层（<code>dialog</code> / <code>popover</code> / <code>command-palette</code> / <code>cascader</code>），关闭后焦点回到触发元素</td>
+</tr>
+<tr>
+<td><code>Enter</code> / <code>Space</code></td>
+<td>激活当前项的默认动作；在 <code>button</code> 上二者等价</td>
+</tr>
+<tr>
+<td><code>Home</code> / <code>End</code></td>
+<td>列表、页签、树、网格跳首/尾</td>
+</tr>
+<tr>
+<td>方向键</td>
+<td>平行结构内漫游（首尾回绕，跳过禁用项）；<code>data-orientation=&quot;vertical&quot;</code> 时只响应上下</td>
+</tr>
+<tr>
+<td>焦点可见</td>
+<td>统一 <code>:focus-visible</code>（鼠标点击不显示焦点环），颜色走 <code>--cin-color-focus-ring</code> 令牌</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-维护规则">维护规则</h2>
+<ul>
+<li>新增 A 档组件：在 <code>intents/&lt;name&gt;.md</code> 第三段写明&quot;键位：&quot;，然后重跑 <code>node scripts/gen-keyboard-matrix.mjs</code>。</li>
+<li>删除或下移组件：重跑脚本即可，禁止手改本表。</li>
+<li>本表<strong>不是</strong>屏幕阅读器实测结论；朗读顺序问题以 <code>docs/ACCESSIBILITY.md</code> 的缺口清单为准。</li>
+</ul>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#a-有完整键位契约-41" data-level="2">A · 有完整键位契约（41）</a>
+      <a href="#b-有行为层但未单列键位-5" data-level="2">B · 有行为层但未单列键位（5）</a>
+      <a href="#c-纯样式组件-27" data-level="2">C · 纯样式组件（27）</a>
+      <a href="#s-通用键位约定-所有组件共有" data-level="2">通用键位约定（所有组件共有）</a>
+      <a href="#s-维护规则" data-level="2">维护规则</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

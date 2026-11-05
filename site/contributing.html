@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>贡献指南 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html" aria-current="page">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>贡献指南</h1>
+        <p class="site-lead">改动流程、构建闸门与提交纪律</p>
+      </header>
+<blockquote>
+<p>面向<strong>人</strong>的上手路径。仓库硬约定以 <code>AGENTS.md</code> 为准（AI Agent 与人共用同一套约束），本文件只回答&quot;第一次来怎么跑起来、改什么、怎么算改完&quot;。</p>
+</blockquote>
+<hr>
+<h2 id="s-1-五分钟跑起来">1. 五分钟跑起来</h2>
+<pre><code class="language-bash">bash scripts/selfcheck.sh     # 环境自检（11 项）；沙箱/新机器第一次必跑
+node build.mjs                # 构建 dist 与 60 个按需入口
+node build.mjs --check        # 校验：0 error 是底线
+npm run acceptance            # 52 组验收全跑（playwright 无头 chromium）
+</code></pre>
+<p>三条命令的判定口径：</p>
+<ul>
+<li><code>build --check</code> 出现<strong>任何 error 即视为未完成</strong>，不接受&quot;先提交后修&quot;。</li>
+<li><code>acceptance</code> 出现<strong>新的 FAIL</strong> 即回退改动；不允许把断言改成 PASS 来消错。</li>
+<li><code>XFAIL</code> 只减不增；新增 XFAIL 必须同时在 <code>docs/known-issues.md</code> 登记 KN 编号。</li>
+</ul>
+<p>按组件单跑：<code>node scripts/acceptance-all.mjs tabs</code>（名称模糊匹配）。</p>
+<hr>
+<h2 id="s-2-仓库里有什么">2. 仓库里有什么</h2>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>内容</th>
+<th>是否进发布包</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>packages/base/src/components/</code></td>
+<td>60 个通用组件（一组件一 <code>.css</code>）</td>
+<td>是（编译后）</td>
+</tr>
+<tr>
+<td><code>packages/base/src/intents/</code></td>
+<td>60 份意图契约（与组件同名 <code>.md</code>，四段硬约束）</td>
+<td>否</td>
+</tr>
+<tr>
+<td><code>packages/base/src/behaviors/</code></td>
+<td>34 个行为层 JS（渐进增强，挂 <code>window.Cinder</code>）</td>
+<td>是（编译后）</td>
+</tr>
+<tr>
+<td><code>packages/base/src/primitives/</code></td>
+<td>12 个 JS 原语（focus / gesture / presence / stream / undo / i18n 等）</td>
+<td>是（编译后）</td>
+</tr>
+<tr>
+<td><code>packages/erp/src/blocks/</code></td>
+<td>6 个 ERP 业务块（PDA、审批、明细行、选择器、打印、单据）</td>
+<td>是（编译后）</td>
+</tr>
+<tr>
+<td><code>demos/</code></td>
+<td>44 个可跑演示页</td>
+<td>否</td>
+</tr>
+<tr>
+<td><code>scripts/</code></td>
+<td>52 个验收脚本 + 自检</td>
+<td>否</td>
+</tr>
+<tr>
+<td><code>docs/</code></td>
+<td>契约模板、已知缺陷、对标矩阵、可访问性声明</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>设计原则：<strong>去中心化自包含</strong>——每个组件独立 CSS（可选 JS），可单文件拷贝，无中心注册表、无强制构建链；删掉 JS 退回语义标签仍可用。</p>
+<hr>
+<h2 id="s-3-改什么-先过-quot-四族-五档-quot">3. 改什么：先过&quot;四族 × 五档&quot;</h2>
+<p>四族：基础件 / 组合件 / 场景件 / 容器件；五档：A 立即补 / B 排期补 / C 软线 / D 不做 / E 已有覆盖。</p>
+<p>判定顺序不许跳步：</p>
+<ol>
+<li><strong>先查存量</strong> —— <code>ls packages/base/src/components</code>、<code>ls packages/base/src/intents</code>。能拼出来就不新增（多数需求是组合问题，不是缺组件）。</li>
+<li><strong>再判档位</strong> —— 确有缺口，定族定档；C / D 档必须先写出替代方案。</li>
+<li><strong>只有 A / B 档才动手</strong>。</li>
+</ol>
+<hr>
+<h2 id="s-4-算改完的标准">4. 算改完的标准</h2>
+<h3 id="s-4-1-改样式-改状态">4.1 改样式 / 改状态</h3>
+<ul>
+<li>只动一个主题，不夹带格式化、重命名、顺手微调。</li>
+<li>颜色、间距、圆角、字号一律走 <code>--cin-*</code> 令牌，禁止裸十六进制色值与 <code>!important</code>。</li>
+<li>方位属性一律用逻辑属性：<code>margin-inline-start</code> / <code>padding-inline</code> / <code>text-align: start|end</code>，禁止 <code>left</code> / <code>right</code>；必须镜像的图形用 <code>:dir(rtl)</code> 显式覆盖。<code>node scripts/acceptance-rtl.mjs</code> 会挡住物理属性。</li>
+</ul>
+<h3 id="s-4-2-新增组件-缺一不可">4.2 新增组件（缺一不可）</h3>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>packages/base/src/components/&lt;name&gt;.css</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>packages/base/src/intents/&lt;name&gt;.md</code> —— 四段：边界（负责 / 明确不负责 + 承接方）、状态机与失败态、可访问性、AI 选型提示</td>
+</tr>
+<tr>
+<td>3</td>
+<td>有交互则加 <code>src/behaviors/&lt;name&gt;.js</code>，并在 <code>build.mjs</code> 的 <code>JS_DOMAINS</code> 登记所属域</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>scripts/acceptance-&lt;name&gt;.mjs</code>（<code>acceptance-all.mjs</code> 自动收录）</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>demos/&lt;name&gt;.html</code> 一页可跑示例</td>
+</tr>
+<tr>
+<td>6</td>
+<td>预算变化写清：涨了多少、是否触发冻结阀</td>
+</tr>
+</tbody>
+</table>
+<p><code>intents</code> 的边界段必须写实，不允许占位骨架；TODO 只能出现在后三段。</p>
+<h3 id="s-4-3-修-bug">4.3 修 bug</h3>
+<p>先补一条会失败的断言，再改代码，断言转 PASS 才算修完。修复后把 KN 条目移入 <code>docs/known-issues.md</code> 文末&quot;已修复&quot;表，保留一行历史。</p>
+<hr>
+<h2 id="s-5-预算纪律">5. 预算纪律</h2>
+<ul>
+<li>入口 gzip <strong>≥7KB，逐字节冻结</strong>：涨 1B 即构建失败。先想优化，确需抬高走 <code>node build.mjs --update-baseline</code>，并逐行 review <code>budget-baseline.json</code> 的 diff。</li>
+<li>入口 gzip <strong>&lt;7KB</strong>：按 5% 预警（warning，不阻断）。</li>
+<li>禁止调大阈值函数、关闭冻结阀、或改入口名绕过统计。</li>
+<li>现状：71 个入口，最重 <code>base/overlay</code> 7628B；全量合订 gzip 140,880B（约 137.6KB）（参考线，不阻断，真实接入走 <code>entries/</code>）。</li>
+</ul>
+<h3 id="s-视觉基线纪律">视觉基线纪律</h3>
+<ul>
+<li><code>visual:check</code> 失败先看 <code>tests/visual/diff/&lt;页名&gt;.diff.png</code>，判断是预期改动还是意外回归。</li>
+<li>确认预期改动才 <code>npm run visual</code> 覆盖基线，并在同一次提交说明改了哪几页、为什么。</li>
+<li><strong>禁止</strong>在失败状态下顺手更新基线——那等于把回归洗白，与预算基线的「禁止调大阈值」同源。</li>
+<li>新增演示页必须同时补基线，否则 <code>--check</code> 报缺基线。</li>
+</ul>
+<h3 id="s-文档站纪律">文档站纪律</h3>
+<ul>
+<li>改了 <code>README.md</code>、<code>docs/*.md</code>、<code>CHANGELOG.md</code> 的正文，或改了 <code>dist/cinder-manifest.json</code>，必须重跑 <code>npm run docs</code>，否则 <code>docs:check</code> 会在提交前失败。</li>
+<li><strong>禁止手改 <code>site/</code> 下的产物</strong>：它是生成物，手改的部分下次构建就丢。要改样式改 <code>scripts/build-docs.mjs</code> 里的 <code>SITE_CSS</code>，要改页面清单改 <code>PAGES</code>。</li>
+<li>新增文档页只做两件事：写 markdown，往 <code>PAGES</code> 加一行（<code>slug / src / title / group</code>）。</li>
+<li>站点不引外部字体、CDN 脚本或图标服务；验收里有一条&quot;每页零外域请求&quot;，加了就会被拦。</li>
+</ul>
+<hr>
+<h2 id="s-6-需求节奏-与产品方约定">6. 需求节奏（与产品方约定）</h2>
+<p>&quot;做 XX 库 / XX 系统&quot;类需求默认走：<strong>联网调研 → 方案文档 → 列决策点 → 待确认 → 执行</strong>。未确认前不落业务代码。</p>
+<hr>
+<h2 id="s-7-提交">7. 提交</h2>
+<ul>
+<li>一个主题一个 commit；<code>dist/</code> 永不入库。</li>
+<li>提交前跑完第 1 节的三条命令。</li>
+<li>版本发布：更新 <code>package.json</code> 的 <code>version</code> 与 <code>CHANGELOG.md</code>，二者必须同步。
+<em>（内容由AI生成，仅供参考）</em></li>
+</ul>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-1-五分钟跑起来" data-level="2">1. 五分钟跑起来</a>
+      <a href="#s-2-仓库里有什么" data-level="2">2. 仓库里有什么</a>
+      <a href="#s-3-改什么-先过-quot-四族-五档-quot" data-level="2">3. 改什么：先过&amp;quot;四族 × 五档&amp;quot;</a>
+      <a href="#s-4-算改完的标准" data-level="2">4. 算改完的标准</a>
+      <a href="#s-4-1-改样式-改状态" data-level="3">4.1 改样式 / 改状态</a>
+      <a href="#s-4-2-新增组件-缺一不可" data-level="3">4.2 新增组件（缺一不可）</a>
+      <a href="#s-4-3-修-bug" data-level="3">4.3 修 bug</a>
+      <a href="#s-5-预算纪律" data-level="2">5. 预算纪律</a>
+      <a href="#s-视觉基线纪律" data-level="3">视觉基线纪律</a>
+      <a href="#s-文档站纪律" data-level="3">文档站纪律</a>
+      <a href="#s-6-需求节奏-与产品方约定" data-level="2">6. 需求节奏（与产品方约定）</a>
+      <a href="#s-7-提交" data-level="2">7. 提交</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

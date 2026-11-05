@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 结果页</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">result</span>
+      <span class="cin-caption">五档语义状态 + 操作区 + 明细块；处理中遵循 reduce-motion</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">成功</h2>
+          <div class="cin-result" data-status="success" role="status">
+            <span class="cin-result-icon" aria-hidden="true">✓</span>
+            <h3 class="cin-result-title">提交成功</h3>
+            <p class="cin-result-desc">采购申请已进入审批流，预计 2 个工作日内完成一级审批。</p>
+            <div class="cin-result-extra">
+              <button class="cin-btn" data-variant="primary">查看申请单</button>
+              <button class="cin-btn" data-variant="ghost">继续新建</button>
+            </div>
+            <div class="cin-result-detail">
+              申请单号：PR-2026-1101-0042　提交人：林洋　提交时间：2026-11-01 09:24
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">失败（带完整失败原因）</h2>
+          <div class="cin-result" data-status="danger" role="alert">
+            <span class="cin-result-icon" aria-hidden="true">×</span>
+            <h3 class="cin-result-title">导入失败</h3>
+            <p class="cin-result-desc">12 条明细中有 3 条校验未通过，其余数据未写入，请修正后重新导入。</p>
+            <div class="cin-result-extra">
+              <button class="cin-btn" data-variant="primary">重新导入</button>
+              <button class="cin-btn">下载错误明细</button>
+            </div>
+            <div class="cin-result-detail">
+              第 4 行：数量必须为正整数（当前 "0"）<br>
+              第 7 行：供应商编码 "SUP-9912" 不存在<br>
+              第 11 行：交付日期早于下单日期
+            </div>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">处理中 / 警告 / 信息</h2>
+          <div class="cin-result" data-status="processing" role="status">
+            <span class="cin-result-icon" aria-hidden="true"></span>
+            <h3 class="cin-result-title">正在生成报表</h3>
+            <p class="cin-result-desc">数据量较大，通常需要 10–30 秒，请勿关闭页面。</p>
+          </div>
+
+          <div class="cin-result" data-status="warning">
+            <span class="cin-result-icon" aria-hidden="true">!</span>
+            <h3 class="cin-result-title">部分成功</h3>
+            <p class="cin-result-desc">58 条已入库，2 条因库存锁定失败，可在库存明细中重试。</p>
+          </div>
+
+          <div class="cin-result" data-status="info">
+            <span class="cin-result-icon" aria-hidden="true">i</span>
+            <h3 class="cin-result-title">已受理</h3>
+            <p class="cin-result-desc">对账单已提交至财务，审核结果将通过站内消息通知。</p>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">紧凑尺寸（data-size="sm"）</h2>
+          <div class="cin-panel" style="max-inline-size:360px">
+            <div class="cin-result" data-status="success" data-size="sm">
+              <span class="cin-result-icon" aria-hidden="true">✓</span>
+              <h3 class="cin-result-title">已保存</h3>
+              <p class="cin-result-desc">设置已生效，可随时回来修改。</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

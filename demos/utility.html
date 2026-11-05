@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 工具类组件</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">v2.6</span>
+      <span class="cin-caption">复制、分栏、验证码、格式化、Markdown、二维码：六个小件，零第三方依赖</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+    <div class="cin-shell-body">
+      <aside class="cin-sidebar">
+        <div class="cin-sidebar-brand">Cinder</div>
+        <div class="cin-sidebar-section">工具类</div>
+        <a class="cin-navitem" href="#copy">复制与格式化</a>
+        <a class="cin-navitem" href="#split">分栏</a>
+        <a class="cin-navitem" href="#otp">验证码</a>
+        <a class="cin-navitem" href="#markdown">Markdown</a>
+        <a class="cin-navitem" href="#qr">二维码</a>
+        <a class="cin-navitem" href="#details">详情块</a>
+      </aside>
+      <main class="cin-main">
+        <div class="cin-main-scroll">
+          <div class="cin-page cin-stack">
+
+            <div class="cin-page-header">
+              <div class="cin-page-header-main">
+                <div class="cin-page-header-titles">
+                  <h1 class="cin-title2">工具类组件</h1>
+                  <p class="cin-caption">每个组件都能在断 JS 时退化：复制按钮仍可手动选中、分栏退回默认比例、验证码仍是普通输入框</p>
+                </div>
+              </div>
+            </div>
+
+            <section class="cin-panel" id="copy">
+              <div class="cin-panel-head">
+                <h2 class="cin-title3">复制与格式化</h2>
+                <p class="cin-caption">按钮自带文案；格式化收敛到纯函数，时间读 datetime 属性</p>
+              </div>
+              <div class="cin-panel-body cin-stack">
+                <div class="cin-field">
+                  <label class="cin-label" for="orderNo">订单号</label>
+                  <div class="cin-row">
+                    <input class="cin-input" id="orderNo" value="SO-20261101-0042" readonly>
+                    <button class="cin-copy cin-btn" data-copy="#orderNo" data-label="复制单号" data-copied-label="已复制">
+                      <span class="cin-copy-icon" aria-hidden="true"></span>
+                      <span data-copy-label>复制单号</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="cin-row">
+                  <button class="cin-copy cin-btn" data-value="CINDER-QR-2026" data-label="复制口令" data-copied-label="口令已复制">复制口令</button>
+                  <span class="cin-caption" id="copyState">等待操作</span>
+                </div>
+                <div class="cin-row">
+                  <span class="cin-caption">数字</span><span id="fmtNumber">—</span>
+                  <span class="cin-caption">字节</span><span id="fmtBytes">—</span>
+                  <span class="cin-caption">日期</span><span id="fmtDate">—</span>
+                </div>
+                <div class="cin-row">
+                  <span class="cin-caption">相对时间</span>
+                  <time class="cin-time" id="relTime" datetime="2026-11-01T09:12:00+08:00" data-format="relative">—</time>
+                  <span class="cin-caption">未来</span>
+                  <time class="cin-time" datetime="2026-11-08T09:12:00+08:00" data-format="relative">—</time>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="split">
+              <div class="cin-panel-head">
+                <h2 class="cin-title3">分栏</h2>
+                <p class="cin-caption">拖动、方向键微调、双击复位；比例只存在 --_a 一个变量里</p>
+              </div>
+              <div class="cin-panel-body">
+                <div class="cin-split" id="splitDemo" data-split data-min="20" data-max="80" data-step="2" data-persist="cinder-demo-split"
+                     style="height:220px;border:1px solid var(--cin-color-border-subtle);border-radius:var(--cin-radius-md);overflow:hidden">
+                  <div class="cin-split-pane">
+                    <div class="cin-panel-body"><p class="cin-body-text">左侧：列表区。宽度百分比只由 --_a 决定。</p></div>
+                  </div>
+                  <div class="cin-split-bar" data-label="调整分栏"><span class="cin-split-grip"></span></div>
+                  <div class="cin-split-pane">
+                    <div class="cin-panel-body"><p class="cin-body-text">右侧：详情区。键盘 ←/→ 每次 2%，双击分隔条回到 50%。</p></div>
+                  </div>
+                </div>
+                <div class="cin-row" style="margin-block-start:var(--cin-space-300)">
+                  <button class="cin-btn" data-size="sm" id="splitTo30">设为 30%</button>
+                  <button class="cin-btn" data-size="sm" id="splitToggle">收起左侧</button>
+                  <span class="cin-caption" id="splitState">—</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="otp">
+              <div class="cin-panel-head">
+                <h2 class="cin-title3">验证码</h2>
+                <p class="cin-caption">输入自动前进、退格回退、整串粘贴自动分配，填满派发 cin:otpcomplete</p>
+              </div>
+              <div class="cin-panel-body cin-stack">
+                <div class="cin-otp" id="otpDemo" data-otp data-length="6" data-charset="numeric">
+                  <input class="cin-otp-input" aria-label="第 1 位验证码" autocomplete="one-time-code" inputmode="numeric">
+                  <input class="cin-otp-input" aria-label="第 2 位验证码" autocomplete="one-time-code" inputmode="numeric">
+                  <input class="cin-otp-input" aria-label="第 3 位验证码" autocomplete="one-time-code" inputmode="numeric">
+                  <input class="cin-otp-input" aria-label="第 4 位验证码" autocomplete="one-time-code" inputmode="numeric">
+                  <input class="cin-otp-input" aria-label="第 5 位验证码" autocomplete="one-time-code" inputmode="numeric">
+                  <input class="cin-otp-input" aria-label="第 6 位验证码" autocomplete="one-time-code" inputmode="numeric">
+                </div>
+                <div class="cin-row">
+                  <span class="cin-caption">当前值</span><span id="otpValue">—</span>
+                  <button class="cin-btn" data-size="sm" id="otpFill">填入 246810</button>
+                  <button class="cin-btn" data-size="sm" id="otpClear">清空</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="markdown">
+              <div class="cin-panel-head">
+                <h2 class="cin-title3">Markdown</h2>
+                <p class="cin-caption">先整体转义再拼标签；链接只放行 http(s)/mailto/tel 与相对地址</p>
+              </div>
+              <div class="cin-panel-body">
+                <div class="cin-markdown" id="mdDemo" data-markdown>## 采购申请 #2049
+
+**申请人**：王琳　·　`成本中心`：CC-3301
+
+1. 办公椅 ×12
+2. 显示器支架 ×4
+
+> 预算已确认，走标准审批流。
+
+| 项目 | 金额 |
+| --- | --- |
+| 办公椅 | 4,320.00 |
+| 支架 | 596.00 |
+
+[查看供应商资质](https://example.com/supplier)　[危险链接](javascript:alert(1))
+</div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="qr">
+              <div class="cin-panel-head">
+                <h2 class="cin-title3">二维码</h2>
+                <p class="cin-caption">自带编码器，8 种掩码按惩罚函数择优；模块色走 currentColor</p>
+              </div>
+              <div class="cin-panel-body">
+                <div class="cin-row" style="align-items:flex-start;gap:var(--cin-space-150)">
+                  <div class="cin-stack" style="align-items:center">
+                    <div class="cin-qr" id="qrDemo" data-qr data-value="SO-20261101-0042" data-ecc="M" data-quiet="4" data-label="订单 SO-20261101-0042"></div>
+                    <span class="cin-caption">纠错 M · 订单号</span>
+                  </div>
+                  <div class="cin-stack" style="align-items:center">
+                    <div class="cin-qr" data-qr data-value="https://cinder.dev/d/abc" data-ecc="H" data-quiet="4"></div>
+                    <span class="cin-caption">纠错 H · 链接</span>
+                  </div>
+                  <div class="cin-stack" style="align-items:center">
+                    <div class="cin-qr" data-qr data-value="订单已生成，请在 24 小时内完成支付，逾期自动取消。" data-ecc="M" data-quiet="4"></div>
+                    <span class="cin-caption">中文内容</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="cin-panel" id="details">
+              <div class="cin-panel-head">
+                <h2 class="cin-title3">详情块</h2>
+                <p class="cin-caption">单条原生 details/summary，纯 CSS 无脚本：断 JS 也能开合</p>
+              </div>
+              <div class="cin-panel-body cin-stack">
+                <details class="cin-details" id="detailsDefault" open>
+                  <summary>单据须知 <span class="cin-details-meta">3 条</span></summary>
+                  <div class="cin-details-body">
+                    <p>收货前请核对箱数与外包装，破箱当场拍照并在 24 小时内提交异常单。</p>
+                  </div>
+                </details>
+                <details class="cin-details">
+                  <summary>结算规则 <span class="cin-details-meta">月结 30 天</span></summary>
+                  <div class="cin-details-body">
+                    <p>对账单每月 5 日前出具，异议期为 5 个工作日，逾期视为确认。</p>
+                  </div>
+                </details>
+                <details class="cin-details" data-variant="card">
+                  <summary>接口说明：库存同步</summary>
+                  <div class="cin-details-body">
+                    <p>全量同步每 30 分钟一次，增量走变更水位；单次上限 500 条。</p>
+                  </div>
+                </details>
+                <details class="cin-details" data-variant="plain">
+                  <summary>行内说明：为什么是负库存</summary>
+                  <div class="cin-details-body">
+                    <p>先出后入导致的暂态，日结前会自动冲平，不做人工调整。</p>
+                  </div>
+                </details>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../dist/cinder.js"></script>
+  <script>
+    (function () {
+      const C = window.Cinder;
+      const $ = (s) => document.querySelector(s);
+
+      C.initCopyButtons();
+      C.initSplitPanels();
+      C.initOTPs();
+      C.initKnownDates();
+      C.initMarkdowns();
+      C.initQRCodes();
+
+      $("#fmtNumber").textContent = C.formatNumber(1284930.5, { locale: "zh-CN" });
+      $("#fmtBytes").textContent = C.formatBytes(1536);
+      $("#fmtDate").textContent = C.formatDate(new Date("2026-11-01T09:12:00+08:00"), { locale: "zh-CN" });
+
+      const copyState = $("#copyState");
+      document.addEventListener("cin:copy", (e) => {
+        copyState.textContent = e.detail && e.detail.ok ? "复制成功：" + (e.detail.text || "") : "复制失败";
+      });
+
+      const split = $("#splitDemo");
+      const splitState = $("#splitState");
+      document.addEventListener("cin:splitchange", (e) => {
+        splitState.textContent = "左栏 " + Math.round(e.detail.percent * 10) / 10 + "%" + (e.detail.collapsed ? "（已收起 " + e.detail.collapsed + "）" : "");
+      });
+      $("#splitTo30").addEventListener("click", () => C.setSplitSize(split, 30));
+      $("#splitToggle").addEventListener("click", () => C.toggleSplitPanel(split));
+
+      const otp = $("#otpDemo");
+      const otpValue = $("#otpValue");
+      document.addEventListener("cin:otpchange", () => { otpValue.textContent = C.getOTP(otp) || "—"; });
+      document.addEventListener("cin:otpcomplete", (e) => { otpValue.textContent = "完整：" + e.detail.value; });
+      $("#otpFill").addEventListener("click", () => C.setOTP(otp, "246810"));
+      $("#otpClear").addEventListener("click", () => C.setOTP(otp, ""));
+    })();
+  </script>
+</body>
+</html>

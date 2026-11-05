@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinder Base / 头像</title>
+  <link rel="stylesheet" href="../dist/cinder-base.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body class="cin-body">
+  <div class="cin-shell">
+    <header class="cin-topbar">
+      <span class="cin-topbar-title">Cinder Base</span>
+      <span class="cin-badge">avatar</span>
+      <span class="cin-caption">图片 / 文字 / 占位三态 + 状态点 + 叠加组；无脚本</span>
+      <div class="cin-toolbar" style="margin-inline-start:auto">
+        <button class="cin-btn" data-size="sm" data-variant="ghost" onclick="const r=document.documentElement; r.getAttribute('data-theme')==='ink' ? r.removeAttribute('data-theme') : r.setAttribute('data-theme','ink')">切换主题</button>
+      </div>
+    </header>
+
+    <div class="cin-shell-body">
+      <main class="cin-main">
+        <section class="cin-section">
+          <h2 class="cin-section-title">尺寸（xs / sm / md / lg）</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-200)">
+            <span class="cin-avatar" data-size="xs"><span class="cin-avatar-text">林</span></span>
+            <span class="cin-avatar" data-size="sm"><span class="cin-avatar-text">林</span></span>
+            <span class="cin-avatar"><span class="cin-avatar-text">林洋</span></span>
+            <span class="cin-avatar" data-size="lg"><span class="cin-avatar-text">云</span></span>
+            <span class="cin-avatar" data-size="lg" data-shape="square"><span class="cin-avatar-text">云</span></span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">图片态与占位态</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-200)">
+            <span class="cin-avatar" data-size="lg">
+              <img class="cin-avatar-img" alt="示例头像" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%230ea5a4'/%3E%3Ccircle cx='32' cy='26' r='12' fill='%23e6fffb'/%3E%3Crect x='14' y='42' width='36' height='20' rx='10' fill='%23e6fffb'/%3E%3C/svg%3E">
+            </span>
+            <span class="cin-avatar" data-size="lg" aria-hidden="true"></span>
+            <span class="cin-avatar" data-size="lg" data-shape="square" aria-hidden="true"></span>
+            <span class="cin-avatar" data-size="lg" data-tone="accent" aria-hidden="true"></span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">语义底色（data-tone）</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-200)">
+            <span class="cin-avatar" data-tone="accent" aria-label="强调"><span class="cin-avatar-text">强</span></span>
+            <span class="cin-avatar" data-tone="success" aria-label="成功"><span class="cin-avatar-text">成</span></span>
+            <span class="cin-avatar" data-tone="warning" aria-label="警告"><span class="cin-avatar-text">警</span></span>
+            <span class="cin-avatar" data-tone="danger" aria-label="危险"><span class="cin-avatar-text">危</span></span>
+            <span class="cin-avatar" data-tone="info" aria-label="信息"><span class="cin-avatar-text">讯</span></span>
+            <span class="cin-avatar" aria-label="默认"><span class="cin-avatar-text">默</span></span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">状态点（data-status）</h2>
+          <div class="cin-toolbar" style="gap:var(--cin-space-300)">
+            <span class="cin-avatar" data-size="lg" data-tone="accent" aria-label="林洋，在线">
+              <span class="cin-avatar-text" aria-hidden="true">林</span>
+              <span class="cin-avatar-status" data-status="online" aria-label="在线"></span>
+            </span>
+            <span class="cin-avatar" data-size="lg" data-tone="info" aria-label="周舟，忙碌">
+              <span class="cin-avatar-text" aria-hidden="true">周</span>
+              <span class="cin-avatar-status" data-status="busy" aria-label="忙碌"></span>
+            </span>
+            <span class="cin-avatar" data-size="lg" data-tone="warning" aria-label="陈默，离开">
+              <span class="cin-avatar-text" aria-hidden="true">陈</span>
+              <span class="cin-avatar-status" data-status="away" aria-label="离开"></span>
+            </span>
+            <span class="cin-avatar" data-size="lg" aria-label="吴桐，离线">
+              <span class="cin-avatar-text" aria-hidden="true">吴</span>
+              <span class="cin-avatar-status" data-status="offline" aria-label="离线"></span>
+            </span>
+          </div>
+        </section>
+
+        <section class="cin-section">
+          <h2 class="cin-section-title">叠加组（悬停展开）</h2>
+          <div class="cin-avatar-group" role="list" aria-label="项目成员 4 人">
+            <span class="cin-avatar" role="listitem" data-tone="accent" aria-label="林洋"><span class="cin-avatar-text">林</span></span>
+            <span class="cin-avatar" role="listitem" data-tone="success" aria-label="周舟"><span class="cin-avatar-text">周</span></span>
+            <span class="cin-avatar" role="listitem" data-tone="warning" aria-label="陈默"><span class="cin-avatar-text">陈</span></span>
+            <span class="cin-avatar" role="listitem" aria-label="还有 3 人">+3</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

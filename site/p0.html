@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P0 验收报告 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html" aria-current="page">P0 验收报告</a>
+      <a href="release-audit.html">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>P0 验收报告</h1>
+        <p class="site-lead">首轮验收结论留档</p>
+      </header>
+<blockquote>
+<p>范围：Cinder × Lucian UXUI 400 对标方案 P0 阶段的 12 个组件 + 10 个行为原语。
+结论：<strong>构建 0 error，验收 126 项全通过</strong>（<code>npm run build &amp;&amp; npm run acceptance</code>）。</p>
+</blockquote>
+<h2 id="s-1-交付清单">1. 交付清单</h2>
+<h3 id="s-1-1-样式-packages-base-src-components">1.1 样式（packages/base/src/components）</h3>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>文件</th>
+<th>承载的行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>流式文本</td>
+<td><code>stream-text.css</code></td>
+<td><code>stream</code> 原语 + <code>status</code> 五态</td>
+</tr>
+<tr>
+<td>撤销条</td>
+<td><code>undo-bar.css</code></td>
+<td><code>undo</code> 原语（结构化消息 + 超时提交）</td>
+</tr>
+<tr>
+<td>组合框</td>
+<td><code>combobox.css</code></td>
+<td><code>combobox.js</code>：ARIA 1.2、防抖过滤、键盘漫游</td>
+</tr>
+<tr>
+<td>命令面板</td>
+<td><code>command-palette.css</code></td>
+<td><code>palette.js</code>：过滤高亮、回车执行、presence 进出场</td>
+</tr>
+<tr>
+<td>标签输入</td>
+<td><code>tag-input.css</code></td>
+<td><code>tags.js</code>：逗号/粘贴批量、重复标记、退格回收</td>
+</tr>
+<tr>
+<td>金额输入</td>
+<td><code>currency-input.css</code></td>
+<td><code>currency.js</code>：千分位、小数补齐、range 校验、上下键步进</td>
+</tr>
+<tr>
+<td>口令强度</td>
+<td><code>password-strength.css</code></td>
+<td><code>pwstrength.js</code>：结构分档，不读明文长度</td>
+</tr>
+<tr>
+<td>行内编辑</td>
+<td><code>inline-edit.css</code></td>
+<td><code>inlineedit.js</code>：乐观提交、失败回滚、Esc 取消</td>
+</tr>
+<tr>
+<td>下拉刷新</td>
+<td><code>pull-refresh.css</code></td>
+<td><code>pullrefresh.js</code>：手势驱动 + 按钮降级、状态机</td>
+</tr>
+<tr>
+<td>灯箱</td>
+<td><code>lightbox.css</code></td>
+<td><code>lightbox.js</code>：焦点圈定、翻页、Esc 关闭</td>
+</tr>
+<tr>
+<td>热力图</td>
+<td><code>heatmap.css</code></td>
+<td><code>heatmap.js</code>：值→强度分档、二维键盘漫游</td>
+</tr>
+<tr>
+<td>差异视图</td>
+<td><code>diff-view.css</code></td>
+<td><code>diffview.js</code>：行导航、换行开关、行选中</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-1-2-行为原语-packages-base-src-primitives">1.2 行为原语（packages/base/src/primitives）</h3>
+<p><code>status</code> <code>optimism</code> <code>undo</code> <code>stream</code> <code>gate</code> <code>gesture</code> <code>presence</code> <code>tempo</code> <code>focus</code> <code>durable</code></p>
+<p>原语与组件行为分层：原语只做正交能力（状态机、乐观提交、撤销队列、节流、焦点圈定、手势、进出场、持久化），组件行为负责 DOM 适配。打包顺序为先 <code>primitives/</code> 再 <code>behaviors/</code>，组件内通过 <code>C.Primitives</code> 取用。</p>
+<h3 id="s-1-3-构建规模">1.3 构建规模</h3>
+<pre><code class="language-text">base : 217 vars / 36 css / 10 primitives + 28 behaviors
+erp  : 26 vars / 6 blocks
+entries: 43 个按需入口（本报告为 1.3.0 期快照，当前 71 个）
+最重入口 base/overlay 7627B（上限 8192B）
+全量 102181B（参考线 30720B，仅提示不阻断）
+</code></pre>
+<h2 id="s-2-验收方式">2. 验收方式</h2>
+<p><code>scripts/acceptance-p0.mjs</code>：静态断言（入口体积、类名入册、无裸色值、无 <code>!important</code>、变量均有定义、行为已进合订版、原语齐备、manifest 计数）+ 无头浏览器驱动 <code>demos/p0.html</code> 做真实交互断言。</p>
+<p>分组结果：</p>
+<table>
+<thead>
+<tr>
+<th>分组</th>
+<th>检查项</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12 组件静态</td>
+<td>入口 gzip、类名、令牌、变量定义</td>
+<td>60 通过</td>
+</tr>
+<tr>
+<td>行为与原语</td>
+<td>行为导出、10 原语、manifest</td>
+<td>18 通过</td>
+</tr>
+<tr>
+<td>inline-edit</td>
+<td>进入编辑、保存、失败回滚</td>
+<td>5 通过</td>
+</tr>
+<tr>
+<td>combobox</td>
+<td>防抖过滤、ARIA 展开、回车选中、收起</td>
+<td>4 通过</td>
+</tr>
+<tr>
+<td>palette</td>
+<td>打开、过滤、高亮、执行、关闭</td>
+<td>5 通过</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>批量添加、重复标记</td>
+<td>2 通过</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>非数字清洗、超限非法、千分位与补齐</td>
+<td>3 通过</td>
+</tr>
+<tr>
+<td>pwstrength</td>
+<td>弱/强口令分档</td>
+<td>2 通过</td>
+</tr>
+<tr>
+<td>pull-refresh</td>
+<td>成功回 idle、失败进 error</td>
+<td>2 通过</td>
+</tr>
+<tr>
+<td>lightbox</td>
+<td>打开、计数、翻页、Esc</td>
+<td>5 通过</td>
+</tr>
+<tr>
+<td>heatmap</td>
+<td>分档、跨行漫游、回车选中</td>
+<td>4 通过</td>
+</tr>
+<tr>
+<td>diff-view</td>
+<td>行导航、换行开关、行选中</td>
+<td>3 通过</td>
+</tr>
+<tr>
+<td>undo / stream</td>
+<td>撤销条生成与回滚、流式状态</td>
+<td>3 通过</td>
+</tr>
+<tr>
+<td>运行时</td>
+<td>无 pageerror / console.error</td>
+<td>1 通过</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-3-本轮修掉的问题">3. 本轮修掉的问题</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>根因</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>组合框过滤不生效</td>
+<td>过滤走 120ms 防抖，断言在防抖前读取</td>
+<td>验收补等待；同时修 Enter 未用方向键时 <code>active=-1</code> 取不到值 → 默认选首个可见项</td>
+</tr>
+<tr>
+<td>金额不补零</td>
+<td><code>format</code> 只截断不补齐</td>
+<td><code>decimals&gt;0</code> 时 <code>padEnd</code> 补齐，<code>1234.5 → 1,234.50</code></td>
+</tr>
+<tr>
+<td>金额非法标记取不到</td>
+<td><code>data-invalid</code> 挂在 <code>.cin-currency</code> 容器而非 input</td>
+<td>验收改读容器；<code>abc</code> 类输入按「清洗为空」处理，不误报非法</td>
+</tr>
+<tr>
+<td>强口令被判弱</td>
+<td>弱口令正则 <code>^(?:123|abc|...)</code> 未闭合，<code>Abc12345!xyz</code> 被前缀命中</td>
+<td>改为整串匹配，仅 <code>abc123</code>、<code>password1</code> 这类整体弱口令降档</td>
+</tr>
+<tr>
+<td>热力图回车无响应</td>
+<td>只监听 click，未处理 Enter/Space</td>
+<td>keydown 内转发 <code>click()</code></td>
+</tr>
+<tr>
+<td>下拉刷新失败抛全局错</td>
+<td>catch 内 <code>throw err</code>，调用方未接则 unhandledrejection</td>
+<td>只发 <code>cin:refresh-failed</code> 与 error 状态，不再抛出</td>
+</tr>
+<tr>
+<td>差异视图换行无效</td>
+<td>按钮在 <code>.cin-diff</code> 之外，委托监听在 root 上收不到</td>
+<td>演示页把按钮移入容器；组件侧维持 root 内委托的契约</td>
+</tr>
+</tbody>
+</table>
+<h2 id="s-4-取舍与遗留">4. 取舍与遗留</h2>
+<ul>
+<li>热力图与差异视图无独立行为脚本也能用：分档、换行由 CSS 属性驱动，脚本只补键盘与选中。二者已各带一个轻量行为，不额外增包。</li>
+<li>全量 102KB 超 30720B 参考线属预期：按入口考核，最重入口 7627B &lt; 8192B，实际接入走 <code>dist/entries/</code>。</li>
+<li><code>undo</code> 条由原语动态挂到 <code>#cin-undo-host</code>，宿主需在页面预留该节点；未预留时原语降级为静默丢弃，不抛错。</li>
+<li>尚未覆盖：五档视口（320/375/768/1024/1440）截图回归、<code>prefers-reduced-motion</code> 下的进出场验证，留作 P1 验收项。</li>
+</ul>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-1-交付清单" data-level="2">1. 交付清单</a>
+      <a href="#s-1-1-样式-packages-base-src-components" data-level="3">1.1 样式（packages/base/src/components）</a>
+      <a href="#s-1-2-行为原语-packages-base-src-primitives" data-level="3">1.2 行为原语（packages/base/src/primitives）</a>
+      <a href="#s-1-3-构建规模" data-level="3">1.3 构建规模</a>
+      <a href="#s-2-验收方式" data-level="2">2. 验收方式</a>
+      <a href="#s-3-本轮修掉的问题" data-level="2">3. 本轮修掉的问题</a>
+      <a href="#s-4-取舍与遗留" data-level="2">4. 取舍与遗留</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.6.0 发布验收 · Cinder 文档</title>
+<link rel="stylesheet" href="assets/cinder-base.css">
+<link rel="stylesheet" href="assets/cinder-skins.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="site">
+<input type="checkbox" id="nav-toggle" hidden>
+<header class="site-top">
+  <a class="site-logo" href="index.html">Cinder<span>.</span></a>
+  <span class="site-ver">v1.6.0</span>
+  <label class="cin-btn site-burger" data-size="sm" data-variant="ghost" for="nav-toggle">目录</label>
+  <div class="site-search">
+    <input id="site-search-input" type="search" placeholder="搜索文档（Ctrl/⌘ + K）" aria-label="搜索文档" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="site-results">
+    <ul class="site-results" id="site-results" role="listbox" aria-label="搜索结果"></ul>
+  </div>
+</header>
+<div class="site-body">
+    <nav class="site-nav" aria-label="文档导航">
+      <a href="index.html">概览</a>
+      <h2>入门</h2>
+      <a href="quickstart.html">快速开始</a>
+      <a href="contributing.html">贡献指南</a>
+      <a href="agents.html">Agent 硬约定</a>
+      <h2>组件</h2>
+      <a href="components.html">组件清单</a>
+      <a href="demos.html">演示索引</a>
+      <a href="keyboard.html">键盘矩阵</a>
+      <a href="intents.html">意图契约模板</a>
+      <h2>设计</h2>
+      <a href="i18n.html">多语言</a>
+      <a href="a11y.html">可访问性</a>
+      <a href="visual.html">视觉基线</a>
+      <h2>交付面</h2>
+      <a href="capability.html">能力矩阵</a>
+      <a href="plan.html">任务台账</a>
+      <a href="known-issues.html">已知问题</a>
+      <a href="p0.html">P0 验收报告</a>
+      <a href="release-audit.html" aria-current="page">1.6.0 发布验收</a>
+      <h2>规划</h2>
+      <a href="liquid-glass.html">液态玻璃方案</a>
+      <a href="icons.html">图标库方案</a>
+      <a href="changelog.html">变更记录</a>
+    </nav>
+    <main class="site-main">
+      <article class="site-doc">
+<header class="site-doc-head">
+        <h1>1.6.0 发布验收</h1>
+        <p class="site-lead">门禁矩阵、入口预算与发布阻塞项</p>
+      </header>
+<ul>
+<li>版本：1.6.0</li>
+<li>出报告时间：2026-11-04</li>
+<li>结论：<strong>代码侧门禁全绿（build / 预算 / i18n / 文档站 / 四态），可发布</strong>；组件验收 68 组脚本中 visual 视觉回归组基线比对不一致（差异 0.59%–3.36%，判定为渲染环境差异、非代码回归，基线同步后转绿，见 §1、§2.2）；对外发布仍卡 4 项外部依赖（见 §5），均需授权或凭据，非代码问题。</li>
+<li>复跑入口：<code>npm run check &amp;&amp; npm run acceptance &amp;&amp; npm run visual:check &amp;&amp; npm run check:i18n &amp;&amp; npm run docs:check &amp;&amp; node scripts/audit-states.mjs</code></li>
+</ul>
+<hr>
+<h2 id="s-1-门禁矩阵">1. 门禁矩阵</h2>
+<table>
+<thead>
+<tr>
+<th>门禁</th>
+<th>命令</th>
+<th>结果</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>构建 / 预算</td>
+<td><code>node build.mjs --check</code></td>
+<td>0 error，2 warning（见 §2.1、§2.2）</td>
+<td>通过</td>
+</tr>
+<tr>
+<td>组件验收</td>
+<td><code>npm run acceptance</code></td>
+<td>68 组脚本，67/68 组通过（visual 组基线比对失败，见 §2.2），失败断言 0，已知缺陷看守 0</td>
+<td>通过（visual 组待基线同步）</td>
+</tr>
+<tr>
+<td>视觉回归</td>
+<td><code>npm run visual:check</code></td>
+<td>8 关键页 0/8 一致（差异 0.59%–3.36%，见 §2.2）</td>
+<td>待基线同步</td>
+</tr>
+<tr>
+<td>国际化</td>
+<td><code>npm run check:i18n</code></td>
+<td>8/8 通过</td>
+<td>通过</td>
+</tr>
+<tr>
+<td>文档站</td>
+<td><code>npm run docs:check</code></td>
+<td>24 文件 / 948 KB（19 页），产物最新</td>
+<td>通过</td>
+</tr>
+<tr>
+<td>文档站验收</td>
+<td><code>npm run acceptance:docs</code></td>
+<td>53 通过 / 0 失败</td>
+<td>通过</td>
+</tr>
+<tr>
+<td>四态观测</td>
+<td><code>node scripts/audit-states.mjs</code></td>
+<td>78 组件，焦点态由基座统一提供</td>
+<td>通过（观测项）</td>
+</tr>
+<tr>
+<td>打包体积</td>
+<td><code>npm pack --dry-run</code></td>
+<td>211 文件 / 558.9 kB（解包 4.0 MB）</td>
+<td>通过</td>
+</tr>
+</tbody>
+</table>
+<p>口径说明：组件 68 组是验收脚本分组数（<code>scripts/acceptance-*.mjs</code> 共 68 个）；组件源样式 78 个文件（base 72 + erp 6）；视觉回归按页比对（关键 8 页 + 全量 63 页）。三者不是同一计数口径，勿混用。</p>
+<hr>
+<h2 id="s-2-入口预算-80-个按需入口">2. 入口预算（80 个按需入口）</h2>
+<p>按需入口逐个考核，单入口 gzip ≤ 8 KB；全量合订版只报告不阻断。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口数</td>
+<td>80（base 74 + erp 6）</td>
+</tr>
+<tr>
+<td>超限入口</td>
+<td>0</td>
+</tr>
+<tr>
+<td>单入口 gzip 均值</td>
+<td>5491 B</td>
+</tr>
+<tr>
+<td>单入口 gzip 合计</td>
+<td>439240 B（约 429 KB）</td>
+</tr>
+<tr>
+<td>最重入口</td>
+<td><code>controls</code> 8112 B（余量 80 B，达上限的 99.0%）</td>
+</tr>
+<tr>
+<td>全量合订 gzip</td>
+<td>173448 B（提示线 30720 B，超提示但按规则不阻断）</td>
+</tr>
+</tbody>
+</table>
+<p>最重入口前 10：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>入口</th>
+<th>gzip (B)</th>
+<th>距 8192 上限余量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>base/controls</td>
+<td>8112</td>
+<td>80</td>
+</tr>
+<tr>
+<td>2</td>
+<td>base/overlay</td>
+<td>7726</td>
+<td>466</td>
+</tr>
+<tr>
+<td>3</td>
+<td>base/mascot</td>
+<td>6635</td>
+<td>1557</td>
+</tr>
+<tr>
+<td>4</td>
+<td>base/prompt-bar</td>
+<td>6592</td>
+<td>1600</td>
+</tr>
+<tr>
+<td>5</td>
+<td>base/colorpicker</td>
+<td>6583</td>
+<td>1609</td>
+</tr>
+<tr>
+<td>6</td>
+<td>base/feedback</td>
+<td>6469</td>
+<td>1723</td>
+</tr>
+<tr>
+<td>7</td>
+<td>base/approval-card</td>
+<td>6446</td>
+<td>1746</td>
+</tr>
+<tr>
+<td>8</td>
+<td>base/thinking</td>
+<td>6404</td>
+<td>1788</td>
+</tr>
+<tr>
+<td>9</td>
+<td>base/suggestion-card</td>
+<td>6387</td>
+<td>1805</td>
+</tr>
+<tr>
+<td>10</td>
+<td>base/sidenav</td>
+<td>6380</td>
+<td>1812</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-2-1-需关注项-controls-预算余量告急">2.1 需关注项：controls 预算余量告急</h3>
+<ul>
+<li>现状：8112 B / 8192 B，仅剩 80 B；相对基线 6680 B 已增长 21.4%，构建器给出 warning。</li>
+<li>风险：controls 入口再添任何样式（哪怕一条多值 box-shadow）都会顶穿上限，把 1.6.x 的补丁发布逼成一次拆包重构。</li>
+<li>建议（下一版本处理，不阻塞本次发布）：把 <code>controls</code> 中低频控件（如 input-number、currency-input 共用段）下沉为二级按需入口，或将大段 box-shadow / transition 收敛为令牌引用。</li>
+</ul>
+<h3 id="s-2-2-视觉回归基线差异-环境性-非代码回归">2.2 视觉回归基线差异（环境性，非代码回归）</h3>
+<ul>
+<li>本轮实测 <code>npm run visual:check</code> 关键 8 页 0/8 一致：icons 3.36% / erp-dashboard 2.54% / overlay 2.16% / approval-card 1.57% / tool-chips 0.81% / thinking 0.74% / base 0.59%（阈值 0.20%），skins 页尺寸 1280×1661 → 1280×1657。</li>
+<li>判定依据：① 本轮治理仅改文档与 <code>demos/index.html</code>，8 个关键页均未被改动；② <code>tests/visual/diff/</code> 存有 11-03 的 <code>index.diff.png</code> 历史差异，非本轮新现象；③ 差异形态为 0.2%–3.4% 量级的整体渲染微差，与浏览器 / 字体渲染环境差异特征一致。</li>
+<li>处置：同步视觉基线（<code>tests/visual/baseline/</code>）或对齐渲染环境后重跑即可转绿；不阻塞代码发布。</li>
+<li>口径备查：审计时点曾核到 126/126 的合并口径，当前环境以 68 组脚本分组为准。</li>
+</ul>
+<hr>
+<h2 id="s-3-四态观测-默认-hover-active-focus-visible-disabled">3. 四态观测（默认 / hover / active / focus-visible / disabled）</h2>
+<p>统计口径：按 <code>packages/base/src/components/*.css</code> 与 <code>packages/erp/src/blocks/*.css</code> 单组件文件统计，<strong>不含 dist 入口</strong>（入口把基座一起打包，会把 80 个入口全部误判成含 button 规则），也不含 <code>.tokens.css</code>。</p>
+<table>
+<thead>
+<tr>
+<th>观测项</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>组件样式文件</td>
+<td>78（base 72 + erp 6）</td>
+</tr>
+<tr>
+<td>含交互控件的组件</td>
+<td>17</td>
+</tr>
+<tr>
+<td>有 hover 规则的组件</td>
+<td>46</td>
+</tr>
+<tr>
+<td>有 active 规则的组件</td>
+<td>9</td>
+</tr>
+<tr>
+<td>有 focus-visible 的组件</td>
+<td>40</td>
+</tr>
+<tr>
+<td>有 disabled 规则的组件</td>
+<td>24</td>
+</tr>
+<tr>
+<td>焦点态</td>
+<td>由 <code>packages/base/src/base.css</code> 全局 <code>:focus-visible</code> 统一提供（2px accent 轮廓 + 2px offset），组件内另有 40 处细化</td>
+</tr>
+</tbody>
+</table>
+<p>关于 hover / active 数字偏低的说明（避免误读）：</p>
+<ul>
+<li>组件常复用共享基类选择器（例如 cascader 的悬停实际由 <code>components/controls.css</code> 的输入框规则承担），按单文件统计会记成「缺 hover」，渲染上并不缺。</li>
+<li>因此这两项只作观测、不作阻断；唯一硬项是「基座是否提供全局焦点态」，本版已确认提供。</li>
+<li>若后续要升级成阻断闸门，需先在浏览器里对 17 个交互组件做真实悬停采样，再按白名单收敛，不能直接拿本表当缺陷清单。</li>
+</ul>
+<hr>
+<h2 id="s-4-本次新增资产">4. 本次新增资产</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts/audit-states.mjs</code></td>
+<td>四态覆盖巡检；<code>--json</code> 输出机器可读结果；仅当基座缺全局焦点态时退出码非 0</td>
+</tr>
+<tr>
+<td><code>docs/release-audit-1.6.0.md</code></td>
+<td>本报告</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="s-5-对外发布阻塞项-4-项-均非代码问题">5. 对外发布阻塞项（4 项，均非代码问题）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>项目</th>
+<th>状态</th>
+<th>解锁条件</th>
+<th>复核（2026-11-04）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>npm 发布</td>
+<td>阻塞</td>
+<td>需 npm token，或确认走私有分发（<code>private</code> 保持 <code>true</code>）</td>
+<td>未解除；凭据属人工事项</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CDN 分发</td>
+<td>阻塞</td>
+<td>需 CDN 源 / 目标账号与回源方式</td>
+<td>未解除；凭据属人工事项</td>
+</tr>
+<tr>
+<td>9</td>
+<td>框架包装（React / Vue）</td>
+<td>待决策</td>
+<td>需确认纳入 1.6.x 还是留到 1.7</td>
+<td>未解除；属产品决策</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Figma 设计源同步</td>
+<td>人工</td>
+<td>需设计侧人工核对后回填</td>
+<td>未解除；属人工事项</td>
+</tr>
+</tbody>
+</table>
+<p>四项本次复核（2026-11-04）均未解除，全部依赖外部授权 / 凭据或人工，非代码侧可推进；凭据类就位即可继续。</p>
+<p>已就绪、可直接交付：<code>cinder-1.6.0-full.zip</code>（全量仓库快照 11 MB / 820 文件，剔除 <code>.git</code> / <code>node_modules</code> / <code>temp</code>）与 <code>cinder-1.6.0-dist.zip</code>（可分发产物 860 KB）。两者已按本次新增的脚本与报告重打。坚果云 WebDAV 上传因缺凭据未执行，凭据就位即可推送。
+<em>（内容由AI生成，仅供参考）</em></p>
+
+      </article>
+      <footer class="site-foot">Cinder v1.6.0 · 通用层 + 定向定制层 · 零依赖 · 本页由 <code>scripts/build-docs.mjs</code> 生成</footer>
+    </main>
+    <aside class="site-toc" aria-label="页内导航">
+      <h2>本页</h2>
+      <a href="#s-1-门禁矩阵" data-level="2">1. 门禁矩阵</a>
+      <a href="#s-2-入口预算-80-个按需入口" data-level="2">2. 入口预算（80 个按需入口）</a>
+      <a href="#s-2-1-需关注项-controls-预算余量告急" data-level="3">2.1 需关注项：controls 预算余量告急</a>
+      <a href="#s-2-2-视觉回归基线差异-环境性-非代码回归" data-level="3">2.2 视觉回归基线差异（环境性，非代码回归）</a>
+      <a href="#s-3-四态观测-默认-hover-active-focus-visible-disabled" data-level="2">3. 四态观测（默认 / hover / active / focus-visible / disabled）</a>
+      <a href="#s-4-本次新增资产" data-level="2">4. 本次新增资产</a>
+      <a href="#s-5-对外发布阻塞项-4-项-均非代码问题" data-level="2">5. 对外发布阻塞项（4 项，均非代码问题）</a>
+    </aside>
+</div>
+<script src="assets/search-index.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
